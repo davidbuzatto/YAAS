@@ -24,12 +24,23 @@ import com.formdev.flatlaf.FlatDarculaLaf;
  * @author Prof. Dr. David Buzatto
  */
 public class MainWindow extends javax.swing.JFrame {
-
+    
     /**
      * Creates new form MainWindow
      */
     public MainWindow() {
         initComponents();
+        customInit();
+    }
+    
+    private void customInit() {
+        
+        setExtendedState( MAXIMIZED_BOTH );
+        
+        DFAInternalFrame iFrame = new DFAInternalFrame();
+        desktopPane.add( iFrame );
+        iFrame.setVisible( true );
+        
     }
 
     /**
@@ -41,23 +52,72 @@ public class MainWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        desktopPane = new javax.swing.JDesktopPane();
+        toolBar = new javax.swing.JToolBar();
+        btnDFA = new javax.swing.JButton();
+        menuBar = new javax.swing.JMenuBar();
+        menuFile = new javax.swing.JMenu();
+        menuEdit = new javax.swing.JMenu();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("YAAS");
+
+        javax.swing.GroupLayout desktopPaneLayout = new javax.swing.GroupLayout(desktopPane);
+        desktopPane.setLayout(desktopPaneLayout);
+        desktopPaneLayout.setHorizontalGroup(
+            desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        desktopPaneLayout.setVerticalGroup(
+            desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 666, Short.MAX_VALUE)
+        );
+
+        toolBar.setRollover(true);
+
+        btnDFA.setText("DFA");
+        btnDFA.setFocusable(false);
+        btnDFA.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnDFA.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnDFA.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDFAActionPerformed(evt);
+            }
+        });
+        toolBar.add(btnDFA);
+
+        menuFile.setText("File");
+        menuBar.add(menuFile);
+
+        menuEdit.setText("Edit");
+        menuBar.add(menuEdit);
+
+        setJMenuBar(menuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(desktopPane)
+            .addComponent(toolBar, javax.swing.GroupLayout.DEFAULT_SIZE, 1280, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(toolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(desktopPane))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnDFAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDFAActionPerformed
+        DFAInternalFrame iFrame = new DFAInternalFrame();
+        desktopPane.add( iFrame );
+        iFrame.setVisible( true );
+    }//GEN-LAST:event_btnDFAActionPerformed
 
     /**
      * @param args the command line arguments
@@ -72,5 +132,11 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDFA;
+    private javax.swing.JDesktopPane desktopPane;
+    private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenu menuEdit;
+    private javax.swing.JMenu menuFile;
+    private javax.swing.JToolBar toolBar;
     // End of variables declaration//GEN-END:variables
 }
