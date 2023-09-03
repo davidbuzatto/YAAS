@@ -34,7 +34,7 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Container class="br.com.davidbuzatto.yaas.testes.DPanel" name="dPanel1">
+    <Container class="br.com.davidbuzatto.yaas.tests.DPanel" name="dPanel1">
 
       <Layout>
         <DimensionLayout dim="0">

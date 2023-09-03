@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.davidbuzatto.yaas.testes;
+package br.com.davidbuzatto.yaas.tests;
 
 /**
  *
@@ -38,7 +38,7 @@ public class Curves extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        dPanel1 = new br.com.davidbuzatto.yaas.testes.DPanel();
+        dPanel1 = new br.com.davidbuzatto.yaas.tests.DPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("teste");
@@ -106,6 +106,6 @@ public class Curves extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private br.com.davidbuzatto.yaas.testes.DPanel dPanel1;
+    private br.com.davidbuzatto.yaas.tests.DPanel dPanel1;
     // End of variables declaration//GEN-END:variables
 }
