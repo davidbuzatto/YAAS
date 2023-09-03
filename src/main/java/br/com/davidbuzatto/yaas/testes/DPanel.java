@@ -1,0 +1,242 @@
+/*
+ * Copyright (C) 2023 Prof. Dr. David Buzatto
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+package br.com.davidbuzatto.yaas.testes;
+
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.geom.CubicCurve2D;
+import javax.swing.JPanel;
+
+/**
+ *
+ * @author Prof. Dr. David Buzatto
+ */
+public class DPanel extends JPanel {
+    
+    private CubicCurve2D curva;
+    private Arrow arrow1;
+    private Arrow arrow2;
+    
+    private int xPressed;
+    private int yPressed;
+    
+    private int r = 5;
+    
+    // start and end
+    private int x1;
+    private int y1;
+    private int x2;
+    private int y2;
+    
+    // controls
+    private int cx;
+    private int cy;
+    private int c1x;
+    private int c1y;
+    private int c2x;
+    private int c2y;
+    
+    private int cxOri;
+    private int cyOri;
+    private int c1xOri;
+    private int c1yOri;
+    private int c2xOri;
+    private int c2yOri;
+    
+    private boolean p1Dragg;
+    private boolean p2Dragg;
+    private boolean cDragg;
+    private boolean c1Dragg;
+    private boolean c2Dragg;
+    
+    public DPanel() {
+        
+        x1 = 100;
+        y1 = 200;
+        x2 = 400;
+        y2 = 100;
+        
+        cx = x1 + (x2-x1)/2;
+        cy = y1 + (y2-y1)/2;
+        
+        c1x = x1 + (x2-x1)/3;
+        c1y = y1 + (y2-y1)/3;
+        
+        c2x = x2 - (x2-x1)/3;
+        c2y = y2 - (y2-y1)/3;
+        
+        arrow1 = new Arrow();
+        arrow1.setAngle( Math.atan2( y1-c1y, x1-c1x ) );
+        arrow1.setX1( x1 );
+        arrow1.setY1( y1 );
+        
+        arrow2 = new Arrow();
+        arrow2.setAngle( Math.atan2( y2-c2y, x2-c2x ) );
+        arrow2.setX1( x2 );
+        arrow2.setY1( y2 );
+        
+        curva = new CubicCurve2D.Double( x1, y1, c1x, c1y, c2x, c2y, x2, y2 );
+        
+        addMouseListener( new MouseAdapter(){
+            
+            @Override
+            public void mousePressed( MouseEvent e ) {
+                
+                xPressed = e.getX();
+                yPressed = e.getY();
+                
+                int p1x = xPressed - x1;
+                int p1y = yPressed - y1;
+                int p2x = xPressed - x2;
+                int p2y = yPressed - y2;
+                
+                int cxc = xPressed - cx;
+                int cyc = yPressed - cy;
+                int c1xc = xPressed - c1x;
+                int c1yc = yPressed - c1y;
+                int c2xc = xPressed - c2x;
+                int c2yc = yPressed - c2y;
+                
+                int r2 = r*r;
+                
+                cxOri = cx;
+                cyOri = cy;
+                c1xOri = c1x;
+                c1yOri = c1y;
+                c2xOri = c2x;
+                c2yOri = c2y;
+                    
+                if ( p1x * p1x + p1y * p1y <= r2) {
+                    p1Dragg = true;
+                } else if ( p2x * p2x + p2y * p2y <= r2 ) {
+                    p2Dragg = true;
+                } else if ( cxc * cxc + cyc * cyc <= r2 ) {
+                    cDragg = true;
+                } else if ( c1xc * c1xc + c1yc * c1yc <= r2 ) {
+                    c1Dragg = true;
+                } else if ( c2xc * c2xc + c2yc * c2yc <= r2 ) {
+                    c2Dragg = true;
+                }
+                
+            }
+
+            @Override
+            public void mouseReleased( MouseEvent e ) {
+                p1Dragg = false;
+                p2Dragg = false;
+                cDragg = false;
+                c1Dragg = false;
+                c2Dragg = false;
+            }
+            
+        });
+        
+        addMouseMotionListener( new MouseAdapter() {
+            
+            @Override
+            public void mouseDragged( MouseEvent e ) {
+                
+                if ( p1Dragg ) {
+                    x1 = e.getX();
+                    y1 = e.getY();
+                    cx = x1 + (x2-x1)/2;
+                    cy = y1 + (y2-y1)/2;
+                    c1x = x1 + (x2-x1)/3;
+                    c1y = y1 + (y2-y1)/3;
+                    c2x = x2 - (x2-x1)/3;
+                    c2y = y2 - (y2-y1)/3;
+                } else if ( p2Dragg ) {
+                    x2 = e.getX();
+                    y2 = e.getY();
+                    cx = x1 + (x2-x1)/2;
+                    cy = y1 + (y2-y1)/2;
+                    c1x = x1 + (x2-x1)/3;
+                    c1y = y1 + (y2-y1)/3;
+                    c2x = x2 - (x2-x1)/3;
+                    c2y = y2 - (y2-y1)/3;
+                } else if ( cDragg ) {
+                    cx = e.getX();
+                    cy = e.getY();
+                    c1x = c1xOri + cx-cxOri;
+                    c1y = c1yOri + cy-cyOri;
+                    c2x = c2xOri + cx-cxOri;
+                    c2y = c2yOri + cy-cyOri;
+                } else if ( c1Dragg ) {
+                    c1x = e.getX();
+                    c1y = e.getY();
+                } else if ( c2Dragg ) {
+                    c2x = e.getX();
+                    c2y = e.getY();
+                }
+                
+                curva.setCurve( x1, y1, c1x, c1y, c2x, c2y, x2, y2 );
+                
+                arrow1.setAngle( Math.atan2( y1-c1y, x1-c1x ) );
+                arrow1.setX1( x1 );
+                arrow1.setY1( y1 );
+                
+                arrow2.setAngle( Math.atan2( y2-c2y, x2-c2x ) );
+                arrow2.setX1( x2 );
+                arrow2.setY1( y2 );
+                
+                repaint();
+                
+            }
+            
+        });
+        
+    }
+
+    @Override
+    protected void paintComponent( Graphics g ) {
+        
+        super.paintComponent( g );
+        
+        Graphics2D g2d = (Graphics2D) g.create();
+        g2d.setRenderingHint( 
+                RenderingHints.KEY_ANTIALIASING, 
+                RenderingHints.VALUE_ANTIALIAS_ON );
+        
+        g2d.setStroke( new BasicStroke( 2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND ) );
+        g2d.setColor( Color.WHITE );
+        g2d.fillRect( 0, 0, getWidth(), getHeight() );
+        
+        g2d.setColor( Color.BLACK );
+        g2d.draw( curva );
+        
+        g2d.drawLine( cx, cy, c1x, c1y );
+        g2d.drawLine( cx, cy, c2x, c2y );
+        
+        //g2d.fillOval( x1 - r, y1 - r, r*2, r*2 );
+        //g2d.fillOval( x2 - r, y2 - r, r*2, r*2 );
+        g2d.fillOval( cx - r, cy - r, r*2, r*2 );
+        g2d.fillOval( c1x - r, c1y - r, r*2, r*2 );
+        g2d.fillOval( c2x - r, c2y - r, r*2, r*2 );
+        
+        arrow1.draw( g2d );
+        arrow2.draw( g2d );
+        
+        g2d.dispose();
+        
+    }
+    
+}
