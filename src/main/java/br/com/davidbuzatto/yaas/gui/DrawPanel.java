@@ -16,11 +16,13 @@
  */
 package br.com.davidbuzatto.yaas.gui;
 
-import br.com.davidbuzatto.yaas.gui.model.AbstractForm;
+import br.com.davidbuzatto.yaas.gui.model.State;
+import br.com.davidbuzatto.yaas.gui.model.Transition;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
@@ -32,10 +34,12 @@ import javax.swing.JPanel;
  */
 public class DrawPanel extends JPanel {
 
-    private List<AbstractForm> forms;
+    private List<State> states;
+    private List<Transition> transitions;
     
     public DrawPanel() {
-        forms = new ArrayList<>();
+        states = new ArrayList<>();
+        transitions = new ArrayList<>();
     }
     
     @Override
@@ -50,28 +54,23 @@ public class DrawPanel extends JPanel {
         g2d.setColor( Color.WHITE );
         g2d.fillRect( 0, 0, getWidth(), getHeight() );
         
-        for ( AbstractForm f : forms ) {
-            f.draw( g2d );
+        for ( Transition t : transitions ) {
+            t.draw( g2d );
+        }
+        
+        for ( State s : states ) {
+            s.draw( g2d );
         }
         
         g2d.dispose();
         
     }
     
-    public void moveForms( int xOffset, int yOffset ) {
+    public State getStateAt( int x, int y ) {
         
-        for ( AbstractForm form : forms ) {
-            form.setX1( form.getX1() + xOffset );
-            form.setY1( form.getY1() + yOffset );
-        }
-        
-    }
-    
-    public AbstractForm getFormAt( int x, int y ) {
-        
-        for ( AbstractForm form : forms ) {
-            if ( form.intercepts( x, y ) ) {
-                return form;
+        for ( State s : states ) {
+            if ( s.intercepts( x, y ) ) {
+                return s;
             }
         }
         
@@ -79,9 +78,45 @@ public class DrawPanel extends JPanel {
         
     }
     
-    public void addForm( AbstractForm form ) {
-        if ( form != null ) {
-            forms.add( form );
+    public Transition getTransitionAt( int x, int y ) {
+        
+        for ( Transition t : transitions ) {
+            if ( t.intercepts( x, y ) ) {
+                return t;
+            }
+        }
+        
+        return null;
+        
+    }
+    
+    public void addState( State state ) {
+        if ( state != null ) {
+            states.add( state );
+        }
+    }
+    
+    public void addTransition( Transition transition ) {
+        if ( transition != null ) {
+            transitions.add( transition );
+        }
+    }
+    
+    public void updateTransitions() {
+        for ( Transition t : transitions ) {
+            t.updateStartAndEndPoints();
+        }
+    }
+    
+    public void draggTransitions( MouseEvent e ) {
+        for ( Transition t : transitions ) {
+            t.mouseDragged( e );
+        }
+    }
+    
+    public void setTransitionsControlPointsVisible( boolean visible ) {
+        for ( Transition t : transitions ) {
+            t.setControlPointsVisible( visible );
         }
     }
     

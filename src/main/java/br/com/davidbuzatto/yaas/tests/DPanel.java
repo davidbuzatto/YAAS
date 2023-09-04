@@ -16,7 +16,8 @@
  */
 package br.com.davidbuzatto.yaas.tests;
 
-import java.awt.BasicStroke;
+import br.com.davidbuzatto.yaas.gui.model.Arrow;
+import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -32,14 +33,12 @@ import javax.swing.JPanel;
  */
 public class DPanel extends JPanel {
     
-    private CubicCurve2D curva;
-    private Arrow arrow1;
-    private Arrow arrow2;
+    private CubicCurve2D curve;
+    private Arrow originArrow;
+    private Arrow targetArrow;
     
     private int xPressed;
     private int yPressed;
-    
-    private int r = 5;
     
     // start and end
     private int x1;
@@ -47,7 +46,7 @@ public class DPanel extends JPanel {
     private int x2;
     private int y2;
     
-    // controls
+    // control points coordinates
     private int cx;
     private int cy;
     private int c1x;
@@ -84,17 +83,17 @@ public class DPanel extends JPanel {
         c2x = x2 - (x2-x1)/3;
         c2y = y2 - (y2-y1)/3;
         
-        arrow1 = new Arrow();
-        arrow1.setAngle( Math.atan2( y1-c1y, x1-c1x ) );
-        arrow1.setX1( x1 );
-        arrow1.setY1( y1 );
+        originArrow = new Arrow();
+        originArrow.setAngle( Math.atan2( y1-c1y, x1-c1x ) );
+        originArrow.setX1( x1 );
+        originArrow.setY1( y1 );
         
-        arrow2 = new Arrow();
-        arrow2.setAngle( Math.atan2( y2-c2y, x2-c2x ) );
-        arrow2.setX1( x2 );
-        arrow2.setY1( y2 );
+        targetArrow = new Arrow();
+        targetArrow.setAngle( Math.atan2( y2-c2y, x2-c2x ) );
+        targetArrow.setX1( x2 );
+        targetArrow.setY1( y2 );
         
-        curva = new CubicCurve2D.Double( x1, y1, c1x, c1y, c2x, c2y, x2, y2 );
+        curve = new CubicCurve2D.Double( x1, y1, c1x, c1y, c2x, c2y, x2, y2 );
         
         addMouseListener( new MouseAdapter(){
             
@@ -116,8 +115,6 @@ public class DPanel extends JPanel {
                 int c2xc = xPressed - c2x;
                 int c2yc = yPressed - c2y;
                 
-                int r2 = r*r;
-                
                 cxOri = cx;
                 cyOri = cy;
                 c1xOri = c1x;
@@ -125,15 +122,15 @@ public class DPanel extends JPanel {
                 c2xOri = c2x;
                 c2yOri = c2y;
                     
-                if ( p1x * p1x + p1y * p1y <= r2) {
+                if ( p1x * p1x + p1y * p1y <= Utils.TRANSITION_CP_RADIUS_EQUARED ) {
                     p1Dragg = true;
-                } else if ( p2x * p2x + p2y * p2y <= r2 ) {
+                } else if ( p2x * p2x + p2y * p2y <= Utils.TRANSITION_CP_RADIUS_EQUARED ) {
                     p2Dragg = true;
-                } else if ( cxc * cxc + cyc * cyc <= r2 ) {
+                } else if ( cxc * cxc + cyc * cyc <= Utils.TRANSITION_CP_RADIUS_EQUARED ) {
                     cDragg = true;
-                } else if ( c1xc * c1xc + c1yc * c1yc <= r2 ) {
+                } else if ( c1xc * c1xc + c1yc * c1yc <= Utils.TRANSITION_CP_RADIUS_EQUARED ) {
                     c1Dragg = true;
-                } else if ( c2xc * c2xc + c2yc * c2yc <= r2 ) {
+                } else if ( c2xc * c2xc + c2yc * c2yc <= Utils.TRANSITION_CP_RADIUS_EQUARED ) {
                     c2Dragg = true;
                 }
                 
@@ -158,21 +155,21 @@ public class DPanel extends JPanel {
                 if ( p1Dragg ) {
                     x1 = e.getX();
                     y1 = e.getY();
-                    cx = x1 + (x2-x1)/2;
+                    /*cx = x1 + (x2-x1)/2;
                     cy = y1 + (y2-y1)/2;
                     c1x = x1 + (x2-x1)/3;
                     c1y = y1 + (y2-y1)/3;
                     c2x = x2 - (x2-x1)/3;
-                    c2y = y2 - (y2-y1)/3;
+                    c2y = y2 - (y2-y1)/3;*/
                 } else if ( p2Dragg ) {
                     x2 = e.getX();
                     y2 = e.getY();
-                    cx = x1 + (x2-x1)/2;
+                    /*cx = x1 + (x2-x1)/2;
                     cy = y1 + (y2-y1)/2;
                     c1x = x1 + (x2-x1)/3;
                     c1y = y1 + (y2-y1)/3;
                     c2x = x2 - (x2-x1)/3;
-                    c2y = y2 - (y2-y1)/3;
+                    c2y = y2 - (y2-y1)/3;*/
                 } else if ( cDragg ) {
                     cx = e.getX();
                     cy = e.getY();
@@ -188,15 +185,15 @@ public class DPanel extends JPanel {
                     c2y = e.getY();
                 }
                 
-                curva.setCurve( x1, y1, c1x, c1y, c2x, c2y, x2, y2 );
+                curve.setCurve( x1, y1, c1x, c1y, c2x, c2y, x2, y2 );
                 
-                arrow1.setAngle( Math.atan2( y1-c1y, x1-c1x ) );
-                arrow1.setX1( x1 );
-                arrow1.setY1( y1 );
+                originArrow.setAngle( Math.atan2( y1-c1y, x1-c1x ) );
+                originArrow.setX1( x1 );
+                originArrow.setY1( y1 );
                 
-                arrow2.setAngle( Math.atan2( y2-c2y, x2-c2x ) );
-                arrow2.setX1( x2 );
-                arrow2.setY1( y2 );
+                targetArrow.setAngle( Math.atan2( y2-c2y, x2-c2x ) );
+                targetArrow.setX1( x2 );
+                targetArrow.setY1( y2 );
                 
                 repaint();
                 
@@ -216,24 +213,45 @@ public class DPanel extends JPanel {
                 RenderingHints.KEY_ANTIALIASING, 
                 RenderingHints.VALUE_ANTIALIAS_ON );
         
-        g2d.setStroke( new BasicStroke( 2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND ) );
         g2d.setColor( Color.WHITE );
         g2d.fillRect( 0, 0, getWidth(), getHeight() );
         
+        g2d.setStroke( Utils.TRANSITION_STROKE );
         g2d.setColor( Color.BLACK );
-        g2d.draw( curva );
+        g2d.draw( curve );
         
+        originArrow.draw( g2d );
+        targetArrow.draw( g2d );
+        
+        g2d.setStroke( Utils.TRANSITION_CP_STROKE );
+        g2d.setColor( Utils.TRANSITION_CP_COLOR );
         g2d.drawLine( cx, cy, c1x, c1y );
         g2d.drawLine( cx, cy, c2x, c2y );
-        
-        //g2d.fillOval( x1 - r, y1 - r, r*2, r*2 );
-        //g2d.fillOval( x2 - r, y2 - r, r*2, r*2 );
-        g2d.fillOval( cx - r, cy - r, r*2, r*2 );
-        g2d.fillOval( c1x - r, c1y - r, r*2, r*2 );
-        g2d.fillOval( c2x - r, c2y - r, r*2, r*2 );
-        
-        arrow1.draw( g2d );
-        arrow2.draw( g2d );
+        g2d.fillOval( 
+                x1 - Utils.TRANSITION_CP_RADIUS, 
+                y1 - Utils.TRANSITION_CP_RADIUS, 
+                Utils.TRANSITION_CP_DIAMETER, 
+                Utils.TRANSITION_CP_DIAMETER );
+        g2d.fillOval( 
+                x2 - Utils.TRANSITION_CP_RADIUS, 
+                y2 - Utils.TRANSITION_CP_RADIUS, 
+                Utils.TRANSITION_CP_DIAMETER, 
+                Utils.TRANSITION_CP_DIAMETER );
+        g2d.fillOval( 
+                cx - Utils.TRANSITION_CP_RADIUS, 
+                cy - Utils.TRANSITION_CP_RADIUS, 
+                Utils.TRANSITION_CP_DIAMETER, 
+                Utils.TRANSITION_CP_DIAMETER );
+        g2d.fillOval( 
+                c1x - Utils.TRANSITION_CP_RADIUS, 
+                c1y - Utils.TRANSITION_CP_RADIUS, 
+                Utils.TRANSITION_CP_DIAMETER, 
+                Utils.TRANSITION_CP_DIAMETER );
+        g2d.fillOval( 
+                c2x - Utils.TRANSITION_CP_RADIUS, 
+                c2y - Utils.TRANSITION_CP_RADIUS, 
+                Utils.TRANSITION_CP_DIAMETER, 
+                Utils.TRANSITION_CP_DIAMETER );
         
         g2d.dispose();
         

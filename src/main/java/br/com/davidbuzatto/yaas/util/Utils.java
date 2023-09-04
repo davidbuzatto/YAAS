@@ -17,6 +17,7 @@
 package br.com.davidbuzatto.yaas.util;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Font;
 
 /**
@@ -26,7 +27,32 @@ import java.awt.Font;
  */
 public class Utils {
     
-    public static final Font DEFAULT_FONT = new Font( "Monospaced", Font.BOLD, 18 );
-    public static final BasicStroke DEFAULT_STROKE = new BasicStroke( 2 );
+    public static final Font DEFAULT_FONT = new Font( "monospaced", Font.BOLD, 18 );
+    
+    public static final int STATE_RADIUS = 25;
+    public static final int STATE_RADIUS_SQUARED = STATE_RADIUS * STATE_RADIUS;
+    public static final int STATE_DIAMETER = STATE_RADIUS * 2;
+    public static final BasicStroke STATE_STROKE = new BasicStroke( 2 );
+    
+    public static final int TRANSITION_CP_RADIUS = 5;
+    public static final int TRANSITION_CP_RADIUS_EQUARED = 
+            TRANSITION_CP_RADIUS * TRANSITION_CP_RADIUS;
+    public static final int TRANSITION_CP_DIAMETER = TRANSITION_CP_RADIUS * 2;
+    
+    public static final Color TRANSITION_PTG_COLOR = 
+            new Color( 0, 102, 153, 220 );
+    public static final Color TRANSITION_CP_COLOR = 
+            new Color( 150, 150, 150, 220 );
+    public static final Color TRANSITION_CP_LEFT_COLOR = 
+            new Color( 94, 2, 153, 220 );
+    public static final Color TRANSITION_CP_RIGHT_COLOR = 
+            new Color( 4, 153, 64, 220 );
+    
+    public static final BasicStroke TRANSITION_STROKE = 
+            new BasicStroke( 2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND );
+    public static final BasicStroke TRANSITION_CP_STROKE = 
+            new BasicStroke( 2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1
+                    , new float[]{ 5, 5 }, 0 );
+    
     
 }

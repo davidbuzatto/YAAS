@@ -16,8 +16,8 @@
  */
 package br.com.davidbuzatto.yaas.gui;
 
-import br.com.davidbuzatto.yaas.gui.model.AbstractForm;
 import br.com.davidbuzatto.yaas.gui.model.State;
+import br.com.davidbuzatto.yaas.gui.model.Transition;
 
 /**
  *
@@ -25,15 +25,16 @@ import br.com.davidbuzatto.yaas.gui.model.State;
  */
 public class DFAInternalFrame extends javax.swing.JInternalFrame {
 
-    private int xClicked;
-    private int yClicked;
+    private int xPressed;
+    private int yPressed;
     
     private int xOffset;
     private int yOffset;
     
     private int currentState;
     
-    private AbstractForm selectedForm;
+    private State selectedState;
+    private Transition selectedTransition;
     
     /**
      * Creates new form DFAInternalFrame
@@ -44,6 +45,40 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
     }
 
     private void customInit() {
+        
+        State s1 = new State();
+        s1.setX1( 100 );
+        s1.setY1( 200 );
+        s1.setLabel( "q" + currentState++ );
+        
+        State s2 = new State();
+        s2.setX1( 300 );
+        s2.setY1( 100 );
+        s2.setLabel( "q" + currentState++ );
+        
+        State s3 = new State();
+        s3.setX1( 500 );
+        s3.setY1( 100 );
+        s3.setLabel( "q" + currentState++ );
+        
+        State s4 = new State();
+        s4.setX1( 300 );
+        s4.setY1( 300 );
+        s4.setLabel( "q" + currentState++ );
+        
+        Transition t1 = new Transition( s1, s2, 'a' );
+        Transition t2 = new Transition( s1, s4, 'a' );
+        Transition t3 = new Transition( s2, s3, 'a' );
+        Transition t4 = new Transition( s3, s4, 'a' );
+        
+        drawPanel.addState( s1 );
+        drawPanel.addState( s2 );
+        drawPanel.addState( s3 );
+        drawPanel.addState( s4 );
+        drawPanel.addTransition( t1 );
+        drawPanel.addTransition( t2 );
+        drawPanel.addTransition( t3 );
+        drawPanel.addTransition( t4 );
         
     }
     
@@ -63,6 +98,7 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
         btnAddTransition = new javax.swing.JToggleButton();
         sep01 = new javax.swing.JToolBar.Separator();
         btnReset = new javax.swing.JButton();
+        chkShowTCP = new javax.swing.JCheckBox();
         drawPanel = new br.com.davidbuzatto.yaas.gui.DrawPanel();
 
         setClosable(true);
@@ -74,6 +110,7 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
         toolBar.setRollover(true);
 
         btnGroup.add(btnMove);
+        btnMove.setSelected(true);
         btnMove.setText("move");
         btnMove.setFocusable(false);
         btnMove.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -81,7 +118,6 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
         toolBar.add(btnMove);
 
         btnGroup.add(btnAddState);
-        btnAddState.setSelected(true);
         btnAddState.setText("add state");
         btnAddState.setFocusable(false);
         btnAddState.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -101,6 +137,17 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
         btnReset.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnReset.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         toolBar.add(btnReset);
+
+        chkShowTCP.setText("show transition control points");
+        chkShowTCP.setFocusable(false);
+        chkShowTCP.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        chkShowTCP.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        chkShowTCP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkShowTCPActionPerformed(evt);
+            }
+        });
+        toolBar.add(chkShowTCP);
 
         drawPanel.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
@@ -152,26 +199,29 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
 
     private void drawPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drawPanelMousePressed
         
-        xClicked = evt.getX();
-        yClicked = evt.getY();
+        xPressed = evt.getX();
+        yPressed = evt.getY();
         
         if ( btnMove.isSelected() ) {
             
-            selectedForm = drawPanel.getFormAt( xClicked, yClicked );
+            selectedState = drawPanel.getStateAt( xPressed, yPressed );
             
-            if ( selectedForm != null ) {
-                xOffset = xClicked - selectedForm.getX1();
-                yOffset = yClicked - selectedForm.getY1();
+            if ( selectedState != null ) {
+                xOffset = xPressed - selectedState.getX1();
+                yOffset = yPressed - selectedState.getY1();
+                drawPanel.updateTransitions();
+            } else {
+                selectedTransition = drawPanel.getTransitionAt( xPressed, yPressed );
             }
             
         } else if ( btnAddState.isSelected() ) {
             
             State newState = new State();
-            newState.setX1( xClicked );
-            newState.setY1( yClicked );
+            newState.setX1( xPressed );
+            newState.setY1( yPressed );
             newState.setLabel( "q" + currentState++ );
             
-            drawPanel.addForm( newState );
+            drawPanel.addState( newState );
             
         } else if ( btnAddTransition.isSelected() ) {
             
@@ -182,14 +232,25 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_drawPanelMousePressed
 
     private void drawPanelMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drawPanelMouseReleased
-        // TODO add your handling code here:
+        
+        selectedState = null;
+        
+        if ( selectedTransition != null ) {
+            selectedTransition.mouseReleased( evt );
+            selectedTransition = null;
+        }
+        
     }//GEN-LAST:event_drawPanelMouseReleased
 
     private void drawPanelMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drawPanelMouseDragged
         
-        if ( selectedForm != null ) {
-            selectedForm.setX1( evt.getX() - xOffset );
-            selectedForm.setY1( evt.getY() - yOffset );
+        if ( selectedState != null ) {
+            selectedState.setX1( evt.getX() - xOffset );
+            selectedState.setY1( evt.getY() - yOffset );
+            drawPanel.updateTransitions();
+            drawPanel.draggTransitions( evt );
+        } else if ( selectedTransition != null ) {
+            selectedTransition.mouseDragged( evt );
         }
         
         drawPanel.repaint();
@@ -200,6 +261,11 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_drawPanelMouseWheelMoved
 
+    private void chkShowTCPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkShowTCPActionPerformed
+        drawPanel.setTransitionsControlPointsVisible( chkShowTCP.isSelected() );
+        drawPanel.repaint();
+    }//GEN-LAST:event_chkShowTCPActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton btnAddState;
@@ -207,6 +273,7 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.ButtonGroup btnGroup;
     private javax.swing.JToggleButton btnMove;
     private javax.swing.JButton btnReset;
+    private javax.swing.JCheckBox chkShowTCP;
     private br.com.davidbuzatto.yaas.gui.DrawPanel drawPanel;
     private javax.swing.JToolBar.Separator sep01;
     private javax.swing.JToolBar toolBar;

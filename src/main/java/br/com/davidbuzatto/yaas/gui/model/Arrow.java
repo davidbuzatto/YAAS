@@ -14,14 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.davidbuzatto.yaas.tests;
+package br.com.davidbuzatto.yaas.gui.model;
 
-import br.com.davidbuzatto.yaas.gui.model.AbstractForm;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 
 /**
- *
+ * A graphical representation of a arrow for transitions endings.
+ * 
  * @author Prof. Dr. David Buzatto
  */
 public class Arrow extends AbstractForm {

@@ -26,17 +26,11 @@ import java.awt.Graphics2D;
  */
 public class State extends AbstractForm {
     
-    protected int radius;
-    
     protected String label;
     protected String customLabel;
     
     protected boolean isInitial;
     protected boolean isFinal;
-    
-    public State() {
-        radius = 25;
-    }
     
     @Override
     public void draw( Graphics2D g2d ) {
@@ -44,16 +38,27 @@ public class State extends AbstractForm {
         g2d = (Graphics2D) g2d.create();
         
         g2d.setFont( Utils.DEFAULT_FONT );
-        g2d.setStroke( Utils.DEFAULT_STROKE );
+        g2d.setStroke( Utils.STATE_STROKE );
         
         g2d.setColor( fillColor );
-        g2d.fillOval( x1-radius, y1-radius, radius*2, radius*2 );
+        g2d.fillOval( 
+                x1 - Utils.STATE_RADIUS, 
+                y1 - Utils.STATE_RADIUS, 
+                Utils.STATE_DIAMETER, 
+                Utils.STATE_DIAMETER );
         
         g2d.setColor( strokeColor );
-        g2d.drawOval( x1-radius, y1-radius, radius*2, radius*2 );
+        g2d.drawOval(
+                x1 - Utils.STATE_RADIUS, 
+                y1 - Utils.STATE_RADIUS, 
+                Utils.STATE_DIAMETER,
+                Utils.STATE_DIAMETER );
         
         if ( label != null ) {
-            g2d.drawString( label, x1 - g2d.getFontMetrics().stringWidth( label )/2, y1 + 5 );
+            g2d.drawString( 
+                    label, 
+                    x1 - g2d.getFontMetrics().stringWidth( label )/2, 
+                    y1 + 5 );
         }
         
         g2d.dispose();
@@ -66,16 +71,8 @@ public class State extends AbstractForm {
         int dx = x1-x;
         int dy = y1-y;
         
-        return dx*dx + dy*dy <= radius*radius;
+        return dx*dx + dy*dy <= Utils.STATE_RADIUS_SQUARED;
         
-    }
-
-    public int getRadius() {
-        return radius;
-    }
-
-    public void setRadius( int radius ) {
-        this.radius = radius;
     }
 
     public String getLabel() {

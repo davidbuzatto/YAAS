@@ -35,7 +35,7 @@ public class MainWindow extends javax.swing.JFrame {
     
     private void customInit() {
         
-        setExtendedState( MAXIMIZED_BOTH );
+        //setExtendedState( MAXIMIZED_BOTH );
         
         DFAInternalFrame iFrame = new DFAInternalFrame();
         desktopPane.add( iFrame );
