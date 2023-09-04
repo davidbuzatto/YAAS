@@ -21,6 +21,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.geom.CubicCurve2D;
+import java.awt.geom.Point2D;
 
 /**
  * A generic automaton transition.
@@ -175,6 +176,20 @@ public class Transition extends AbstractForm {
             
             g2d.setStroke( Utils.TRANSITION_CP_STROKE );
             
+            Point2D p = Utils.cubicBezierPoint( 
+                    curve.getX1(), 
+                    curve.getY1(), 
+                    curve.getCtrlX1(), 
+                    curve.getCtrlY1(), 
+                    curve.getCtrlX2(), 
+                    curve.getCtrlY2(), 
+                    curve.getX2(), 
+                    curve.getY2(),
+                    0.5 );
+            
+            g2d.setColor( Utils.TRANSITION_CP_COLOR );
+            g2d.drawLine( cx, cy, (int) p.getX(), (int) p.getY() );
+            
             g2d.setColor( Utils.TRANSITION_CP_LEFT_COLOR );
             g2d.drawLine( cx, cy, c1x, c1y );
             
@@ -196,14 +211,14 @@ public class Transition extends AbstractForm {
                     Utils.TRANSITION_CP_DIAMETER );
             
             g2d.setColor( Utils.TRANSITION_CP_LEFT_COLOR );
-            g2d.fillOval( 
+            g2d.fillRect( 
                     c1x - Utils.TRANSITION_CP_RADIUS, 
                     c1y - Utils.TRANSITION_CP_RADIUS, 
                     Utils.TRANSITION_CP_DIAMETER, 
                     Utils.TRANSITION_CP_DIAMETER );
             
             g2d.setColor( Utils.TRANSITION_CP_RIGHT_COLOR );
-            g2d.fillOval( 
+            g2d.fillRect( 
                     c2x - Utils.TRANSITION_CP_RADIUS, 
                     c2y - Utils.TRANSITION_CP_RADIUS, 
                     Utils.TRANSITION_CP_DIAMETER, 

@@ -25,6 +25,8 @@ import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.CubicCurve2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.QuadCurve2D;
 import javax.swing.JPanel;
 
 /**
@@ -252,6 +254,42 @@ public class DPanel extends JPanel {
                 c2y - Utils.TRANSITION_CP_RADIUS, 
                 Utils.TRANSITION_CP_DIAMETER, 
                 Utils.TRANSITION_CP_DIAMETER );
+        
+        g2d.setColor( Color.BLUE );
+        for ( double t = 0.0; t <= 1.0; t += 0.1 ) {
+            
+            Point2D p = Utils.cubicBezierPoint( 
+                    curve.getX1(), 
+                    curve.getY1(), 
+                    curve.getCtrlX1(), 
+                    curve.getCtrlY1(), 
+                    curve.getCtrlX2(), 
+                    curve.getCtrlY2(), 
+                    curve.getX2(), 
+                    curve.getY2(),
+                    t );
+            
+            g2d.fillOval( (int) p.getX() - 5, (int) p.getY() - 5, 10, 10 );
+            
+        }
+        
+        QuadCurve2D c2 = new QuadCurve2D.Double( 100, 400, 250, 300, 400, 400 );
+        g2d.draw( c2 );
+        
+        for ( double t = 0.0; t <= 1.0; t += 0.1 ) {
+            
+            Point2D p = Utils.quadraticBezierPoint( 
+                    c2.getX1(), 
+                    c2.getY1(), 
+                    c2.getCtrlX(), 
+                    c2.getCtrlY(),
+                    c2.getX2(), 
+                    c2.getY2(),
+                    t );
+            
+            g2d.fillOval( (int) p.getX() - 5, (int) p.getY() - 5, 10, 10 );
+            
+        }
         
         g2d.dispose();
         
