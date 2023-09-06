@@ -1,0 +1,4 @@
+Labels for transitions;
+Grid / snap to grid
+Specialized versions of states (Moore machines)
+Specialized versions of transitions (eNFAs, GNFAs, PDAs, Mealy machines and Turing machines)

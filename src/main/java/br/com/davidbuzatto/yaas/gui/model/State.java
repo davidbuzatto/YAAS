@@ -29,8 +29,10 @@ public class State extends AbstractForm {
     protected String label;
     protected String customLabel;
     
-    protected boolean isInitial;
-    protected boolean isFinal;
+    protected boolean initial;
+    protected boolean accepting;
+    
+    private Arrow arrow;
     
     @Override
     public void draw( Graphics2D g2d ) {
@@ -48,11 +50,34 @@ public class State extends AbstractForm {
                 Utils.STATE_DIAMETER );
         
         g2d.setColor( strokeColor );
+        
+        if ( initial ) {
+            g2d.drawLine( 
+                    x1 - Utils.STATE_DIAMETER, 
+                    y1, 
+                    x1 - Utils.STATE_RADIUS, 
+                    y1 );
+            if ( arrow == null ) {
+                arrow = new Arrow();
+            }
+            arrow.setX1( x1 - Utils.STATE_RADIUS );
+            arrow.setY1( y1 );
+            arrow.draw( g2d );
+        }
+        
         g2d.drawOval(
                 x1 - Utils.STATE_RADIUS, 
                 y1 - Utils.STATE_RADIUS, 
                 Utils.STATE_DIAMETER,
                 Utils.STATE_DIAMETER );
+        
+        if ( accepting ) {
+            g2d.drawOval(
+                x1 - Utils.STATE_RADIUS + 5, 
+                y1 - Utils.STATE_RADIUS + 5, 
+                Utils.STATE_DIAMETER - 10,
+                Utils.STATE_DIAMETER - 10 );
+        }
         
         if ( label != null ) {
             g2d.drawString( 
@@ -91,20 +116,20 @@ public class State extends AbstractForm {
         this.customLabel = customLabel;
     }
 
-    public boolean isIsInitial() {
-        return isInitial;
+    public boolean isInitial() {
+        return initial;
     }
 
-    public void setIsInitial( boolean isInitial ) {
-        this.isInitial = isInitial;
+    public void setInitial( boolean initial ) {
+        this.initial = initial;
     }
 
-    public boolean isIsFinal() {
-        return isFinal;
+    public boolean isAccepting() {
+        return accepting;
     }
 
-    public void setIsFinal( boolean isFinal ) {
-        this.isFinal = isFinal;
+    public void setAccepting( boolean accepting ) {
+        this.accepting = accepting;
     }
     
 }

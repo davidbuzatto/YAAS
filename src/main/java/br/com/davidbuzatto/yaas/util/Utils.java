@@ -40,14 +40,19 @@ public class Utils {
             TRANSITION_CP_RADIUS * TRANSITION_CP_RADIUS;
     public static final int TRANSITION_CP_DIAMETER = TRANSITION_CP_RADIUS * 2;
     
-    public static final Color TRANSITION_PTG_COLOR = 
-            new Color( 0, 102, 153, 220 );
+    public static final int TRANSITION_PTG_RADIUS = TRANSITION_CP_DIAMETER;
+    public static final int TRANSITION_PTG_RADIUS_SQUARED = 
+            TRANSITION_PTG_RADIUS * TRANSITION_PTG_RADIUS;
+    public static final int TRANSITION_PTG_DIAMETER = TRANSITION_PTG_RADIUS * 2;
+    
     public static final Color TRANSITION_CP_COLOR = 
             new Color( 150, 150, 150, 220 );
     public static final Color TRANSITION_CP_LEFT_COLOR = 
             new Color( 94, 2, 153, 220 );
     public static final Color TRANSITION_CP_RIGHT_COLOR = 
             new Color( 4, 153, 64, 220 );
+    public static final Color TRANSITION_PTG_COLOR = 
+            new Color( 0, 102, 153, 220 );
     
     public static final BasicStroke TRANSITION_STROKE = 
             new BasicStroke( 2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND );
@@ -95,7 +100,7 @@ public class Utils {
         double p6x = lerp( ctrlx2, x2, t );
         double p6y = lerp( ctrly2, y2, t );
         
-        
+        //-------------------------------------------
         
         // p7 = lerp(p4, p5, t)
         double p7x = lerp( p4x, p5x, t );
@@ -105,7 +110,7 @@ public class Utils {
         double p8x = lerp( p5x, p6x, t );
         double p8y = lerp( p5y, p6y, t );
         
-        
+        //-------------------------------------------
         
         // bt = lerp(p7, p8, t)
         double btx = lerp( p7x, p8x, t );
@@ -145,8 +150,9 @@ public class Utils {
         // p4 = lerp(p1, p2, t)
         double p4x = lerp( ctrlx, x2, t );
         double p4y = lerp( ctrly, y2, t );
-               
-              
+        
+        //-------------------------------------------
+        
         // bt = lerp(p3, p4, t)
         double btx = lerp( p3x, p4x, t );
         double bty = lerp( p3y, p4y, t );

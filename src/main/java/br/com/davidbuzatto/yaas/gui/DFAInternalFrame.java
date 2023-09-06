@@ -46,39 +46,43 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
 
     private void customInit() {
         
+        State s0 = new State();
+        s0.setX1( 100 );
+        s0.setY1( 200 );
+        s0.setLabel( "q" + currentState++ );
+        s0.setInitial( true );
+        
         State s1 = new State();
-        s1.setX1( 100 );
-        s1.setY1( 200 );
+        s1.setX1( 300 );
+        s1.setY1( 100 );
         s1.setLabel( "q" + currentState++ );
         
         State s2 = new State();
-        s2.setX1( 300 );
+        s2.setX1( 500 );
         s2.setY1( 100 );
         s2.setLabel( "q" + currentState++ );
         
         State s3 = new State();
-        s3.setX1( 500 );
-        s3.setY1( 100 );
+        s3.setX1( 300 );
+        s3.setY1( 300 );
+        s3.setAccepting( true );
         s3.setLabel( "q" + currentState++ );
         
-        State s4 = new State();
-        s4.setX1( 300 );
-        s4.setY1( 300 );
-        s4.setLabel( "q" + currentState++ );
+        Transition t1 = new Transition( s0, s1, 'a' );
+        Transition t2 = new Transition( s0, s3, 'a' );
+        Transition t3 = new Transition( s1, s2, 'a' );
+        Transition t4 = new Transition( s2, s3, 'a' );
+        Transition t5 = new Transition( s0, s0, 'a' );
         
-        Transition t1 = new Transition( s1, s2, 'a' );
-        Transition t2 = new Transition( s1, s4, 'a' );
-        Transition t3 = new Transition( s2, s3, 'a' );
-        Transition t4 = new Transition( s3, s4, 'a' );
-        
+        drawPanel.addState( s0 );
         drawPanel.addState( s1 );
         drawPanel.addState( s2 );
         drawPanel.addState( s3 );
-        drawPanel.addState( s4 );
         drawPanel.addTransition( t1 );
         drawPanel.addTransition( t2 );
         drawPanel.addTransition( t3 );
         drawPanel.addTransition( t4 );
+        drawPanel.addTransition( t5 );
         
     }
     
