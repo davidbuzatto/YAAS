@@ -69,6 +69,8 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
         s3.setLabel( "q" + currentState++ );
         
         Transition t1 = new Transition( s0, s1, 'a' );
+        t1.addSymbol( 'b' );
+        t1.addSymbol( 'c' );
         Transition t2 = new Transition( s0, s3, 'a' );
         Transition t3 = new Transition( s1, s2, 'a' );
         Transition t4 = new Transition( s2, s3, 'a' );
@@ -83,6 +85,8 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
         drawPanel.addTransition( t3 );
         drawPanel.addTransition( t4 );
         drawPanel.addTransition( t5 );
+        
+        //drawPanel.setTransitionsControlPointsVisible( true );
         
     }
     
@@ -153,6 +157,7 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
         });
         toolBar.add(chkShowTCP);
 
+        drawPanel.setTransitionsControlPointsVisible(false);
         drawPanel.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 drawPanelMouseDragged(evt);

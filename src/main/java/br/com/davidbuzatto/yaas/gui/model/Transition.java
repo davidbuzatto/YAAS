@@ -19,9 +19,12 @@ package br.com.davidbuzatto.yaas.gui.model;
 import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.awt.event.MouseEvent;
 import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A generic automaton transition.
@@ -32,62 +35,102 @@ public class Transition extends AbstractForm {
 
     private State originState;
     private State targetState;
-    private char symbol;
+    private List<Character> symbols;
     
-    private CubicCurve2D curve;
-    private Arrow arrow;
     
-    private int xPressed;
-    private int yPressed;
+    private TransitionLabel label;
+    private final CubicCurve2D curve;
+    private final Arrow arrow;
     
-    private int cx;
-    private int cy;
-    private int c1x;
-    private int c1y;
-    private int c2x;
-    private int c2y;
+    private final ControlPoint targetCP;
+    private final ControlPoint centralCP;
+    private final ControlPoint leftCP;
+    private final ControlPoint rightCP;
     
-    private int cxOri;
-    private int cyOri;
-    private int c1xOri;
-    private int c1yOri;
-    private int c2xOri;
-    private int c2yOri;
+    private final Stroke cpStroke;
     
-    private boolean ptgDragg;
-    private boolean cDragg;
-    private boolean c1Dragg;
-    private boolean c2Dragg;
     
-    private boolean cpMoved;
-    private boolean tpMoved;
-    private double ptgAngle;
-    private int dptg;
+    private int xOffset;
+    private int yOffset;
+    
+    private boolean labelDragging;
+    private boolean labelMoved;
+    
+    
+    private int prevCentralCPX;
+    private int prevCentralCPY;
+    private int prevLeftCPX;
+    private int prevLeftCPY;
+    private int prevRightCPX;
+    private int prevRightCPY;
+    
+    private boolean targetCPDragging;
+    private boolean centralCPDragging;
+    private boolean leftCPDragging;
+    private boolean rightCPDragging;
+    
+    private boolean centralCPMoved;
+    private boolean targetCPMoved;
+    
+    private double targetCPAngle;
     
     private boolean controlPointsVisible;
+    
     
     public Transition( State originState, State targetState, char symbol ) {
         
         this.originState = originState;
         this.targetState = targetState;
-        this.symbol = symbol;
+        
+        symbols = new ArrayList<>();
+        symbols.add( symbol );
+        
+        label = new TransitionLabel();
+        label.setFont( Utils.DEFAULT_FONT );
+        label.setStrokeColor( strokeColor );
+        updateLabel();
+        
+        font = Utils.DEFAULT_FONT;
+        stroke = Utils.TRANSITION_STROKE;
+        cpStroke = Utils.TRANSITION_CP_STROKE;
+        
+        targetCP = new ControlPoint();
+        targetCP.setRadius( Utils.TRANSITION_PTG_RADIUS );
+        targetCP.setFillColor( Utils.TRANSITION_PTG_COLOR );
+        
+        centralCP = new ControlPoint();
+        centralCP.setRadius( Utils.TRANSITION_CP_RADIUS );
+        centralCP.setFillColor( Utils.TRANSITION_CP_COLOR );
+        
+        leftCP = new ControlPoint();
+        leftCP.setRadius( Utils.TRANSITION_CP_RADIUS );
+        leftCP.setFillColor( Utils.TRANSITION_CP_LEFT_COLOR );
+        
+        rightCP = new ControlPoint();
+        rightCP.setRadius( Utils.TRANSITION_CP_RADIUS );
+        rightCP.setFillColor( Utils.TRANSITION_CP_RIGHT_COLOR );
         
         updateStartAndEndPoints();
         
         arrow = new Arrow();
-        arrow.setAngle( Math.atan2( y2-c2y, x2-c2x ) );
+        arrow.setAngle( Math.atan2( y2 - rightCP.getY1(), x2 - rightCP.getX1() ) );
         arrow.setX1( x2 );
         arrow.setY1( y2 );
         
-        curve = new CubicCurve2D.Double( x1, y1, c1x, c1y, c2x, c2y, x2, y2 );
+        curve = new CubicCurve2D.Double( 
+                x1, y1, 
+                leftCP.getX1(), leftCP.getY1(), 
+                rightCP.getX1(), rightCP.getY1(), 
+                x2, y2 );
         
     }
     
     public void mouseReleased( MouseEvent evt ) {
-        ptgDragg = false;
-        cDragg = false;
-        c1Dragg = false;
-        c2Dragg = false;
+        targetCPDragging = false;
+        centralCPDragging = false;
+        leftCPDragging = false;
+        rightCPDragging = false;
+        labelDragging = false;
     }
     
     public void mouseDragged( MouseEvent evt ) {
@@ -96,59 +139,75 @@ public class Transition extends AbstractForm {
         
         if ( controlPointsVisible ) {
             
-            if ( ptgDragg ) {
+            if ( targetCPDragging ) {
 
-                tpMoved = true;
+                targetCPMoved = true;
 
                 if ( originState == targetState ) {
                     
-                    ptgAngle = Math.atan2( 
+                    targetCPAngle = Math.atan2( 
                             targetState.getY1() - evt.getY(), 
                             targetState.getX1() - evt.getX() ) 
                             - Math.toRadians( 60 );
                     
                 } else {
                     
-                    ptgAngle = Math.atan2( 
+                    targetCPAngle = Math.atan2( 
                             targetState.getY1() - evt.getY(), 
                             targetState.getX1() - evt.getX() );
 
-                    x2 = targetState.getX1() - (int) ( Math.cos( ptgAngle ) * 
-                            Utils.STATE_RADIUS );
-                    y2 = targetState.getY1() - (int) ( Math.sin( ptgAngle ) * 
-                            Utils.STATE_RADIUS );
+                    x2 = targetState.getX1() - (int) ( Math.cos( targetCPAngle ) * 
+                            targetState.getRadius() );
+                    y2 = targetState.getY1() - (int) ( Math.sin( targetCPAngle ) * 
+                            targetState.getRadius() );
                     
                 }
 
-            } else if ( cDragg ) {
-                cpMoved = true;
-                cx = evt.getX();
-                cy = evt.getY();
-                c1x = c1xOri + cx-cxOri;
-                c1y = c1yOri + cy-cyOri;
-                c2x = c2xOri + cx-cxOri;
-                c2y = c2yOri + cy-cyOri;
-            } else if ( c1Dragg ) {
-                cpMoved = true;
-                c1x = evt.getX();
-                c1y = evt.getY();
-            } else if ( c2Dragg ) {
-                cpMoved = true;
-                c2x = evt.getX();
-                c2y = evt.getY();
+            } else if ( centralCPDragging ) {
+                centralCPMoved = true;
+                centralCP.setX1( evt.getX() );
+                centralCP.setY1( evt.getY() );
+                leftCP.setX1( prevLeftCPX + centralCP.getX1() - prevCentralCPX );
+                leftCP.setY1( prevLeftCPY + centralCP.getY1() - prevCentralCPY );
+                rightCP.setX1( prevRightCPX + centralCP.getX1() - prevCentralCPX );
+                rightCP.setY1( prevRightCPY + centralCP.getY1() - prevCentralCPY );
+            } else if ( leftCPDragging ) {
+                centralCPMoved = true;
+                leftCP.setX1( evt.getX() );
+                leftCP.setY1( evt.getY() );
+            } else if ( rightCPDragging ) {
+                centralCPMoved = true;
+                rightCP.setX1( evt.getX() );
+                rightCP.setY1( evt.getY() );
             }
             
         }
 
-        curve.setCurve( x1, y1, c1x, c1y, c2x, c2y, x2, y2 );
+        if ( labelDragging ) {
+            labelMoved = true;
+            label.setX1( evt.getX() - xOffset );
+            label.setY1( evt.getY() - yOffset );
+        }
+        
+        curve.setCurve( 
+                x1, y1, 
+                leftCP.getX1(), leftCP.getY1(), 
+                rightCP.getX1(), rightCP.getY1(), 
+                x2, y2 );
 
-        arrow.setAngle( Math.atan2( y2-c2y, x2-c2x ) );
+        arrow.setAngle( Math.atan2( 
+                y2 - rightCP.getY1(), 
+                x2 - rightCP.getX1() ) );
+        
         arrow.setX1( x2 );
         arrow.setY1( y2 );
+        
+        targetCP.setX1( x2 );
+        targetCP.setY1( y2 );
 
     }
     
-    public void updateStartAndEndPoints() {
+    public final void updateStartAndEndPoints() {
         
         double a = Math.atan2( 
                 targetState.getY1() - originState.getY1(), 
@@ -158,31 +217,45 @@ public class Transition extends AbstractForm {
         y1 = originState.getY1();
         
         if ( originState == targetState ) {
-            x2 = originState.getX1() - (int) ( Utils.STATE_RADIUS * 
-                    Math.cos( ptgAngle + Math.toRadians( 60 ) ) );
-            y2 = originState.getY1() - (int) ( Utils.STATE_RADIUS * 
-                    Math.sin( ptgAngle + Math.toRadians( 60 ) ) );
+            x2 = originState.getX1() - (int) ( originState.getRadius() * 
+                    Math.cos( targetCPAngle + Math.toRadians( 60 ) ) );
+            y2 = originState.getY1() - (int) ( originState.getRadius() * 
+                    Math.sin( targetCPAngle + Math.toRadians( 60 ) ) );
         } else {
-            if ( tpMoved ) {
-                x2 = targetState.getX1() - (int) ( Math.cos( ptgAngle ) * 
-                        Utils.STATE_RADIUS );
-                y2 = targetState.getY1() - (int) ( Math.sin( ptgAngle ) * 
-                        Utils.STATE_RADIUS );
+            if ( targetCPMoved ) {
+                x2 = targetState.getX1() - (int) ( Math.cos( targetCPAngle ) * 
+                        targetState.getRadius() );
+                y2 = targetState.getY1() - (int) ( Math.sin( targetCPAngle ) * 
+                        targetState.getRadius() );
             } else {
                 x2 = targetState.getX1() - (int) ( Math.cos( a ) * 
-                    Utils.STATE_RADIUS );
+                        targetState.getRadius() );
                 y2 = targetState.getY1() - (int) ( Math.sin( a ) * 
-                        Utils.STATE_RADIUS );
+                        targetState.getRadius() );
             }
         }
         
-        if ( !cpMoved ) {
-            cx = x1 + (x2-x1)/2;
-            cy = y1 + (y2-y1)/2;
-            c1x = x1 + (x2-x1)/3;
-            c1y = y1 + (y2-y1)/3;
-            c2x = x2 - (x2-x1)/3;
-            c2y = y2 - (y2-y1)/3;
+        targetCP.setX1( x2 );
+        targetCP.setY1( y2 );
+        
+        if ( !centralCPMoved ) {
+            centralCP.setX1( x1 + (x2-x1)/2 );
+            centralCP.setY1( y1 + (y2-y1)/2 );
+            leftCP.setX1( x1 + (x2-x1)/3 );
+            leftCP.setY1( y1 + (y2-y1)/3 );
+            rightCP.setX1( x2 - (x2-x1)/3 );
+            rightCP.setY1( y2 - (y2-y1)/3 );
+        }
+        
+        if ( !labelMoved ) {
+            if ( curve == null ) {
+                label.setX1( x1 + (x2-x1)/2 );
+                label.setY1( y1 + (y2-y1)/2 - (int) ( label.getTextHeight() * 1.5 ) );
+            } else {
+                Point2D p = Utils.cubicBezierPoint( curve, 0.5 );
+                label.setX1( (int) p.getX() );
+                label.setY1( (int) p.getY() - (int) ( label.getTextHeight() * 1.5 ) );
+            }
         }
         
     }
@@ -192,33 +265,28 @@ public class Transition extends AbstractForm {
         
         g2d = (Graphics2D) g2d.create();
         
-        g2d.setStroke( Utils.TRANSITION_STROKE );
+        g2d.setFont( font );
+        g2d.setStroke( stroke );
         g2d.setColor( Color.BLACK );
         
         if ( originState == targetState ) {
             
             Graphics2D g2dr = (Graphics2D) g2d.create();
-            g2dr.rotate( ptgAngle, x1, y1 );
+            g2dr.rotate( targetCPAngle, x1, y1 );
             
             g2dr.drawOval( 
-                    x1 - Utils.STATE_RADIUS / 2, 
-                    y1 - Utils.STATE_DIAMETER, 
-                    Utils.STATE_RADIUS, 
-                    Utils.STATE_DIAMETER );
+                    x1 - targetState.getRadius() / 2, 
+                    y1 - targetState.getDiameter(), 
+                    targetState.getRadius(), 
+                    targetState.getDiameter() );
             
-            arrow.setX1( x1 - Utils.STATE_RADIUS / 2 );
-            arrow.setY1( y1 - Utils.STATE_RADIUS + 1 );
+            arrow.setX1( x1 - targetState.getRadius() / 2 );
+            arrow.setY1( y1 - targetState.getRadius() + 1 );
             arrow.setAngle( Math.toRadians( 95 ) );
             arrow.draw( g2dr );
             
             if ( controlPointsVisible ) {
-                
-                g2d.setColor( Utils.TRANSITION_PTG_COLOR );
-                g2d.fillOval(x2 - Utils.TRANSITION_PTG_RADIUS, 
-                        y2 - Utils.TRANSITION_PTG_RADIUS, 
-                        Utils.TRANSITION_PTG_DIAMETER, 
-                        Utils.TRANSITION_PTG_DIAMETER );
-                
+                targetCP.draw( g2d );
             }
             
             g2dr.dispose();
@@ -230,59 +298,32 @@ public class Transition extends AbstractForm {
             
             if ( controlPointsVisible ) {
             
-                g2d.setStroke( Utils.TRANSITION_CP_STROKE );
+                g2d.setStroke( cpStroke );
 
-                Point2D p = Utils.cubicBezierPoint( 
-                        curve.getX1(), 
-                        curve.getY1(), 
-                        curve.getCtrlX1(), 
-                        curve.getCtrlY1(), 
-                        curve.getCtrlX2(), 
-                        curve.getCtrlY2(), 
-                        curve.getX2(), 
-                        curve.getY2(),
-                        0.5 );
+                Point2D p = Utils.cubicBezierPoint( curve, 0.5 );
 
-                g2d.setColor( Utils.TRANSITION_CP_COLOR );
-                g2d.drawLine( cx, cy, (int) p.getX(), (int) p.getY() );
+                g2d.setColor( centralCP.getFillColor() );
+                g2d.drawLine( centralCP.getX1(), centralCP.getY1(), 
+                        (int) p.getX(), (int) p.getY() );
 
-                g2d.setColor( Utils.TRANSITION_CP_LEFT_COLOR );
-                g2d.drawLine( cx, cy, c1x, c1y );
+                g2d.setColor( leftCP.getFillColor() );
+                g2d.drawLine( centralCP.getX1(), centralCP.getY1(), 
+                        leftCP.getX1(), leftCP.getY1() );
 
-                g2d.setColor( Utils.TRANSITION_CP_RIGHT_COLOR );
-                g2d.drawLine( cx, cy, c2x, c2y );
+                g2d.setColor( rightCP.getFillColor() );
+                g2d.drawLine( centralCP.getX1(), centralCP.getY1(), 
+                        rightCP.getX1(), rightCP.getY1() );
 
-                g2d.setColor( Utils.TRANSITION_PTG_COLOR );
-                g2d.fillOval( 
-                        x2 - Utils.TRANSITION_CP_DIAMETER, 
-                        y2 - Utils.TRANSITION_CP_DIAMETER, 
-                        Utils.TRANSITION_CP_DIAMETER * 2, 
-                        Utils.TRANSITION_CP_DIAMETER * 2 );
-
-                g2d.setColor( Utils.TRANSITION_CP_COLOR );
-                g2d.fillOval( 
-                        cx - Utils.TRANSITION_CP_RADIUS, 
-                        cy - Utils.TRANSITION_CP_RADIUS, 
-                        Utils.TRANSITION_CP_DIAMETER, 
-                        Utils.TRANSITION_CP_DIAMETER );
-
-                g2d.setColor( Utils.TRANSITION_CP_LEFT_COLOR );
-                g2d.fillRect( 
-                        c1x - Utils.TRANSITION_CP_RADIUS, 
-                        c1y - Utils.TRANSITION_CP_RADIUS, 
-                        Utils.TRANSITION_CP_DIAMETER, 
-                        Utils.TRANSITION_CP_DIAMETER );
-
-                g2d.setColor( Utils.TRANSITION_CP_RIGHT_COLOR );
-                g2d.fillRect( 
-                        c2x - Utils.TRANSITION_CP_RADIUS, 
-                        c2y - Utils.TRANSITION_CP_RADIUS, 
-                        Utils.TRANSITION_CP_DIAMETER, 
-                        Utils.TRANSITION_CP_DIAMETER );
+                targetCP.draw( g2d );
+                centralCP.draw( g2d );
+                leftCP.draw( g2d );
+                rightCP.draw( g2d );
 
             }
         
         }
+        
+        label.draw( g2d );
         
         g2d.dispose();
         
@@ -291,40 +332,58 @@ public class Transition extends AbstractForm {
     @Override
     public boolean intercepts( int x, int y ) {
         
-        xPressed = x;
-        yPressed = y;
-        
-        int ptgx = xPressed - x2;
-        int ptgy = yPressed - y2;
+        prevCentralCPX = centralCP.getX1();
+        prevCentralCPY = centralCP.getY1();
+        prevLeftCPX = leftCP.getX1();
+        prevLeftCPY = leftCP.getY1();
+        prevRightCPX = rightCP.getX1();
+        prevRightCPY = rightCP.getY1();
 
-        int cxc = xPressed - cx;
-        int cyc = yPressed - cy;
-        int c1xc = xPressed - c1x;
-        int c1yc = yPressed - c1y;
-        int c2xc = xPressed - c2x;
-        int c2yc = yPressed - c2y;
-
-        cxOri = cx;
-        cyOri = cy;
-        c1xOri = c1x;
-        c1yOri = c1y;
-        c2xOri = c2x;
-        c2yOri = c2y;
-
-        if ( ptgx * ptgx + ptgy * ptgy <= Utils.TRANSITION_PTG_RADIUS_SQUARED ) {
-            ptgDragg = true;
-        } else if ( cxc * cxc + cyc * cyc <= Utils.TRANSITION_CP_RADIUS_EQUARED ) {
-            cDragg = true;
-        } else if ( c1xc * c1xc + c1yc * c1yc <= Utils.TRANSITION_CP_RADIUS_EQUARED ) {
-            c1Dragg = true;
-        } else if ( c2xc * c2xc + c2yc * c2yc <= Utils.TRANSITION_CP_RADIUS_EQUARED ) {
-            c2Dragg = true;
+        if ( targetCP.intercepts( x, y ) ) {
+            targetCPDragging = true;
+        } else if ( centralCP.intercepts( x, y ) ) {
+            centralCPDragging = true;
+        } else if ( leftCP.intercepts( x, y ) ) {
+            leftCPDragging = true;
+        } else if ( rightCP.intercepts( x, y ) ) {
+            rightCPDragging = true;
+        } else if ( label.intercepts( x, y ) ) {
+            labelDragging = true;
+            xOffset = x - label.getX1();
+            yOffset = y - label.getY1();
         }
         
-        return ptgDragg || cDragg || c1Dragg || c2Dragg;
+        return 
+                targetCPDragging || 
+                centralCPDragging || 
+                leftCPDragging || 
+                rightCPDragging || 
+                labelDragging;
         
     }
 
+    private void updateLabel() {
+        
+        boolean first = true;
+        String labelText = "";
+        
+        for ( Character s : symbols ) {
+            if ( !first ) {
+                labelText += ", ";
+            }
+            labelText += s.toString();
+            first = false;
+        }
+        
+        label.setText( labelText );
+        
+    }
+    
+    public void addSymbol( char symbol ) {
+        symbols.add( symbol );
+        updateLabel();
+    }
+    
     public State getOriginState() {
         return originState;
     }
@@ -340,13 +399,14 @@ public class Transition extends AbstractForm {
     public void setTargetState( State targetState ) {
         this.targetState = targetState;
     }
-    
-    public char getSymbol() {
-        return symbol;
+
+    public List<Character> getSymbols() {
+        return symbols;
     }
 
-    public void setSymbol( char symbol ) {
-        this.symbol = symbol;
+    public void setSymbols( List<Character> symbols ) {
+        this.symbols = symbols;
+        updateLabel();
     }
 
     public boolean isControlPointsVisible() {

@@ -32,54 +32,58 @@ public class State extends AbstractForm {
     protected boolean initial;
     protected boolean accepting;
     
+    protected int radius;
+    protected int radiusSquared;
+    protected int diameter;
+    
     private Arrow arrow;
+    
+    public State() {
+        font = Utils.DEFAULT_FONT;
+        stroke = Utils.STATE_STROKE;
+        radius = Utils.STATE_RADIUS;
+        radiusSquared = Utils.STATE_RADIUS_SQUARED;
+        diameter = Utils.STATE_DIAMETER;
+        arrow = new Arrow();
+    }
     
     @Override
     public void draw( Graphics2D g2d ) {
         
         g2d = (Graphics2D) g2d.create();
         
-        g2d.setFont( Utils.DEFAULT_FONT );
-        g2d.setStroke( Utils.STATE_STROKE );
-        
-        g2d.setColor( fillColor );
-        g2d.fillOval( 
-                x1 - Utils.STATE_RADIUS, 
-                y1 - Utils.STATE_RADIUS, 
-                Utils.STATE_DIAMETER, 
-                Utils.STATE_DIAMETER );
+        g2d.setFont( font );
+        g2d.setStroke( stroke );
         
         g2d.setColor( strokeColor );
         
         if ( initial ) {
-            g2d.drawLine( 
-                    x1 - Utils.STATE_DIAMETER, 
-                    y1, 
-                    x1 - Utils.STATE_RADIUS, 
-                    y1 );
-            if ( arrow == null ) {
-                arrow = new Arrow();
-            }
-            arrow.setX1( x1 - Utils.STATE_RADIUS );
+            g2d.drawLine( x1 - diameter, y1, x1 - radius, y1 );
+            arrow.setX1( x1 - radius );
             arrow.setY1( y1 );
             arrow.draw( g2d );
         }
         
-        g2d.drawOval(
-                x1 - Utils.STATE_RADIUS, 
-                y1 - Utils.STATE_RADIUS, 
-                Utils.STATE_DIAMETER,
-                Utils.STATE_DIAMETER );
+        g2d.setColor( fillColor );
+        g2d.fillOval( x1 - radius, y1 - radius, diameter, diameter );
+        
+        g2d.setColor( strokeColor );
+        g2d.drawOval( x1 - radius, y1 - radius, diameter, diameter );
         
         if ( accepting ) {
             g2d.drawOval(
-                x1 - Utils.STATE_RADIUS + 5, 
-                y1 - Utils.STATE_RADIUS + 5, 
-                Utils.STATE_DIAMETER - 10,
-                Utils.STATE_DIAMETER - 10 );
+                x1 - radius + 5, 
+                y1 - radius + 5, 
+                diameter - 10,
+                diameter - 10 );
         }
         
-        if ( label != null ) {
+        if ( customLabel != null ) {
+            g2d.drawString( 
+                    customLabel, 
+                    x1 - g2d.getFontMetrics().stringWidth( customLabel )/2, 
+                    y1 + 5 );
+        } else if ( label != null ) {
             g2d.drawString( 
                     label, 
                     x1 - g2d.getFontMetrics().stringWidth( label )/2, 
@@ -92,12 +96,9 @@ public class State extends AbstractForm {
 
     @Override
     public boolean intercepts( int x, int y ) {
-        
-        int dx = x1-x;
-        int dy = y1-y;
-        
-        return dx*dx + dy*dy <= Utils.STATE_RADIUS_SQUARED;
-        
+        x = x1 - x;
+        y = y1 - y;
+        return x*x + y*y <= radiusSquared;
     }
 
     public String getLabel() {
@@ -130,6 +131,20 @@ public class State extends AbstractForm {
 
     public void setAccepting( boolean accepting ) {
         this.accepting = accepting;
+    }
+
+    public int getRadius() {
+        return radius;
+    }
+
+    public int getDiameter() {
+        return diameter;
+    }
+    
+    public void setRadius( int radius ) {
+        this.radius = radius;
+        this.radiusSquared = radius * radius;
+        this.diameter = radius * 2;
     }
     
 }

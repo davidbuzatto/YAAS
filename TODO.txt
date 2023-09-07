@@ -1,4 +1,5 @@
-Labels for transitions;
-Grid / snap to grid
-Specialized versions of states (Moore machines)
-Specialized versions of transitions (eNFAs, GNFAs, PDAs, Mealy machines and Turing machines)
+Mouse over effect for states and transitions;
+Grid / snap to grid for states;
+Specialized versions of states (Moore machines);
+Specialized versions of transitions (eNFAs, GNFAs, PDAs, Mealy machines and Turing machines);
+Zoom-in and zoom-out;

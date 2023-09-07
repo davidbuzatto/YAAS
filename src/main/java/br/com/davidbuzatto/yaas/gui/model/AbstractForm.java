@@ -17,7 +17,9 @@
 package br.com.davidbuzatto.yaas.gui.model;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 
 /**
  * An abstract class with the basic behavior of drawable forms.
@@ -36,6 +38,9 @@ public abstract class AbstractForm {
     
     protected Color strokeColor = Color.BLACK;
     protected Color fillColor = Color.WHITE;
+    
+    protected Font font;
+    protected Stroke stroke;
     
     public AbstractForm() {
         id = idGenerator++;
@@ -106,6 +111,22 @@ public abstract class AbstractForm {
 
     public void setFillColor( Color fillColor ) {
         this.fillColor = fillColor;
+    }
+
+    public Font getFont() {
+        return font;
+    }
+
+    public void setFont( Font font ) {
+        this.font = font;
+    }
+
+    public Stroke getStroke() {
+        return stroke;
+    }
+
+    public void setStroke( Stroke stroke ) {
+        this.stroke = stroke;
     }
     
     @Override

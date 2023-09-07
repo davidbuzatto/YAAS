@@ -19,7 +19,13 @@ package br.com.davidbuzatto.yaas.util;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
+import java.awt.font.LineMetrics;
+import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.QuadCurve2D;
+import java.awt.image.BufferedImage;
 
 /**
  * Utilitary methods and application constants.
@@ -81,7 +87,7 @@ public class Utils {
             double ctrlx1, double ctrly1, 
             double ctrlx2, double ctrly2, 
             double x2, double y2,
-            double t) {
+            double t ) {
         
         // x1 and y1 => p0
         // ctrlx1 and ctrly1 => p1
@@ -121,6 +127,25 @@ public class Utils {
     }
     
     /**
+     * Uses a CubicCurve2d to calculate points in it.
+     * 
+     * @param curve The curve.
+     * @param t linear position of the desired point. Varies from 0 to 1.
+     * @return A point inside the curve.
+     */
+    public static Point2D cubicBezierPoint( CubicCurve2D curve, double t ) {
+        return cubicBezierPoint( curve.getX1(), 
+                        curve.getY1(), 
+                        curve.getCtrlX1(), 
+                        curve.getCtrlY1(), 
+                        curve.getCtrlX2(), 
+                        curve.getCtrlY2(), 
+                        curve.getX2(), 
+                        curve.getY2(), 
+                        t );
+    }
+    
+    /**
      * De Casteljau's algorithm to calculate points in a quadratic Bézier curve.
      * 
      * @param x1 x of the first anchor point.
@@ -137,7 +162,7 @@ public class Utils {
             double x1, double y1, 
             double ctrlx, double ctrly, 
             double x2, double y2,
-            double t) {
+            double t ) {
         
         // x1 and y1 => p0
         // ctrlx and ctrly => p1
@@ -159,6 +184,23 @@ public class Utils {
         
         return new Point2D.Double( btx, bty );
         
+    }
+    
+    /**
+     * Uses a QuadCurve2d to calculate points in it.
+     * 
+     * @param curve The curve.
+     * @param t linear position of the desired point. Varies from 0 to 1.
+     * @return A point inside the curve.
+     */
+    public static Point2D quadraticBezierPoint( QuadCurve2D curve, double t ) {
+        return quadraticBezierPoint( curve.getX1(), 
+                        curve.getY1(), 
+                        curve.getCtrlX(), 
+                        curve.getCtrlY(), 
+                        curve.getX2(), 
+                        curve.getY2(), 
+                        t );
     }
     
     /**
@@ -187,6 +229,28 @@ public class Utils {
      */
     public static Point2D lerp( double x1, double y1, double x2, double y2, double t ) {
         return new Point2D.Double( lerp( x1, x2, t ), lerp( y1, y2, t ) );
+    }
+    
+    /**
+     * Get a font metrics of a font.
+     * 
+     * @param font Font to be used
+     * @return The font FontMetrics
+     */
+    public static FontMetrics getFontMetrics( Font font ) {
+        return new BufferedImage( 1, 1, BufferedImage.TYPE_INT_ARGB ).getGraphics().getFontMetrics( font );
+    }
+    
+    /**
+     * Get a line metrics of text using a font.
+     * 
+     * @param text text used to perform calculations
+     * @param font Font to be used
+     * @return The text LineMetrics
+     */
+    public static LineMetrics getLineMetrics( String text, Font font ) {
+        Graphics2D g2d = (Graphics2D) new BufferedImage( 1, 1, BufferedImage.TYPE_INT_ARGB ).getGraphics();
+        return font.getLineMetrics( text, g2d.getFontRenderContext() );
     }
     
 }

@@ -110,6 +110,9 @@
       </SubComponents>
     </Container>
     <Container class="br.com.davidbuzatto.yaas.gui.DrawPanel" name="drawPanel">
+      <Properties>
+        <Property name="transitionsControlPointsVisible" type="boolean" value="false"/>
+      </Properties>
       <Events>
         <EventHandler event="mouseDragged" listener="java.awt.event.MouseMotionListener" parameters="java.awt.event.MouseEvent" handler="drawPanelMouseDragged"/>
         <EventHandler event="mouseWheelMoved" listener="java.awt.event.MouseWheelListener" parameters="java.awt.event.MouseWheelEvent" handler="drawPanelMouseWheelMoved"/>
