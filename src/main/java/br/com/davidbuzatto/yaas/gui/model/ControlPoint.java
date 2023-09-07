@@ -34,8 +34,14 @@ public class ControlPoint extends AbstractForm {
         
         g2d = (Graphics2D) g2d.create();
         
+        g2d.setStroke( stroke );
         g2d.setColor( fillColor );
         g2d.fillOval( x1 - radius, y1 - radius, diameter, diameter );
+        
+        if ( mouseHover ) {
+            g2d.setColor( mouseHoverStrokeColor );
+            g2d.drawOval( x1 - radius, y1 - radius, diameter, diameter );
+        }
         
         g2d.dispose();
         

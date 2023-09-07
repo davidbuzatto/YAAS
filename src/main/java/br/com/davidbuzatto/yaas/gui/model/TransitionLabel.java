@@ -37,10 +37,26 @@ public class TransitionLabel extends AbstractForm {
         
         g2d = (Graphics2D) g2d.create();
         
-        if ( text != null ) {
-            g2d.setFont( font );
+        g2d.setStroke( stroke );
+        g2d.setFont( font );
+        
+        if ( mouseHover ) {
+            g2d.setColor( mouseHoverFillColor );
+            g2d.fillRoundRect( 
+                    x1 - textWidth/2 - 4, y1 - textHeight / 2 - 4, 
+                    textWidth + 8, textHeight + 8,
+                    10, 10 );
+            g2d.setColor( mouseHoverStrokeColor );
+            g2d.drawRoundRect( 
+                    x1 - textWidth/2 - 4, y1 - textHeight / 2 - 4, 
+                    textWidth + 8, textHeight + 8,
+                    10, 10 );
+        } else {
             g2d.setColor( strokeColor );
-            g2d.drawString( text, x1 - textWidth/2, y1 + textHeight );
+        }
+        
+        if ( text != null ) {
+            g2d.drawString( text, x1 - textWidth/2, y1 + textHeight / 2 );
         }
         
         g2d.dispose();
@@ -50,10 +66,10 @@ public class TransitionLabel extends AbstractForm {
     @Override
     public boolean intercepts( int x, int y ) {
         return 
-                x >= x1 - textWidth/2 && 
-                x <= x1 + textWidth/2 &&
-                y >= y1 && 
-                y <= y1 + textHeight;
+                x >= x1 - textWidth/2 - 4 && 
+                x <= x1 + textWidth/2 + 8 &&
+                y >= y1 - textHeight/2 - 4 && 
+                y <= y1 + textHeight/2 + 8;
     }
     
     public void setText( String text ) {

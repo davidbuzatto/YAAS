@@ -162,6 +162,9 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 drawPanelMouseDragged(evt);
             }
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                drawPanelMouseMoved(evt);
+            }
         });
         drawPanel.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
             public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
@@ -265,6 +268,15 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
         drawPanel.repaint();
         
     }//GEN-LAST:event_drawPanelMouseDragged
+
+    private void drawPanelMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drawPanelMouseMoved
+        
+        if ( btnMove.isSelected() ) {
+            drawPanel.mouseHoverStatesAndTransitions( evt.getX(), evt.getY() );
+            drawPanel.repaint();
+        }
+        
+    }//GEN-LAST:event_drawPanelMouseMoved
 
     private void drawPanelMouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_drawPanelMouseWheelMoved
         // TODO add your handling code here:

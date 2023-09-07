@@ -1,4 +1,4 @@
-Mouse over effect for states and transitions;
+Configure appropriate colors;
 Grid / snap to grid for states;
 Specialized versions of states (Moore machines);
 Specialized versions of transitions (eNFAs, GNFAs, PDAs, Mealy machines and Turing machines);

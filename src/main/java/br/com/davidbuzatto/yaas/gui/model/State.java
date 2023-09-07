@@ -54,8 +54,13 @@ public class State extends AbstractForm {
         
         g2d.setFont( font );
         g2d.setStroke( stroke );
+        arrow.setMouseHover( mouseHover );
         
-        g2d.setColor( strokeColor );
+        if ( mouseHover ) {
+            g2d.setColor( mouseHoverStrokeColor );
+        } else {
+            g2d.setColor( strokeColor );
+        }
         
         if ( initial ) {
             g2d.drawLine( x1 - diameter, y1, x1 - radius, y1 );
@@ -64,10 +69,18 @@ public class State extends AbstractForm {
             arrow.draw( g2d );
         }
         
-        g2d.setColor( fillColor );
+        if ( mouseHover ) {
+            g2d.setColor( mouseHoverFillColor );
+        } else {
+            g2d.setColor( fillColor );
+        }
         g2d.fillOval( x1 - radius, y1 - radius, diameter, diameter );
         
-        g2d.setColor( strokeColor );
+        if ( mouseHover ) {
+            g2d.setColor( mouseHoverStrokeColor );
+        } else {
+            g2d.setColor( strokeColor );
+        }
         g2d.drawOval( x1 - radius, y1 - radius, diameter, diameter );
         
         if ( accepting ) {
@@ -93,7 +106,15 @@ public class State extends AbstractForm {
         g2d.dispose();
         
     }
-
+    
+    public void mouseHover( int x, int y ) {
+        if ( intercepts( x, y ) ) {
+            mouseHover = true;
+            return;
+        }
+        mouseHover = false;
+    }
+    
     @Override
     public boolean intercepts( int x, int y ) {
         x = x1 - x;

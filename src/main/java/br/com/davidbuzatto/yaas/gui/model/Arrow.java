@@ -34,7 +34,11 @@ public class Arrow extends AbstractForm {
         g2d = (Graphics2D) g2d.create();
         g2d.rotate( angle, x1, y1 );
         
-        g2d.setColor( strokeColor );
+        if ( mouseHover ) {
+            g2d.setColor( mouseHoverStrokeColor );
+        } else {
+            g2d.setColor( strokeColor );
+        }
         
         Path2D p = new Path2D.Double();
         p.moveTo( x1, y1 );

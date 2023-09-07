@@ -17,7 +17,6 @@
 package br.com.davidbuzatto.yaas.gui.model;
 
 import br.com.davidbuzatto.yaas.util.Utils;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.event.MouseEvent;
@@ -33,12 +32,17 @@ import java.util.List;
  */
 public class Transition extends AbstractForm {
 
+    private static final double RAD_60 = Math.toRadians( 60 );
+    private static final double RAD_90 = Math.toRadians( 90 );
+    private static final double RAD_95 = Math.toRadians( 95 );
+    
+    
     private State originState;
     private State targetState;
     private List<Character> symbols;
     
     
-    private TransitionLabel label;
+    private final TransitionLabel label;
     private final CubicCurve2D curve;
     private final Arrow arrow;
     
@@ -85,35 +89,41 @@ public class Transition extends AbstractForm {
         symbols = new ArrayList<>();
         symbols.add( symbol );
         
-        label = new TransitionLabel();
-        label.setFont( Utils.DEFAULT_FONT );
-        label.setStrokeColor( strokeColor );
-        updateLabel();
-        
         font = Utils.DEFAULT_FONT;
         stroke = Utils.TRANSITION_STROKE;
         cpStroke = Utils.TRANSITION_CP_STROKE;
         
+        label = new TransitionLabel();
+        label.setStroke( stroke );
+        label.setFont( font );
+        label.setStrokeColor( strokeColor );
+        updateLabel();
+        
         targetCP = new ControlPoint();
+        targetCP.setStroke( stroke );
         targetCP.setRadius( Utils.TRANSITION_PTG_RADIUS );
         targetCP.setFillColor( Utils.TRANSITION_PTG_COLOR );
         
         centralCP = new ControlPoint();
+        centralCP.setStroke( stroke );
         centralCP.setRadius( Utils.TRANSITION_CP_RADIUS );
         centralCP.setFillColor( Utils.TRANSITION_CP_COLOR );
         
         leftCP = new ControlPoint();
+        leftCP.setStroke( stroke );
         leftCP.setRadius( Utils.TRANSITION_CP_RADIUS );
         leftCP.setFillColor( Utils.TRANSITION_CP_LEFT_COLOR );
         
         rightCP = new ControlPoint();
+        rightCP.setStroke( stroke );
         rightCP.setRadius( Utils.TRANSITION_CP_RADIUS );
         rightCP.setFillColor( Utils.TRANSITION_CP_RIGHT_COLOR );
         
         updateStartAndEndPoints();
         
         arrow = new Arrow();
-        arrow.setAngle( Math.atan2( y2 - rightCP.getY1(), x2 - rightCP.getX1() ) );
+        arrow.setAngle( Math.atan2( 
+                y2 - rightCP.getY1(), x2 - rightCP.getX1() ) );
         arrow.setX1( x2 );
         arrow.setY1( y2 );
         
@@ -148,7 +158,7 @@ public class Transition extends AbstractForm {
                     targetCPAngle = Math.atan2( 
                             targetState.getY1() - evt.getY(), 
                             targetState.getX1() - evt.getX() ) 
-                            - Math.toRadians( 60 );
+                            - RAD_60;
                     
                 } else {
                     
@@ -156,9 +166,11 @@ public class Transition extends AbstractForm {
                             targetState.getY1() - evt.getY(), 
                             targetState.getX1() - evt.getX() );
 
-                    x2 = targetState.getX1() - (int) ( Math.cos( targetCPAngle ) * 
+                    x2 = targetState.getX1() - 
+                            (int) ( Math.cos( targetCPAngle ) * 
                             targetState.getRadius() );
-                    y2 = targetState.getY1() - (int) ( Math.sin( targetCPAngle ) * 
+                    y2 = targetState.getY1() - 
+                            (int) ( Math.sin( targetCPAngle ) * 
                             targetState.getRadius() );
                     
                 }
@@ -167,10 +179,14 @@ public class Transition extends AbstractForm {
                 centralCPMoved = true;
                 centralCP.setX1( evt.getX() );
                 centralCP.setY1( evt.getY() );
-                leftCP.setX1( prevLeftCPX + centralCP.getX1() - prevCentralCPX );
-                leftCP.setY1( prevLeftCPY + centralCP.getY1() - prevCentralCPY );
-                rightCP.setX1( prevRightCPX + centralCP.getX1() - prevCentralCPX );
-                rightCP.setY1( prevRightCPY + centralCP.getY1() - prevCentralCPY );
+                leftCP.setX1( prevLeftCPX + 
+                        centralCP.getX1() - prevCentralCPX );
+                leftCP.setY1( prevLeftCPY + 
+                        centralCP.getY1() - prevCentralCPY );
+                rightCP.setX1( prevRightCPX + 
+                        centralCP.getX1() - prevCentralCPX );
+                rightCP.setY1( prevRightCPY + 
+                        centralCP.getY1() - prevCentralCPY );
             } else if ( leftCPDragging ) {
                 centralCPMoved = true;
                 leftCP.setX1( evt.getX() );
@@ -207,6 +223,44 @@ public class Transition extends AbstractForm {
 
     }
     
+    public void mouseHover( int x, int y ) {
+
+        if ( controlPointsVisible ) {
+            if ( targetCP.intercepts( x, y ) ) {
+                mouseHover = true;
+                targetCP.setMouseHover( true );
+                return;
+            } else if ( centralCP.intercepts( x, y ) ) {
+                mouseHover = true;
+                centralCP.setMouseHover( true );
+                return;
+            } else if ( leftCP.intercepts( x, y ) ) {
+                mouseHover = true;
+                leftCP.setMouseHover( true );
+                return;
+            } else if ( rightCP.intercepts( x, y ) ) {
+                mouseHover = true;
+                rightCP.setMouseHover( true );
+                return;
+            }
+        }
+        
+        if ( label.intercepts( x, y ) ) {
+            mouseHover = true;
+            label.setMouseHover( true );
+            return;
+        }
+        
+        mouseHover = false;
+        
+        label.setMouseHover( mouseHover );
+        targetCP.setMouseHover( mouseHover );
+        centralCP.setMouseHover( mouseHover );
+        leftCP.setMouseHover( mouseHover );
+        rightCP.setMouseHover( mouseHover );
+        
+    }
+    
     public final void updateStartAndEndPoints() {
         
         double a = Math.atan2( 
@@ -218,9 +272,9 @@ public class Transition extends AbstractForm {
         
         if ( originState == targetState ) {
             x2 = originState.getX1() - (int) ( originState.getRadius() * 
-                    Math.cos( targetCPAngle + Math.toRadians( 60 ) ) );
+                    Math.cos( targetCPAngle + RAD_60 ) );
             y2 = originState.getY1() - (int) ( originState.getRadius() * 
-                    Math.sin( targetCPAngle + Math.toRadians( 60 ) ) );
+                    Math.sin( targetCPAngle + RAD_60 ) );
         } else {
             if ( targetCPMoved ) {
                 x2 = targetState.getX1() - (int) ( Math.cos( targetCPAngle ) * 
@@ -247,14 +301,25 @@ public class Transition extends AbstractForm {
             rightCP.setY1( y2 - (y2-y1)/3 );
         }
         
-        if ( !labelMoved ) {
-            if ( curve == null ) {
-                label.setX1( x1 + (x2-x1)/2 );
-                label.setY1( y1 + (y2-y1)/2 - (int) ( label.getTextHeight() * 1.5 ) );
-            } else {
-                Point2D p = Utils.cubicBezierPoint( curve, 0.5 );
-                label.setX1( (int) p.getX() );
-                label.setY1( (int) p.getY() - (int) ( label.getTextHeight() * 1.5 ) );
+        if ( originState == targetState ) {
+            if ( !labelMoved ) {
+                label.setX1( x1 + (int) ( Math.cos( targetCPAngle - RAD_90 ) * 
+                        ( targetState.getDiameter() + label.getTextHeight() )));
+                label.setY1( y1 + (int) ( Math.sin( targetCPAngle - RAD_90 ) * 
+                        ( targetState.getDiameter() + label.getTextHeight() )));
+            }
+        } else {
+            if ( !labelMoved ) {
+                if ( curve == null ) {
+                    label.setX1( x1 + (x2-x1)/2 );
+                    label.setY1( y1 + (y2-y1)/2 - 
+                            (int) ( label.getTextHeight() * 1.5 ) );
+                } else {
+                    Point2D p = Utils.cubicBezierPoint( curve, 0.5 );
+                    label.setX1( (int) p.getX() );
+                    label.setY1( (int) p.getY() - 
+                            (int) ( label.getTextHeight() * 1.5 ) );
+                }
             }
         }
         
@@ -267,7 +332,13 @@ public class Transition extends AbstractForm {
         
         g2d.setFont( font );
         g2d.setStroke( stroke );
-        g2d.setColor( Color.BLACK );
+        arrow.setMouseHover( mouseHover );
+        
+        if ( mouseHover ) {
+            g2d.setColor( mouseHoverStrokeColor );
+        } else {
+            g2d.setColor( strokeColor );
+        }
         
         if ( originState == targetState ) {
             
@@ -282,7 +353,7 @@ public class Transition extends AbstractForm {
             
             arrow.setX1( x1 - targetState.getRadius() / 2 );
             arrow.setY1( y1 - targetState.getRadius() + 1 );
-            arrow.setAngle( Math.toRadians( 95 ) );
+            arrow.setAngle( RAD_95 );
             arrow.draw( g2dr );
             
             if ( controlPointsVisible ) {
@@ -339,15 +410,19 @@ public class Transition extends AbstractForm {
         prevRightCPX = rightCP.getX1();
         prevRightCPY = rightCP.getY1();
 
-        if ( targetCP.intercepts( x, y ) ) {
-            targetCPDragging = true;
-        } else if ( centralCP.intercepts( x, y ) ) {
-            centralCPDragging = true;
-        } else if ( leftCP.intercepts( x, y ) ) {
-            leftCPDragging = true;
-        } else if ( rightCP.intercepts( x, y ) ) {
-            rightCPDragging = true;
-        } else if ( label.intercepts( x, y ) ) {
+        if ( controlPointsVisible ) {
+            if ( targetCP.intercepts( x, y ) ) {
+                targetCPDragging = true;
+            } else if ( centralCP.intercepts( x, y ) ) {
+                centralCPDragging = true;
+            } else if ( leftCP.intercepts( x, y ) ) {
+                leftCPDragging = true;
+            } else if ( rightCP.intercepts( x, y ) ) {
+                rightCPDragging = true;
+            }
+        }
+        
+        if ( label.intercepts( x, y ) ) {
             labelDragging = true;
             xOffset = x - label.getX1();
             yOffset = y - label.getY1();

@@ -120,4 +120,13 @@ public class DrawPanel extends JPanel {
         }
     }
     
+    public void mouseHoverStatesAndTransitions( int x, int y ) {
+        for ( Transition t : transitions ) {
+            t.mouseHover( x, y );
+        }
+        for ( State s : states ) {
+            s.mouseHover( x, y );
+        }
+    }
+    
 }

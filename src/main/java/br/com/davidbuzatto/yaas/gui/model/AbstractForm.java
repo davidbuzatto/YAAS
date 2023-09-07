@@ -35,9 +35,13 @@ public abstract class AbstractForm {
     protected int y1;
     protected int x2;
     protected int y2;
+    protected boolean mouseHover;
     
     protected Color strokeColor = Color.BLACK;
     protected Color fillColor = Color.WHITE;
+    
+    protected Color mouseHoverStrokeColor = Color.BLUE;
+    protected Color mouseHoverFillColor = Color.GREEN;
     
     protected Font font;
     protected Stroke stroke;
@@ -55,14 +59,6 @@ public abstract class AbstractForm {
 
     public static void setIdGenerator( int idGenerator ) {
         AbstractForm.idGenerator = idGenerator;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId( int id ) {
-        this.id = id;
     }
 
     public int getX1() {
@@ -97,6 +93,14 @@ public abstract class AbstractForm {
         this.y2 = y2;
     }
 
+    public boolean isMouseHover() {
+        return mouseHover;
+    }
+
+    public void setMouseHover( boolean mouseHover ) {
+        this.mouseHover = mouseHover;
+    }
+
     public Color getStrokeColor() {
         return strokeColor;
     }
@@ -111,6 +115,22 @@ public abstract class AbstractForm {
 
     public void setFillColor( Color fillColor ) {
         this.fillColor = fillColor;
+    }
+
+    public Color getMouseHoverStrokeColor() {
+        return mouseHoverStrokeColor;
+    }
+
+    public void setMouseHoverStrokeColor( Color mouseHoverStrokeColor ) {
+        this.mouseHoverStrokeColor = mouseHoverStrokeColor;
+    }
+
+    public Color getMouseHoverFillColor() {
+        return mouseHoverFillColor;
+    }
+
+    public void setMouseHoverFillColor( Color mouseHoverFillColor ) {
+        this.mouseHoverFillColor = mouseHoverFillColor;
     }
 
     public Font getFont() {
@@ -128,6 +148,8 @@ public abstract class AbstractForm {
     public void setStroke( Stroke stroke ) {
         this.stroke = stroke;
     }
+
+    
     
     @Override
     public int hashCode() {
