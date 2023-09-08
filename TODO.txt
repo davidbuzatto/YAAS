@@ -1,5 +1,6 @@
-Configure appropriate colors;
-Grid / snap to grid for states;
+Context menus for basic properties configuration;
+Properties panel for advanced properties configuration;
+Grid / snap to grid for states; ???
 Specialized versions of states (Moore machines);
 Specialized versions of transitions (eNFAs, GNFAs, PDAs, Mealy machines and Turing machines);
 Zoom-in and zoom-out;

@@ -17,6 +17,7 @@
 package br.com.davidbuzatto.yaas.gui.model;
 
 import br.com.davidbuzatto.yaas.util.Utils;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.event.MouseEvent;
@@ -90,6 +91,7 @@ public class Transition extends AbstractForm {
         symbols.add( symbol );
         
         font = Utils.DEFAULT_FONT;
+        mouseHoverStrokeColor = Utils.TRANSITION_MOUSE_HOVER_STROKE_COLOR;
         stroke = Utils.TRANSITION_STROKE;
         cpStroke = Utils.TRANSITION_CP_STROKE;
         
@@ -97,31 +99,38 @@ public class Transition extends AbstractForm {
         label.setStroke( stroke );
         label.setFont( font );
         label.setStrokeColor( strokeColor );
+        label.setMouseHoverStrokeColor( Utils.TRANSITION_MOUSE_HOVER_STROKE_COLOR );
+        label.setMouseHoverFillColor( Utils.TRANSITION_MOUSE_HOVER_FILL_COLOR );
         updateLabel();
         
         targetCP = new ControlPoint();
         targetCP.setStroke( stroke );
-        targetCP.setRadius( Utils.TRANSITION_PTG_RADIUS );
-        targetCP.setFillColor( Utils.TRANSITION_PTG_COLOR );
+        targetCP.setRadius(Utils.TRANSITION_CP_TARGET_RADIUS );
+        targetCP.setFillColor(Utils.TRANSITION_CP_TARGET_COLOR );
+        targetCP.setMouseHoverStrokeColor( Utils.TRANSITION_CP_MOUSE_HOVER_STROKE_COLOR );
         
         centralCP = new ControlPoint();
         centralCP.setStroke( stroke );
         centralCP.setRadius( Utils.TRANSITION_CP_RADIUS );
         centralCP.setFillColor( Utils.TRANSITION_CP_COLOR );
+        centralCP.setMouseHoverStrokeColor( Utils.TRANSITION_CP_MOUSE_HOVER_STROKE_COLOR );
         
         leftCP = new ControlPoint();
         leftCP.setStroke( stroke );
         leftCP.setRadius( Utils.TRANSITION_CP_RADIUS );
         leftCP.setFillColor( Utils.TRANSITION_CP_LEFT_COLOR );
+        leftCP.setMouseHoverStrokeColor( Utils.TRANSITION_CP_MOUSE_HOVER_STROKE_COLOR );
         
         rightCP = new ControlPoint();
         rightCP.setStroke( stroke );
         rightCP.setRadius( Utils.TRANSITION_CP_RADIUS );
         rightCP.setFillColor( Utils.TRANSITION_CP_RIGHT_COLOR );
+        rightCP.setMouseHoverStrokeColor( Utils.TRANSITION_CP_MOUSE_HOVER_STROKE_COLOR );
         
         updateStartAndEndPoints();
         
         arrow = new Arrow();
+        arrow.setMouseHoverStrokeColor( Utils.TRANSITION_MOUSE_HOVER_STROKE_COLOR );
         arrow.setAngle( Math.atan2( 
                 y2 - rightCP.getY1(), x2 - rightCP.getX1() ) );
         arrow.setX1( x2 );
@@ -410,7 +419,13 @@ public class Transition extends AbstractForm {
         prevRightCPX = rightCP.getX1();
         prevRightCPY = rightCP.getY1();
 
-        if ( controlPointsVisible ) {
+        if ( label.intercepts( x, y ) ) {
+            labelDragging = true;
+            xOffset = x - label.getX1();
+            yOffset = y - label.getY1();
+        }
+        
+        if ( !labelDragging && controlPointsVisible ) {
             if ( targetCP.intercepts( x, y ) ) {
                 targetCPDragging = true;
             } else if ( centralCP.intercepts( x, y ) ) {
@@ -420,12 +435,6 @@ public class Transition extends AbstractForm {
             } else if ( rightCP.intercepts( x, y ) ) {
                 rightCPDragging = true;
             }
-        }
-        
-        if ( label.intercepts( x, y ) ) {
-            labelDragging = true;
-            xOffset = x - label.getX1();
-            yOffset = y - label.getY1();
         }
         
         return 

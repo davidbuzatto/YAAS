@@ -16,6 +16,7 @@
  */
 package br.com.davidbuzatto.yaas.gui.model;
 
+import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 
@@ -28,11 +29,16 @@ public class Arrow extends AbstractForm {
     
     private double angle = 0;
     
+    public Arrow() {
+        stroke = Utils.DEFAULT_ARROW_STROKE;
+    }
+    
     @Override
     public void draw( Graphics2D g2d ) {
         
         g2d = (Graphics2D) g2d.create();
         g2d.rotate( angle, x1, y1 );
+        g2d.setStroke( stroke );
         
         if ( mouseHover ) {
             g2d.setColor( mouseHoverStrokeColor );

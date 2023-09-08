@@ -39,12 +39,20 @@ public class State extends AbstractForm {
     private Arrow arrow;
     
     public State() {
+        
         font = Utils.DEFAULT_FONT;
         stroke = Utils.STATE_STROKE;
+        
+        mouseHoverFillColor = Utils.STATE_MOUSE_HOVER_FILL_COLOR;
+        mouseHoverStrokeColor = Utils.STATE_MOUSE_HOVER_STROKE_COLOR;
+        
         radius = Utils.STATE_RADIUS;
         radiusSquared = Utils.STATE_RADIUS_SQUARED;
         diameter = Utils.STATE_DIAMETER;
+        
         arrow = new Arrow();
+        arrow.setMouseHoverStrokeColor( Utils.STATE_MOUSE_HOVER_STROKE_COLOR );
+        
     }
     
     @Override
@@ -74,6 +82,7 @@ public class State extends AbstractForm {
         } else {
             g2d.setColor( fillColor );
         }
+        
         g2d.fillOval( x1 - radius, y1 - radius, diameter, diameter );
         
         if ( mouseHover ) {

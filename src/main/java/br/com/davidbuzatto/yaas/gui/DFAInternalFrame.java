@@ -18,6 +18,7 @@ package br.com.davidbuzatto.yaas.gui;
 
 import br.com.davidbuzatto.yaas.gui.model.State;
 import br.com.davidbuzatto.yaas.gui.model.Transition;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -35,6 +36,9 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
     
     private State selectedState;
     private Transition selectedTransition;
+    
+    private State originState;
+    private State targetState;
     
     /**
      * Creates new form DFAInternalFrame
@@ -101,12 +105,22 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
 
         btnGroup = new javax.swing.ButtonGroup();
         toolBar = new javax.swing.JToolBar();
+        btnNew = new javax.swing.JButton();
+        btnOpen = new javax.swing.JButton();
+        btnSave = new javax.swing.JButton();
+        sep01 = new javax.swing.JToolBar.Separator();
         btnMove = new javax.swing.JToggleButton();
         btnAddState = new javax.swing.JToggleButton();
         btnAddTransition = new javax.swing.JToggleButton();
-        sep01 = new javax.swing.JToolBar.Separator();
-        btnReset = new javax.swing.JButton();
-        chkShowTCP = new javax.swing.JCheckBox();
+        horizontalFiller = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        btnShowObjectProperties = new javax.swing.JToggleButton();
+        btnShowTransitionControls = new javax.swing.JToggleButton();
+        seo03 = new javax.swing.JToolBar.Separator();
+        btnShowGrid = new javax.swing.JToggleButton();
+        btnSnapToGrid = new javax.swing.JToggleButton();
+        sep04 = new javax.swing.JToolBar.Separator();
+        btnZoomIn = new javax.swing.JButton();
+        btnZoomOut = new javax.swing.JButton();
         drawPanel = new br.com.davidbuzatto.yaas.gui.DrawPanel();
 
         setClosable(true);
@@ -117,45 +131,157 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
 
         toolBar.setRollover(true);
 
+        btnNew.setIcon(new javax.swing.ImageIcon(getClass().getResource("/page_white_add.png"))); // NOI18N
+        btnNew.setToolTipText("New");
+        btnNew.setFocusable(false);
+        btnNew.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnNew.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnNew.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNewActionPerformed(evt);
+            }
+        });
+        toolBar.add(btnNew);
+
+        btnOpen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/folder.png"))); // NOI18N
+        btnOpen.setToolTipText("Open");
+        btnOpen.setFocusable(false);
+        btnOpen.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnOpen.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnOpen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOpenActionPerformed(evt);
+            }
+        });
+        toolBar.add(btnOpen);
+
+        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/disk.png"))); // NOI18N
+        btnSave.setToolTipText("Save");
+        btnSave.setFocusable(false);
+        btnSave.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnSave.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
+        toolBar.add(btnSave);
+        toolBar.add(sep01);
+
         btnGroup.add(btnMove);
+        btnMove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cursor_openhand.png"))); // NOI18N
         btnMove.setSelected(true);
-        btnMove.setText("move");
+        btnMove.setToolTipText("Move");
         btnMove.setFocusable(false);
         btnMove.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnMove.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnMove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMoveActionPerformed(evt);
+            }
+        });
         toolBar.add(btnMove);
 
         btnGroup.add(btnAddState);
-        btnAddState.setText("add state");
+        btnAddState.setIcon(new javax.swing.ImageIcon(getClass().getResource("/state.png"))); // NOI18N
+        btnAddState.setToolTipText("Add State");
         btnAddState.setFocusable(false);
         btnAddState.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnAddState.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAddState.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddStateActionPerformed(evt);
+            }
+        });
         toolBar.add(btnAddState);
 
         btnGroup.add(btnAddTransition);
-        btnAddTransition.setText("add transition");
+        btnAddTransition.setIcon(new javax.swing.ImageIcon(getClass().getResource("/transition.png"))); // NOI18N
+        btnAddTransition.setToolTipText("Add Transition");
         btnAddTransition.setFocusable(false);
         btnAddTransition.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnAddTransition.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        toolBar.add(btnAddTransition);
-        toolBar.add(sep01);
-
-        btnReset.setText("reset");
-        btnReset.setFocusable(false);
-        btnReset.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnReset.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        toolBar.add(btnReset);
-
-        chkShowTCP.setText("show transition control points");
-        chkShowTCP.setFocusable(false);
-        chkShowTCP.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        chkShowTCP.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        chkShowTCP.addActionListener(new java.awt.event.ActionListener() {
+        btnAddTransition.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chkShowTCPActionPerformed(evt);
+                btnAddTransitionActionPerformed(evt);
             }
         });
-        toolBar.add(chkShowTCP);
+        toolBar.add(btnAddTransition);
+        toolBar.add(horizontalFiller);
+
+        btnShowObjectProperties.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wrench.png"))); // NOI18N
+        btnShowObjectProperties.setToolTipText("Show/Hide Object Properties");
+        btnShowObjectProperties.setFocusable(false);
+        btnShowObjectProperties.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnShowObjectProperties.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnShowObjectProperties.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnShowObjectPropertiesActionPerformed(evt);
+            }
+        });
+        toolBar.add(btnShowObjectProperties);
+
+        btnShowTransitionControls.setIcon(new javax.swing.ImageIcon(getClass().getResource("/shape_square_edit.png"))); // NOI18N
+        btnShowTransitionControls.setToolTipText("Show/Hide Transition Control Points");
+        btnShowTransitionControls.setFocusable(false);
+        btnShowTransitionControls.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnShowTransitionControls.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnShowTransitionControls.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnShowTransitionControlsActionPerformed(evt);
+            }
+        });
+        toolBar.add(btnShowTransitionControls);
+        toolBar.add(seo03);
+
+        btnShowGrid.setIcon(new javax.swing.ImageIcon(getClass().getResource("/note.png"))); // NOI18N
+        btnShowGrid.setToolTipText("Show/Hide Grid");
+        btnShowGrid.setFocusable(false);
+        btnShowGrid.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnShowGrid.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnShowGrid.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnShowGridActionPerformed(evt);
+            }
+        });
+        toolBar.add(btnShowGrid);
+
+        btnSnapToGrid.setIcon(new javax.swing.ImageIcon(getClass().getResource("/magnet.png"))); // NOI18N
+        btnSnapToGrid.setToolTipText("Snap to Grid");
+        btnSnapToGrid.setFocusable(false);
+        btnSnapToGrid.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnSnapToGrid.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSnapToGrid.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSnapToGridActionPerformed(evt);
+            }
+        });
+        toolBar.add(btnSnapToGrid);
+        toolBar.add(sep04);
+
+        btnZoomIn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/zoom_in.png"))); // NOI18N
+        btnZoomIn.setToolTipText("Zoom In");
+        btnZoomIn.setFocusable(false);
+        btnZoomIn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnZoomIn.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnZoomIn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnZoomInActionPerformed(evt);
+            }
+        });
+        toolBar.add(btnZoomIn);
+
+        btnZoomOut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/zoom_out.png"))); // NOI18N
+        btnZoomOut.setToolTipText("Zoom Out");
+        btnZoomOut.setFocusable(false);
+        btnZoomOut.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnZoomOut.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnZoomOut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnZoomOutActionPerformed(evt);
+            }
+        });
+        toolBar.add(btnZoomOut);
 
         drawPanel.setTransitionsControlPointsVisible(false);
         drawPanel.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
@@ -237,6 +363,17 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
             
         } else if ( btnAddTransition.isSelected() ) {
             
+            if ( originState == null ) {
+                originState = drawPanel.getStateAt( xPressed, yPressed );
+                if ( originState != null ) {
+                    drawPanel.setDrawingTempTransition( true );
+                    drawPanel.setTempTransitionX1( originState.getX1() );
+                    drawPanel.setTempTransitionY1( originState.getY1() );
+                    drawPanel.setTempTransitionX2( originState.getX1() );
+                    drawPanel.setTempTransitionY2( originState.getY1() );
+                }
+            }
+            
         }
         
         drawPanel.repaint();
@@ -245,24 +382,67 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
 
     private void drawPanelMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drawPanelMouseReleased
         
-        selectedState = null;
-        
-        if ( selectedTransition != null ) {
-            selectedTransition.mouseReleased( evt );
-            selectedTransition = null;
+        if ( btnMove.isSelected() ) {
+            
+            selectedState = null;
+
+            if ( selectedTransition != null ) {
+                selectedTransition.mouseReleased( evt );
+                selectedTransition = null;
+            }
+            
+        } else if ( btnAddTransition.isSelected() ) {
+            
+            if ( originState != null ) {
+                
+                if ( targetState == null ) {
+                    targetState = drawPanel.getStateAt( evt.getX(), evt.getY() );
+                } 
+            
+                if ( targetState != null ) {
+                    
+                    String s = JOptionPane.showInputDialog( this, "Transition symbol" );
+                    char symbol;
+                    
+                    if ( s == null || s.isEmpty() ) {
+                        symbol = '\u03b5';
+                    } else {
+                        symbol = s.charAt( 0 );
+                    }
+                        
+                    Transition t = new Transition( originState, targetState, symbol );
+                    drawPanel.addTransition( t );
+                    
+                }
+                
+                originState = null;
+                targetState = null;
+                drawPanel.setDrawingTempTransition( false );
+                
+            }
+            
         }
+        
+        drawPanel.repaint();
         
     }//GEN-LAST:event_drawPanelMouseReleased
 
     private void drawPanelMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drawPanelMouseDragged
         
-        if ( selectedState != null ) {
-            selectedState.setX1( evt.getX() - xOffset );
-            selectedState.setY1( evt.getY() - yOffset );
-            drawPanel.updateTransitions();
-            drawPanel.draggTransitions( evt );
-        } else if ( selectedTransition != null ) {
-            selectedTransition.mouseDragged( evt );
+        if ( btnMove.isSelected() ) {
+            
+            if ( selectedState != null ) {
+                selectedState.setX1( evt.getX() - xOffset );
+                selectedState.setY1( evt.getY() - yOffset );
+                drawPanel.updateTransitions();
+                drawPanel.draggTransitions( evt );
+            } else if ( selectedTransition != null ) {
+                selectedTransition.mouseDragged( evt );
+            }
+            
+        } else if ( btnAddTransition.isSelected() ) {
+            drawPanel.setTempTransitionX2( evt.getX() );
+            drawPanel.setTempTransitionY2( evt.getY() );
         }
         
         drawPanel.repaint();
@@ -271,7 +451,7 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
 
     private void drawPanelMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drawPanelMouseMoved
         
-        if ( btnMove.isSelected() ) {
+        if ( btnMove.isSelected() || btnAddTransition.isSelected() ) {
             drawPanel.mouseHoverStatesAndTransitions( evt.getX(), evt.getY() );
             drawPanel.repaint();
         }
@@ -282,10 +462,55 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_drawPanelMouseWheelMoved
 
-    private void chkShowTCPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkShowTCPActionPerformed
-        drawPanel.setTransitionsControlPointsVisible( chkShowTCP.isSelected() );
+    private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnNewActionPerformed
+
+    private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnOpenActionPerformed
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void btnMoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnMoveActionPerformed
+
+    private void btnAddStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddStateActionPerformed
+        // nothing here
+    }//GEN-LAST:event_btnAddStateActionPerformed
+
+    private void btnAddTransitionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddTransitionActionPerformed
+        // nothing here
+    }//GEN-LAST:event_btnAddTransitionActionPerformed
+
+    private void btnShowTransitionControlsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowTransitionControlsActionPerformed
+        drawPanel.setTransitionsControlPointsVisible( btnShowTransitionControls.isSelected() );
         drawPanel.repaint();
-    }//GEN-LAST:event_chkShowTCPActionPerformed
+    }//GEN-LAST:event_btnShowTransitionControlsActionPerformed
+
+    private void btnShowGridActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowGridActionPerformed
+        drawPanel.setShowGrid( btnShowGrid.isSelected() );
+        drawPanel.repaint();
+    }//GEN-LAST:event_btnShowGridActionPerformed
+
+    private void btnSnapToGridActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSnapToGridActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSnapToGridActionPerformed
+
+    private void btnZoomInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZoomInActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnZoomInActionPerformed
+
+    private void btnZoomOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZoomOutActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnZoomOutActionPerformed
+
+    private void btnShowObjectPropertiesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowObjectPropertiesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnShowObjectPropertiesActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -293,10 +518,20 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JToggleButton btnAddTransition;
     private javax.swing.ButtonGroup btnGroup;
     private javax.swing.JToggleButton btnMove;
-    private javax.swing.JButton btnReset;
-    private javax.swing.JCheckBox chkShowTCP;
+    private javax.swing.JButton btnNew;
+    private javax.swing.JButton btnOpen;
+    private javax.swing.JButton btnSave;
+    private javax.swing.JToggleButton btnShowGrid;
+    private javax.swing.JToggleButton btnShowObjectProperties;
+    private javax.swing.JToggleButton btnShowTransitionControls;
+    private javax.swing.JToggleButton btnSnapToGrid;
+    private javax.swing.JButton btnZoomIn;
+    private javax.swing.JButton btnZoomOut;
     private br.com.davidbuzatto.yaas.gui.DrawPanel drawPanel;
+    private javax.swing.Box.Filler horizontalFiller;
+    private javax.swing.JToolBar.Separator seo03;
     private javax.swing.JToolBar.Separator sep01;
+    private javax.swing.JToolBar.Separator sep04;
     private javax.swing.JToolBar toolBar;
     // End of variables declaration//GEN-END:variables
 }

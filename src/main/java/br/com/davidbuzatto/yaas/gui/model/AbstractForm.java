@@ -40,8 +40,8 @@ public abstract class AbstractForm {
     protected Color strokeColor = Color.BLACK;
     protected Color fillColor = Color.WHITE;
     
-    protected Color mouseHoverStrokeColor = Color.BLUE;
-    protected Color mouseHoverFillColor = Color.GREEN;
+    protected Color mouseHoverStrokeColor = Color.BLACK;
+    protected Color mouseHoverFillColor = Color.WHITE;
     
     protected Font font;
     protected Stroke stroke;
