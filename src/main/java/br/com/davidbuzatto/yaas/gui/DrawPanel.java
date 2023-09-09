@@ -17,17 +17,13 @@
 package br.com.davidbuzatto.yaas.gui;
 
 import br.com.davidbuzatto.yaas.gui.model.Arrow;
-import br.com.davidbuzatto.yaas.gui.model.State;
-import br.com.davidbuzatto.yaas.gui.model.Transition;
+import br.com.davidbuzatto.yaas.gui.model.DFA;
 import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.JPanel;
 
 /**
@@ -37,13 +33,11 @@ import javax.swing.JPanel;
  */
 public class DrawPanel extends JPanel {
 
-    private List<State> states;
-    private List<Transition> transitions;
+    private DFA dfa;
     
     private boolean showGrid;
-    private boolean transitionControlPointsVisible;
-    
     private boolean drawingTempTransition;
+    
     private Arrow tempTransitionArrow;
     private int tempTransitionX1;
     private int tempTransitionY1;
@@ -51,8 +45,6 @@ public class DrawPanel extends JPanel {
     private int tempTransitionY2;
     
     public DrawPanel() {
-        states = new ArrayList<>();
-        transitions = new ArrayList<>();
         tempTransitionArrow = new Arrow();
         tempTransitionArrow.setStroke( Utils.TRANSITION_STROKE );
     }
@@ -68,6 +60,8 @@ public class DrawPanel extends JPanel {
         
         g2d.setColor( Color.WHITE );
         g2d.fillRect( 0, 0, getWidth(), getHeight() );
+        g2d.setColor( Color.BLACK );
+        g2d.drawRect( 0, 0, getWidth(), getHeight() );
         
         if ( showGrid ) {
             g2d.setColor( Utils.GRID_COLOR );
@@ -79,101 +73,38 @@ public class DrawPanel extends JPanel {
             }
         }
         
-        for ( Transition t : transitions ) {
-            t.draw( g2d );
-        }
+        if ( dfa != null ) {
+            
+            dfa.draw( g2d );
         
-        for ( State s : states ) {
-            s.draw( g2d );
-        }
-        
-        if ( drawingTempTransition ) {
-            
-            Stroke s = g2d.getStroke();
-            g2d.setStroke( Utils.TEMP_TRANSITION_STROKE );
-            g2d.setColor( Utils.TEMP_TRANSITION_COLOR );
-            
-            g2d.drawLine( 
-                    tempTransitionX1, tempTransitionY1, 
-                    tempTransitionX2, tempTransitionY2 );
-            
-            tempTransitionArrow.setX1( tempTransitionX2 );
-            tempTransitionArrow.setY1( tempTransitionY2 );
-            tempTransitionArrow.setStrokeColor( Utils.TEMP_TRANSITION_COLOR );
-            tempTransitionArrow.setAngle( Math.atan2( 
-                    tempTransitionY2 - tempTransitionY1, 
-                    tempTransitionX2 - tempTransitionX1 ) );
-            tempTransitionArrow.draw( g2d );
+            if ( drawingTempTransition ) {
+
+                Stroke s = g2d.getStroke();
+                g2d.setStroke( Utils.TEMP_TRANSITION_STROKE );
+                g2d.setColor( Utils.TEMP_TRANSITION_COLOR );
+
+                g2d.drawLine( 
+                        tempTransitionX1, tempTransitionY1, 
+                        tempTransitionX2, tempTransitionY2 );
+
+                tempTransitionArrow.setX1( tempTransitionX2 );
+                tempTransitionArrow.setY1( tempTransitionY2 );
+                tempTransitionArrow.setStrokeColor( Utils.TEMP_TRANSITION_COLOR );
+                tempTransitionArrow.setAngle( Math.atan2( 
+                        tempTransitionY2 - tempTransitionY1, 
+                        tempTransitionX2 - tempTransitionX1 ) );
+                tempTransitionArrow.draw( g2d );
+
+            }
             
         }
         
         g2d.dispose();
         
     }
-    
-    public State getStateAt( int x, int y ) {
-        
-        for ( State s : states ) {
-            if ( s.intercepts( x, y ) ) {
-                return s;
-            }
-        }
-        
-        return null;
-        
-    }
-    
-    public Transition getTransitionAt( int x, int y ) {
-        
-        for ( Transition t : transitions ) {
-            if ( t.intercepts( x, y ) ) {
-                return t;
-            }
-        }
-        
-        return null;
-        
-    }
-    
-    public void addState( State state ) {
-        if ( state != null ) {
-            states.add( state );
-        }
-    }
-    
-    public void addTransition( Transition transition ) {
-        if ( transition != null ) {
-            transition.setControlPointsVisible( transitionControlPointsVisible );
-            transitions.add( transition );
-        }
-    }
-    
-    public void updateTransitions() {
-        for ( Transition t : transitions ) {
-            t.updateStartAndEndPoints();
-        }
-    }
-    
-    public void draggTransitions( MouseEvent e ) {
-        for ( Transition t : transitions ) {
-            t.mouseDragged( e );
-        }
-    }
-    
-    public void setTransitionsControlPointsVisible( boolean visible ) {
-        transitionControlPointsVisible = visible;
-        for ( Transition t : transitions ) {
-            t.setControlPointsVisible( visible );
-        }
-    }
-    
-    public void mouseHoverStatesAndTransitions( int x, int y ) {
-        for ( Transition t : transitions ) {
-            t.mouseHover( x, y );
-        }
-        for ( State s : states ) {
-            s.mouseHover( x, y );
-        }
+
+    public void setDfa( DFA dfa ) {
+        this.dfa = dfa;
     }
 
     public boolean isShowGrid() {

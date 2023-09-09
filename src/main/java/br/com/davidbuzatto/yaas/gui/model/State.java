@@ -46,12 +46,16 @@ public class State extends AbstractForm {
         mouseHoverFillColor = Utils.STATE_MOUSE_HOVER_FILL_COLOR;
         mouseHoverStrokeColor = Utils.STATE_MOUSE_HOVER_STROKE_COLOR;
         
+        selectedFillColor = Utils.STATE_SELECTED_FILL_COLOR;
+        selectedStrokeColor = Utils.STATE_SELECTED_STROKE_COLOR;
+        
         radius = Utils.STATE_RADIUS;
         radiusSquared = Utils.STATE_RADIUS_SQUARED;
         diameter = Utils.STATE_DIAMETER;
         
         arrow = new Arrow();
         arrow.setMouseHoverStrokeColor( Utils.STATE_MOUSE_HOVER_STROKE_COLOR );
+        arrow.setSelectedStrokeColor( Utils.STATE_SELECTED_STROKE_COLOR );
         
     }
     
@@ -63,9 +67,12 @@ public class State extends AbstractForm {
         g2d.setFont( font );
         g2d.setStroke( stroke );
         arrow.setMouseHover( mouseHover );
+        arrow.setSelected( selected );
         
         if ( mouseHover ) {
             g2d.setColor( mouseHoverStrokeColor );
+        } else if ( selected ) {
+            g2d.setColor( selectedStrokeColor );
         } else {
             g2d.setColor( strokeColor );
         }
@@ -79,6 +86,8 @@ public class State extends AbstractForm {
         
         if ( mouseHover ) {
             g2d.setColor( mouseHoverFillColor );
+        } else if ( selected ) {
+            g2d.setColor( selectedFillColor );
         } else {
             g2d.setColor( fillColor );
         }
@@ -87,9 +96,12 @@ public class State extends AbstractForm {
         
         if ( mouseHover ) {
             g2d.setColor( mouseHoverStrokeColor );
+        } else if ( selected ) {
+            g2d.setColor( selectedStrokeColor );
         } else {
             g2d.setColor( strokeColor );
         }
+        
         g2d.drawOval( x1 - radius, y1 - radius, diameter, diameter );
         
         if ( accepting ) {

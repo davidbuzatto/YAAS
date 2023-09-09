@@ -16,8 +16,13 @@
  */
 package br.com.davidbuzatto.yaas.gui;
 
+import br.com.davidbuzatto.yaas.gui.model.DFA;
+import br.com.davidbuzatto.yaas.gui.model.DFAPropertiesPanel;
 import br.com.davidbuzatto.yaas.gui.model.State;
+import br.com.davidbuzatto.yaas.gui.model.StatePropertiesPanel;
 import br.com.davidbuzatto.yaas.gui.model.Transition;
+import br.com.davidbuzatto.yaas.gui.model.TransitionPropertiesPanel;
+import java.awt.CardLayout;
 import javax.swing.JOptionPane;
 
 /**
@@ -26,6 +31,12 @@ import javax.swing.JOptionPane;
  */
 public class DFAInternalFrame extends javax.swing.JInternalFrame {
 
+    private static final String MODEL_PROPERTIES_CARD = "model";
+    private static final String STATE_PROPERTIES_CARD = "state";
+    private static final String TRANSITION_PROPERTIES_CARD = "transition";
+    
+    private DFA dfa;
+    
     private int xPressed;
     private int yPressed;
     
@@ -40,6 +51,11 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
     private State originState;
     private State targetState;
     
+    private DFAPropertiesPanel dfaPPanel;
+    private StatePropertiesPanel statePPanel;
+    private TransitionPropertiesPanel transitionPPanel;
+    private CardLayout cardLayout;
+    
     /**
      * Creates new form DFAInternalFrame
      */
@@ -49,6 +65,22 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
     }
 
     private void customInit() {
+        
+        dfaPPanel = new DFAPropertiesPanel();
+        statePPanel = new StatePropertiesPanel();
+        transitionPPanel = new TransitionPropertiesPanel();
+        
+        cardLayout = (CardLayout) containerProperties.getLayout();
+        containerProperties.add( dfaPPanel, MODEL_PROPERTIES_CARD );
+        containerProperties.add( statePPanel, STATE_PROPERTIES_CARD );
+        containerProperties.add( transitionPPanel, TRANSITION_PROPERTIES_CARD );
+        
+        cardLayout.show( containerProperties, MODEL_PROPERTIES_CARD );
+        
+        splitH.setDividerLocation( 600 );
+        splitV.setDividerLocation( 400 );
+        
+        dfa = new DFA();
         
         State s0 = new State();
         s0.setX1( 100 );
@@ -80,15 +112,17 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
         Transition t4 = new Transition( s2, s3, 'a' );
         Transition t5 = new Transition( s0, s0, 'a' );
         
-        drawPanel.addState( s0 );
-        drawPanel.addState( s1 );
-        drawPanel.addState( s2 );
-        drawPanel.addState( s3 );
-        drawPanel.addTransition( t1 );
-        drawPanel.addTransition( t2 );
-        drawPanel.addTransition( t3 );
-        drawPanel.addTransition( t4 );
-        drawPanel.addTransition( t5 );
+        dfa.addState( s0 );
+        dfa.addState( s1 );
+        dfa.addState( s2 );
+        dfa.addState( s3 );
+        dfa.addTransition( t1 );
+        dfa.addTransition( t2 );
+        dfa.addTransition( t3 );
+        dfa.addTransition( t4 );
+        dfa.addTransition( t5 );
+        
+        drawPanel.setDfa( dfa );
         
         //drawPanel.setTransitionsControlPointsVisible( true );
         
@@ -113,7 +147,6 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
         btnAddState = new javax.swing.JToggleButton();
         btnAddTransition = new javax.swing.JToggleButton();
         horizontalFiller = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        btnShowObjectProperties = new javax.swing.JToggleButton();
         btnShowTransitionControls = new javax.swing.JToggleButton();
         seo03 = new javax.swing.JToolBar.Separator();
         btnShowGrid = new javax.swing.JToggleButton();
@@ -121,7 +154,14 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
         sep04 = new javax.swing.JToolBar.Separator();
         btnZoomIn = new javax.swing.JButton();
         btnZoomOut = new javax.swing.JButton();
+        splitH = new javax.swing.JSplitPane();
+        splitV = new javax.swing.JSplitPane();
+        scrollAutomaton = new javax.swing.JScrollPane();
         drawPanel = new br.com.davidbuzatto.yaas.gui.DrawPanel();
+        containerSimulation = new javax.swing.JPanel();
+        scrollSimulation = new javax.swing.JScrollPane();
+        panelSimulation = new javax.swing.JPanel();
+        containerProperties = new javax.swing.JPanel();
 
         setClosable(true);
         setIconifiable(true);
@@ -209,18 +249,6 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
         toolBar.add(btnAddTransition);
         toolBar.add(horizontalFiller);
 
-        btnShowObjectProperties.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wrench.png"))); // NOI18N
-        btnShowObjectProperties.setToolTipText("Show/Hide Object Properties");
-        btnShowObjectProperties.setFocusable(false);
-        btnShowObjectProperties.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnShowObjectProperties.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnShowObjectProperties.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnShowObjectPropertiesActionPerformed(evt);
-            }
-        });
-        toolBar.add(btnShowObjectProperties);
-
         btnShowTransitionControls.setIcon(new javax.swing.ImageIcon(getClass().getResource("/shape_square_edit.png"))); // NOI18N
         btnShowTransitionControls.setToolTipText("Show/Hide Transition Control Points");
         btnShowTransitionControls.setFocusable(false);
@@ -283,7 +311,8 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
         });
         toolBar.add(btnZoomOut);
 
-        drawPanel.setTransitionsControlPointsVisible(false);
+        splitV.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+
         drawPanel.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 drawPanelMouseDragged(evt);
@@ -310,30 +339,126 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
         drawPanel.setLayout(drawPanelLayout);
         drawPanelLayout.setHorizontalGroup(
             drawPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 598, Short.MAX_VALUE)
         );
         drawPanelLayout.setVerticalGroup(
             drawPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 533, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
+
+        scrollAutomaton.setViewportView(drawPanel);
+
+        splitV.setTopComponent(scrollAutomaton);
+
+        containerSimulation.setBorder(javax.swing.BorderFactory.createTitledBorder("Simulation"));
+
+        javax.swing.GroupLayout panelSimulationLayout = new javax.swing.GroupLayout(panelSimulation);
+        panelSimulation.setLayout(panelSimulationLayout);
+        panelSimulationLayout.setHorizontalGroup(
+            panelSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 576, Short.MAX_VALUE)
+        );
+        panelSimulationLayout.setVerticalGroup(
+            panelSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 511, Short.MAX_VALUE)
+        );
+
+        scrollSimulation.setViewportView(panelSimulation);
+
+        javax.swing.GroupLayout containerSimulationLayout = new javax.swing.GroupLayout(containerSimulation);
+        containerSimulation.setLayout(containerSimulationLayout);
+        containerSimulationLayout.setHorizontalGroup(
+            containerSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(containerSimulationLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(scrollSimulation, javax.swing.GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        containerSimulationLayout.setVerticalGroup(
+            containerSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(containerSimulationLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(scrollSimulation, javax.swing.GroupLayout.DEFAULT_SIZE, 407, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        splitV.setRightComponent(containerSimulation);
+
+        splitH.setLeftComponent(splitV);
+
+        containerProperties.setBorder(javax.swing.BorderFactory.createTitledBorder("Properties"));
+        containerProperties.setLayout(new java.awt.CardLayout());
+        splitH.setRightComponent(containerProperties);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(toolBar, javax.swing.GroupLayout.DEFAULT_SIZE, 788, Short.MAX_VALUE)
-            .addComponent(drawPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(toolBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(splitH, javax.swing.GroupLayout.DEFAULT_SIZE, 788, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(toolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(drawPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(splitH, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnNewActionPerformed
+
+    private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnOpenActionPerformed
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void btnMoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveActionPerformed
+        dfa.deselectAll();
+        cardLayout.show( containerProperties, MODEL_PROPERTIES_CARD );
+        drawPanel.repaint();
+    }//GEN-LAST:event_btnMoveActionPerformed
+
+    private void btnAddStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddStateActionPerformed
+        dfa.deselectAll();
+        cardLayout.show( containerProperties, MODEL_PROPERTIES_CARD );
+        drawPanel.repaint();
+    }//GEN-LAST:event_btnAddStateActionPerformed
+
+    private void btnAddTransitionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddTransitionActionPerformed
+        dfa.deselectAll();
+        cardLayout.show( containerProperties, MODEL_PROPERTIES_CARD );
+        drawPanel.repaint();
+    }//GEN-LAST:event_btnAddTransitionActionPerformed
+
+    private void btnShowTransitionControlsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowTransitionControlsActionPerformed
+        dfa.setTransitionsControlPointsVisible( btnShowTransitionControls.isSelected() );
+        drawPanel.repaint();
+    }//GEN-LAST:event_btnShowTransitionControlsActionPerformed
+
+    private void btnShowGridActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowGridActionPerformed
+        drawPanel.setShowGrid( btnShowGrid.isSelected() );
+        drawPanel.repaint();
+    }//GEN-LAST:event_btnShowGridActionPerformed
+
+    private void btnSnapToGridActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSnapToGridActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSnapToGridActionPerformed
+
+    private void btnZoomInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZoomInActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnZoomInActionPerformed
+
+    private void btnZoomOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZoomOutActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnZoomOutActionPerformed
 
     private void drawPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drawPanelMousePressed
         
@@ -342,14 +467,21 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
         
         if ( btnMove.isSelected() ) {
             
-            selectedState = drawPanel.getStateAt( xPressed, yPressed );
+            dfa.deselectAll();
+            selectedState = dfa.getStateAt( xPressed, yPressed );
             
             if ( selectedState != null ) {
                 xOffset = xPressed - selectedState.getX1();
                 yOffset = yPressed - selectedState.getY1();
-                drawPanel.updateTransitions();
+                dfa.updateTransitions();
+                cardLayout.show( containerProperties, STATE_PROPERTIES_CARD );
             } else {
-                selectedTransition = drawPanel.getTransitionAt( xPressed, yPressed );
+                selectedTransition = dfa.getTransitionAt( xPressed, yPressed );
+                if ( selectedTransition != null ) {
+                    cardLayout.show( containerProperties, TRANSITION_PROPERTIES_CARD );
+                } else {
+                    cardLayout.show( containerProperties, MODEL_PROPERTIES_CARD );
+                }
             }
             
         } else if ( btnAddState.isSelected() ) {
@@ -359,12 +491,12 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
             newState.setY1( yPressed );
             newState.setLabel( "q" + currentState++ );
             
-            drawPanel.addState( newState );
+            dfa.addState( newState );
             
         } else if ( btnAddTransition.isSelected() ) {
             
             if ( originState == null ) {
-                originState = drawPanel.getStateAt( xPressed, yPressed );
+                originState = dfa.getStateAt( xPressed, yPressed );
                 if ( originState != null ) {
                     drawPanel.setDrawingTempTransition( true );
                     drawPanel.setTempTransitionX1( originState.getX1() );
@@ -396,7 +528,7 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
             if ( originState != null ) {
                 
                 if ( targetState == null ) {
-                    targetState = drawPanel.getStateAt( evt.getX(), evt.getY() );
+                    targetState = dfa.getStateAt( evt.getX(), evt.getY() );
                 } 
             
                 if ( targetState != null ) {
@@ -411,7 +543,7 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
                     }
                         
                     Transition t = new Transition( originState, targetState, symbol );
-                    drawPanel.addTransition( t );
+                    dfa.addTransition( t );
                     
                 }
                 
@@ -420,6 +552,8 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
                 drawPanel.setDrawingTempTransition( false );
                 
             }
+            
+            dfa.deselectAll();
             
         }
         
@@ -434,8 +568,8 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
             if ( selectedState != null ) {
                 selectedState.setX1( evt.getX() - xOffset );
                 selectedState.setY1( evt.getY() - yOffset );
-                drawPanel.updateTransitions();
-                drawPanel.draggTransitions( evt );
+                dfa.updateTransitions();
+                dfa.draggTransitions( evt );
             } else if ( selectedTransition != null ) {
                 selectedTransition.mouseDragged( evt );
             }
@@ -452,7 +586,7 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
     private void drawPanelMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drawPanelMouseMoved
         
         if ( btnMove.isSelected() || btnAddTransition.isSelected() ) {
-            drawPanel.mouseHoverStatesAndTransitions( evt.getX(), evt.getY() );
+            dfa.mouseHoverStatesAndTransitions( evt.getX(), evt.getY() );
             drawPanel.repaint();
         }
         
@@ -461,56 +595,6 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
     private void drawPanelMouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_drawPanelMouseWheelMoved
         // TODO add your handling code here:
     }//GEN-LAST:event_drawPanelMouseWheelMoved
-
-    private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnNewActionPerformed
-
-    private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnOpenActionPerformed
-
-    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSaveActionPerformed
-
-    private void btnMoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnMoveActionPerformed
-
-    private void btnAddStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddStateActionPerformed
-        // nothing here
-    }//GEN-LAST:event_btnAddStateActionPerformed
-
-    private void btnAddTransitionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddTransitionActionPerformed
-        // nothing here
-    }//GEN-LAST:event_btnAddTransitionActionPerformed
-
-    private void btnShowTransitionControlsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowTransitionControlsActionPerformed
-        drawPanel.setTransitionsControlPointsVisible( btnShowTransitionControls.isSelected() );
-        drawPanel.repaint();
-    }//GEN-LAST:event_btnShowTransitionControlsActionPerformed
-
-    private void btnShowGridActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowGridActionPerformed
-        drawPanel.setShowGrid( btnShowGrid.isSelected() );
-        drawPanel.repaint();
-    }//GEN-LAST:event_btnShowGridActionPerformed
-
-    private void btnSnapToGridActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSnapToGridActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSnapToGridActionPerformed
-
-    private void btnZoomInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZoomInActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnZoomInActionPerformed
-
-    private void btnZoomOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZoomOutActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnZoomOutActionPerformed
-
-    private void btnShowObjectPropertiesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowObjectPropertiesActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnShowObjectPropertiesActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -522,16 +606,22 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnOpen;
     private javax.swing.JButton btnSave;
     private javax.swing.JToggleButton btnShowGrid;
-    private javax.swing.JToggleButton btnShowObjectProperties;
     private javax.swing.JToggleButton btnShowTransitionControls;
     private javax.swing.JToggleButton btnSnapToGrid;
     private javax.swing.JButton btnZoomIn;
     private javax.swing.JButton btnZoomOut;
+    private javax.swing.JPanel containerProperties;
+    private javax.swing.JPanel containerSimulation;
     private br.com.davidbuzatto.yaas.gui.DrawPanel drawPanel;
     private javax.swing.Box.Filler horizontalFiller;
+    private javax.swing.JPanel panelSimulation;
+    private javax.swing.JScrollPane scrollAutomaton;
+    private javax.swing.JScrollPane scrollSimulation;
     private javax.swing.JToolBar.Separator seo03;
     private javax.swing.JToolBar.Separator sep01;
     private javax.swing.JToolBar.Separator sep04;
+    private javax.swing.JSplitPane splitH;
+    private javax.swing.JSplitPane splitV;
     private javax.swing.JToolBar toolBar;
     // End of variables declaration//GEN-END:variables
 }

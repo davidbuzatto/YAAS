@@ -1,4 +1,3 @@
-Context menus for basic properties configuration;
 Properties panel for advanced properties configuration;
 Grid / snap to grid for states; ???
 Specialized versions of states (Moore machines);

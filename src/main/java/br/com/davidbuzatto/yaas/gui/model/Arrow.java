@@ -42,6 +42,8 @@ public class Arrow extends AbstractForm {
         
         if ( mouseHover ) {
             g2d.setColor( mouseHoverStrokeColor );
+        } else if ( selected ) {
+            g2d.setColor( selectedStrokeColor );
         } else {
             g2d.setColor( strokeColor );
         }

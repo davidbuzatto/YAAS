@@ -45,6 +45,10 @@ public class Utils {
             new Color( 0, 102, 153 );
     public static final Color STATE_MOUSE_HOVER_FILL_COLOR = 
             new Color( 157, 222, 255 );
+    public static final Color STATE_SELECTED_STROKE_COLOR = 
+            new Color( 0, 102, 153 );
+    public static final Color STATE_SELECTED_FILL_COLOR = 
+            new Color( 157, 222, 255 );
     
     public static final int TRANSITION_CP_RADIUS = 5;
     public static final int TRANSITION_CP_RADIUS_EQUARED = 
@@ -70,6 +74,10 @@ public class Utils {
     public static final Color TRANSITION_MOUSE_HOVER_STROKE_COLOR = 
             new Color( 0, 102, 153, 220 );
     public static final Color TRANSITION_MOUSE_HOVER_FILL_COLOR = 
+            new Color( 157, 222, 255, 220 );
+    public static final Color TRANSITION_SELECTED_STROKE_COLOR = 
+            new Color( 0, 102, 153, 220 );
+    public static final Color TRANSITION_SELECTED_FILL_COLOR = 
             new Color( 157, 222, 255, 220 );
     
     public static final BasicStroke TRANSITION_STROKE = 

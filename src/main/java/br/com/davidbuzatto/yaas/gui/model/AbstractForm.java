@@ -36,12 +36,16 @@ public abstract class AbstractForm {
     protected int x2;
     protected int y2;
     protected boolean mouseHover;
+    protected boolean selected;
     
     protected Color strokeColor = Color.BLACK;
     protected Color fillColor = Color.WHITE;
     
     protected Color mouseHoverStrokeColor = Color.BLACK;
     protected Color mouseHoverFillColor = Color.WHITE;
+    
+    protected Color selectedStrokeColor = Color.BLUE;
+    protected Color selectedFillColor = Color.WHITE;
     
     protected Font font;
     protected Stroke stroke;
@@ -133,6 +137,22 @@ public abstract class AbstractForm {
         this.mouseHoverFillColor = mouseHoverFillColor;
     }
 
+    public Color getSelectedStrokeColor() {
+        return selectedStrokeColor;
+    }
+
+    public void setSelectedStrokeColor( Color selectedStrokeColor ) {
+        this.selectedStrokeColor = selectedStrokeColor;
+    }
+
+    public Color getSelectedFillColor() {
+        return selectedFillColor;
+    }
+
+    public void setSelectedFillColor( Color selectedFillColor ) {
+        this.selectedFillColor = selectedFillColor;
+    }
+
     public Font getFont() {
         return font;
     }
@@ -149,7 +169,13 @@ public abstract class AbstractForm {
         this.stroke = stroke;
     }
 
-    
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected( boolean selected ) {
+        this.selected = selected;
+    }
     
     @Override
     public int hashCode() {

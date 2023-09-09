@@ -92,6 +92,7 @@ public class Transition extends AbstractForm {
         
         font = Utils.DEFAULT_FONT;
         mouseHoverStrokeColor = Utils.TRANSITION_MOUSE_HOVER_STROKE_COLOR;
+        selectedStrokeColor = Utils.TRANSITION_SELECTED_STROKE_COLOR;
         stroke = Utils.TRANSITION_STROKE;
         cpStroke = Utils.TRANSITION_CP_STROKE;
         
@@ -101,6 +102,8 @@ public class Transition extends AbstractForm {
         label.setStrokeColor( strokeColor );
         label.setMouseHoverStrokeColor( Utils.TRANSITION_MOUSE_HOVER_STROKE_COLOR );
         label.setMouseHoverFillColor( Utils.TRANSITION_MOUSE_HOVER_FILL_COLOR );
+        label.setSelectedStrokeColor( Utils.TRANSITION_SELECTED_STROKE_COLOR );
+        label.setSelectedFillColor( Utils.TRANSITION_SELECTED_FILL_COLOR );
         updateLabel();
         
         targetCP = new ControlPoint();
@@ -131,6 +134,7 @@ public class Transition extends AbstractForm {
         
         arrow = new Arrow();
         arrow.setMouseHoverStrokeColor( Utils.TRANSITION_MOUSE_HOVER_STROKE_COLOR );
+        arrow.setSelectedStrokeColor( Utils.TRANSITION_SELECTED_STROKE_COLOR );
         arrow.setAngle( Math.atan2( 
                 y2 - rightCP.getY1(), x2 - rightCP.getX1() ) );
         arrow.setX1( x2 );
@@ -256,17 +260,10 @@ public class Transition extends AbstractForm {
         
         if ( label.intercepts( x, y ) ) {
             mouseHover = true;
-            label.setMouseHover( true );
             return;
         }
         
         mouseHover = false;
-        
-        label.setMouseHover( mouseHover );
-        targetCP.setMouseHover( mouseHover );
-        centralCP.setMouseHover( mouseHover );
-        leftCP.setMouseHover( mouseHover );
-        rightCP.setMouseHover( mouseHover );
         
     }
     
@@ -342,9 +339,20 @@ public class Transition extends AbstractForm {
         g2d.setFont( font );
         g2d.setStroke( stroke );
         arrow.setMouseHover( mouseHover );
+        arrow.setSelected( selected );
+        
+        label.setMouseHover( mouseHover );
+        label.setSelected( selected );
+        
+        targetCP.setMouseHover( mouseHover );
+        centralCP.setMouseHover( mouseHover );
+        leftCP.setMouseHover( mouseHover );
+        rightCP.setMouseHover( mouseHover );
         
         if ( mouseHover ) {
             g2d.setColor( mouseHoverStrokeColor );
+        } else if ( selected ) {
+            g2d.setColor( selectedStrokeColor );
         } else {
             g2d.setColor( strokeColor );
         }
