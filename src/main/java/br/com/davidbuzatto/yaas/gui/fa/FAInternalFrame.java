@@ -14,28 +14,40 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.davidbuzatto.yaas.gui;
+package br.com.davidbuzatto.yaas.gui.fa;
 
-import br.com.davidbuzatto.yaas.gui.model.DFA;
-import br.com.davidbuzatto.yaas.gui.model.DFAPropertiesPanel;
-import br.com.davidbuzatto.yaas.gui.model.State;
-import br.com.davidbuzatto.yaas.gui.model.StatePropertiesPanel;
-import br.com.davidbuzatto.yaas.gui.model.Transition;
-import br.com.davidbuzatto.yaas.gui.model.TransitionPropertiesPanel;
+import br.com.davidbuzatto.yaas.gui.fa.properties.FAPropertiesPanel;
+import br.com.davidbuzatto.yaas.gui.fa.properties.FAStatePropertiesPanel;
+import br.com.davidbuzatto.yaas.gui.fa.properties.FATransitionPropertiesPanel;
+import br.com.davidbuzatto.yaas.util.ApplicationPreferences;
+import br.com.davidbuzatto.yaas.util.CharacterConstants;
+import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
- *
+ * Finite Automaton modelation and simulation.
+ * 
  * @author Prof. Dr. David Buzatto
  */
-public class DFAInternalFrame extends javax.swing.JInternalFrame {
+public class FAInternalFrame extends javax.swing.JInternalFrame {
 
     private static final String MODEL_PROPERTIES_CARD = "model";
     private static final String STATE_PROPERTIES_CARD = "state";
     private static final String TRANSITION_PROPERTIES_CARD = "transition";
     
-    private DFA dfa;
+    private FA fa;
     
     private int xPressed;
     private int yPressed;
@@ -45,84 +57,83 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
     
     private int currentState;
     
-    private State selectedState;
-    private Transition selectedTransition;
+    private FAState selectedState;
+    private FATransition selectedTransition;
     
-    private State originState;
-    private State targetState;
+    private FAState originState;
+    private FAState targetState;
     
-    private DFAPropertiesPanel dfaPPanel;
-    private StatePropertiesPanel statePPanel;
-    private TransitionPropertiesPanel transitionPPanel;
+    private FAPropertiesPanel faPPanel;
+    private FAStatePropertiesPanel statePPanel;
+    private FATransitionPropertiesPanel transitionPPanel;
     private CardLayout cardLayout;
     
     /**
-     * Creates new form DFAInternalFrame
+     * Creates new form FAInternalFrame
      */
-    public DFAInternalFrame() {
+    public FAInternalFrame() {
         initComponents();
         customInit();
     }
 
     private void customInit() {
         
-        dfaPPanel = new DFAPropertiesPanel();
-        statePPanel = new StatePropertiesPanel();
-        transitionPPanel = new TransitionPropertiesPanel();
+        faPPanel = new FAPropertiesPanel( drawPanel );
+        statePPanel = new FAStatePropertiesPanel( drawPanel );
+        transitionPPanel = new FATransitionPropertiesPanel( drawPanel );
         
-        cardLayout = (CardLayout) containerProperties.getLayout();
-        containerProperties.add( dfaPPanel, MODEL_PROPERTIES_CARD );
-        containerProperties.add( statePPanel, STATE_PROPERTIES_CARD );
-        containerProperties.add( transitionPPanel, TRANSITION_PROPERTIES_CARD );
+        cardLayout = (CardLayout) panelProperties.getLayout();
+        panelProperties.add( faPPanel, MODEL_PROPERTIES_CARD );
+        panelProperties.add( statePPanel, STATE_PROPERTIES_CARD );
+        panelProperties.add( transitionPPanel, TRANSITION_PROPERTIES_CARD );
         
-        cardLayout.show( containerProperties, MODEL_PROPERTIES_CARD );
+        cardLayout.show(panelProperties, MODEL_PROPERTIES_CARD );
         
-        splitH.setDividerLocation( 600 );
         splitV.setDividerLocation( 400 );
         
-        dfa = new DFA();
+        fa = new FA();
         
-        State s0 = new State();
+        FAState s0 = new FAState();
         s0.setX1( 100 );
         s0.setY1( 200 );
         s0.setLabel( "q" + currentState++ );
         s0.setInitial( true );
         
-        State s1 = new State();
+        FAState s1 = new FAState();
         s1.setX1( 300 );
         s1.setY1( 100 );
         s1.setLabel( "q" + currentState++ );
         
-        State s2 = new State();
+        FAState s2 = new FAState();
         s2.setX1( 500 );
         s2.setY1( 100 );
         s2.setLabel( "q" + currentState++ );
         
-        State s3 = new State();
+        FAState s3 = new FAState();
         s3.setX1( 300 );
         s3.setY1( 300 );
         s3.setAccepting( true );
         s3.setLabel( "q" + currentState++ );
         
-        Transition t1 = new Transition( s0, s1, 'a' );
+        FATransition t1 = new FATransition( s0, s1, 'a' );
         t1.addSymbol( 'b' );
         t1.addSymbol( 'c' );
-        Transition t2 = new Transition( s0, s3, 'a' );
-        Transition t3 = new Transition( s1, s2, 'a' );
-        Transition t4 = new Transition( s2, s3, 'a' );
-        Transition t5 = new Transition( s0, s0, 'a' );
+        FATransition t2 = new FATransition( s0, s3, 'a' );
+        FATransition t3 = new FATransition( s1, s2, 'a' );
+        FATransition t4 = new FATransition( s2, s3, 'a' );
+        FATransition t5 = new FATransition( s0, s0, 'a' );
         
-        dfa.addState( s0 );
-        dfa.addState( s1 );
-        dfa.addState( s2 );
-        dfa.addState( s3 );
-        dfa.addTransition( t1 );
-        dfa.addTransition( t2 );
-        dfa.addTransition( t3 );
-        dfa.addTransition( t4 );
-        dfa.addTransition( t5 );
+        fa.addState( s0 );
+        fa.addState( s1 );
+        fa.addState( s2 );
+        fa.addState( s3 );
+        fa.addTransition( t1 );
+        fa.addTransition( t2 );
+        fa.addTransition( t3 );
+        fa.addTransition( t4 );
+        fa.addTransition( t5 );
         
-        drawPanel.setDfa( dfa );
+        drawPanel.setFa( fa );
         
         //drawPanel.setTransitionsControlPointsVisible( true );
         
@@ -142,6 +153,7 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
         btnNew = new javax.swing.JButton();
         btnOpen = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
+        btnSaveModelAsImage = new javax.swing.JButton();
         sep01 = new javax.swing.JToolBar.Separator();
         btnMove = new javax.swing.JToggleButton();
         btnAddState = new javax.swing.JToggleButton();
@@ -154,20 +166,18 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
         sep04 = new javax.swing.JToolBar.Separator();
         btnZoomIn = new javax.swing.JButton();
         btnZoomOut = new javax.swing.JButton();
-        splitH = new javax.swing.JSplitPane();
+        panelModel = new javax.swing.JPanel();
         splitV = new javax.swing.JSplitPane();
         scrollAutomaton = new javax.swing.JScrollPane();
         drawPanel = new br.com.davidbuzatto.yaas.gui.DrawPanel();
-        containerSimulation = new javax.swing.JPanel();
-        scrollSimulation = new javax.swing.JScrollPane();
         panelSimulation = new javax.swing.JPanel();
-        containerProperties = new javax.swing.JPanel();
+        panelProperties = new javax.swing.JPanel();
 
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
-        setTitle("DFA");
+        setTitle("Finite Automatons");
 
         toolBar.setRollover(true);
 
@@ -206,6 +216,18 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         toolBar.add(btnSave);
+
+        btnSaveModelAsImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture.png"))); // NOI18N
+        btnSaveModelAsImage.setToolTipText("Save Model as Image");
+        btnSaveModelAsImage.setFocusable(false);
+        btnSaveModelAsImage.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnSaveModelAsImage.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSaveModelAsImage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveModelAsImageActionPerformed(evt);
+            }
+        });
+        toolBar.add(btnSaveModelAsImage);
         toolBar.add(sep01);
 
         btnGroup.add(btnMove);
@@ -311,6 +333,8 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
         });
         toolBar.add(btnZoomOut);
 
+        panelModel.setBorder(javax.swing.BorderFactory.createTitledBorder("Model"));
+
         splitV.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
 
         drawPanel.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
@@ -339,7 +363,7 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
         drawPanel.setLayout(drawPanelLayout);
         drawPanelLayout.setHorizontalGroup(
             drawPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 598, Short.MAX_VALUE)
+            .addGap(0, 1162, Short.MAX_VALUE)
         );
         drawPanelLayout.setVerticalGroup(
             drawPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -350,59 +374,62 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
 
         splitV.setTopComponent(scrollAutomaton);
 
-        containerSimulation.setBorder(javax.swing.BorderFactory.createTitledBorder("Simulation"));
+        panelSimulation.setBorder(javax.swing.BorderFactory.createTitledBorder("Simulation"));
 
         javax.swing.GroupLayout panelSimulationLayout = new javax.swing.GroupLayout(panelSimulation);
         panelSimulation.setLayout(panelSimulationLayout);
         panelSimulationLayout.setHorizontalGroup(
             panelSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 576, Short.MAX_VALUE)
+            .addGap(0, 675, Short.MAX_VALUE)
         );
         panelSimulationLayout.setVerticalGroup(
             panelSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 511, Short.MAX_VALUE)
+            .addGap(0, 500, Short.MAX_VALUE)
         );
 
-        scrollSimulation.setViewportView(panelSimulation);
+        splitV.setRightComponent(panelSimulation);
 
-        javax.swing.GroupLayout containerSimulationLayout = new javax.swing.GroupLayout(containerSimulation);
-        containerSimulation.setLayout(containerSimulationLayout);
-        containerSimulationLayout.setHorizontalGroup(
-            containerSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(containerSimulationLayout.createSequentialGroup()
+        javax.swing.GroupLayout panelModelLayout = new javax.swing.GroupLayout(panelModel);
+        panelModel.setLayout(panelModelLayout);
+        panelModelLayout.setHorizontalGroup(
+            panelModelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelModelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(scrollSimulation, javax.swing.GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
+                .addComponent(splitV, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        containerSimulationLayout.setVerticalGroup(
-            containerSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(containerSimulationLayout.createSequentialGroup()
+        panelModelLayout.setVerticalGroup(
+            panelModelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelModelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(scrollSimulation, javax.swing.GroupLayout.DEFAULT_SIZE, 407, Short.MAX_VALUE)
+                .addComponent(splitV, javax.swing.GroupLayout.DEFAULT_SIZE, 544, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        splitV.setRightComponent(containerSimulation);
-
-        splitH.setLeftComponent(splitV);
-
-        containerProperties.setBorder(javax.swing.BorderFactory.createTitledBorder("Properties"));
-        containerProperties.setLayout(new java.awt.CardLayout());
-        splitH.setRightComponent(containerProperties);
+        panelProperties.setBorder(javax.swing.BorderFactory.createTitledBorder("Properties"));
+        panelProperties.setLayout(new java.awt.CardLayout());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(toolBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(splitH, javax.swing.GroupLayout.DEFAULT_SIZE, 788, Short.MAX_VALUE)
+            .addComponent(toolBar, javax.swing.GroupLayout.DEFAULT_SIZE, 925, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panelModel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panelProperties, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(toolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(splitH, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(panelProperties, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panelModel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -421,25 +448,25 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnMoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveActionPerformed
-        dfa.deselectAll();
-        cardLayout.show( containerProperties, MODEL_PROPERTIES_CARD );
+        fa.deselectAll();
+        cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
         drawPanel.repaint();
     }//GEN-LAST:event_btnMoveActionPerformed
 
     private void btnAddStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddStateActionPerformed
-        dfa.deselectAll();
-        cardLayout.show( containerProperties, MODEL_PROPERTIES_CARD );
+        fa.deselectAll();
+        cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
         drawPanel.repaint();
     }//GEN-LAST:event_btnAddStateActionPerformed
 
     private void btnAddTransitionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddTransitionActionPerformed
-        dfa.deselectAll();
-        cardLayout.show( containerProperties, MODEL_PROPERTIES_CARD );
+        fa.deselectAll();
+        cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
         drawPanel.repaint();
     }//GEN-LAST:event_btnAddTransitionActionPerformed
 
     private void btnShowTransitionControlsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowTransitionControlsActionPerformed
-        dfa.setTransitionsControlPointsVisible( btnShowTransitionControls.isSelected() );
+        fa.setTransitionsControlPointsVisible( btnShowTransitionControls.isSelected() );
         drawPanel.repaint();
     }//GEN-LAST:event_btnShowTransitionControlsActionPerformed
 
@@ -467,36 +494,54 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
         
         if ( btnMove.isSelected() ) {
             
-            dfa.deselectAll();
-            selectedState = dfa.getStateAt( xPressed, yPressed );
+            fa.deselectAll();
+            selectedState = fa.getStateAt( xPressed, yPressed );
             
             if ( selectedState != null ) {
+                
                 xOffset = xPressed - selectedState.getX1();
                 yOffset = yPressed - selectedState.getY1();
-                dfa.updateTransitions();
-                cardLayout.show( containerProperties, STATE_PROPERTIES_CARD );
+                fa.updateTransitions();
+                
+                statePPanel.setFa( fa );
+                statePPanel.setState( selectedState );
+                statePPanel.readProperties();
+                cardLayout.show( panelProperties, STATE_PROPERTIES_CARD );
+                
             } else {
-                selectedTransition = dfa.getTransitionAt( xPressed, yPressed );
+                
+                selectedTransition = fa.getTransitionAt( xPressed, yPressed );
+                
                 if ( selectedTransition != null ) {
-                    cardLayout.show( containerProperties, TRANSITION_PROPERTIES_CARD );
+                    
+                    transitionPPanel.setFa( fa );
+                    transitionPPanel.setTransition( selectedTransition );
+                    transitionPPanel.readProperties();
+                    cardLayout.show( panelProperties, TRANSITION_PROPERTIES_CARD );
+                    
                 } else {
-                    cardLayout.show( containerProperties, MODEL_PROPERTIES_CARD );
+                    
+                    faPPanel.setFa( fa );
+                    faPPanel.readProperties();
+                    cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
+                    
                 }
+                
             }
             
         } else if ( btnAddState.isSelected() ) {
             
-            State newState = new State();
+            FAState newState = new FAState();
             newState.setX1( xPressed );
             newState.setY1( yPressed );
             newState.setLabel( "q" + currentState++ );
             
-            dfa.addState( newState );
+            fa.addState( newState );
             
         } else if ( btnAddTransition.isSelected() ) {
             
             if ( originState == null ) {
-                originState = dfa.getStateAt( xPressed, yPressed );
+                originState = fa.getStateAt( xPressed, yPressed );
                 if ( originState != null ) {
                     drawPanel.setDrawingTempTransition( true );
                     drawPanel.setTempTransitionX1( originState.getX1() );
@@ -528,22 +573,32 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
             if ( originState != null ) {
                 
                 if ( targetState == null ) {
-                    targetState = dfa.getStateAt( evt.getX(), evt.getY() );
+                    targetState = fa.getStateAt( evt.getX(), evt.getY() );
                 } 
             
                 if ( targetState != null ) {
                     
-                    String s = JOptionPane.showInputDialog( this, "Transition symbol" );
-                    char symbol;
+                    String input = JOptionPane.showInputDialog( this, "Transition symbol(s)" );
+                    List<Character> symbols = new ArrayList<>();
                     
-                    if ( s == null || s.isEmpty() ) {
-                        symbol = '\u03b5';
+                    if ( input == null ) {
+                        symbols.add( CharacterConstants.SMALL_EPSILON );
                     } else {
-                        symbol = s.charAt( 0 );
+                        
+                        input = input.trim().replace( " ", "" );
+                        
+                        if ( input.isEmpty() ) {
+                            symbols.add( CharacterConstants.SMALL_EPSILON );
+                        } else {
+                            for ( char c : input.toCharArray() ) {
+                                symbols.add( c );
+                            }
+                        }
+                        
                     }
                         
-                    Transition t = new Transition( originState, targetState, symbol );
-                    dfa.addTransition( t );
+                    FATransition t = new FATransition( originState, targetState, symbols );
+                    fa.addTransition( t );
                     
                 }
                 
@@ -553,7 +608,7 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
                 
             }
             
-            dfa.deselectAll();
+            fa.deselectAll();
             
         }
         
@@ -568,8 +623,8 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
             if ( selectedState != null ) {
                 selectedState.setX1( evt.getX() - xOffset );
                 selectedState.setY1( evt.getY() - yOffset );
-                dfa.updateTransitions();
-                dfa.draggTransitions( evt );
+                fa.updateTransitions();
+                fa.draggTransitions( evt );
             } else if ( selectedTransition != null ) {
                 selectedTransition.mouseDragged( evt );
             }
@@ -586,7 +641,7 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
     private void drawPanelMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drawPanelMouseMoved
         
         if ( btnMove.isSelected() || btnAddTransition.isSelected() ) {
-            dfa.mouseHoverStatesAndTransitions( evt.getX(), evt.getY() );
+            fa.mouseHoverStatesAndTransitions( evt.getX(), evt.getY() );
             drawPanel.repaint();
         }
         
@@ -595,6 +650,73 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
     private void drawPanelMouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_drawPanelMouseWheelMoved
         // TODO add your handling code here:
     }//GEN-LAST:event_drawPanelMouseWheelMoved
+
+    private void btnSaveModelAsImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveModelAsImageActionPerformed
+        
+        JFileChooser jfc = new JFileChooser( new File( ApplicationPreferences.getPref( ApplicationPreferences.PREF_DEFAULT_FOLDER_PATH ) ) );
+        jfc.setDialogTitle( "Save Model as Image" );
+        jfc.setMultiSelectionEnabled( false );
+        jfc.setFileSelectionMode( JFileChooser.FILES_ONLY );
+        jfc.removeChoosableFileFilter( jfc.getFileFilter() );
+        jfc.setFileFilter( new FileNameExtensionFilter( "PNG Image File", "png" ) );
+
+        if ( jfc.showSaveDialog( null ) == JFileChooser.APPROVE_OPTION ) {
+
+            File f = jfc.getSelectedFile();
+            
+            if ( !f.getName().endsWith( ".png" ) ) {
+                f = new File( f.getAbsolutePath() + ".png" );
+            }
+            
+            boolean save = true;
+
+            if ( f.exists() ) {
+                if ( JOptionPane.showConfirmDialog( this, 
+                        "The file already exists. Do you want to overwrite it?", 
+                        "Confirmation", 
+                        JOptionPane.YES_NO_OPTION ) == JOptionPane.NO_OPTION ) {
+                    save = false;
+                }
+            }
+
+            if ( save ) {
+                
+                ApplicationPreferences.setPref( 
+                        ApplicationPreferences.PREF_DEFAULT_FOLDER_PATH, 
+                        f.getParentFile().getAbsolutePath() );
+                
+                int r = JOptionPane.showConfirmDialog( 
+                        this, "Do you want transparent background?", 
+                        "Transparent background", JOptionPane.YES_NO_OPTION );
+
+                BufferedImage img = new BufferedImage( 
+                        drawPanel.getWidth(), 
+                        drawPanel.getHeight(), 
+                        BufferedImage.TYPE_INT_ARGB );
+
+                Graphics2D g2d = img.createGraphics();
+                g2d.setRenderingHint(
+                        RenderingHints.KEY_ANTIALIASING,
+                        RenderingHints.VALUE_ANTIALIAS_ON );
+
+                if ( r != JOptionPane.YES_OPTION ) {
+                    g2d.setColor( Color.WHITE );
+                    g2d.fillRect( 0, 0, img.getWidth(), img.getHeight() );
+                }
+
+                fa.draw( g2d );
+
+                try {
+                    ImageIO.write( img, "png", f );
+                } catch ( IOException exc ) {
+                    Utils.showException( exc );
+                }
+                
+            }
+            
+        }
+        
+    }//GEN-LAST:event_btnSaveModelAsImageActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -605,22 +727,21 @@ public class DFAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnNew;
     private javax.swing.JButton btnOpen;
     private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnSaveModelAsImage;
     private javax.swing.JToggleButton btnShowGrid;
     private javax.swing.JToggleButton btnShowTransitionControls;
     private javax.swing.JToggleButton btnSnapToGrid;
     private javax.swing.JButton btnZoomIn;
     private javax.swing.JButton btnZoomOut;
-    private javax.swing.JPanel containerProperties;
-    private javax.swing.JPanel containerSimulation;
     private br.com.davidbuzatto.yaas.gui.DrawPanel drawPanel;
     private javax.swing.Box.Filler horizontalFiller;
+    private javax.swing.JPanel panelModel;
+    private javax.swing.JPanel panelProperties;
     private javax.swing.JPanel panelSimulation;
     private javax.swing.JScrollPane scrollAutomaton;
-    private javax.swing.JScrollPane scrollSimulation;
     private javax.swing.JToolBar.Separator seo03;
     private javax.swing.JToolBar.Separator sep01;
     private javax.swing.JToolBar.Separator sep04;
-    private javax.swing.JSplitPane splitH;
     private javax.swing.JSplitPane splitV;
     private javax.swing.JToolBar toolBar;
     // End of variables declaration//GEN-END:variables

@@ -17,8 +17,8 @@
 package br.com.davidbuzatto.yaas.gui;
 
 import br.com.davidbuzatto.yaas.gui.model.Arrow;
-import br.com.davidbuzatto.yaas.gui.model.DFA;
-import br.com.davidbuzatto.yaas.util.Utils;
+import br.com.davidbuzatto.yaas.gui.fa.FA;
+import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -33,7 +33,7 @@ import javax.swing.JPanel;
  */
 public class DrawPanel extends JPanel {
 
-    private DFA dfa;
+    private FA fa;
     
     private boolean showGrid;
     private boolean drawingTempTransition;
@@ -46,7 +46,7 @@ public class DrawPanel extends JPanel {
     
     public DrawPanel() {
         tempTransitionArrow = new Arrow();
-        tempTransitionArrow.setStroke( Utils.TRANSITION_STROKE );
+        tempTransitionArrow.setStroke(DrawingConstants.TRANSITION_STROKE );
     }
     
     @Override
@@ -64,24 +64,24 @@ public class DrawPanel extends JPanel {
         g2d.drawRect( 0, 0, getWidth(), getHeight() );
         
         if ( showGrid ) {
-            g2d.setColor( Utils.GRID_COLOR );
-            for ( int i = 0; i <= getHeight(); i += Utils.STATE_RADIUS ) {
+            g2d.setColor(DrawingConstants.GRID_COLOR );
+            for ( int i = 0; i <= getHeight(); i += DrawingConstants.STATE_RADIUS ) {
                 g2d.drawLine( 0, i, getWidth(), i );
             }
-            for ( int i = 0; i <= getWidth(); i += Utils.STATE_RADIUS ) {
+            for ( int i = 0; i <= getWidth(); i += DrawingConstants.STATE_RADIUS ) {
                 g2d.drawLine( i, 0, i, getHeight() );
             }
         }
         
-        if ( dfa != null ) {
+        if ( fa != null ) {
             
-            dfa.draw( g2d );
+            fa.draw( g2d );
         
             if ( drawingTempTransition ) {
 
                 Stroke s = g2d.getStroke();
-                g2d.setStroke( Utils.TEMP_TRANSITION_STROKE );
-                g2d.setColor( Utils.TEMP_TRANSITION_COLOR );
+                g2d.setStroke(DrawingConstants.TEMP_TRANSITION_STROKE );
+                g2d.setColor(DrawingConstants.TEMP_TRANSITION_COLOR );
 
                 g2d.drawLine( 
                         tempTransitionX1, tempTransitionY1, 
@@ -89,7 +89,7 @@ public class DrawPanel extends JPanel {
 
                 tempTransitionArrow.setX1( tempTransitionX2 );
                 tempTransitionArrow.setY1( tempTransitionY2 );
-                tempTransitionArrow.setStrokeColor( Utils.TEMP_TRANSITION_COLOR );
+                tempTransitionArrow.setStrokeColor(DrawingConstants.TEMP_TRANSITION_COLOR );
                 tempTransitionArrow.setAngle( Math.atan2( 
                         tempTransitionY2 - tempTransitionY1, 
                         tempTransitionX2 - tempTransitionX1 ) );
@@ -103,8 +103,8 @@ public class DrawPanel extends JPanel {
         
     }
 
-    public void setDfa( DFA dfa ) {
-        this.dfa = dfa;
+    public void setFa( FA fa ) {
+        this.fa = fa;
     }
 
     public boolean isShowGrid() {

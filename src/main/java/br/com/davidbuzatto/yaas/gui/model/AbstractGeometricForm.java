@@ -26,7 +26,7 @@ import java.awt.Stroke;
  * 
  * @author Prof. Dr. David Buzatto
  */
-public abstract class AbstractForm {
+public abstract class AbstractGeometricForm {
     
     private static int idGenerator;
     protected int id;
@@ -50,7 +50,7 @@ public abstract class AbstractForm {
     protected Font font;
     protected Stroke stroke;
     
-    public AbstractForm() {
+    public AbstractGeometricForm() {
         id = idGenerator++;
     }
     
@@ -62,7 +62,7 @@ public abstract class AbstractForm {
     }
 
     public static void setIdGenerator( int idGenerator ) {
-        AbstractForm.idGenerator = idGenerator;
+        AbstractGeometricForm.idGenerator = idGenerator;
     }
 
     public int getX1() {
@@ -195,7 +195,7 @@ public abstract class AbstractForm {
         if ( getClass() != obj.getClass() ) {
             return false;
         }
-        final AbstractForm other = (AbstractForm) obj;
+        final AbstractGeometricForm other = (AbstractGeometricForm) obj;
         return this.id == other.id;
     }
     

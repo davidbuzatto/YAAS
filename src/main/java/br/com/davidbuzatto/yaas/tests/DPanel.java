@@ -17,6 +17,7 @@
 package br.com.davidbuzatto.yaas.tests;
 
 import br.com.davidbuzatto.yaas.gui.model.Arrow;
+import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -97,7 +98,7 @@ public class DPanel extends JPanel {
         
         curve = new CubicCurve2D.Double( x1, y1, c1x, c1y, c2x, c2y, x2, y2 );
         
-        addMouseListener( new MouseAdapter(){
+        addMouseListener(new MouseAdapter(){
             
             @Override
             public void mousePressed( MouseEvent e ) {
@@ -124,15 +125,15 @@ public class DPanel extends JPanel {
                 c2xOri = c2x;
                 c2yOri = c2y;
                     
-                if ( p1x * p1x + p1y * p1y <= Utils.TRANSITION_CP_RADIUS_EQUARED ) {
+                if ( p1x * p1x + p1y * p1y <= DrawingConstants.TRANSITION_CP_RADIUS_EQUARED ) {
                     p1Dragg = true;
-                } else if ( p2x * p2x + p2y * p2y <= Utils.TRANSITION_CP_RADIUS_EQUARED ) {
+                } else if ( p2x * p2x + p2y * p2y <= DrawingConstants.TRANSITION_CP_RADIUS_EQUARED ) {
                     p2Dragg = true;
-                } else if ( cxc * cxc + cyc * cyc <= Utils.TRANSITION_CP_RADIUS_EQUARED ) {
+                } else if ( cxc * cxc + cyc * cyc <= DrawingConstants.TRANSITION_CP_RADIUS_EQUARED ) {
                     cDragg = true;
-                } else if ( c1xc * c1xc + c1yc * c1yc <= Utils.TRANSITION_CP_RADIUS_EQUARED ) {
+                } else if ( c1xc * c1xc + c1yc * c1yc <= DrawingConstants.TRANSITION_CP_RADIUS_EQUARED ) {
                     c1Dragg = true;
-                } else if ( c2xc * c2xc + c2yc * c2yc <= Utils.TRANSITION_CP_RADIUS_EQUARED ) {
+                } else if ( c2xc * c2xc + c2yc * c2yc <= DrawingConstants.TRANSITION_CP_RADIUS_EQUARED ) {
                     c2Dragg = true;
                 }
                 
@@ -218,42 +219,37 @@ public class DPanel extends JPanel {
         g2d.setColor( Color.WHITE );
         g2d.fillRect( 0, 0, getWidth(), getHeight() );
         
-        g2d.setStroke( Utils.TRANSITION_STROKE );
+        g2d.setStroke(DrawingConstants.TRANSITION_STROKE );
         g2d.setColor( Color.BLACK );
         g2d.draw( curve );
         
         originArrow.draw( g2d );
         targetArrow.draw( g2d );
         
-        g2d.setStroke( Utils.TRANSITION_CP_STROKE );
-        g2d.setColor( Utils.TRANSITION_CP_COLOR );
+        g2d.setStroke(DrawingConstants.TRANSITION_CP_STROKE );
+        g2d.setColor(DrawingConstants.TRANSITION_CP_COLOR );
         g2d.drawLine( cx, cy, c1x, c1y );
         g2d.drawLine( cx, cy, c2x, c2y );
-        g2d.fillOval( 
-                x1 - Utils.TRANSITION_CP_RADIUS, 
-                y1 - Utils.TRANSITION_CP_RADIUS, 
-                Utils.TRANSITION_CP_DIAMETER, 
-                Utils.TRANSITION_CP_DIAMETER );
-        g2d.fillOval( 
-                x2 - Utils.TRANSITION_CP_RADIUS, 
-                y2 - Utils.TRANSITION_CP_RADIUS, 
-                Utils.TRANSITION_CP_DIAMETER, 
-                Utils.TRANSITION_CP_DIAMETER );
-        g2d.fillOval( 
-                cx - Utils.TRANSITION_CP_RADIUS, 
-                cy - Utils.TRANSITION_CP_RADIUS, 
-                Utils.TRANSITION_CP_DIAMETER, 
-                Utils.TRANSITION_CP_DIAMETER );
-        g2d.fillOval( 
-                c1x - Utils.TRANSITION_CP_RADIUS, 
-                c1y - Utils.TRANSITION_CP_RADIUS, 
-                Utils.TRANSITION_CP_DIAMETER, 
-                Utils.TRANSITION_CP_DIAMETER );
-        g2d.fillOval( 
-                c2x - Utils.TRANSITION_CP_RADIUS, 
-                c2y - Utils.TRANSITION_CP_RADIUS, 
-                Utils.TRANSITION_CP_DIAMETER, 
-                Utils.TRANSITION_CP_DIAMETER );
+        g2d.fillOval(x1 - DrawingConstants.TRANSITION_CP_RADIUS, 
+                y1 - DrawingConstants.TRANSITION_CP_RADIUS, 
+                DrawingConstants.TRANSITION_CP_DIAMETER, 
+                DrawingConstants.TRANSITION_CP_DIAMETER );
+        g2d.fillOval(x2 - DrawingConstants.TRANSITION_CP_RADIUS, 
+                y2 - DrawingConstants.TRANSITION_CP_RADIUS, 
+                DrawingConstants.TRANSITION_CP_DIAMETER, 
+                DrawingConstants.TRANSITION_CP_DIAMETER );
+        g2d.fillOval(cx - DrawingConstants.TRANSITION_CP_RADIUS, 
+                cy - DrawingConstants.TRANSITION_CP_RADIUS, 
+                DrawingConstants.TRANSITION_CP_DIAMETER, 
+                DrawingConstants.TRANSITION_CP_DIAMETER );
+        g2d.fillOval(c1x - DrawingConstants.TRANSITION_CP_RADIUS, 
+                c1y - DrawingConstants.TRANSITION_CP_RADIUS, 
+                DrawingConstants.TRANSITION_CP_DIAMETER, 
+                DrawingConstants.TRANSITION_CP_DIAMETER );
+        g2d.fillOval(c2x - DrawingConstants.TRANSITION_CP_RADIUS, 
+                c2y - DrawingConstants.TRANSITION_CP_RADIUS, 
+                DrawingConstants.TRANSITION_CP_DIAMETER, 
+                DrawingConstants.TRANSITION_CP_DIAMETER );
         
         g2d.setColor( Color.BLUE );
         for ( double t = 0.0; t <= 1.0; t += 0.1 ) {

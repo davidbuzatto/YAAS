@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.davidbuzatto.yaas.gui.model;
+package br.com.davidbuzatto.yaas.gui.fa;
 
+import br.com.davidbuzatto.yaas.gui.model.AbstractGeometricForm;
 import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
@@ -26,7 +27,7 @@ import java.awt.font.LineMetrics;
  * 
  * @author Prof. Dr. David Buzatto
  */
-public class TransitionLabel extends AbstractForm {
+public class FATransitionLabel extends AbstractGeometricForm {
     
     private String text;
     private int textWidth;

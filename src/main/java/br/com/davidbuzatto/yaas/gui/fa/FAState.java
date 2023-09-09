@@ -14,9 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.davidbuzatto.yaas.gui.model;
+package br.com.davidbuzatto.yaas.gui.fa;
 
-import br.com.davidbuzatto.yaas.util.Utils;
+import br.com.davidbuzatto.yaas.gui.model.AbstractGeometricForm;
+import br.com.davidbuzatto.yaas.gui.model.Arrow;
+import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import java.awt.Graphics2D;
 
 /**
@@ -24,7 +26,7 @@ import java.awt.Graphics2D;
  * 
  * @author Prof. Dr. David Buzatto
  */
-public class State extends AbstractForm {
+public class FAState extends AbstractGeometricForm {
     
     protected String label;
     protected String customLabel;
@@ -38,24 +40,24 @@ public class State extends AbstractForm {
     
     private Arrow arrow;
     
-    public State() {
+    public FAState() {
         
-        font = Utils.DEFAULT_FONT;
-        stroke = Utils.STATE_STROKE;
+        font = DrawingConstants.DEFAULT_FONT;
+        stroke = DrawingConstants.STATE_STROKE;
         
-        mouseHoverFillColor = Utils.STATE_MOUSE_HOVER_FILL_COLOR;
-        mouseHoverStrokeColor = Utils.STATE_MOUSE_HOVER_STROKE_COLOR;
+        mouseHoverFillColor = DrawingConstants.STATE_MOUSE_HOVER_FILL_COLOR;
+        mouseHoverStrokeColor = DrawingConstants.STATE_MOUSE_HOVER_STROKE_COLOR;
         
-        selectedFillColor = Utils.STATE_SELECTED_FILL_COLOR;
-        selectedStrokeColor = Utils.STATE_SELECTED_STROKE_COLOR;
+        selectedFillColor = DrawingConstants.STATE_SELECTED_FILL_COLOR;
+        selectedStrokeColor = DrawingConstants.STATE_SELECTED_STROKE_COLOR;
         
-        radius = Utils.STATE_RADIUS;
-        radiusSquared = Utils.STATE_RADIUS_SQUARED;
-        diameter = Utils.STATE_DIAMETER;
+        radius = DrawingConstants.STATE_RADIUS;
+        radiusSquared = DrawingConstants.STATE_RADIUS_SQUARED;
+        diameter = DrawingConstants.STATE_DIAMETER;
         
         arrow = new Arrow();
-        arrow.setMouseHoverStrokeColor( Utils.STATE_MOUSE_HOVER_STROKE_COLOR );
-        arrow.setSelectedStrokeColor( Utils.STATE_SELECTED_STROKE_COLOR );
+        arrow.setMouseHoverStrokeColor(DrawingConstants.STATE_MOUSE_HOVER_STROKE_COLOR );
+        arrow.setSelectedStrokeColor(DrawingConstants.STATE_SELECTED_STROKE_COLOR );
         
     }
     
@@ -187,6 +189,14 @@ public class State extends AbstractForm {
         this.radius = radius;
         this.radiusSquared = radius * radius;
         this.diameter = radius * 2;
+    }
+    
+    @Override
+    public String toString() {
+        if ( customLabel != null ) {
+            return String.format( "%s (%s)", customLabel, label );
+        }
+        return label;
     }
     
 }

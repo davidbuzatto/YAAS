@@ -23,7 +23,7 @@ import java.awt.Graphics2D;
  * 
  * @author Prof. Dr. David Buzatto
  */
-public class ControlPoint extends AbstractForm {
+public class ControlPoint extends AbstractGeometricForm {
     
     private int radius;
     private int radiusSquared;

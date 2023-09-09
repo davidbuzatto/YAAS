@@ -14,8 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.davidbuzatto.yaas.gui.model;
+package br.com.davidbuzatto.yaas.gui.fa;
 
+import br.com.davidbuzatto.yaas.gui.model.AbstractGeometricForm;
+import br.com.davidbuzatto.yaas.gui.model.Arrow;
+import br.com.davidbuzatto.yaas.gui.model.ControlPoint;
+import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -31,19 +35,19 @@ import java.util.List;
  * 
  * @author Prof. Dr. David Buzatto
  */
-public class Transition extends AbstractForm {
+public class FATransition extends AbstractGeometricForm {
 
     private static final double RAD_60 = Math.toRadians( 60 );
     private static final double RAD_90 = Math.toRadians( 90 );
     private static final double RAD_95 = Math.toRadians( 95 );
     
     
-    private State originState;
-    private State targetState;
+    private FAState originState;
+    private FAState targetState;
     private List<Character> symbols;
     
     
-    private final TransitionLabel label;
+    private final FATransitionLabel label;
     private final CubicCurve2D curve;
     private final Arrow arrow;
     
@@ -81,60 +85,57 @@ public class Transition extends AbstractForm {
     
     private boolean controlPointsVisible;
     
-    
-    public Transition( State originState, State targetState, char symbol ) {
+    public FATransition( FAState originState, FAState targetState, List<Character> symbols ) {
         
         this.originState = originState;
         this.targetState = targetState;
+        this.symbols = new ArrayList<>();
         
-        symbols = new ArrayList<>();
-        symbols.add( symbol );
+        font = DrawingConstants.DEFAULT_FONT;
+        mouseHoverStrokeColor = DrawingConstants.TRANSITION_MOUSE_HOVER_STROKE_COLOR;
+        selectedStrokeColor = DrawingConstants.TRANSITION_SELECTED_STROKE_COLOR;
+        stroke = DrawingConstants.TRANSITION_STROKE;
+        cpStroke = DrawingConstants.TRANSITION_CP_STROKE;
         
-        font = Utils.DEFAULT_FONT;
-        mouseHoverStrokeColor = Utils.TRANSITION_MOUSE_HOVER_STROKE_COLOR;
-        selectedStrokeColor = Utils.TRANSITION_SELECTED_STROKE_COLOR;
-        stroke = Utils.TRANSITION_STROKE;
-        cpStroke = Utils.TRANSITION_CP_STROKE;
-        
-        label = new TransitionLabel();
+        label = new FATransitionLabel();
         label.setStroke( stroke );
         label.setFont( font );
         label.setStrokeColor( strokeColor );
-        label.setMouseHoverStrokeColor( Utils.TRANSITION_MOUSE_HOVER_STROKE_COLOR );
-        label.setMouseHoverFillColor( Utils.TRANSITION_MOUSE_HOVER_FILL_COLOR );
-        label.setSelectedStrokeColor( Utils.TRANSITION_SELECTED_STROKE_COLOR );
-        label.setSelectedFillColor( Utils.TRANSITION_SELECTED_FILL_COLOR );
+        label.setMouseHoverStrokeColor(DrawingConstants.TRANSITION_MOUSE_HOVER_STROKE_COLOR );
+        label.setMouseHoverFillColor(DrawingConstants.TRANSITION_MOUSE_HOVER_FILL_COLOR );
+        label.setSelectedStrokeColor(DrawingConstants.TRANSITION_SELECTED_STROKE_COLOR );
+        label.setSelectedFillColor(DrawingConstants.TRANSITION_SELECTED_FILL_COLOR );
         updateLabel();
         
         targetCP = new ControlPoint();
         targetCP.setStroke( stroke );
-        targetCP.setRadius(Utils.TRANSITION_CP_TARGET_RADIUS );
-        targetCP.setFillColor(Utils.TRANSITION_CP_TARGET_COLOR );
-        targetCP.setMouseHoverStrokeColor( Utils.TRANSITION_CP_MOUSE_HOVER_STROKE_COLOR );
+        targetCP.setRadius(DrawingConstants.TRANSITION_CP_TARGET_RADIUS );
+        targetCP.setFillColor(DrawingConstants.TRANSITION_CP_TARGET_COLOR );
+        targetCP.setMouseHoverStrokeColor(DrawingConstants.TRANSITION_CP_MOUSE_HOVER_STROKE_COLOR );
         
         centralCP = new ControlPoint();
         centralCP.setStroke( stroke );
-        centralCP.setRadius( Utils.TRANSITION_CP_RADIUS );
-        centralCP.setFillColor( Utils.TRANSITION_CP_COLOR );
-        centralCP.setMouseHoverStrokeColor( Utils.TRANSITION_CP_MOUSE_HOVER_STROKE_COLOR );
+        centralCP.setRadius(DrawingConstants.TRANSITION_CP_RADIUS );
+        centralCP.setFillColor(DrawingConstants.TRANSITION_CP_COLOR );
+        centralCP.setMouseHoverStrokeColor(DrawingConstants.TRANSITION_CP_MOUSE_HOVER_STROKE_COLOR );
         
         leftCP = new ControlPoint();
         leftCP.setStroke( stroke );
-        leftCP.setRadius( Utils.TRANSITION_CP_RADIUS );
-        leftCP.setFillColor( Utils.TRANSITION_CP_LEFT_COLOR );
-        leftCP.setMouseHoverStrokeColor( Utils.TRANSITION_CP_MOUSE_HOVER_STROKE_COLOR );
+        leftCP.setRadius(DrawingConstants.TRANSITION_CP_RADIUS );
+        leftCP.setFillColor(DrawingConstants.TRANSITION_CP_LEFT_COLOR );
+        leftCP.setMouseHoverStrokeColor(DrawingConstants.TRANSITION_CP_MOUSE_HOVER_STROKE_COLOR );
         
         rightCP = new ControlPoint();
         rightCP.setStroke( stroke );
-        rightCP.setRadius( Utils.TRANSITION_CP_RADIUS );
-        rightCP.setFillColor( Utils.TRANSITION_CP_RIGHT_COLOR );
-        rightCP.setMouseHoverStrokeColor( Utils.TRANSITION_CP_MOUSE_HOVER_STROKE_COLOR );
+        rightCP.setRadius(DrawingConstants.TRANSITION_CP_RADIUS );
+        rightCP.setFillColor(DrawingConstants.TRANSITION_CP_RIGHT_COLOR );
+        rightCP.setMouseHoverStrokeColor(DrawingConstants.TRANSITION_CP_MOUSE_HOVER_STROKE_COLOR );
         
         updateStartAndEndPoints();
         
         arrow = new Arrow();
-        arrow.setMouseHoverStrokeColor( Utils.TRANSITION_MOUSE_HOVER_STROKE_COLOR );
-        arrow.setSelectedStrokeColor( Utils.TRANSITION_SELECTED_STROKE_COLOR );
+        arrow.setMouseHoverStrokeColor(DrawingConstants.TRANSITION_MOUSE_HOVER_STROKE_COLOR );
+        arrow.setSelectedStrokeColor(DrawingConstants.TRANSITION_SELECTED_STROKE_COLOR );
         arrow.setAngle( Math.atan2( 
                 y2 - rightCP.getY1(), x2 - rightCP.getX1() ) );
         arrow.setX1( x2 );
@@ -146,6 +147,13 @@ public class Transition extends AbstractForm {
                 rightCP.getX1(), rightCP.getY1(), 
                 x2, y2 );
         
+        addSymbols( symbols );
+        
+    }
+    
+    public FATransition( FAState originState, FAState targetState, char symbol ) {
+        this( originState, targetState, new ArrayList<Character>() );
+        addSymbol( symbol );
     }
     
     public void mouseReleased( MouseEvent evt ) {
@@ -472,23 +480,45 @@ public class Transition extends AbstractForm {
     }
     
     public void addSymbol( char symbol ) {
-        symbols.add( symbol );
-        updateLabel();
+        
+        if ( !symbols.contains( symbol ) ) {
+            symbols.add( symbol );
+            Utils.customSymbolsSort( this.symbols );
+            updateLabel();
+        }
+        
     }
     
-    public State getOriginState() {
+    public void addSymbols( List<Character> symbols ) {
+        
+        if ( !symbols.isEmpty() ) {
+            
+            for ( Character s : symbols ) {
+                if ( !this.symbols.contains( s ) ) {
+                    this.symbols.add( s );
+                }
+            }
+
+            Utils.customSymbolsSort( this.symbols );
+            updateLabel();
+            
+        }
+        
+    }
+    
+    public FAState getOriginState() {
         return originState;
     }
 
-    public void setOriginState( State originState ) {
+    public void setOriginState( FAState originState ) {
         this.originState = originState;
     }
 
-    public State getTargetState() {
+    public FAState getTargetState() {
         return targetState;
     }
 
-    public void setTargetState( State targetState ) {
+    public void setTargetState( FAState targetState ) {
         this.targetState = targetState;
     }
 
@@ -497,8 +527,22 @@ public class Transition extends AbstractForm {
     }
 
     public void setSymbols( List<Character> symbols ) {
-        this.symbols = symbols;
-        updateLabel();
+        
+        this.symbols = new ArrayList<>();
+        
+        if ( !symbols.isEmpty() ) {
+            
+            for ( Character s : symbols ) {
+                if ( !this.symbols.contains( s ) ) {
+                    this.symbols.add( s );
+                }
+            }
+
+            Utils.customSymbolsSort( this.symbols );
+            updateLabel();
+            
+        }
+        
     }
 
     public boolean isControlPointsVisible() {
@@ -507,6 +551,43 @@ public class Transition extends AbstractForm {
 
     public void setControlPointsVisible( boolean controlPointsVisible ) {
         this.controlPointsVisible = controlPointsVisible;
+    }
+    
+    public void resetTransformations() {
+        
+        centralCPMoved = false;
+        targetCPMoved = false;
+        labelMoved = false;
+        targetCPAngle = 0;
+        
+        updateStartAndEndPoints();
+        
+        arrow.setAngle( Math.atan2( 
+                y2 - rightCP.getY1(), x2 - rightCP.getX1() ) );
+        arrow.setX1( x2 );
+        arrow.setY1( y2 );
+        
+        curve.setCurve( 
+                x1, y1, 
+                leftCP.getX1(), leftCP.getY1(), 
+                rightCP.getX1(), rightCP.getY1(), 
+                x2, y2 );
+        
+        updateStartAndEndPoints();
+        
+    }
+    
+    @Override
+    public void setStrokeColor( Color strokeColor ) {
+        this.strokeColor = strokeColor;
+        arrow.setStrokeColor( strokeColor );
+        label.setStrokeColor( strokeColor );
+    }
+    
+    @Override
+    public String toString() {
+        return String.format( "(%s) - %s -> (%s)",
+                originState, label.getText(), targetState );
     }
     
 }

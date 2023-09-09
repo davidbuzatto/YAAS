@@ -16,21 +16,21 @@
  */
 package br.com.davidbuzatto.yaas.gui.model;
 
-import br.com.davidbuzatto.yaas.util.Utils;
+import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 
 /**
- * A graphical representation of a arrow for transitions endings.
+ * A graphical representation of a arrow.
  * 
  * @author Prof. Dr. David Buzatto
  */
-public class Arrow extends AbstractForm {
+public class Arrow extends AbstractGeometricForm {
     
     private double angle = 0;
     
     public Arrow() {
-        stroke = Utils.DEFAULT_ARROW_STROKE;
+        stroke = DrawingConstants.DEFAULT_ARROW_STROKE;
     }
     
     @Override
