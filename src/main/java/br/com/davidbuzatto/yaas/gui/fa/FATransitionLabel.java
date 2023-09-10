@@ -44,23 +44,23 @@ public class FATransitionLabel extends AbstractGeometricForm {
         if ( mouseHover ) {
             g2d.setColor( mouseHoverFillColor );
             g2d.fillRoundRect( 
-                    x1 - textWidth/2 - 4, y1 - textHeight / 2 - 4, 
+                    x1 - textWidth/2 - 4, y1 - textHeight / 2 - 6, 
                     textWidth + 8, textHeight + 8,
                     10, 10 );
             g2d.setColor( mouseHoverStrokeColor );
             g2d.drawRoundRect( 
-                    x1 - textWidth/2 - 4, y1 - textHeight / 2 - 4, 
+                    x1 - textWidth/2 - 4, y1 - textHeight / 2 - 6, 
                     textWidth + 8, textHeight + 8,
                     10, 10 );
         } else if ( selected ) {
             g2d.setColor( selectedFillColor );
             g2d.fillRoundRect( 
-                    x1 - textWidth/2 - 4, y1 - textHeight / 2 - 4, 
+                    x1 - textWidth/2 - 4, y1 - textHeight / 2 - 6, 
                     textWidth + 8, textHeight + 8,
                     10, 10 );
             g2d.setColor( selectedStrokeColor );
             g2d.drawRoundRect( 
-                    x1 - textWidth/2 - 4, y1 - textHeight / 2 - 4, 
+                    x1 - textWidth/2 - 4, y1 - textHeight / 2 - 6, 
                     textWidth + 8, textHeight + 8,
                     10, 10 );
         } else {

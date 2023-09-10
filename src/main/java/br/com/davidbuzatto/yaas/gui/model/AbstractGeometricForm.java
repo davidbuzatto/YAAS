@@ -35,6 +35,8 @@ public abstract class AbstractGeometricForm {
     protected int y1;
     protected int x2;
     protected int y2;
+    protected int width;
+    protected int height;
     protected boolean mouseHover;
     protected boolean selected;
     
@@ -175,6 +177,22 @@ public abstract class AbstractGeometricForm {
 
     public void setSelected( boolean selected ) {
         this.selected = selected;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth( int width ) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight( int height ) {
+        this.height = height;
     }
     
     @Override

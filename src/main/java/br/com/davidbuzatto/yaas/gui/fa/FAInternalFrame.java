@@ -24,6 +24,7 @@ import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
@@ -34,6 +35,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollBar;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -54,6 +56,9 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     
     private int xOffset;
     private int yOffset;
+    
+    private int xFaBeforeDragg;
+    private int yFaBeforeDragg;
     
     private int currentState;
     
@@ -99,7 +104,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         faPPanel.setFa( fa );
         faPPanel.readProperties();
         cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
-        drawPanel.repaint();
+        
+        repaintDrawPanel();
         
     }
 
@@ -695,10 +701,11 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             
             currentState = 0;
             
-            drawPanel.repaint();
             faPPanel.readProperties();
             statePPanel.readProperties();
             transitionPPanel.readProperties();
+            
+            repaintDrawPanel();
             
         }
         
@@ -715,29 +722,29 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private void btnMoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveActionPerformed
         fa.deselectAll();
         cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
-        drawPanel.repaint();
+        repaintDrawPanel();
     }//GEN-LAST:event_btnMoveActionPerformed
 
     private void btnAddStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddStateActionPerformed
         fa.deselectAll();
         cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
-        drawPanel.repaint();
+        repaintDrawPanel();
     }//GEN-LAST:event_btnAddStateActionPerformed
 
     private void btnAddTransitionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddTransitionActionPerformed
         fa.deselectAll();
         cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
-        drawPanel.repaint();
+        repaintDrawPanel();
     }//GEN-LAST:event_btnAddTransitionActionPerformed
 
     private void btnShowTransitionControlsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowTransitionControlsActionPerformed
         fa.setTransitionsControlPointsVisible( btnShowTransitionControls.isSelected() );
-        drawPanel.repaint();
+        repaintDrawPanel();
     }//GEN-LAST:event_btnShowTransitionControlsActionPerformed
 
     private void btnShowGridActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowGridActionPerformed
         drawPanel.setShowGrid( btnShowGrid.isSelected() );
-        drawPanel.repaint();
+        repaintDrawPanel();
     }//GEN-LAST:event_btnShowGridActionPerformed
 
     private void btnSnapToGridActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSnapToGridActionPerformed
@@ -745,17 +752,20 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSnapToGridActionPerformed
 
     private void btnZoomInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZoomInActionPerformed
-        // TODO add your handling code here:
+        zoomIn();
     }//GEN-LAST:event_btnZoomInActionPerformed
 
     private void btnZoomOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZoomOutActionPerformed
-        // TODO add your handling code here:
+        zoomOut();
     }//GEN-LAST:event_btnZoomOutActionPerformed
 
     private void drawPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drawPanelMousePressed
         
         xPressed = evt.getX();
         yPressed = evt.getY();
+        
+        xFaBeforeDragg = fa.getX1();
+        yFaBeforeDragg = fa.getY1();
         
         if ( btnMove.isSelected() ) {
             
@@ -820,7 +830,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         faPPanel.setFa( fa );
         faPPanel.readProperties();
-        drawPanel.repaint();
+        repaintDrawPanel();
         
     }//GEN-LAST:event_drawPanelMousePressed
 
@@ -881,7 +891,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         faPPanel.setFa( fa );
         faPPanel.readProperties();
-        drawPanel.repaint();
+        repaintDrawPanel();
         
     }//GEN-LAST:event_drawPanelMouseReleased
 
@@ -896,6 +906,11 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 fa.draggTransitions( evt );
             } else if ( selectedTransition != null ) {
                 selectedTransition.mouseDragged( evt );
+            } else {
+                fa.setX1( xFaBeforeDragg - xPressed + evt.getX() );
+                fa.setY1( yFaBeforeDragg - yPressed + evt.getY() );
+                //fa.setX1( xFaBeforeDragg - xPressed + evt.getX() - xOffset );
+                //fa.setY1( yFaBeforeDragg - yPressed + evt.getY() - yOffset );
             }
             
         } else if ( btnAddTransition.isSelected() ) {
@@ -903,7 +918,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             drawPanel.setTempTransitionY2( evt.getY() );
         }
         
-        drawPanel.repaint();
+        repaintDrawPanel();
         
     }//GEN-LAST:event_drawPanelMouseDragged
 
@@ -911,13 +926,39 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         if ( btnMove.isSelected() || btnAddTransition.isSelected() ) {
             fa.mouseHoverStatesAndTransitions( evt.getX(), evt.getY() );
-            drawPanel.repaint();
+            repaintDrawPanel();
         }
         
     }//GEN-LAST:event_drawPanelMouseMoved
 
     private void drawPanelMouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_drawPanelMouseWheelMoved
-        // TODO add your handling code here:
+        
+        if ( evt.isAltDown() ) {
+            
+            if ( evt.getWheelRotation() > 0 ) {
+                zoomOut();
+            } else {
+                zoomIn();
+            }
+            
+        } else {
+            
+            JScrollBar sb;
+
+            if ( evt.isShiftDown() ) {
+                sb = scrollPaneModel.getHorizontalScrollBar();
+            } else {
+                sb = scrollPaneModel.getVerticalScrollBar();
+            }
+
+            if ( evt.getWheelRotation() > 0 ) {
+                sb.setValue( sb.getValue() + sb.getBlockIncrement() );
+            } else {
+                sb.setValue( sb.getValue() - sb.getBlockIncrement() );
+            }
+            
+        }
+        
     }//GEN-LAST:event_drawPanelMouseWheelMoved
 
     private void btnSaveModelAsImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveModelAsImageActionPerformed
@@ -989,19 +1030,29 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
     public void repaintDrawPanel() {
         drawPanel.repaint();
+        drawPanel.setPreferredSize( new Dimension( fa.getWidth(), fa.getHeight() ) );
+        drawPanel.revalidate();
     }
     
     public void updateAfterRemotion() {
         faPPanel.setFa( fa );
         faPPanel.readProperties();
         cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
-        drawPanel.repaint();
+        repaintDrawPanel();
     }
     
     public void updateAfterUpdate() {
         fa.updateType();
         faPPanel.setFa( fa );
         faPPanel.readProperties();
+    }
+    
+    private void zoomIn() {
+        System.out.println( "zoom in" );
+    }
+    
+    private void zoomOut() {
+        System.out.println( "zoom out" );
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

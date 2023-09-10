@@ -32,8 +32,8 @@ import java.util.Map;
  */
 public class FA extends AbstractGeometricForm {
     
-    private List<FAState> states;
-    private List<FATransition> transitions;
+    private final List<FAState> states;
+    private final List<FATransition> transitions;
     private FAState initialState;
     private FAType type;
     
@@ -53,6 +53,10 @@ public class FA extends AbstractGeometricForm {
     public void draw( Graphics2D g2d ) {
         
         g2d = (Graphics2D) g2d.create();
+        g2d.translate( x1, y1 );
+        
+        int maxX = 0;
+        int maxY = 0;
         
         for ( FATransition t : transitions ) {
             t.draw( g2d );
@@ -60,7 +64,16 @@ public class FA extends AbstractGeometricForm {
         
         for ( FAState s : states ) {
             s.draw( g2d );
+            if ( maxX < s.getX1() + s.getRadius() ) {
+                maxX = s.getX1() + s.getRadius();
+            }
+            if ( maxY < s.getY1() + s.getRadius() ) {
+                maxY = s.getY1() + s.getRadius();
+            }
         }
+        
+        width = x1 + maxX + 100;
+        height = y1 + maxY + 100;
         
         for ( FATransition t : transitions ) {
             t.drawLabel( g2d );
@@ -91,7 +104,7 @@ public class FA extends AbstractGeometricForm {
     public FATransition getTransitionAt( int x, int y ) {
         
         for ( FATransition t : transitions ) {
-            if ( t.intercepts( x, y ) ) {
+            if ( t.intercepts( x - x1, y - y1 ) ) {
                 t.setSelected( true );
                 return t;
             }
@@ -229,7 +242,7 @@ public class FA extends AbstractGeometricForm {
         updateType();
     }
     
-    public void updateType() {
+    public final void updateType() {
         
         if ( states.isEmpty() ) {
             type = FAType.EMPTY;
