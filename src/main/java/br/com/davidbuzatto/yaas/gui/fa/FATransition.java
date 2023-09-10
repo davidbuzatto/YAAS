@@ -156,6 +156,20 @@ public class FATransition extends AbstractGeometricForm {
         addSymbol( symbol );
     }
     
+    public FATransition( FAState originState, FAState targetState, char... symbols ) {
+        this( originState, targetState, new ArrayList<Character>() );
+        for ( char s : symbols ) {
+            addSymbol( s );
+        }
+    }
+    
+    public FATransition( FAState originState, FAState targetState, String symbols ) {
+        this( originState, targetState, new ArrayList<Character>() );
+        for ( char s : symbols.trim().replace( " ", "" ).toCharArray() ) {
+            addSymbol( s );
+        }
+    }
+    
     public void mouseReleased( MouseEvent evt ) {
         targetCPDragging = false;
         centralCPDragging = false;
@@ -423,6 +437,12 @@ public class FATransition extends AbstractGeometricForm {
         
         g2d.dispose();
         
+    }
+    
+    public void drawLabel( Graphics2D g2d ) {
+        g2d = (Graphics2D) g2d.create();
+        label.draw( g2d );
+        g2d.dispose();
     }
 
     @Override

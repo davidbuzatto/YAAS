@@ -78,18 +78,32 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
     private void customInit() {
         
-        faPPanel = new FAPropertiesPanel( drawPanel );
-        statePPanel = new FAStatePropertiesPanel( drawPanel );
-        transitionPPanel = new FATransitionPropertiesPanel( drawPanel );
+        faPPanel = new FAPropertiesPanel( this );
+        statePPanel = new FAStatePropertiesPanel( this );
+        transitionPPanel = new FATransitionPropertiesPanel( this );
         
         cardLayout = (CardLayout) panelProperties.getLayout();
         panelProperties.add( faPPanel, MODEL_PROPERTIES_CARD );
         panelProperties.add( statePPanel, STATE_PROPERTIES_CARD );
         panelProperties.add( transitionPPanel, TRANSITION_PROPERTIES_CARD );
         
-        cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
-        
         fa = new FA();
+        drawPanel.setFa( fa );
+        
+        //createFATest();
+        createDFATest();
+        //createNFATest();
+        //createENFATest();
+        //drawPanel.setTransitionsControlPointsVisible( true );
+        
+        faPPanel.setFa( fa );
+        faPPanel.readProperties();
+        cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
+        drawPanel.repaint();
+        
+    }
+
+    private void createFATest() {
         
         FAState s0 = new FAState();
         s0.setX1( 100 );
@@ -98,24 +112,22 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         s0.setInitial( true );
         
         FAState s1 = new FAState();
-        s1.setX1( 300 );
+        s1.setX1( 250 );
         s1.setY1( 100 );
         s1.setLabel( "q" + currentState++ );
         
         FAState s2 = new FAState();
-        s2.setX1( 500 );
-        s2.setY1( 100 );
+        s2.setX1( 400 );
+        s2.setY1( 200 );
         s2.setLabel( "q" + currentState++ );
         
         FAState s3 = new FAState();
-        s3.setX1( 300 );
+        s3.setX1( 250 );
         s3.setY1( 300 );
         s3.setAccepting( true );
         s3.setLabel( "q" + currentState++ );
         
-        FATransition t1 = new FATransition( s0, s1, 'a' );
-        t1.addSymbol( 'b' );
-        t1.addSymbol( 'c' );
+        FATransition t1 = new FATransition( s0, s1, 'a', 'b', 'c' );
         FATransition t2 = new FATransition( s0, s3, 'a' );
         FATransition t3 = new FATransition( s1, s2, 'a' );
         FATransition t4 = new FATransition( s2, s3, 'a' );
@@ -131,9 +143,134 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         fa.addTransition( t4 );
         fa.addTransition( t5 );
         
-        drawPanel.setFa( fa );
+    }
+    
+    private void createDFATest() {
         
-        //drawPanel.setTransitionsControlPointsVisible( true );
+        FAState s0 = new FAState();
+        s0.setX1( 100 );
+        s0.setY1( 200 );
+        s0.setInitial( true );
+        s0.setLabel( "q" + currentState++ );
+        
+        FAState s1 = new FAState();
+        s1.setX1( 250 );
+        s1.setY1( 200 );
+        s1.setLabel( "q" + currentState++ );
+        
+        FAState s2 = new FAState();
+        s2.setX1( 400 );
+        s2.setY1( 200 );
+        s2.setAccepting( true );
+        s2.setLabel( "q" + currentState++ );
+        
+        FATransition t1 = new FATransition( s0, s0, '1' );
+        FATransition t2 = new FATransition( s0, s1, '0' );
+        FATransition t3 = new FATransition( s1, s1, '0' );
+        FATransition t4 = new FATransition( s1, s2, '1' );
+        FATransition t5 = new FATransition( s2, s2, '0', '1' );
+        
+        fa.addState( s0 );
+        fa.addState( s1 );
+        fa.addState( s2 );
+        fa.addTransition( t1 );
+        fa.addTransition( t2 );
+        fa.addTransition( t3 );
+        fa.addTransition( t4 );
+        fa.addTransition( t5 );
+        
+    }
+    
+    private void createNFATest() {
+        
+        FAState s0 = new FAState();
+        s0.setX1( 100 );
+        s0.setY1( 200 );
+        s0.setInitial( true );
+        s0.setLabel( "q" + currentState++ );
+        
+        FAState s1 = new FAState();
+        s1.setX1( 250 );
+        s1.setY1( 200 );
+        s1.setLabel( "q" + currentState++ );
+        
+        FAState s2 = new FAState();
+        s2.setX1( 400 );
+        s2.setY1( 200 );
+        s2.setAccepting( true );
+        s2.setLabel( "q" + currentState++ );
+        
+        FATransition t1 = new FATransition( s0, s0, '0', '1' );
+        FATransition t2 = new FATransition( s0, s1, '0' );
+        FATransition t3 = new FATransition( s1, s2, '1' );
+        
+        fa.addState( s0 );
+        fa.addState( s1 );
+        fa.addState( s2 );
+        fa.addTransition( t1 );
+        fa.addTransition( t2 );
+        fa.addTransition( t3 );
+        
+    }
+    
+    private void createENFATest() {
+        
+        FAState s0 = new FAState();
+        s0.setX1( 80 );
+        s0.setY1( 150 );
+        s0.setInitial( true );
+        s0.setLabel( "q" + currentState++ );
+        
+        FAState s1 = new FAState();
+        s1.setX1( 180 );
+        s1.setY1( 150 );
+        s1.setLabel( "q" + currentState++ );
+        
+        FAState s2 = new FAState();
+        s2.setX1( 280 );
+        s2.setY1( 150 );
+        s2.setLabel( "q" + currentState++ );
+        
+        FAState s3 = new FAState();
+        s3.setX1( 380 );
+        s3.setY1( 150 );
+        s3.setLabel( "q" + currentState++ );
+        
+        FAState s4 = new FAState();
+        s4.setX1( 280 );
+        s4.setY1( 250 );
+        s4.setLabel( "q" + currentState++ );
+        
+        FAState s5 = new FAState();
+        s5.setX1( 480 );
+        s5.setY1( 150 );
+        s5.setAccepting( true );
+        s5.setLabel( "q" + currentState++ );
+        
+        char[] n = { '0', '1', '2' };
+        FATransition t1 = new FATransition( s0, s1, '+', '-', CharacterConstants.EMPTY_STRING );
+        FATransition t2 = new FATransition( s1, s1, n );
+        FATransition t3 = new FATransition( s1, s2, '.' );
+        FATransition t4 = new FATransition( s1, s4, n );
+        FATransition t5 = new FATransition( s2, s3, n );
+        FATransition t6 = new FATransition( s3, s3, n );
+        FATransition t7 = new FATransition( s3, s5, CharacterConstants.EMPTY_STRING );
+        FATransition t8 = new FATransition( s4, s3, '.' );
+        
+        fa.addState( s0 );
+        fa.addState( s1 );
+        fa.addState( s2 );
+        fa.addState( s3 );
+        fa.addState( s4 );
+        fa.addState( s5 );
+        fa.addTransition( t1 );
+        fa.addTransition( t2 );
+        fa.addTransition( t3 );
+        fa.addTransition( t4 );
+        fa.addTransition( t5 );
+        fa.addTransition( t6 );
+        fa.addTransition( t7 );
+        fa.addTransition( t8 );
         
     }
     
@@ -156,6 +293,9 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnMove = new javax.swing.JToggleButton();
         btnAddState = new javax.swing.JToggleButton();
         btnAddTransition = new javax.swing.JToggleButton();
+        sep02 = new javax.swing.JToolBar.Separator();
+        btnGenerateEquivalentDFA = new javax.swing.JButton();
+        btnGenerateMinimizedDFA = new javax.swing.JButton();
         hFiller = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         btnShowTransitionControls = new javax.swing.JToggleButton();
         seo03 = new javax.swing.JToolBar.Separator();
@@ -187,7 +327,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
-        setTitle("Finite Automatons");
+        setTitle("Finite Automata");
         setFrameIcon(new javax.swing.ImageIcon(getClass().getResource("/fa.png"))); // NOI18N
 
         toolBar.setRollover(true);
@@ -280,6 +420,21 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         toolBar.add(btnAddTransition);
+        toolBar.add(sep02);
+
+        btnGenerateEquivalentDFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dfa.png"))); // NOI18N
+        btnGenerateEquivalentDFA.setToolTipText("Generate Equivalent DFA");
+        btnGenerateEquivalentDFA.setFocusable(false);
+        btnGenerateEquivalentDFA.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnGenerateEquivalentDFA.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        toolBar.add(btnGenerateEquivalentDFA);
+
+        btnGenerateMinimizedDFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/arrow_in.png"))); // NOI18N
+        btnGenerateMinimizedDFA.setToolTipText("Generate Minimized DFA");
+        btnGenerateMinimizedDFA.setFocusable(false);
+        btnGenerateMinimizedDFA.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnGenerateMinimizedDFA.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        toolBar.add(btnGenerateMinimizedDFA);
         toolBar.add(hFiller);
 
         btnShowTransitionControls.setIcon(new javax.swing.ImageIcon(getClass().getResource("/shape_square_edit.png"))); // NOI18N
@@ -520,7 +675,33 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
-        // TODO add your handling code here:
+        
+        if ( JOptionPane.showConfirmDialog( 
+                this, 
+                "Do you really want to create a new model?\n" +
+                "All non saved modifications will be lost!", 
+                "New model", 
+                JOptionPane.YES_NO_OPTION ) == JOptionPane.YES_OPTION ) {
+            
+            fa = new FA();
+            
+            drawPanel.setFa( fa );
+            faPPanel.setFa( fa );
+            statePPanel.setFa( fa );
+            transitionPPanel.setFa( fa );
+            
+            selectedState = null;
+            selectedTransition = null;
+            
+            currentState = 0;
+            
+            drawPanel.repaint();
+            faPPanel.readProperties();
+            statePPanel.readProperties();
+            transitionPPanel.readProperties();
+            
+        }
+        
     }//GEN-LAST:event_btnNewActionPerformed
 
     private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
@@ -637,6 +818,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             
         }
         
+        faPPanel.setFa( fa );
+        faPPanel.readProperties();
         drawPanel.repaint();
         
     }//GEN-LAST:event_drawPanelMousePressed
@@ -696,6 +879,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             
         }
         
+        faPPanel.setFa( fa );
+        faPPanel.readProperties();
         drawPanel.repaint();
         
     }//GEN-LAST:event_drawPanelMouseReleased
@@ -802,12 +987,30 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_btnSaveModelAsImageActionPerformed
 
-
+    public void repaintDrawPanel() {
+        drawPanel.repaint();
+    }
+    
+    public void updateAfterRemotion() {
+        faPPanel.setFa( fa );
+        faPPanel.readProperties();
+        cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
+        drawPanel.repaint();
+    }
+    
+    public void updateAfterUpdate() {
+        fa.updateType();
+        faPPanel.setFa( fa );
+        faPPanel.readProperties();
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton btnAddState;
     private javax.swing.JToggleButton btnAddTransition;
     private javax.swing.JButton btnBatchTest;
     private javax.swing.JButton btnFirstStep;
+    private javax.swing.JButton btnGenerateEquivalentDFA;
+    private javax.swing.JButton btnGenerateMinimizedDFA;
     private javax.swing.ButtonGroup btnGroup;
     private javax.swing.JButton btnLastStep;
     private javax.swing.JToggleButton btnMove;
@@ -835,6 +1038,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane scrollPaneModel;
     private javax.swing.JToolBar.Separator seo03;
     private javax.swing.JToolBar.Separator sep01;
+    private javax.swing.JToolBar.Separator sep02;
     private javax.swing.JToolBar.Separator sep04;
     private javax.swing.JToolBar.Separator sepTS01;
     private javax.swing.JToolBar toolBar;

@@ -16,8 +16,8 @@
  */
 package br.com.davidbuzatto.yaas.gui.fa.properties;
 
-import br.com.davidbuzatto.yaas.gui.DrawPanel;
 import br.com.davidbuzatto.yaas.gui.fa.FA;
+import br.com.davidbuzatto.yaas.gui.fa.FAInternalFrame;
 import br.com.davidbuzatto.yaas.gui.fa.FATransition;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import java.awt.Color;
@@ -33,7 +33,7 @@ import javax.swing.JOptionPane;
  */
 public class FATransitionPropertiesPanel extends javax.swing.JPanel {
 
-    private DrawPanel drawPanel;
+    private FAInternalFrame faIFrame;
     
     private FA fa;
     private FATransition transition;
@@ -42,9 +42,9 @@ public class FATransitionPropertiesPanel extends javax.swing.JPanel {
     /**
      * Creates new form TransitionPropertiesPanel
      */
-    public FATransitionPropertiesPanel( DrawPanel drawPanel ) {
+    public FATransitionPropertiesPanel( FAInternalFrame faIFrame ) {
         
-        this.drawPanel = drawPanel;
+        this.faIFrame = faIFrame;
         
         initComponents();
         customInit();
@@ -254,7 +254,8 @@ public class FATransitionPropertiesPanel extends javax.swing.JPanel {
             
             transition.setSymbols( symbols );
             readProperties();
-            drawPanel.repaint();
+            faIFrame.repaintDrawPanel();
+            faIFrame.updateAfterUpdate();
             
         } else {
             
@@ -274,7 +275,7 @@ public class FATransitionPropertiesPanel extends javax.swing.JPanel {
         if ( c != null ) {
             btnColor.setForeground( c );
             transition.setStrokeColor( c );
-            drawPanel.repaint();
+            faIFrame.repaintDrawPanel();
         }
         
     }//GEN-LAST:event_btnColorActionPerformed
@@ -283,7 +284,7 @@ public class FATransitionPropertiesPanel extends javax.swing.JPanel {
         
         if ( transition != null ) {
             transition.resetTransformations();
-            drawPanel.repaint();
+            faIFrame.repaintDrawPanel();
         } else {
             
             JOptionPane.showMessageDialog( this,
@@ -305,7 +306,8 @@ public class FATransitionPropertiesPanel extends javax.swing.JPanel {
                     "Confirmation",
                     JOptionPane.YES_NO_OPTION ) == JOptionPane.YES_OPTION ) {
                 fa.removeTransition( transition );
-                drawPanel.repaint();
+                faIFrame.repaintDrawPanel();
+                faIFrame.updateAfterRemotion();
                 transition = null;
                 readProperties();
             }

@@ -40,4 +40,6 @@ public interface CharacterConstants {
     public static final Character EXISTS = '\u2203';
     public static final Character NOT_EXISTS = '\u2204';
     
+    public static final Character EMPTY_STRING = SMALL_EPSILON;
+    
 }

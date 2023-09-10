@@ -17,10 +17,13 @@
 package br.com.davidbuzatto.yaas.gui.fa;
 
 import br.com.davidbuzatto.yaas.gui.model.AbstractGeometricForm;
+import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Finite Automaton representation.
@@ -32,12 +35,14 @@ public class FA extends AbstractGeometricForm {
     private List<FAState> states;
     private List<FATransition> transitions;
     private FAState initialState;
+    private FAType type;
     
     private boolean transitionControlPointsVisible;
     
     public FA() {
         states = new ArrayList<>();
         transitions = new ArrayList<>();
+        updateType();
     }
     
     public boolean accepts( String str ) {
@@ -55,6 +60,10 @@ public class FA extends AbstractGeometricForm {
         
         for ( FAState s : states ) {
             s.draw( g2d );
+        }
+        
+        for ( FATransition t : transitions ) {
+            t.drawLabel( g2d );
         }
         
         g2d.dispose();
@@ -112,6 +121,9 @@ public class FA extends AbstractGeometricForm {
             }
             
         }
+        
+        updateType();
+        
     }
     
     public void addTransition( FATransition transition ) {
@@ -136,6 +148,8 @@ public class FA extends AbstractGeometricForm {
             }
             
         }
+        
+        updateType();
         
     }
     
@@ -175,10 +189,16 @@ public class FA extends AbstractGeometricForm {
         
         this.initialState = initialState;
         
+        updateType();
+        
     }
 
     public FAState getInitialState() {
         return initialState;
+    }
+
+    public FAType getType() {
+        return type;
     }
     
     public void removeState( FAState state ) {
@@ -200,10 +220,62 @@ public class FA extends AbstractGeometricForm {
             transitions.remove( t );
         }
         
+        updateType();
+        
     }
     
     public void removeTransition( FATransition transition ) {
         transitions.remove( transition );
+        updateType();
+    }
+    
+    public void updateType() {
+        
+        if ( states.isEmpty() ) {
+            type = FAType.EMPTY;
+            return;
+        }
+        
+        Map<FAState, Map<Character, Integer>> counts = new HashMap<>();
+        boolean epsilon = false;
+        boolean nondeterminism = false;
+        
+        for ( FATransition t : transitions ) {
+            
+            Map<Character, Integer> count = counts.get( t.getOriginState() );
+            if ( count == null ) {
+                count = new HashMap<>();
+                counts.put( t.getOriginState(), count );
+            }
+            
+            for ( char c : t.getSymbols() ) {
+                Integer v = count.get( c );
+                count.put( c, v == null ? 1 : v+1 );
+            }
+            
+        }
+        
+        for ( Map.Entry<FAState, Map<Character, Integer>> ec : counts.entrySet() ) {
+            for ( Map.Entry<Character, Integer> e : ec.getValue().entrySet() ) {
+                if ( e.getKey().equals( CharacterConstants.EMPTY_STRING ) ) {
+                    epsilon = true;
+                } else if ( e.getValue().compareTo( 1 ) > 0 ) {
+                    nondeterminism = true;
+                }
+            }
+            if ( epsilon && nondeterminism ) {
+                break;
+            }
+        }
+        
+        if ( epsilon ) {
+            type = FAType.ENFA;
+        } else if ( nondeterminism ) {
+            type = FAType.NFA;
+        } else {
+            type = FAType.DFA;
+        }
+        
     }
     
 }

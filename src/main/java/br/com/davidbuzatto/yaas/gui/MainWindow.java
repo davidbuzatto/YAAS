@@ -82,8 +82,8 @@ public class MainWindow extends javax.swing.JFrame {
         toolBar.setRollover(true);
 
         btnFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/faBig.png"))); // NOI18N
-        btnFA.setText("Finite Automatons");
-        btnFA.setToolTipText("Finite Automatons");
+        btnFA.setText("Finite Automata");
+        btnFA.setToolTipText("");
         btnFA.setFocusable(false);
         btnFA.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnFA.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -95,7 +95,8 @@ public class MainWindow extends javax.swing.JFrame {
         toolBar.add(btnFA);
 
         btnPDA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pdaBig.png"))); // NOI18N
-        btnPDA.setText("Pushdown Automatons");
+        btnPDA.setText("Pushdown Automata");
+        btnPDA.setToolTipText("");
         btnPDA.setEnabled(false);
         btnPDA.setFocusable(false);
         btnPDA.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);

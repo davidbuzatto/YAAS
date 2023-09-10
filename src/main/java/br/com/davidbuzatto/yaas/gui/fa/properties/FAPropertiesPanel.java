@@ -16,8 +16,9 @@
  */
 package br.com.davidbuzatto.yaas.gui.fa.properties;
 
-import br.com.davidbuzatto.yaas.gui.DrawPanel;
 import br.com.davidbuzatto.yaas.gui.fa.FA;
+import br.com.davidbuzatto.yaas.gui.fa.FAInternalFrame;
+import br.com.davidbuzatto.yaas.gui.fa.FAType;
 
 /**
  * Finite Automaton properties edit/visualization panel.
@@ -26,16 +27,16 @@ import br.com.davidbuzatto.yaas.gui.fa.FA;
  */
 public class FAPropertiesPanel extends javax.swing.JPanel {
 
-    private DrawPanel drawPanel;
+    private FAInternalFrame faIFrame;
     
     private FA fa;
     
     /**
      * Creates new form FAPropertiesPanel
      */
-    public FAPropertiesPanel( DrawPanel drawPanel ) {
+    public FAPropertiesPanel( FAInternalFrame faIFrame ) {
         
-        this.drawPanel = drawPanel;
+        this.faIFrame = faIFrame;
         
         initComponents();
         customInit();
@@ -50,8 +51,13 @@ public class FAPropertiesPanel extends javax.swing.JPanel {
     }
 
     public void readProperties() {
-        txtFAType.setText( "DFA" );
-        txtFAType.setToolTipText( "Deterministic Finite Automaton" );
+        if ( fa.getType() == FAType.EMPTY ) {
+            txtFAType.setText( "" );
+            txtFAType.setToolTipText( "" );
+        } else {
+            txtFAType.setText( fa.getType().name() );
+            txtFAType.setToolTipText( fa.getType().getDescription() );
+        }
     }
     
     /**

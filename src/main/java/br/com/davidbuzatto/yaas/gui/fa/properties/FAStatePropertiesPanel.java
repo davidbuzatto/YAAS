@@ -16,8 +16,8 @@
  */
 package br.com.davidbuzatto.yaas.gui.fa.properties;
 
-import br.com.davidbuzatto.yaas.gui.DrawPanel;
 import br.com.davidbuzatto.yaas.gui.fa.FA;
+import br.com.davidbuzatto.yaas.gui.fa.FAInternalFrame;
 import br.com.davidbuzatto.yaas.gui.fa.FAState;
 import java.awt.Color;
 import javax.swing.JColorChooser;
@@ -30,7 +30,7 @@ import javax.swing.JOptionPane;
  */
 public class FAStatePropertiesPanel extends javax.swing.JPanel {
 
-    private DrawPanel drawPanel;
+    private FAInternalFrame faIFrame;
     
     private FA fa;
     private FAState state;
@@ -38,9 +38,9 @@ public class FAStatePropertiesPanel extends javax.swing.JPanel {
     /**
      * Creates new form StatePropertiesPanel
      */
-    public FAStatePropertiesPanel( DrawPanel drawPanel ) {
+    public FAStatePropertiesPanel( FAInternalFrame faIFrame ) {
         
-        this.drawPanel = drawPanel;
+        this.faIFrame = faIFrame;
         
         initComponents();
         customInit();
@@ -235,13 +235,13 @@ public class FAStatePropertiesPanel extends javax.swing.JPanel {
             state.setInitial( false );
         }
         
-        drawPanel.repaint();
+        faIFrame.repaintDrawPanel();
         
     }//GEN-LAST:event_checkInitialActionPerformed
 
     private void checkAcceptingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkAcceptingActionPerformed
         state.setAccepting( checkAccepting.isSelected() );
-        drawPanel.repaint();
+        faIFrame.repaintDrawPanel();
     }//GEN-LAST:event_checkAcceptingActionPerformed
 
     private void btnColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnColorActionPerformed
@@ -251,7 +251,7 @@ public class FAStatePropertiesPanel extends javax.swing.JPanel {
         if ( c != null ) {
             btnColor.setForeground( c );
             state.setStrokeColor( c );
-            drawPanel.repaint();
+            faIFrame.repaintDrawPanel();
         }
         
     }//GEN-LAST:event_btnColorActionPerformed
@@ -266,7 +266,8 @@ public class FAStatePropertiesPanel extends javax.swing.JPanel {
                     "Confirmation",
                     JOptionPane.YES_NO_OPTION ) == JOptionPane.YES_OPTION ) {
                 fa.removeState( state );
-                drawPanel.repaint();
+                faIFrame.repaintDrawPanel();
+                faIFrame.updateAfterRemotion();
                 state = null;
                 readProperties();
             }
@@ -284,7 +285,7 @@ public class FAStatePropertiesPanel extends javax.swing.JPanel {
 
     private void txtCustomLabelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCustomLabelActionPerformed
         state.setCustomLabel( txtCustomLabel.getText() );
-        drawPanel.repaint();
+        faIFrame.repaintDrawPanel();
     }//GEN-LAST:event_txtCustomLabelActionPerformed
 
 
