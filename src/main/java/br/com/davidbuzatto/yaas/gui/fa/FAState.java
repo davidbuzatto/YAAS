@@ -56,8 +56,8 @@ public class FAState extends AbstractGeometricForm {
         diameter = DrawingConstants.STATE_DIAMETER;
         
         arrow = new Arrow();
-        arrow.setMouseHoverStrokeColor(DrawingConstants.STATE_MOUSE_HOVER_STROKE_COLOR );
-        arrow.setSelectedStrokeColor(DrawingConstants.STATE_SELECTED_STROKE_COLOR );
+        arrow.setMouseHoverStrokeColor( DrawingConstants.STATE_MOUSE_HOVER_STROKE_COLOR );
+        arrow.setSelectedStrokeColor( DrawingConstants.STATE_SELECTED_STROKE_COLOR );
         
     }
     
@@ -70,6 +70,7 @@ public class FAState extends AbstractGeometricForm {
         g2d.setStroke( stroke );
         arrow.setMouseHover( mouseHover );
         arrow.setSelected( selected );
+        arrow.setStrokeColor( strokeColor );
         
         if ( mouseHover ) {
             g2d.setColor( mouseHoverStrokeColor );

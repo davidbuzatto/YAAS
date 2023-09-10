@@ -87,9 +87,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         panelProperties.add( statePPanel, STATE_PROPERTIES_CARD );
         panelProperties.add( transitionPPanel, TRANSITION_PROPERTIES_CARD );
         
-        cardLayout.show(panelProperties, MODEL_PROPERTIES_CARD );
-        
-        splitV.setDividerLocation( 400 );
+        cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
         
         fa = new FA();
         
@@ -158,7 +156,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnMove = new javax.swing.JToggleButton();
         btnAddState = new javax.swing.JToggleButton();
         btnAddTransition = new javax.swing.JToggleButton();
-        horizontalFiller = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        hFiller = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         btnShowTransitionControls = new javax.swing.JToggleButton();
         seo03 = new javax.swing.JToolBar.Separator();
         btnShowGrid = new javax.swing.JToggleButton();
@@ -167,10 +165,22 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnZoomIn = new javax.swing.JButton();
         btnZoomOut = new javax.swing.JButton();
         panelModel = new javax.swing.JPanel();
-        splitV = new javax.swing.JSplitPane();
-        scrollAutomaton = new javax.swing.JScrollPane();
+        panelTestsAndSimulation = new javax.swing.JPanel();
+        lblTestString = new javax.swing.JLabel();
+        txtTestString = new javax.swing.JTextField();
+        toolBarTestsAndSimulation = new javax.swing.JToolBar();
+        btnTest = new javax.swing.JButton();
+        sepTS01 = new javax.swing.JToolBar.Separator();
+        btnStart = new javax.swing.JButton();
+        btnFirstStep = new javax.swing.JButton();
+        btnPreviousStep = new javax.swing.JButton();
+        btnNextStep = new javax.swing.JButton();
+        btnLastStep = new javax.swing.JButton();
+        btnStop = new javax.swing.JButton();
+        hFillerTS = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        btnBatchTest = new javax.swing.JButton();
+        scrollPaneModel = new javax.swing.JScrollPane();
         drawPanel = new br.com.davidbuzatto.yaas.gui.DrawPanel();
-        panelSimulation = new javax.swing.JPanel();
         panelProperties = new javax.swing.JPanel();
 
         setClosable(true);
@@ -178,6 +188,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         setMaximizable(true);
         setResizable(true);
         setTitle("Finite Automatons");
+        setFrameIcon(new javax.swing.ImageIcon(getClass().getResource("/fa.png"))); // NOI18N
 
         toolBar.setRollover(true);
 
@@ -269,7 +280,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         toolBar.add(btnAddTransition);
-        toolBar.add(horizontalFiller);
+        toolBar.add(hFiller);
 
         btnShowTransitionControls.setIcon(new javax.swing.ImageIcon(getClass().getResource("/shape_square_edit.png"))); // NOI18N
         btnShowTransitionControls.setToolTipText("Show/Hide Transition Control Points");
@@ -335,7 +346,94 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
         panelModel.setBorder(javax.swing.BorderFactory.createTitledBorder("Model"));
 
-        splitV.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+        panelTestsAndSimulation.setBorder(javax.swing.BorderFactory.createTitledBorder("Tests and Simulation"));
+
+        lblTestString.setText("String:");
+
+        toolBarTestsAndSimulation.setRollover(true);
+
+        btnTest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/accept.png"))); // NOI18N
+        btnTest.setToolTipText("Test");
+        btnTest.setFocusable(false);
+        btnTest.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnTest.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        toolBarTestsAndSimulation.add(btnTest);
+        toolBarTestsAndSimulation.add(sepTS01);
+
+        btnStart.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_play_blue.png"))); // NOI18N
+        btnStart.setToolTipText("Start Simulation");
+        btnStart.setFocusable(false);
+        btnStart.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnStart.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        toolBarTestsAndSimulation.add(btnStart);
+
+        btnFirstStep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_start_blue.png"))); // NOI18N
+        btnFirstStep.setToolTipText("First Step");
+        btnFirstStep.setFocusable(false);
+        btnFirstStep.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnFirstStep.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        toolBarTestsAndSimulation.add(btnFirstStep);
+
+        btnPreviousStep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_rewind_blue.png"))); // NOI18N
+        btnPreviousStep.setToolTipText("Previous Step");
+        btnPreviousStep.setFocusable(false);
+        btnPreviousStep.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnPreviousStep.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        toolBarTestsAndSimulation.add(btnPreviousStep);
+
+        btnNextStep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_fastforward_blue.png"))); // NOI18N
+        btnNextStep.setToolTipText("Next Step");
+        btnNextStep.setFocusable(false);
+        btnNextStep.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnNextStep.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        toolBarTestsAndSimulation.add(btnNextStep);
+
+        btnLastStep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_end_blue.png"))); // NOI18N
+        btnLastStep.setToolTipText("Last Step");
+        btnLastStep.setFocusable(false);
+        btnLastStep.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnLastStep.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        toolBarTestsAndSimulation.add(btnLastStep);
+
+        btnStop.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_stop_blue.png"))); // NOI18N
+        btnStop.setToolTipText("Stop Simulation");
+        btnStop.setFocusable(false);
+        btnStop.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnStop.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        toolBarTestsAndSimulation.add(btnStop);
+        toolBarTestsAndSimulation.add(hFillerTS);
+
+        btnBatchTest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/book.png"))); // NOI18N
+        btnBatchTest.setToolTipText("Batch Test");
+        btnBatchTest.setFocusable(false);
+        btnBatchTest.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnBatchTest.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        toolBarTestsAndSimulation.add(btnBatchTest);
+
+        javax.swing.GroupLayout panelTestsAndSimulationLayout = new javax.swing.GroupLayout(panelTestsAndSimulation);
+        panelTestsAndSimulation.setLayout(panelTestsAndSimulationLayout);
+        panelTestsAndSimulationLayout.setHorizontalGroup(
+            panelTestsAndSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTestsAndSimulationLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblTestString)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelTestsAndSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(toolBarTestsAndSimulation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtTestString))
+                .addContainerGap())
+        );
+        panelTestsAndSimulationLayout.setVerticalGroup(
+            panelTestsAndSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelTestsAndSimulationLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelTestsAndSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblTestString)
+                    .addComponent(txtTestString, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(toolBarTestsAndSimulation, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         drawPanel.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
@@ -363,31 +461,14 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         drawPanel.setLayout(drawPanelLayout);
         drawPanelLayout.setHorizontalGroup(
             drawPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1162, Short.MAX_VALUE)
+            .addGap(0, 1148, Short.MAX_VALUE)
         );
         drawPanelLayout.setVerticalGroup(
             drawPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 467, Short.MAX_VALUE)
         );
 
-        scrollAutomaton.setViewportView(drawPanel);
-
-        splitV.setTopComponent(scrollAutomaton);
-
-        panelSimulation.setBorder(javax.swing.BorderFactory.createTitledBorder("Simulation"));
-
-        javax.swing.GroupLayout panelSimulationLayout = new javax.swing.GroupLayout(panelSimulation);
-        panelSimulation.setLayout(panelSimulationLayout);
-        panelSimulationLayout.setHorizontalGroup(
-            panelSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 675, Short.MAX_VALUE)
-        );
-        panelSimulationLayout.setVerticalGroup(
-            panelSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 500, Short.MAX_VALUE)
-        );
-
-        splitV.setRightComponent(panelSimulation);
+        scrollPaneModel.setViewportView(drawPanel);
 
         javax.swing.GroupLayout panelModelLayout = new javax.swing.GroupLayout(panelModel);
         panelModel.setLayout(panelModelLayout);
@@ -395,14 +476,17 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             panelModelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelModelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(splitV, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addGroup(panelModelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(panelTestsAndSimulation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(scrollPaneModel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
         panelModelLayout.setVerticalGroup(
             panelModelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelModelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(splitV, javax.swing.GroupLayout.DEFAULT_SIZE, 544, Short.MAX_VALUE)
+                .addComponent(scrollPaneModel, javax.swing.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panelTestsAndSimulation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -413,7 +497,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(toolBar, javax.swing.GroupLayout.DEFAULT_SIZE, 925, Short.MAX_VALUE)
+            .addComponent(toolBar, javax.swing.GroupLayout.DEFAULT_SIZE, 788, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(panelModel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -722,27 +806,39 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton btnAddState;
     private javax.swing.JToggleButton btnAddTransition;
+    private javax.swing.JButton btnBatchTest;
+    private javax.swing.JButton btnFirstStep;
     private javax.swing.ButtonGroup btnGroup;
+    private javax.swing.JButton btnLastStep;
     private javax.swing.JToggleButton btnMove;
     private javax.swing.JButton btnNew;
+    private javax.swing.JButton btnNextStep;
     private javax.swing.JButton btnOpen;
+    private javax.swing.JButton btnPreviousStep;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSaveModelAsImage;
     private javax.swing.JToggleButton btnShowGrid;
     private javax.swing.JToggleButton btnShowTransitionControls;
     private javax.swing.JToggleButton btnSnapToGrid;
+    private javax.swing.JButton btnStart;
+    private javax.swing.JButton btnStop;
+    private javax.swing.JButton btnTest;
     private javax.swing.JButton btnZoomIn;
     private javax.swing.JButton btnZoomOut;
     private br.com.davidbuzatto.yaas.gui.DrawPanel drawPanel;
-    private javax.swing.Box.Filler horizontalFiller;
+    private javax.swing.Box.Filler hFiller;
+    private javax.swing.Box.Filler hFillerTS;
+    private javax.swing.JLabel lblTestString;
     private javax.swing.JPanel panelModel;
     private javax.swing.JPanel panelProperties;
-    private javax.swing.JPanel panelSimulation;
-    private javax.swing.JScrollPane scrollAutomaton;
+    private javax.swing.JPanel panelTestsAndSimulation;
+    private javax.swing.JScrollPane scrollPaneModel;
     private javax.swing.JToolBar.Separator seo03;
     private javax.swing.JToolBar.Separator sep01;
     private javax.swing.JToolBar.Separator sep04;
-    private javax.swing.JSplitPane splitV;
+    private javax.swing.JToolBar.Separator sepTS01;
     private javax.swing.JToolBar toolBar;
+    private javax.swing.JToolBar toolBarTestsAndSimulation;
+    private javax.swing.JTextField txtTestString;
     // End of variables declaration//GEN-END:variables
 }

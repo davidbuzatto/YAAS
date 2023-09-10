@@ -58,12 +58,15 @@ public class MainWindow extends javax.swing.JFrame {
         desktopPane = new javax.swing.JDesktopPane();
         toolBar = new javax.swing.JToolBar();
         btnFA = new javax.swing.JButton();
+        btnPDA = new javax.swing.JButton();
+        btnTM = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
         menuEdit = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("YAAS");
+        setIconImage(new javax.swing.ImageIcon( getClass().getResource( "/yaas.png" ) ).getImage());
 
         javax.swing.GroupLayout desktopPaneLayout = new javax.swing.GroupLayout(desktopPane);
         desktopPane.setLayout(desktopPaneLayout);
@@ -73,12 +76,14 @@ public class MainWindow extends javax.swing.JFrame {
         );
         desktopPaneLayout.setVerticalGroup(
             desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 666, Short.MAX_VALUE)
+            .addGap(0, 631, Short.MAX_VALUE)
         );
 
         toolBar.setRollover(true);
 
-        btnFA.setText("FA");
+        btnFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/faBig.png"))); // NOI18N
+        btnFA.setText("Finite Automatons");
+        btnFA.setToolTipText("Finite Automatons");
         btnFA.setFocusable(false);
         btnFA.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnFA.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -88,6 +93,22 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
         toolBar.add(btnFA);
+
+        btnPDA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pdaBig.png"))); // NOI18N
+        btnPDA.setText("Pushdown Automatons");
+        btnPDA.setEnabled(false);
+        btnPDA.setFocusable(false);
+        btnPDA.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnPDA.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        toolBar.add(btnPDA);
+
+        btnTM.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turingBig.png"))); // NOI18N
+        btnTM.setText("Turing Machines");
+        btnTM.setEnabled(false);
+        btnTM.setFocusable(false);
+        btnTM.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnTM.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        toolBar.add(btnTM);
 
         menuFile.setText("File");
         menuBar.add(menuFile);
@@ -107,7 +128,7 @@ public class MainWindow extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(toolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(toolBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(desktopPane))
         );
@@ -136,6 +157,8 @@ public class MainWindow extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFA;
+    private javax.swing.JButton btnPDA;
+    private javax.swing.JButton btnTM;
     private javax.swing.JDesktopPane desktopPane;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenu menuEdit;
