@@ -19,7 +19,7 @@ package br.com.davidbuzatto.yaas.util;
 import br.com.davidbuzatto.yaas.gui.fa.FA;
 import br.com.davidbuzatto.yaas.gui.fa.FAState;
 import br.com.davidbuzatto.yaas.gui.fa.FAType;
-import br.com.davidbuzatto.yaas.gui.fa.FATransitionFunctionTableModel;
+import br.com.davidbuzatto.yaas.gui.fa.table.FATransitionFunctionTableModel;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.FontMetrics;

@@ -16,6 +16,7 @@
  */
 package br.com.davidbuzatto.yaas.gui.fa;
 
+import br.com.davidbuzatto.yaas.gui.fa.table.FATransitionFunctionTableCellRenderer;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
