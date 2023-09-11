@@ -21,9 +21,11 @@ import br.com.davidbuzatto.yaas.gui.fa.properties.FAStatePropertiesPanel;
 import br.com.davidbuzatto.yaas.gui.fa.properties.FATransitionPropertiesPanel;
 import br.com.davidbuzatto.yaas.util.ApplicationPreferences;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
+import br.com.davidbuzatto.yaas.util.CustomCursors;
 import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -57,8 +59,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private int xOffset;
     private int yOffset;
     
-    private int xFaBeforeDragg;
-    private int yFaBeforeDragg;
+    private int xPrev;
+    private int yPrev;
     
     private int currentState;
     
@@ -105,6 +107,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         faPPanel.readProperties();
         cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
         
+        drawPanel.setCursor( CustomCursors.MOVE_CURSOR );
         repaintDrawPanel();
         
     }
@@ -723,18 +726,21 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         fa.deselectAll();
         cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
         repaintDrawPanel();
+        drawPanel.setCursor( CustomCursors.MOVE_CURSOR );
     }//GEN-LAST:event_btnMoveActionPerformed
 
     private void btnAddStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddStateActionPerformed
         fa.deselectAll();
         cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
         repaintDrawPanel();
+        drawPanel.setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR ) );
     }//GEN-LAST:event_btnAddStateActionPerformed
 
     private void btnAddTransitionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddTransitionActionPerformed
         fa.deselectAll();
         cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
         repaintDrawPanel();
+        drawPanel.setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR ) );
     }//GEN-LAST:event_btnAddTransitionActionPerformed
 
     private void btnShowTransitionControlsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowTransitionControlsActionPerformed
@@ -764,8 +770,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         xPressed = evt.getX();
         yPressed = evt.getY();
         
-        xFaBeforeDragg = fa.getX1();
-        yFaBeforeDragg = fa.getY1();
+        xPrev = xPressed;
+        yPrev = yPressed;
         
         if ( btnMove.isSelected() ) {
             
@@ -855,27 +861,25 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             
                 if ( targetState != null ) {
                     
-                    String input = JOptionPane.showInputDialog( this, "Transition symbol(s)" );
+                    String input = Utils.showInputDialogEmptyString( this, 
+                            "Transition symbol(s)", 
+                            "Add Transition Symbol(s)", null );
                     List<Character> symbols = new ArrayList<>();
                     
-                    if ( input == null ) {
-                        symbols.add( CharacterConstants.SMALL_EPSILON );
-                    } else {
+                    if ( input != null ) {
                         
                         input = input.trim().replace( " ", "" );
                         
-                        if ( input.isEmpty() ) {
-                            symbols.add( CharacterConstants.SMALL_EPSILON );
-                        } else {
+                        if ( !input.isEmpty() ) {
                             for ( char c : input.toCharArray() ) {
                                 symbols.add( c );
                             }
+                            FATransition t = new FATransition( 
+                                    originState, targetState, symbols );
+                            fa.addTransition( t );
                         }
                         
                     }
-                        
-                    FATransition t = new FATransition( originState, targetState, symbols );
-                    fa.addTransition( t );
                     
                 }
                 
@@ -894,7 +898,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         repaintDrawPanel();
         
     }//GEN-LAST:event_drawPanelMouseReleased
-
+    
     private void drawPanelMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drawPanelMouseDragged
         
         if ( btnMove.isSelected() ) {
@@ -907,10 +911,11 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             } else if ( selectedTransition != null ) {
                 selectedTransition.mouseDragged( evt );
             } else {
-                //fa.setX1( xFaBeforeDragg - xPressed + evt.getX() );
-                //fa.setY1( yFaBeforeDragg - yPressed + evt.getY() );
-                //fa.setX1( xFaBeforeDragg - xPressed + evt.getX() - xOffset );
-                //fa.setY1( yFaBeforeDragg - yPressed + evt.getY() - yOffset );
+                int xAmount = evt.getX() - xPrev;
+                int yAmount = evt.getY() - yPrev;
+                xPrev += xAmount;
+                yPrev += yAmount;
+                fa.move( xAmount, yAmount  );
             }
             
         } else if ( btnAddTransition.isSelected() ) {

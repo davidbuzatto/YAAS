@@ -19,7 +19,7 @@ package br.com.davidbuzatto.yaas.gui.fa.properties;
 import br.com.davidbuzatto.yaas.gui.fa.FA;
 import br.com.davidbuzatto.yaas.gui.fa.FAInternalFrame;
 import br.com.davidbuzatto.yaas.gui.fa.FATransition;
-import br.com.davidbuzatto.yaas.util.CharacterConstants;
+import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
@@ -235,27 +235,26 @@ public class FATransitionPropertiesPanel extends javax.swing.JPanel {
             }
             s = s.trim();
             
-            String input = JOptionPane.showInputDialog( this, "Transition symbol(s)", s );
+            String input = Utils.showInputDialogEmptyString( this, 
+                    "New transition symbol(s)", 
+                    "Edit Transition Symbol(s)", s );
             List<Character> symbols = new ArrayList<>();
-            
+
             if ( input != null ) {
-                
+
                 input = input.trim().replace( " ", "" );
 
-                if ( input.isEmpty() ) {
-                    symbols.add( CharacterConstants.SMALL_EPSILON );
-                } else {
+                if ( !input.isEmpty() ) {
                     for ( char c : input.toCharArray() ) {
                         symbols.add( c );
                     }
+                    transition.setSymbols( symbols );
+                    readProperties();
+                    faIFrame.repaintDrawPanel();
+                    faIFrame.updateAfterUpdate();
                 }
 
             }
-            
-            transition.setSymbols( symbols );
-            readProperties();
-            faIFrame.repaintDrawPanel();
-            faIFrame.updateAfterUpdate();
             
         } else {
             

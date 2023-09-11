@@ -91,6 +91,16 @@ public class FA extends AbstractGeometricForm {
     public boolean intercepts( int x, int y ) {
         return false;
     }
+
+    @Override
+    public void move( int xAmount, int yAmount ) {
+        for ( FATransition t : transitions ) {
+            t.move( xAmount, yAmount );
+        }
+        for ( FAState s : states ) {
+            s.move( xAmount, yAmount );
+        }
+    }
     
     public FAState getStateAt( int x, int y ) {
         
@@ -176,9 +186,9 @@ public class FA extends AbstractGeometricForm {
         }
     }
     
-    public void draggTransitions( MouseEvent e ) {
+    public void draggTransitions( MouseEvent evt ) {
         for ( FATransition t : transitions ) {
-            t.mouseDragged( e );
+            t.mouseDragged( evt );
         }
     }
     

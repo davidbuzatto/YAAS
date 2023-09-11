@@ -482,6 +482,25 @@ public class FATransition extends AbstractGeometricForm {
         
     }
 
+    @Override
+    public void move( int xAmount, int yAmount ) {
+        x1 += xAmount;
+        y1 += yAmount;
+        x2 += xAmount;
+        y2 += yAmount;
+        targetCP.move( xAmount, yAmount );
+        centralCP.move( xAmount, yAmount );
+        leftCP.move( xAmount, yAmount );
+        rightCP.move( xAmount, yAmount );
+        label.move( xAmount, yAmount );
+        arrow.move( xAmount, yAmount );
+        curve.setCurve( 
+                x1, y1, 
+                leftCP.getX1(), leftCP.getY1(), 
+                rightCP.getX1(), rightCP.getY1(), 
+                x2, y2 );
+    }
+    
     private void updateLabel() {
         
         boolean first = true;

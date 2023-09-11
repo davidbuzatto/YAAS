@@ -59,6 +59,13 @@ public abstract class AbstractGeometricForm {
     public abstract void draw( Graphics2D g2d );
     public abstract boolean intercepts( int x, int y );
 
+    public void move( int xAmount, int yAmount ) {
+        x1 += xAmount;
+        y1 += yAmount;
+        x2 += xAmount;
+        y2 += yAmount;
+    }
+    
     public static int getIdGenerator() {
         return idGenerator;
     }

@@ -36,10 +36,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
@@ -391,6 +394,62 @@ public class Utils {
         }
         
         return tm;
+        
+    }
+    
+    /**
+     * SHow a custom input dialog for transition symbols.
+     * 
+     * @param parentComponent The parent component.
+     * @param message The message above the input text.
+     * @param title The title of the dialog.
+     * @param initialValue The initial value
+     * 
+     * @return The input.
+     */
+    public static String showInputDialogEmptyString( 
+            Component parentComponent, 
+            String message, 
+            String title, 
+            String initialValue ) {
+        
+        JLabel lbl = new JLabel( message + ":" );
+        JTextField txtField = new JTextField( 20 );
+        JCheckBox chkBox = new JCheckBox( "Add " + CharacterConstants.EMPTY_STRING );
+        Component[] components = new Component[]{ lbl, txtField, chkBox };
+        
+        if ( initialValue != null ) {
+            if ( initialValue.contains( CharacterConstants.EMPTY_STRING.toString() ) ) {
+                initialValue = initialValue.replace( 
+                        CharacterConstants.EMPTY_STRING.toString(), "" );
+                chkBox.setSelected( true );
+            }
+            txtField.setText( initialValue.trim() );
+        }
+        
+        if ( JOptionPane.showOptionDialog( 
+                parentComponent, 
+                components, 
+                title, 
+                JOptionPane.OK_CANCEL_OPTION, 
+                JOptionPane.QUESTION_MESSAGE, 
+                null, 
+                new String[]{ "OK", "Cancel" }, 
+                "OK" ) == JOptionPane.OK_OPTION ) {
+            
+            String input = "";
+            
+            if ( chkBox.isSelected() ) {
+                input += CharacterConstants.EMPTY_STRING;
+            }
+            
+            input += txtField.getText();
+            
+            return input.trim();
+            
+        }
+        
+        return null;
         
     }
     
