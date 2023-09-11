@@ -42,4 +42,7 @@ public interface CharacterConstants {
     
     public static final Character EMPTY_STRING = SMALL_EPSILON;
     
+    public static final Character ARROW_LEFT = '\u2190';
+    public static final Character ARROW_RIGHT = '\u2192';
+    
 }

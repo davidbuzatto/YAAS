@@ -19,6 +19,8 @@ package br.com.davidbuzatto.yaas.gui.fa.properties;
 import br.com.davidbuzatto.yaas.gui.fa.FA;
 import br.com.davidbuzatto.yaas.gui.fa.FAInternalFrame;
 import br.com.davidbuzatto.yaas.gui.fa.FAType;
+import br.com.davidbuzatto.yaas.gui.fa.FAFormalDefinitionDialog;
+import javax.swing.JOptionPane;
 
 /**
  * Finite Automaton properties edit/visualization panel.
@@ -132,7 +134,23 @@ public class FAPropertiesPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnFormalDefinitionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFormalDefinitionActionPerformed
-        // TODO add your handling code here:
+        
+        if ( fa.getStates().isEmpty() ) {
+            JOptionPane.showMessageDialog( 
+                    this, 
+                    "First add at least one state!", 
+                    "Warning", 
+                    JOptionPane.WARNING_MESSAGE );
+        } else if ( fa.getInitialState() == null ) {
+            JOptionPane.showMessageDialog( 
+                    this, 
+                    "Set the initial state!", 
+                    "Warning", JOptionPane.WARNING_MESSAGE );
+        } else {
+            FAFormalDefinitionDialog d = new FAFormalDefinitionDialog( null, true, fa );
+            d.setVisible( true );
+        }
+        
     }//GEN-LAST:event_btnFormalDefinitionActionPerformed
 
 

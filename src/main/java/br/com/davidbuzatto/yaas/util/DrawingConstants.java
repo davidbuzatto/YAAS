@@ -27,7 +27,8 @@ import java.awt.Font;
  */
 public interface DrawingConstants {
     
-    public static final Font DEFAULT_FONT = new Font( "monospaced", Font.BOLD, 18 );
+    public static final Font DEFAULT_FONT = new Font( Font.MONOSPACED, Font.BOLD, 18 );
+    public static final Font DEFAULT_TABLE_FONT = new Font( Font.MONOSPACED, Font.BOLD, 16 );
     
     public static final int STATE_RADIUS = 25;
     public static final int STATE_RADIUS_SQUARED = STATE_RADIUS * STATE_RADIUS;

@@ -21,9 +21,13 @@ import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 /**
  * Finite Automaton representation.
@@ -289,6 +293,143 @@ public class FA extends AbstractGeometricForm {
             type = FAType.DFA;
         }
         
+    }
+    
+    public String getFormalDefinition() {
+        
+        String def = String.format( "A = { Q, %c, %c, %s, F }\n",
+                CharacterConstants.CAPITAL_SIGMA,
+                CharacterConstants.SMALL_DELTA, 
+                initialState.toString() );
+        def += getStatesString() + "\n";
+        def += getAlphabetString() + "\n";
+        def += getAcceptingStatesString();
+        
+        return def;
+        
+    }
+    
+    public Map<FAState, Map<Character, List<FAState>>> getDelta() {
+        
+        Map<FAState, Map<Character, List<FAState>>> m = new TreeMap<>();
+        for ( FAState s : states ) {
+            m.put( s, new TreeMap<>() );
+        }
+        
+        for ( FATransition t : transitions ) {
+            Map<Character, List<FAState>> mq = m.get( t.getOriginState() );
+            for ( Character sy : t.getSymbols() ) {
+                List<FAState> li = mq.get( sy );
+                if ( li == null ) {
+                    li = new ArrayList<>();
+                    mq.put( sy, li );
+                }
+                li.add( t.getTargetState() );
+            }
+            
+        }
+        
+        return m;
+        
+    }
+    
+    private String getStatesString() {
+        
+        String str = "";
+        
+        List<String> ss = new ArrayList<>();
+        for ( FAState s : states ) {
+            ss.add( s.toString() );
+        }
+        
+        Collections.sort( ss );
+        boolean first = true;
+        
+        str += "Q = { ";
+        for ( String s : ss ) {
+            if ( !first ) {
+                str += ", ";
+            }
+            str += s;
+            first = false;
+        }
+        str += " }";
+        
+        return str;
+        
+    }
+    
+    private String getAcceptingStatesString() {
+        
+        String str = "";
+        
+        List<String> ss = new ArrayList<>();
+        for ( FAState s : states ) {
+            if ( s.accepting ) {
+                ss.add( s.toString() );
+            }
+        }
+        
+        Collections.sort( ss );
+        boolean first = true;
+        
+        str += "F = { ";
+        for ( String s : ss ) {
+            if ( !first ) {
+                str += ", ";
+            }
+            str += s;
+            first = false;
+        }
+        str += " }";
+        
+        return str;
+        
+    }
+    
+    private String getAlphabetString() {
+        
+        String str = "";
+        
+        Set<Character> alf = getAlphabet();
+        
+        boolean first = true;
+        
+        str += CharacterConstants.CAPITAL_SIGMA + " = { ";
+        for ( Character c : alf ) {
+            if ( !first ) {
+                str += ", ";
+            }
+            str += c;
+            first = false;
+        }
+        str += " }";
+        
+        return str;
+        
+    }
+    
+    public Set<Character> getAlphabet() {
+        
+        Set<Character> alf = new TreeSet<>();
+        for ( FATransition t : transitions ) {
+            for ( char c : t.getSymbols() ) {
+                if ( c != CharacterConstants.EMPTY_STRING ) {
+                    alf.add( c );
+                }
+            }
+        }
+        
+        return alf;
+        
+    }
+
+    public List<FAState> getStates() {
+        return states;
+    }
+
+    public List<FATransition> getTransitions() {
+        return transitions;
     }
     
 }

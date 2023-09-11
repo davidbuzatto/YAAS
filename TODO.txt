@@ -1,8 +1,10 @@
-Properties of Finite Automaton (type and formal definition);
+Move entire automaton;   <- need to fix new position offset
+Algorithms for automata layout.
+
 Simulation: one string, step by step, string set
 Grid / snap to grid for states;
 Zoom-in and zoom-out;
-Move entire automaton;   <- need to fix new position offset
+
 Drawing panel behavior and scroll pane adjustments.
 
 Specialized versions of states (Moore machines); ???

@@ -16,6 +16,11 @@
  */
 package br.com.davidbuzatto.yaas.util;
 
+import br.com.davidbuzatto.yaas.gui.fa.FA;
+import br.com.davidbuzatto.yaas.gui.fa.FAState;
+import br.com.davidbuzatto.yaas.gui.fa.FAType;
+import br.com.davidbuzatto.yaas.gui.fa.FATransitionFunctionTableModel;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
@@ -27,11 +32,16 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumnModel;
 
 /**
  * Utilitary methods.
@@ -270,6 +280,117 @@ public class Utils {
         } catch ( IOException iexc ) {
             iexc.printStackTrace();
         }
+        
+    }
+    
+    /**
+     * Resizes columns width based in their contents.
+     * Based in: https://stackoverflow.com/questions/17627431/auto-resizing-the-jtable-column-widths
+     * 
+     * @param table The table that contains the columns to be resized.
+     * @param maxWidth The max width to use.
+     */
+    public static void resizeColumnWidth( JTable table, int maxWidth ) {
+        
+        final TableColumnModel columnModel = table.getColumnModel();
+        
+        for ( int column = 0; column < table.getColumnCount(); column++ ) {
+            
+            double width = table.getTableHeader().getHeaderRect( column ).getWidth();
+            
+            for (int row = 0; row < table.getRowCount(); row++) {
+                TableCellRenderer renderer = table.getCellRenderer( row, column );
+                Component comp = table.prepareRenderer( renderer, row, column );
+                width = Math.max( comp.getPreferredSize().width + 1, width );
+            }
+            
+            if ( width > maxWidth ) {
+                width = maxWidth;
+            }
+            
+            columnModel.getColumn( column ).setPreferredWidth( (int) width );
+            
+        }
+        
+    }
+    
+    /**
+     * Creates the table model for the transition function representation of
+     * finite automata.
+     * 
+     * @param fa The finite automata to be used.
+     * @return The table model.
+     */
+    public static FATransitionFunctionTableModel createFATransitionFunctionTableModel( FA fa ) {
+        
+        FATransitionFunctionTableModel tm = new FATransitionFunctionTableModel();
+        List<Character> symbols = new ArrayList<>();
+        
+        if ( fa.getType() == FAType.ENFA ) {
+            symbols.add( CharacterConstants.EMPTY_STRING );
+        }
+        symbols.addAll( fa.getAlphabet() );
+        
+        for ( char s : symbols ) {
+            tm.getSymbols().add( String.valueOf( s ) );
+        }
+        
+        Map<FAState, Map<Character, List<FAState>>> delta = fa.getDelta();
+        
+        for ( Map.Entry<FAState, Map<Character, List<FAState>>> entry : delta.entrySet() ) {
+            
+            FAState state = entry.getKey();
+            
+            String eStr = "";
+            if ( state.isAccepting()) {
+                eStr += "*";
+            }
+            if ( state.isInitial() ) {
+                eStr += CharacterConstants.ARROW_RIGHT;
+            }
+            eStr += state;
+            
+            tm.getStates().add( eStr );
+            
+            List<String> data = new ArrayList<>();
+            data.add( eStr );
+            
+            for ( char symbol : symbols ) {
+                
+                List<FAState> targetStates = entry.getValue().get( symbol );
+                
+                if ( targetStates == null || targetStates.isEmpty() ) {
+                    data.add( CharacterConstants.EMPTY_SET.toString() );
+                } else {
+                    
+                    String targetStr;
+                    
+                    if ( fa.getType() == FAType.DFA ) {
+                        targetStr = targetStates.get( 0 ).toString();
+                    } else {
+                        targetStr = "{ ";
+                        boolean first = true;
+                        for ( FAState ee : targetStates ) {
+                            if ( !first ) {
+                                targetStr += ", ";
+                            }
+                            targetStr += ee.toString();
+                            first = false;
+                        }
+                        targetStr += " }";
+                    }
+                    
+                    data.add( targetStr );
+                    
+                }
+                
+            }
+            
+            tm.getData().add( data );
+            
+        }
+        
+        return tm;
         
     }
     

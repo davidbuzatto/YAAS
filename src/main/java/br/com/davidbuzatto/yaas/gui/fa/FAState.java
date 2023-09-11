@@ -26,7 +26,7 @@ import java.awt.Graphics2D;
  * 
  * @author Prof. Dr. David Buzatto
  */
-public class FAState extends AbstractGeometricForm {
+public class FAState extends AbstractGeometricForm implements Comparable<FAState> {
     
     protected String label;
     protected String customLabel;
@@ -198,6 +198,11 @@ public class FAState extends AbstractGeometricForm {
             return String.format( "%s (%s)", customLabel, label );
         }
         return label;
+    }
+
+    @Override
+    public int compareTo( FAState o ) {
+        return id - o.id;
     }
     
 }

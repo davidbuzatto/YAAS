@@ -907,8 +907,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             } else if ( selectedTransition != null ) {
                 selectedTransition.mouseDragged( evt );
             } else {
-                fa.setX1( xFaBeforeDragg - xPressed + evt.getX() );
-                fa.setY1( yFaBeforeDragg - yPressed + evt.getY() );
+                //fa.setX1( xFaBeforeDragg - xPressed + evt.getX() );
+                //fa.setY1( yFaBeforeDragg - yPressed + evt.getY() );
                 //fa.setX1( xFaBeforeDragg - xPressed + evt.getX() - xOffset );
                 //fa.setY1( yFaBeforeDragg - yPressed + evt.getY() - yOffset );
             }
