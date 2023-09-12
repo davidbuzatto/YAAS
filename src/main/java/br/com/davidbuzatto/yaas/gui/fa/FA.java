@@ -23,6 +23,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -30,7 +31,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 /**
- * Finite Automaton representation.
+ * Finite Automaton representation and algorithms.
  * 
  * @author Prof. Dr. David Buzatto
  */
@@ -50,9 +51,61 @@ public class FA extends AbstractGeometricForm {
     }
     
     public boolean accepts( String str ) {
+        
+        if ( canExecute() ) {
+            
+            Map<FAState, Map<Character, List<FAState>>> delta = getDelta();
+            Map<FAState, Set<FAState>> ecloses = getEcloses( delta );
+            
+            Set<FAState> currentStates = new HashSet<>();
+            currentStates.addAll( ecloses.get( initialState ) );
+            
+            for ( char c : str.toCharArray() ) {
+                
+                Set<FAState> targetStates = new HashSet<>();
+                
+                for ( FAState s : currentStates ) {
+                    
+                    Map<Character, List<FAState>> t = delta.get( s );
+                    
+                    if ( t.containsKey( c ) ) {
+                        targetStates.addAll( t.get( c ) );
+                    }
+                    
+                }
+                
+                if ( targetStates.isEmpty() ) {
+                    return false;
+                }
+                
+                Set<FAState> targetEclose = new HashSet<>();
+                for ( FAState s : targetStates ) {
+                    targetEclose.addAll( ecloses.get( s ) );
+                }
+                
+                /*System.out.println( currentStates + " " + c + " " + targetEclose );
+                System.out.println();*/
+                
+                currentStates = targetEclose;
+                
+            }
+            
+            for ( FAState s : currentStates ) {
+                if ( s.isAccepting() ) {
+                    return true;
+                }
+            }
+            
+        }
+        
         return false;
+        
     }
 
+    public boolean canExecute() {
+        return initialState != null;
+    }
+    
     @Override
     public void draw( Graphics2D g2d ) {
         
@@ -343,6 +396,48 @@ public class FA extends AbstractGeometricForm {
         
     }
     
+    public Map<FAState, Set<FAState>> getEcloses( Map<FAState, Map<Character, List<FAState>>> delta ) {
+        
+        Map<FAState, Set<FAState>> ecloses = new HashMap<>();
+        
+        for ( FAState e : delta.keySet() ) {
+            ecloses.put( e, discoverEclose( e, delta ) );
+        }
+        
+        return ecloses;
+        
+    }
+    
+    private Set<FAState> discoverEclose( FAState s, Map<FAState, Map<Character, List<FAState>>> delta ) {
+        
+        Set<FAState> eclose = new TreeSet<>();
+        Set<FAState> visited = new HashSet<>();
+        
+        discoverEcloseR( s, eclose, visited, delta );
+        
+        return eclose;
+        
+    }
+    
+    private void discoverEcloseR( FAState s, Set<FAState> eclose, Set<FAState> visited, Map<FAState, Map<Character, List<FAState>>> delta ) {
+        
+        if ( !visited.contains( s ) ) {
+            
+            eclose.add( s );
+            visited.add( s );
+            
+            Map<Character, List<FAState>> transitions = delta.get( s );
+            
+            if ( transitions.containsKey( CharacterConstants.EMPTY_STRING ) ) {
+                for ( FAState target : transitions.get( CharacterConstants.EMPTY_STRING ) ) {
+                    discoverEcloseR( target, eclose, visited, delta );
+                }
+            }
+            
+        }
+        
+    }
+    
     private String getStatesString() {
         
         String str = "";
@@ -394,6 +489,20 @@ public class FA extends AbstractGeometricForm {
         str += " }";
         
         return str;
+        
+    }
+    
+    public List<FAState> getAcceptingStates() {
+        
+        List<FAState> acStates = new ArrayList<>();
+        
+        for ( FAState s : states ) {
+            if ( s.isAccepting() ) {
+                acStates.add( s );
+            }
+        }
+        
+        return acStates;
         
     }
     

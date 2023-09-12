@@ -98,8 +98,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         drawPanel.setFa( fa );
         
         //createFATest();
-        createDFATest();
-        //createNFATest();
+        //createDFATest();
+        createNFATest();
         //createENFATest();
         //drawPanel.setTransitionsControlPointsVisible( true );
         
@@ -521,6 +521,11 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnTest.setFocusable(false);
         btnTest.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnTest.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnTest.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTestActionPerformed(evt);
+            }
+        });
         toolBarTestsAndSimulation.add(btnTest);
         toolBarTestsAndSimulation.add(sepTS01);
 
@@ -529,6 +534,11 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnStart.setFocusable(false);
         btnStart.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnStart.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnStart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStartActionPerformed(evt);
+            }
+        });
         toolBarTestsAndSimulation.add(btnStart);
 
         btnFirstStep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_start_blue.png"))); // NOI18N
@@ -536,6 +546,11 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnFirstStep.setFocusable(false);
         btnFirstStep.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnFirstStep.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnFirstStep.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFirstStepActionPerformed(evt);
+            }
+        });
         toolBarTestsAndSimulation.add(btnFirstStep);
 
         btnPreviousStep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_rewind_blue.png"))); // NOI18N
@@ -543,6 +558,11 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnPreviousStep.setFocusable(false);
         btnPreviousStep.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnPreviousStep.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnPreviousStep.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPreviousStepActionPerformed(evt);
+            }
+        });
         toolBarTestsAndSimulation.add(btnPreviousStep);
 
         btnNextStep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_fastforward_blue.png"))); // NOI18N
@@ -550,6 +570,11 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnNextStep.setFocusable(false);
         btnNextStep.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnNextStep.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnNextStep.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNextStepActionPerformed(evt);
+            }
+        });
         toolBarTestsAndSimulation.add(btnNextStep);
 
         btnLastStep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_end_blue.png"))); // NOI18N
@@ -557,6 +582,11 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnLastStep.setFocusable(false);
         btnLastStep.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnLastStep.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnLastStep.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLastStepActionPerformed(evt);
+            }
+        });
         toolBarTestsAndSimulation.add(btnLastStep);
 
         btnStop.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_stop_blue.png"))); // NOI18N
@@ -564,6 +594,11 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnStop.setFocusable(false);
         btnStop.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnStop.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnStop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStopActionPerformed(evt);
+            }
+        });
         toolBarTestsAndSimulation.add(btnStop);
         toolBarTestsAndSimulation.add(hFillerTS);
 
@@ -572,6 +607,11 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnBatchTest.setFocusable(false);
         btnBatchTest.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnBatchTest.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnBatchTest.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBatchTestActionPerformed(evt);
+            }
+        });
         toolBarTestsAndSimulation.add(btnBatchTest);
 
         javax.swing.GroupLayout panelTestsAndSimulationLayout = new javax.swing.GroupLayout(panelTestsAndSimulation);
@@ -1032,6 +1072,60 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         }
         
     }//GEN-LAST:event_btnSaveModelAsImageActionPerformed
+
+    private void btnTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTestActionPerformed
+        
+        if ( fa.canExecute() ) {
+            
+            String result;
+            
+            if ( fa.accepts( txtTestString.getText() ) ) {
+                result = "ACCEPTED";
+            } else {
+                result = "REJECTED";
+            }
+            
+            JOptionPane.showMessageDialog( this, result );
+            
+        } else {
+            
+            JOptionPane.showMessageDialog( 
+                    this, 
+                    "You must set an initial state!", 
+                    "ERROR", 
+                    JOptionPane.ERROR_MESSAGE );
+            
+        }
+        
+    }//GEN-LAST:event_btnTestActionPerformed
+
+    private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnStartActionPerformed
+
+    private void btnFirstStepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFirstStepActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnFirstStepActionPerformed
+
+    private void btnPreviousStepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousStepActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnPreviousStepActionPerformed
+
+    private void btnNextStepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextStepActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnNextStepActionPerformed
+
+    private void btnLastStepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLastStepActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnLastStepActionPerformed
+
+    private void btnStopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStopActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnStopActionPerformed
+
+    private void btnBatchTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatchTestActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnBatchTestActionPerformed
 
     public void repaintDrawPanel() {
         drawPanel.repaint();

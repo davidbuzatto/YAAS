@@ -1,5 +1,7 @@
+Accepts method of FA finished.
+Simulation: one string, step by step, string set <- improve onde string feedback. work in string set and simulation (step by step)
+
 Algorithms for automata layout.
-Simulation: one string, step by step, string set
 Grid / snap to grid for states;
 Zoom-in and zoom-out;
 

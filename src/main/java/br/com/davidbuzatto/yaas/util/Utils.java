@@ -43,6 +43,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
@@ -398,7 +400,7 @@ public class Utils {
     }
     
     /**
-     * SHow a custom input dialog for transition symbols.
+     * Show a custom input dialog for transition symbols.
      * 
      * @param parentComponent The parent component.
      * @param message The message above the input text.
@@ -417,6 +419,23 @@ public class Utils {
         JTextField txtField = new JTextField( 20 );
         JCheckBox chkBox = new JCheckBox( "Add " + CharacterConstants.EMPTY_STRING );
         Component[] components = new Component[]{ lbl, txtField, chkBox };
+        
+        txtField.addAncestorListener( new AncestorListener(){
+            
+            @Override
+            public void ancestorAdded( AncestorEvent evt ) {
+                evt.getComponent().requestFocusInWindow();
+            }
+
+            @Override
+            public void ancestorRemoved( AncestorEvent evt ) {
+            }
+
+            @Override
+            public void ancestorMoved( AncestorEvent evt ) {
+            }
+            
+        });
         
         if ( initialValue != null ) {
             if ( initialValue.contains( CharacterConstants.EMPTY_STRING.toString() ) ) {
