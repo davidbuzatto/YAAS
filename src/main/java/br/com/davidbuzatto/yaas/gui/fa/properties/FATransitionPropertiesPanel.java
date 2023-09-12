@@ -69,14 +69,16 @@ public class FATransitionPropertiesPanel extends javax.swing.JPanel {
             txtOriginState.setText( transition.getOriginState().toString() );
             txtTargetState.setText( transition.getTargetState().toString() );
             txtSymbols.setText( transition.getSymbols().toString() );
-            btnColor.setForeground( transition.getStrokeColor() );
+            ccpColor.setColor( transition.getStrokeColor() );
+            ccpColor.repaint();
             
         } else {
             
             txtOriginState.setText( "" );
             txtTargetState.setText( "" );
             txtSymbols.setText( "" );
-            btnColor.setForeground( Color.BLACK );
+            ccpColor.setColor( Color.BLACK );
+            ccpColor.repaint();
             
         }
         
@@ -100,7 +102,7 @@ public class FATransitionPropertiesPanel extends javax.swing.JPanel {
         txtTargetState = new javax.swing.JTextField();
         txtSymbols = new javax.swing.JTextField();
         btnEditSymbols = new javax.swing.JButton();
-        btnColor = new javax.swing.JButton();
+        ccpColor = new br.com.davidbuzatto.yaas.gui.ColorChooserPanel();
         btnResetTransformations = new javax.swing.JButton();
         btnRemove = new javax.swing.JButton();
 
@@ -126,13 +128,22 @@ public class FATransitionPropertiesPanel extends javax.swing.JPanel {
             }
         });
 
-        btnColor.setForeground(new java.awt.Color(0, 0, 0));
-        btnColor.setText("\u25fc");
-        btnColor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnColorActionPerformed(evt);
+        ccpColor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                ccpColorMouseReleased(evt);
             }
         });
+
+        javax.swing.GroupLayout ccpColorLayout = new javax.swing.GroupLayout(ccpColor);
+        ccpColor.setLayout(ccpColorLayout);
+        ccpColorLayout.setHorizontalGroup(
+            ccpColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 26, Short.MAX_VALUE)
+        );
+        ccpColorLayout.setVerticalGroup(
+            ccpColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 26, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout panelPropertiesLayout = new javax.swing.GroupLayout(panelProperties);
         panelProperties.setLayout(panelPropertiesLayout);
@@ -148,14 +159,14 @@ public class FATransitionPropertiesPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelPropertiesLayout.createSequentialGroup()
-                        .addComponent(txtSymbols)
+                        .addComponent(txtSymbols, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnEditSymbols))
                     .addComponent(txtTargetState)
+                    .addComponent(txtOriginState)
                     .addGroup(panelPropertiesLayout.createSequentialGroup()
-                        .addComponent(btnColor)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(txtOriginState))
+                        .addComponent(ccpColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         panelPropertiesLayout.setVerticalGroup(
@@ -175,9 +186,9 @@ public class FATransitionPropertiesPanel extends javax.swing.JPanel {
                     .addComponent(txtSymbols, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEditSymbols))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblColor)
-                    .addComponent(btnColor))
+                .addGroup(panelPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(ccpColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblColor))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -267,18 +278,6 @@ public class FATransitionPropertiesPanel extends javax.swing.JPanel {
         
     }//GEN-LAST:event_btnEditSymbolsActionPerformed
 
-    private void btnColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnColorActionPerformed
-        
-        Color c = JColorChooser.showDialog( this, "Transition Color", btnColor.getForeground() );
-        
-        if ( c != null ) {
-            btnColor.setForeground( c );
-            transition.setStrokeColor( c );
-            faIFrame.repaintDrawPanel();
-        }
-        
-    }//GEN-LAST:event_btnColorActionPerformed
-
     private void btnResetTransformationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetTransformationsActionPerformed
         
         if ( transition != null ) {
@@ -322,12 +321,25 @@ public class FATransitionPropertiesPanel extends javax.swing.JPanel {
         
     }//GEN-LAST:event_btnRemoveActionPerformed
 
+    private void ccpColorMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ccpColorMouseReleased
+        
+        Color c = JColorChooser.showDialog( this, "Transition Color", ccpColor.getForeground() );
+        
+        if ( c != null ) {
+            ccpColor.setColor( c );
+            ccpColor.repaint();
+            transition.setStrokeColor( c );
+            faIFrame.repaintDrawPanel();
+        }
+        
+    }//GEN-LAST:event_ccpColorMouseReleased
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnColor;
     private javax.swing.JButton btnEditSymbols;
     private javax.swing.JButton btnRemove;
     private javax.swing.JButton btnResetTransformations;
+    private br.com.davidbuzatto.yaas.gui.ColorChooserPanel ccpColor;
     private javax.swing.JLabel lblColor;
     private javax.swing.JLabel lblOriginState;
     private javax.swing.JLabel lblSymbols;

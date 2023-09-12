@@ -66,7 +66,8 @@ public class FAStatePropertiesPanel extends javax.swing.JPanel {
             txtCustomLabel.setText( state.getCustomLabel() );
             checkInitial.setSelected( state.isInitial() );
             checkAccepting.setSelected( state.isAccepting() );
-            btnColor.setForeground( state.getStrokeColor() );
+            ccpColor.setColor( state.getStrokeColor() );
+            ccpColor.repaint();
             
         } else {
             
@@ -74,7 +75,8 @@ public class FAStatePropertiesPanel extends javax.swing.JPanel {
             txtCustomLabel.setText( "" );
             checkInitial.setSelected( false );
             checkAccepting.setSelected( false );
-            btnColor.setForeground( Color.BLACK );
+            ccpColor.setColor( Color.BLACK );
+            ccpColor.repaint();
             
         }
         
@@ -99,7 +101,7 @@ public class FAStatePropertiesPanel extends javax.swing.JPanel {
         txtCustomLabel = new javax.swing.JTextField();
         checkInitial = new javax.swing.JCheckBox();
         checkAccepting = new javax.swing.JCheckBox();
-        btnColor = new javax.swing.JButton();
+        ccpColor = new br.com.davidbuzatto.yaas.gui.ColorChooserPanel();
         btnRemove = new javax.swing.JButton();
 
         lblLabel.setText("Label:");
@@ -108,7 +110,7 @@ public class FAStatePropertiesPanel extends javax.swing.JPanel {
 
         lblInitial.setText("Initial:");
 
-        lblAccepting.setText("Accepting");
+        lblAccepting.setText("Accepting:");
 
         lblColor.setText("Color:");
 
@@ -133,11 +135,28 @@ public class FAStatePropertiesPanel extends javax.swing.JPanel {
             }
         });
 
-        btnColor.setForeground(new java.awt.Color(0, 0, 0));
-        btnColor.setText("\u25fc");
-        btnColor.addActionListener(new java.awt.event.ActionListener() {
+        ccpColor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                ccpColorMouseReleased(evt);
+            }
+        });
+
+        javax.swing.GroupLayout ccpColorLayout = new javax.swing.GroupLayout(ccpColor);
+        ccpColor.setLayout(ccpColorLayout);
+        ccpColorLayout.setHorizontalGroup(
+            ccpColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 26, Short.MAX_VALUE)
+        );
+        ccpColorLayout.setVerticalGroup(
+            ccpColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 26, Short.MAX_VALUE)
+        );
+
+        btnRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete.png"))); // NOI18N
+        btnRemove.setText("Remove");
+        btnRemove.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnColorActionPerformed(evt);
+                btnRemoveActionPerformed(evt);
             }
         });
 
@@ -155,15 +174,18 @@ public class FAStatePropertiesPanel extends javax.swing.JPanel {
                     .addComponent(lblColor, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
+                    .addComponent(txtCustomLabel)
                     .addGroup(panelPropertiesLayout.createSequentialGroup()
                         .addGroup(panelPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(checkInitial)
-                            .addComponent(btnColor)
-                            .addComponent(checkAccepting))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(txtLabel)
-                    .addComponent(txtCustomLabel))
+                            .addComponent(checkAccepting)
+                            .addComponent(ccpColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(panelPropertiesLayout.createSequentialGroup()
+                .addComponent(btnRemove)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         panelPropertiesLayout.setVerticalGroup(
             panelPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -185,19 +207,13 @@ public class FAStatePropertiesPanel extends javax.swing.JPanel {
                     .addComponent(lblAccepting)
                     .addComponent(checkAccepting))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblColor)
-                    .addComponent(btnColor))
+                .addGroup(panelPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(ccpColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblColor))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnRemove)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        btnRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete.png"))); // NOI18N
-        btnRemove.setText("Remove");
-        btnRemove.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRemoveActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -205,21 +221,14 @@ public class FAStatePropertiesPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnRemove)
-                        .addGap(0, 101, Short.MAX_VALUE))
-                    .addComponent(panelProperties, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(panelProperties, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(panelProperties, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnRemove)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(panelProperties, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -243,18 +252,6 @@ public class FAStatePropertiesPanel extends javax.swing.JPanel {
         state.setAccepting( checkAccepting.isSelected() );
         faIFrame.repaintDrawPanel();
     }//GEN-LAST:event_checkAcceptingActionPerformed
-
-    private void btnColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnColorActionPerformed
-        
-        Color c = JColorChooser.showDialog( this, "State Color", btnColor.getForeground() );
-        
-        if ( c != null ) {
-            btnColor.setForeground( c );
-            state.setStrokeColor( c );
-            faIFrame.repaintDrawPanel();
-        }
-        
-    }//GEN-LAST:event_btnColorActionPerformed
 
     private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
         
@@ -288,10 +285,23 @@ public class FAStatePropertiesPanel extends javax.swing.JPanel {
         faIFrame.repaintDrawPanel();
     }//GEN-LAST:event_txtCustomLabelActionPerformed
 
+    private void ccpColorMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ccpColorMouseReleased
+        
+        Color c = JColorChooser.showDialog( this, "State Color", ccpColor.getForeground() );
+        
+        if ( c != null ) {
+            ccpColor.setColor( c );
+            ccpColor.repaint();
+            state.setStrokeColor( c );
+            faIFrame.repaintDrawPanel();
+        }
+        
+    }//GEN-LAST:event_ccpColorMouseReleased
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnColor;
     private javax.swing.JButton btnRemove;
+    private br.com.davidbuzatto.yaas.gui.ColorChooserPanel ccpColor;
     private javax.swing.JCheckBox checkAccepting;
     private javax.swing.JCheckBox checkInitial;
     private javax.swing.JLabel lblAccepting;

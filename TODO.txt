@@ -1,11 +1,7 @@
-Move entire automaton;   <- need to fix new position offset
 Algorithms for automata layout.
-
 Simulation: one string, step by step, string set
 Grid / snap to grid for states;
 Zoom-in and zoom-out;
-
-Drawing panel behavior and scroll pane adjustments.
 
 Specialized versions of states (Moore machines); ???
 Specialized versions of transitions (eNFAs, GNFAs, PDAs, Mealy machines and Turing machines); ???
