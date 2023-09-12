@@ -29,7 +29,10 @@ import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.QuadCurve2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -47,6 +50,9 @@ import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
+import org.apache.maven.model.Model;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 /**
  * Utilitary methods.
@@ -54,6 +60,39 @@ import javax.swing.table.TableColumnModel;
  * @author Prof. Dr. David Buzatto
  */
 public class Utils {
+    
+    private static Model mavenModel;
+    
+    /**
+     * Return the maven model to information extraction.
+     * 
+     * @return  The maven model.
+     */
+    public static Model getMavenModel() {
+        
+        MavenXpp3Reader reader = new MavenXpp3Reader();
+        
+        if ( mavenModel == null ) {
+            try {
+                if ( ( new File( "pom.xml" )).exists() ) {
+                    mavenModel = reader.read( new FileReader( "pom.xml" ) );
+                } else {
+                    mavenModel = reader.read(
+                        new InputStreamReader(
+                            Utils.class.getResourceAsStream(
+                                "/META-INF/maven/br.com.davidbuzatto/YAAS/pom.xml"
+                            )
+                        )
+                    );
+                }
+            } catch ( IOException | XmlPullParserException exc ) {
+                showException( exc );
+            }
+        }
+        
+        return mavenModel;
+      
+    }
     
     /**
      * De Casteljau's algorithm to calculate points in a cubic Bézier curve.

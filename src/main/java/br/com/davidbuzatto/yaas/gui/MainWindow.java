@@ -18,6 +18,8 @@ package br.com.davidbuzatto.yaas.gui;
 
 import br.com.davidbuzatto.yaas.gui.fa.FAInternalFrame;
 import br.com.davidbuzatto.yaas.util.ApplicationPreferences;
+import br.com.davidbuzatto.yaas.util.CharacterConstants;
+import br.com.davidbuzatto.yaas.util.Utils;
 import com.formdev.flatlaf.FlatDarculaLaf;
 
 /**
@@ -38,9 +40,14 @@ public class MainWindow extends javax.swing.JFrame {
     
     private void customInit() {
         
+        setTitle( 
+                Utils.getMavenModel().getArtifactId() + 
+                " - v" + 
+                Utils.getMavenModel().getVersion() );
+        
         //setExtendedState( MAXIMIZED_BOTH );
         
-        FAInternalFrame iFrame = new FAInternalFrame();
+        FAInternalFrame iFrame = new FAInternalFrame( this );
         desktopPane.add( iFrame );
         iFrame.setVisible( true );
         
@@ -62,7 +69,13 @@ public class MainWindow extends javax.swing.JFrame {
         btnTM = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
-        menuEdit = new javax.swing.JMenu();
+        menuItemExit = new javax.swing.JMenuItem();
+        menuExamples = new javax.swing.JMenu();
+        menuDFA = new javax.swing.JMenu();
+        menuNFA = new javax.swing.JMenu();
+        menuENFA = new javax.swing.JMenu();
+        menuHelp = new javax.swing.JMenu();
+        menuItemAbout = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("YAAS");
@@ -112,10 +125,38 @@ public class MainWindow extends javax.swing.JFrame {
         toolBar.add(btnTM);
 
         menuFile.setText("File");
+
+        menuItemExit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_DOWN_MASK));
+        menuItemExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/door_out.png"))); // NOI18N
+        menuItemExit.setText("Exit");
+        menuFile.add(menuItemExit);
+
         menuBar.add(menuFile);
 
-        menuEdit.setText("Edit");
-        menuBar.add(menuEdit);
+        menuExamples.setText("Examples");
+
+        menuDFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dfa.png"))); // NOI18N
+        menuDFA.setText("DFA");
+        menuExamples.add(menuDFA);
+
+        menuNFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nfa.png"))); // NOI18N
+        menuNFA.setText("NFA");
+        menuExamples.add(menuNFA);
+
+        menuENFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/enfa.png"))); // NOI18N
+        menuENFA.setText(CharacterConstants.EMPTY_STRING.toString() + "-NFA");
+        menuExamples.add(menuENFA);
+
+        menuBar.add(menuExamples);
+
+        menuHelp.setText("Help");
+
+        menuItemAbout.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
+        menuItemAbout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/help.png"))); // NOI18N
+        menuItemAbout.setText("About...");
+        menuHelp.add(menuItemAbout);
+
+        menuBar.add(menuHelp);
 
         setJMenuBar(menuBar);
 
@@ -139,7 +180,7 @@ public class MainWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnFAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFAActionPerformed
-        FAInternalFrame iFrame = new FAInternalFrame();
+        FAInternalFrame iFrame = new FAInternalFrame( this );
         desktopPane.add( iFrame );
         iFrame.setVisible( true );
     }//GEN-LAST:event_btnFAActionPerformed
@@ -162,8 +203,14 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton btnTM;
     private javax.swing.JDesktopPane desktopPane;
     private javax.swing.JMenuBar menuBar;
-    private javax.swing.JMenu menuEdit;
+    private javax.swing.JMenu menuDFA;
+    private javax.swing.JMenu menuENFA;
+    private javax.swing.JMenu menuExamples;
     private javax.swing.JMenu menuFile;
+    private javax.swing.JMenu menuHelp;
+    private javax.swing.JMenuItem menuItemAbout;
+    private javax.swing.JMenuItem menuItemExit;
+    private javax.swing.JMenu menuNFA;
     private javax.swing.JToolBar toolBar;
     // End of variables declaration//GEN-END:variables
 }

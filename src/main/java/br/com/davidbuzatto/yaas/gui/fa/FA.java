@@ -42,12 +42,18 @@ public class FA extends AbstractGeometricForm {
     private FAState initialState;
     private FAType type;
     
+    private boolean deltaUpToDate;
+    private boolean eclosesUpToDate;
+    private Map<FAState, Map<Character, List<FAState>>> delta;
+    private Map<FAState, Set<FAState>> ecloses;
+    
+    
     private boolean transitionControlPointsVisible;
     
     public FA() {
         states = new ArrayList<>();
         transitions = new ArrayList<>();
-        updateType();
+        type = FAType.EMPTY;
     }
     
     public boolean accepts( String str ) {
@@ -202,6 +208,8 @@ public class FA extends AbstractGeometricForm {
             
         }
         
+        deltaUpToDate = false;
+        eclosesUpToDate = false;
         updateType();
         
     }
@@ -229,6 +237,8 @@ public class FA extends AbstractGeometricForm {
             
         }
         
+        deltaUpToDate = false;
+        eclosesUpToDate = false;
         updateType();
         
     }
@@ -269,6 +279,8 @@ public class FA extends AbstractGeometricForm {
         
         this.initialState = initialState;
         
+        deltaUpToDate = false;
+        eclosesUpToDate = false;
         updateType();
         
     }
@@ -300,12 +312,16 @@ public class FA extends AbstractGeometricForm {
             transitions.remove( t );
         }
         
+        deltaUpToDate = false;
+        eclosesUpToDate = false;
         updateType();
         
     }
     
     public void removeTransition( FATransition transition ) {
         transitions.remove( transition );
+        deltaUpToDate = false;
+        eclosesUpToDate = false;
         updateType();
     }
     
@@ -374,41 +390,55 @@ public class FA extends AbstractGeometricForm {
     
     public Map<FAState, Map<Character, List<FAState>>> getDelta() {
         
-        Map<FAState, Map<Character, List<FAState>>> m = new TreeMap<>();
-        for ( FAState s : states ) {
-            m.put( s, new TreeMap<>() );
-        }
-        
-        for ( FATransition t : transitions ) {
-            Map<Character, List<FAState>> mq = m.get( t.getOriginState() );
-            for ( Character sy : t.getSymbols() ) {
-                List<FAState> li = mq.get( sy );
-                if ( li == null ) {
-                    li = new ArrayList<>();
-                    mq.put( sy, li );
+        if ( delta == null || !deltaUpToDate ) {
+            
+            deltaUpToDate = true;
+            
+            delta = new TreeMap<>();
+            for ( FAState s : states ) {
+                delta.put( s, new TreeMap<>() );
+            }
+
+            for ( FATransition t : transitions ) {
+                Map<Character, List<FAState>> mq = delta.get( t.getOriginState() );
+                for ( Character sy : t.getSymbols() ) {
+                    List<FAState> li = mq.get( sy );
+                    if ( li == null ) {
+                        li = new ArrayList<>();
+                        mq.put( sy, li );
+                    }
+                    li.add( t.getTargetState() );
                 }
-                li.add( t.getTargetState() );
+
             }
             
         }
         
-        return m;
+        return delta;
         
     }
     
-    public Map<FAState, Set<FAState>> getEcloses( Map<FAState, Map<Character, List<FAState>>> delta ) {
+    public Map<FAState, Set<FAState>> getEcloses( 
+            Map<FAState, Map<Character, List<FAState>>> delta ) {
         
-        Map<FAState, Set<FAState>> ecloses = new HashMap<>();
-        
-        for ( FAState e : delta.keySet() ) {
-            ecloses.put( e, discoverEclose( e, delta ) );
+        if ( ecloses == null || !eclosesUpToDate ) {
+            
+            eclosesUpToDate = true;
+            ecloses = new HashMap<>();
+            
+            for ( FAState e : delta.keySet() ) {
+                ecloses.put( e, discoverEclose( e, delta ) );
+            }
+            
         }
         
         return ecloses;
         
     }
     
-    private Set<FAState> discoverEclose( FAState s, Map<FAState, Map<Character, List<FAState>>> delta ) {
+    private Set<FAState> discoverEclose( 
+            FAState s, 
+            Map<FAState, Map<Character, List<FAState>>> delta ) {
         
         Set<FAState> eclose = new TreeSet<>();
         Set<FAState> visited = new HashSet<>();
@@ -419,7 +449,11 @@ public class FA extends AbstractGeometricForm {
         
     }
     
-    private void discoverEcloseR( FAState s, Set<FAState> eclose, Set<FAState> visited, Map<FAState, Map<Character, List<FAState>>> delta ) {
+    private void discoverEcloseR( 
+            FAState s, 
+            Set<FAState> eclose, 
+            Set<FAState> visited, 
+            Map<FAState, Map<Character, List<FAState>>> delta ) {
         
         if ( !visited.contains( s ) ) {
             

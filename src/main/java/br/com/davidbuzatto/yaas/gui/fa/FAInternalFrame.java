@@ -16,12 +16,14 @@
  */
 package br.com.davidbuzatto.yaas.gui.fa;
 
+import br.com.davidbuzatto.yaas.gui.MainWindow;
 import br.com.davidbuzatto.yaas.gui.fa.properties.FAPropertiesPanel;
 import br.com.davidbuzatto.yaas.gui.fa.properties.FAStatePropertiesPanel;
 import br.com.davidbuzatto.yaas.gui.fa.properties.FATransitionPropertiesPanel;
 import br.com.davidbuzatto.yaas.util.ApplicationPreferences;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import br.com.davidbuzatto.yaas.util.CustomCursors;
+import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -75,10 +77,17 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private FATransitionPropertiesPanel transitionPPanel;
     private CardLayout cardLayout;
     
+    private MainWindow mainWindow;
+    private FABatchTest faBatchTestDialog;
+    private Color txtTestStringDefaultBC;
+    private Color txtTestStringDefaultFC;
+    private Color lblTestResultDefaultFC;
+    
     /**
      * Creates new form FAInternalFrame
      */
-    public FAInternalFrame() {
+    public FAInternalFrame( MainWindow mainWindow ) {
+        this.mainWindow = mainWindow;
         initComponents();
         customInit();
     }
@@ -109,6 +118,10 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         drawPanel.setCursor( CustomCursors.MOVE_CURSOR );
         repaintDrawPanel();
+        
+        txtTestStringDefaultBC = txtTestString.getBackground();
+        txtTestStringDefaultFC = txtTestString.getForeground();
+        lblTestResultDefaultFC = lblTestResult.getForeground();
         
     }
 
@@ -297,6 +310,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnNew = new javax.swing.JButton();
         btnOpen = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
+        btnSaveAss = new javax.swing.JButton();
         btnSaveModelAsImage = new javax.swing.JButton();
         sep01 = new javax.swing.JToolBar.Separator();
         btnMove = new javax.swing.JToggleButton();
@@ -317,8 +331,10 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         panelTestsAndSimulation = new javax.swing.JPanel();
         lblTestString = new javax.swing.JLabel();
         txtTestString = new javax.swing.JTextField();
+        lblTestResult = new javax.swing.JLabel();
         toolBarTestsAndSimulation = new javax.swing.JToolBar();
         btnTest = new javax.swing.JButton();
+        btnReset = new javax.swing.JButton();
         sepTS01 = new javax.swing.JToolBar.Separator();
         btnStart = new javax.swing.JButton();
         btnFirstStep = new javax.swing.JButton();
@@ -376,6 +392,13 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         toolBar.add(btnSave);
+
+        btnSaveAss.setIcon(new javax.swing.ImageIcon(getClass().getResource("/disk_multiple.png"))); // NOI18N
+        btnSaveAss.setToolTipText("Save as...");
+        btnSaveAss.setFocusable(false);
+        btnSaveAss.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnSaveAss.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        toolBar.add(btnSaveAss);
 
         btnSaveModelAsImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture.png"))); // NOI18N
         btnSaveModelAsImage.setToolTipText("Save Model as Image");
@@ -514,10 +537,14 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
         lblTestString.setText("String:");
 
+        lblTestResult.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblTestResult.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTestResult.setText("TEST RESULT");
+
         toolBarTestsAndSimulation.setRollover(true);
 
         btnTest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/accept.png"))); // NOI18N
-        btnTest.setToolTipText("Test");
+        btnTest.setToolTipText("Execute Test");
         btnTest.setFocusable(false);
         btnTest.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnTest.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -527,6 +554,18 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         toolBarTestsAndSimulation.add(btnTest);
+
+        btnReset.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete.png"))); // NOI18N
+        btnReset.setToolTipText("Reset Test");
+        btnReset.setFocusable(false);
+        btnReset.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnReset.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetActionPerformed(evt);
+            }
+        });
+        toolBarTestsAndSimulation.add(btnReset);
         toolBarTestsAndSimulation.add(sepTS01);
 
         btnStart.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_play_blue.png"))); // NOI18N
@@ -622,20 +661,25 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addComponent(lblTestString)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelTestsAndSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(toolBarTestsAndSimulation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(panelTestsAndSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(toolBarTestsAndSimulation, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
                     .addComponent(txtTestString))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblTestResult, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         panelTestsAndSimulationLayout.setVerticalGroup(
             panelTestsAndSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelTestsAndSimulationLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelTestsAndSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblTestString)
-                    .addComponent(txtTestString, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(toolBarTestsAndSimulation, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelTestsAndSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(lblTestResult, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelTestsAndSimulationLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(panelTestsAndSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblTestString)
+                            .addComponent(txtTestString, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(toolBarTestsAndSimulation, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -726,7 +770,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
         
         if ( JOptionPane.showConfirmDialog( 
-                this, 
+                mainWindow, 
                 "Do you really want to create a new model?\n" +
                 "All non saved modifications will be lost!", 
                 "New model", 
@@ -901,7 +945,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             
                 if ( targetState != null ) {
                     
-                    String input = Utils.showInputDialogEmptyString( this, 
+                    String input = Utils.showInputDialogEmptyString( mainWindow, 
                             "Transition symbol(s)", 
                             "Add Transition Symbol(s)", null );
                     List<Character> symbols = new ArrayList<>();
@@ -1015,7 +1059,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         jfc.removeChoosableFileFilter( jfc.getFileFilter() );
         jfc.setFileFilter( new FileNameExtensionFilter( "PNG Image File", "png" ) );
 
-        if ( jfc.showSaveDialog( null ) == JFileChooser.APPROVE_OPTION ) {
+        if ( jfc.showSaveDialog( mainWindow ) == JFileChooser.APPROVE_OPTION ) {
 
             File f = jfc.getSelectedFile();
             
@@ -1026,7 +1070,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             boolean save = true;
 
             if ( f.exists() ) {
-                if ( JOptionPane.showConfirmDialog( this, 
+                if ( JOptionPane.showConfirmDialog( 
+                        mainWindow, 
                         "The file already exists. Do you want to overwrite it?", 
                         "Confirmation", 
                         JOptionPane.YES_NO_OPTION ) == JOptionPane.NO_OPTION ) {
@@ -1041,8 +1086,10 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                         f.getParentFile().getAbsolutePath() );
                 
                 int r = JOptionPane.showConfirmDialog( 
-                        this, "Do you want transparent background?", 
-                        "Transparent background", JOptionPane.YES_NO_OPTION );
+                        mainWindow, 
+                        "Do you want transparent background?", 
+                        "Transparent background", 
+                        JOptionPane.YES_NO_OPTION );
 
                 BufferedImage img = new BufferedImage( 
                         drawPanel.getWidth(), 
@@ -1077,20 +1124,32 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         if ( fa.canExecute() ) {
             
-            String result;
-            
             if ( fa.accepts( txtTestString.getText() ) ) {
-                result = "ACCEPTED";
+                
+                lblTestResult.setForeground( 
+                        DrawingConstants.ACCEPTED_LABEL_FOREGROUND_COLOR );
+                txtTestString.setForeground( 
+                        DrawingConstants.ACCEPTED_TEXTFIELD_FOREGROUND_COLOR );
+                txtTestString.setBackground( 
+                        DrawingConstants.ACCEPTED_TEXTFIELD_BACKGROUND_COLOR );
+                lblTestResult.setText( "ACCEPTED" );
+                
             } else {
-                result = "REJECTED";
+                
+                lblTestResult.setForeground( 
+                        DrawingConstants.REJECTED_LABEL_FOREGROUND_COLOR );
+                txtTestString.setForeground( 
+                        DrawingConstants.REJECTED_TEXTFIELD_FOREGROUND_COLOR );
+                txtTestString.setBackground( 
+                        DrawingConstants.REJECTED_TEXTFIELD_BACKGROUND_COLOR );
+                lblTestResult.setText( "REJECTED" );
+                
             }
-            
-            JOptionPane.showMessageDialog( this, result );
             
         } else {
             
             JOptionPane.showMessageDialog( 
-                    this, 
+                    mainWindow, 
                     "You must set an initial state!", 
                     "ERROR", 
                     JOptionPane.ERROR_MESSAGE );
@@ -1124,8 +1183,19 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnStopActionPerformed
 
     private void btnBatchTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatchTestActionPerformed
-        // TODO add your handling code here:
+        if ( faBatchTestDialog == null ) {
+            faBatchTestDialog = new FABatchTest( mainWindow, true );
+        }
+        faBatchTestDialog.setFa( fa );
+        faBatchTestDialog.setVisible( true );
     }//GEN-LAST:event_btnBatchTestActionPerformed
+
+    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
+        txtTestString.setBackground( txtTestStringDefaultBC );
+        txtTestString.setForeground( txtTestStringDefaultFC );
+        lblTestResult.setForeground( lblTestResultDefaultFC );
+        lblTestResult.setText( "TEST RESULT" );
+    }//GEN-LAST:event_btnResetActionPerformed
 
     public void repaintDrawPanel() {
         drawPanel.repaint();
@@ -1168,7 +1238,9 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnNextStep;
     private javax.swing.JButton btnOpen;
     private javax.swing.JButton btnPreviousStep;
+    private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnSaveAss;
     private javax.swing.JButton btnSaveModelAsImage;
     private javax.swing.JToggleButton btnShowGrid;
     private javax.swing.JToggleButton btnShowTransitionControls;
@@ -1181,6 +1253,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private br.com.davidbuzatto.yaas.gui.DrawPanel drawPanel;
     private javax.swing.Box.Filler hFiller;
     private javax.swing.Box.Filler hFillerTS;
+    private javax.swing.JLabel lblTestResult;
     private javax.swing.JLabel lblTestString;
     private javax.swing.JPanel panelModel;
     private javax.swing.JPanel panelProperties;

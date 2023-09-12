@@ -91,4 +91,11 @@ public interface DrawingConstants {
     public static final BasicStroke DEFAULT_ARROW_STROKE = new BasicStroke( 
             2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND );
     
+    public static final Color ACCEPTED_LABEL_FOREGROUND_COLOR = new Color( 0, 204, 102 );
+    public static final Color ACCEPTED_TEXTFIELD_FOREGROUND_COLOR = new Color( 46, 61, 54 );
+    public static final Color ACCEPTED_TEXTFIELD_BACKGROUND_COLOR = new Color( 154, 204, 179 );
+    public static final Color REJECTED_LABEL_FOREGROUND_COLOR = new Color( 204, 51, 51 );
+    public static final Color REJECTED_TEXTFIELD_FOREGROUND_COLOR = new Color( 63, 48, 48 );
+    public static final Color REJECTED_TEXTFIELD_BACKGROUND_COLOR = new Color( 204, 154, 154 );
+    
 }
