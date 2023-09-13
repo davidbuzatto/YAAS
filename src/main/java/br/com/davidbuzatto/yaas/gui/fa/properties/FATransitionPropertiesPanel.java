@@ -334,6 +334,15 @@ public class FATransitionPropertiesPanel extends javax.swing.JPanel {
         
     }//GEN-LAST:event_ccpColorMouseReleased
 
+    public void disableGUI() {
+        btnEditSymbols.setEnabled( false );
+        btnRemove.setEnabled( false );
+    }
+    
+    public void enableGUI() {
+        btnEditSymbols.setEnabled( true );
+        btnRemove.setEnabled( true );
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEditSymbols;

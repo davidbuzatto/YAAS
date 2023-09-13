@@ -17,6 +17,7 @@
 package br.com.davidbuzatto.yaas.gui.model;
 
 import br.com.davidbuzatto.yaas.util.DrawingConstants;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 
@@ -28,6 +29,9 @@ import java.awt.geom.Path2D;
 public class Arrow extends AbstractGeometricForm {
     
     private double angle = 0;
+    
+    protected boolean activeInSimulation;
+    private Color activeInSimulationStrokeColor;
     
     public Arrow() {
         stroke = DrawingConstants.DEFAULT_ARROW_STROKE;
@@ -44,6 +48,8 @@ public class Arrow extends AbstractGeometricForm {
             g2d.setColor( mouseHoverStrokeColor );
         } else if ( selected ) {
             g2d.setColor( selectedStrokeColor );
+        } else if ( activeInSimulation ) {
+            g2d.setColor( activeInSimulationStrokeColor );
         } else {
             g2d.setColor( strokeColor );
         }
@@ -71,6 +77,22 @@ public class Arrow extends AbstractGeometricForm {
 
     public void setAngle( double angle ) {
         this.angle = angle;
+    }
+
+    public boolean isActiveInSimulation() {
+        return activeInSimulation;
+    }
+
+    public void setActiveInSimulation( boolean activeInSimulation ) {
+        this.activeInSimulation = activeInSimulation;
+    }
+
+    public Color getActiveInSimulationStrokeColor() {
+        return activeInSimulationStrokeColor;
+    }
+
+    public void setActiveInSimulationStrokeColor( Color activeInSimulationStrokeColor ) {
+        this.activeInSimulationStrokeColor = activeInSimulationStrokeColor;
     }
     
 }

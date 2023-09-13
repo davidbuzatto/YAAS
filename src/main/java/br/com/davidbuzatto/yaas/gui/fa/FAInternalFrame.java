@@ -54,6 +54,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private static final String TRANSITION_PROPERTIES_CARD = "transition";
     
     private FA fa;
+    private MainWindow mainWindow;
     
     private int xPressed;
     private int yPressed;
@@ -77,7 +78,9 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private FATransitionPropertiesPanel transitionPPanel;
     private CardLayout cardLayout;
     
-    private MainWindow mainWindow;
+    private List<FASimulationStep> simulationSteps;
+    private int currentSimulationStep;
+    
     private FABatchTest faBatchTestDialog;
     private Color txtTestStringDefaultBC;
     private Color txtTestStringDefaultFC;
@@ -88,6 +91,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
      */
     public FAInternalFrame( MainWindow mainWindow ) {
         this.mainWindow = mainWindow;
+        this.simulationSteps = new ArrayList<>();
         initComponents();
         customInit();
     }
@@ -107,9 +111,9 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         drawPanel.setFa( fa );
         
         //createFATest();
-        //createDFATest();
-        createNFATest();
-        //createENFATest();
+        //reateDFATest();
+        //createNFATest();
+        createENFATest();
         //drawPanel.setTransitionsControlPointsVisible( true );
         
         faPPanel.setFa( fa );
@@ -243,7 +247,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         s0.setInitial( true );
         s0.setLabel( "q" + currentState++ );
         
-        FAState s1 = new FAState();
+        /*FAState s1 = new FAState();
         s1.setX1( 180 );
         s1.setY1( 150 );
         s1.setLabel( "q" + currentState++ );
@@ -267,9 +271,35 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         s5.setX1( 480 );
         s5.setY1( 150 );
         s5.setAccepting( true );
+        s5.setLabel( "q" + currentState++ );*/
+        
+        FAState s1 = new FAState();
+        s1.setX1( 250 );
+        s1.setY1( 150 );
+        s1.setLabel( "q" + currentState++ );
+        
+        FAState s2 = new FAState();
+        s2.setX1( 350 );
+        s2.setY1( 150 );
+        s2.setLabel( "q" + currentState++ );
+        
+        FAState s3 = new FAState();
+        s3.setX1( 580 );
+        s3.setY1( 150 );
+        s3.setLabel( "q" + currentState++ );
+        
+        FAState s4 = new FAState();
+        s4.setX1( 350 );
+        s4.setY1( 300 );
+        s4.setLabel( "q" + currentState++ );
+        
+        FAState s5 = new FAState();
+        s5.setX1( 680 );
+        s5.setY1( 150 );
+        s5.setAccepting( true );
         s5.setLabel( "q" + currentState++ );
         
-        char[] n = { '0', '1', '2' };
+        char[] n = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
         FATransition t1 = new FATransition( s0, s1, '+', '-', CharacterConstants.EMPTY_STRING );
         FATransition t2 = new FATransition( s1, s1, n );
         FATransition t3 = new FATransition( s1, s2, '.' );
@@ -310,7 +340,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnNew = new javax.swing.JButton();
         btnOpen = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
-        btnSaveAss = new javax.swing.JButton();
+        btnSaveAs = new javax.swing.JButton();
         btnSaveModelAsImage = new javax.swing.JButton();
         sep01 = new javax.swing.JToolBar.Separator();
         btnMove = new javax.swing.JToggleButton();
@@ -336,14 +366,14 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnTest = new javax.swing.JButton();
         btnReset = new javax.swing.JButton();
         sepTS01 = new javax.swing.JToolBar.Separator();
+        btnBatchTest = new javax.swing.JButton();
+        sepTS02 = new javax.swing.JToolBar.Separator();
         btnStart = new javax.swing.JButton();
         btnFirstStep = new javax.swing.JButton();
         btnPreviousStep = new javax.swing.JButton();
         btnNextStep = new javax.swing.JButton();
         btnLastStep = new javax.swing.JButton();
         btnStop = new javax.swing.JButton();
-        hFillerTS = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        btnBatchTest = new javax.swing.JButton();
         scrollPaneModel = new javax.swing.JScrollPane();
         drawPanel = new br.com.davidbuzatto.yaas.gui.DrawPanel();
         panelProperties = new javax.swing.JPanel();
@@ -393,12 +423,12 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         });
         toolBar.add(btnSave);
 
-        btnSaveAss.setIcon(new javax.swing.ImageIcon(getClass().getResource("/disk_multiple.png"))); // NOI18N
-        btnSaveAss.setToolTipText("Save as...");
-        btnSaveAss.setFocusable(false);
-        btnSaveAss.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnSaveAss.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        toolBar.add(btnSaveAss);
+        btnSaveAs.setIcon(new javax.swing.ImageIcon(getClass().getResource("/disk_multiple.png"))); // NOI18N
+        btnSaveAs.setToolTipText("Save as...");
+        btnSaveAs.setFocusable(false);
+        btnSaveAs.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnSaveAs.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        toolBar.add(btnSaveAs);
 
         btnSaveModelAsImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture.png"))); // NOI18N
         btnSaveModelAsImage.setToolTipText("Save Model as Image");
@@ -568,6 +598,19 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         toolBarTestsAndSimulation.add(btnReset);
         toolBarTestsAndSimulation.add(sepTS01);
 
+        btnBatchTest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/book.png"))); // NOI18N
+        btnBatchTest.setToolTipText("Batch Test");
+        btnBatchTest.setFocusable(false);
+        btnBatchTest.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnBatchTest.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnBatchTest.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBatchTestActionPerformed(evt);
+            }
+        });
+        toolBarTestsAndSimulation.add(btnBatchTest);
+        toolBarTestsAndSimulation.add(sepTS02);
+
         btnStart.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_play_blue.png"))); // NOI18N
         btnStart.setToolTipText("Start Simulation");
         btnStart.setFocusable(false);
@@ -582,6 +625,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
         btnFirstStep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_start_blue.png"))); // NOI18N
         btnFirstStep.setToolTipText("First Step");
+        btnFirstStep.setEnabled(false);
         btnFirstStep.setFocusable(false);
         btnFirstStep.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnFirstStep.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -594,6 +638,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
         btnPreviousStep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_rewind_blue.png"))); // NOI18N
         btnPreviousStep.setToolTipText("Previous Step");
+        btnPreviousStep.setEnabled(false);
         btnPreviousStep.setFocusable(false);
         btnPreviousStep.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnPreviousStep.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -606,6 +651,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
         btnNextStep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_fastforward_blue.png"))); // NOI18N
         btnNextStep.setToolTipText("Next Step");
+        btnNextStep.setEnabled(false);
         btnNextStep.setFocusable(false);
         btnNextStep.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnNextStep.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -618,6 +664,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
         btnLastStep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_end_blue.png"))); // NOI18N
         btnLastStep.setToolTipText("Last Step");
+        btnLastStep.setEnabled(false);
         btnLastStep.setFocusable(false);
         btnLastStep.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnLastStep.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -630,6 +677,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
         btnStop.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_stop_blue.png"))); // NOI18N
         btnStop.setToolTipText("Stop Simulation");
+        btnStop.setEnabled(false);
         btnStop.setFocusable(false);
         btnStop.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnStop.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -639,19 +687,6 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         toolBarTestsAndSimulation.add(btnStop);
-        toolBarTestsAndSimulation.add(hFillerTS);
-
-        btnBatchTest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/book.png"))); // NOI18N
-        btnBatchTest.setToolTipText("Batch Test");
-        btnBatchTest.setFocusable(false);
-        btnBatchTest.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnBatchTest.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnBatchTest.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBatchTestActionPerformed(evt);
-            }
-        });
-        toolBarTestsAndSimulation.add(btnBatchTest);
 
         javax.swing.GroupLayout panelTestsAndSimulationLayout = new javax.swing.GroupLayout(panelTestsAndSimulation);
         panelTestsAndSimulation.setLayout(panelTestsAndSimulationLayout);
@@ -807,10 +842,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnMoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveActionPerformed
-        fa.deselectAll();
-        cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
-        repaintDrawPanel();
-        drawPanel.setCursor( CustomCursors.MOVE_CURSOR );
+        btnMoveAction();
     }//GEN-LAST:event_btnMoveActionPerformed
 
     private void btnAddStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddStateActionPerformed
@@ -1125,25 +1157,9 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         if ( fa.canExecute() ) {
             
             if ( fa.accepts( txtTestString.getText() ) ) {
-                
-                lblTestResult.setForeground( 
-                        DrawingConstants.ACCEPTED_LABEL_FOREGROUND_COLOR );
-                txtTestString.setForeground( 
-                        DrawingConstants.ACCEPTED_TEXTFIELD_FOREGROUND_COLOR );
-                txtTestString.setBackground( 
-                        DrawingConstants.ACCEPTED_TEXTFIELD_BACKGROUND_COLOR );
-                lblTestResult.setText( "ACCEPTED" );
-                
+                setTestToAcceptedInGUI( );
             } else {
-                
-                lblTestResult.setForeground( 
-                        DrawingConstants.REJECTED_LABEL_FOREGROUND_COLOR );
-                txtTestString.setForeground( 
-                        DrawingConstants.REJECTED_TEXTFIELD_FOREGROUND_COLOR );
-                txtTestString.setBackground( 
-                        DrawingConstants.REJECTED_TEXTFIELD_BACKGROUND_COLOR );
-                lblTestResult.setText( "REJECTED" );
-                
+                setTestToRejectedInGUI( );
             }
             
         } else {
@@ -1159,27 +1175,95 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnTestActionPerformed
 
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
-        // TODO add your handling code here:
+        
+        if ( fa.canExecute() ) {
+            
+            txtTestString.setEditable( false );
+            resetTestInGUI();
+            disableGUI();
+            simulationSteps.clear();
+            currentSimulationStep = 0;
+            
+            boolean accepted = fa.accepts( txtTestString.getText(), simulationSteps );
+            
+            btnStart.setEnabled( false );
+            btnStop.setEnabled( true );
+            
+            updateSimulationButtons( currentSimulationStep );
+            activateSimulationStep( currentSimulationStep );
+            drawPanel.setSimulationString( txtTestString.getText() );
+            drawPanel.setSimulationSteps( simulationSteps );
+            drawPanel.setCurrentSimulationStep( currentSimulationStep );
+            drawPanel.setSimulationAccepted( accepted );
+            drawPanel.repaint();
+            
+        } else {
+            
+            JOptionPane.showMessageDialog( 
+                    mainWindow, 
+                    "You must set an initial state!", 
+                    "ERROR", 
+                    JOptionPane.ERROR_MESSAGE );
+            
+        }
+        
     }//GEN-LAST:event_btnStartActionPerformed
 
     private void btnFirstStepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFirstStepActionPerformed
-        // TODO add your handling code here:
+        currentSimulationStep = 0;
+        resetTestInGUI();
+        updateSimulationButtons( currentSimulationStep );
+        activateSimulationStep( currentSimulationStep );
     }//GEN-LAST:event_btnFirstStepActionPerformed
 
     private void btnPreviousStepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousStepActionPerformed
-        // TODO add your handling code here:
+        currentSimulationStep--;
+        if ( currentSimulationStep < 0 ) {
+            currentSimulationStep = 0;
+        }
+        resetTestInGUI();
+        updateSimulationButtons( currentSimulationStep );
+        activateSimulationStep( currentSimulationStep );
     }//GEN-LAST:event_btnPreviousStepActionPerformed
 
     private void btnNextStepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextStepActionPerformed
-        // TODO add your handling code here:
+        currentSimulationStep++;
+        if ( currentSimulationStep >= simulationSteps.size() ) {
+            currentSimulationStep--;
+        }
+        resetTestInGUI();
+        updateSimulationButtons( currentSimulationStep );
+        activateSimulationStep( currentSimulationStep );
     }//GEN-LAST:event_btnNextStepActionPerformed
 
     private void btnLastStepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLastStepActionPerformed
-        // TODO add your handling code here:
+        currentSimulationStep = simulationSteps.size()-1;
+        resetTestInGUI();
+        updateSimulationButtons( currentSimulationStep );
+        activateSimulationStep( currentSimulationStep );
     }//GEN-LAST:event_btnLastStepActionPerformed
 
     private void btnStopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStopActionPerformed
-        // TODO add your handling code here:
+        
+        simulationSteps.clear();
+        fa.deactivateAllStatesInSimulation();
+        txtTestString.setEditable( true );
+        resetTestInGUI();
+        enableGUI();
+        
+        btnStart.setEnabled( true );
+        btnFirstStep.setEnabled( false );
+        btnPreviousStep.setEnabled( false );
+        btnNextStep.setEnabled( false );
+        btnLastStep.setEnabled( false );
+        btnStop.setEnabled( false );
+            
+        drawPanel.setSimulationString( null );
+        drawPanel.setSimulationSteps( null );
+        drawPanel.setCurrentSimulationStep( 0 );
+        drawPanel.setSimulationAccepted( false );
+        drawPanel.repaint();
+        
     }//GEN-LAST:event_btnStopActionPerformed
 
     private void btnBatchTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatchTestActionPerformed
@@ -1191,10 +1275,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnBatchTestActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
-        txtTestString.setBackground( txtTestStringDefaultBC );
-        txtTestString.setForeground( txtTestStringDefaultFC );
-        lblTestResult.setForeground( lblTestResultDefaultFC );
-        lblTestResult.setText( "TEST RESULT" );
+        resetTestInGUI();
+        txtTestString.setText( "" );
     }//GEN-LAST:event_btnResetActionPerformed
 
     public void repaintDrawPanel() {
@@ -1224,6 +1306,134 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         System.out.println( "zoom out" );
     }
     
+    private void updateSimulationButtons( int step ) {
+        
+        if ( step == 0 ) {
+            btnFirstStep.setEnabled( false );
+            btnPreviousStep.setEnabled( false );
+            btnNextStep.setEnabled( true );
+            btnLastStep.setEnabled( true );
+        } else if ( step == simulationSteps.size() - 1 ) {
+            btnFirstStep.setEnabled( true );
+            btnPreviousStep.setEnabled( true );
+            btnNextStep.setEnabled( false );
+            btnLastStep.setEnabled( false );
+        } else {
+            btnFirstStep.setEnabled( true );
+            btnPreviousStep.setEnabled( true );
+            btnNextStep.setEnabled( true );
+            btnLastStep.setEnabled( true );
+        }
+        
+    }
+    
+    private void setTestToAcceptedInGUI() {
+        lblTestResult.setForeground(
+                DrawingConstants.ACCEPTED_LABEL_FOREGROUND_COLOR );
+        txtTestString.setForeground(
+                DrawingConstants.ACCEPTED_TEXTFIELD_FOREGROUND_COLOR );
+        txtTestString.setBackground(
+                DrawingConstants.ACCEPTED_TEXTFIELD_BACKGROUND_COLOR );
+        lblTestResult.setText( "ACCEPTED" );
+    }
+    
+    private void setTestToRejectedInGUI() {
+        lblTestResult.setForeground(
+                DrawingConstants.REJECTED_LABEL_FOREGROUND_COLOR );
+        txtTestString.setForeground(
+                DrawingConstants.REJECTED_TEXTFIELD_FOREGROUND_COLOR );
+        txtTestString.setBackground(
+                DrawingConstants.REJECTED_TEXTFIELD_BACKGROUND_COLOR );
+        lblTestResult.setText( "REJECTED" );
+    }
+    
+    private void resetTestInGUI() {
+        txtTestString.setBackground( txtTestStringDefaultBC );
+        txtTestString.setForeground( txtTestStringDefaultFC );
+        lblTestResult.setForeground( lblTestResultDefaultFC );
+        lblTestResult.setText( "TEST RESULT" );
+    }
+    
+    private void btnMoveAction() {
+        fa.deselectAll();
+        cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
+        repaintDrawPanel();
+        drawPanel.setCursor( CustomCursors.MOVE_CURSOR );
+    }
+    
+    private void disableGUI() {
+        
+        btnNew.setEnabled( false );
+        btnOpen.setEnabled( false );
+        btnSave.setEnabled( false );
+        btnSaveAs.setEnabled( false );
+        btnSaveModelAsImage.setEnabled( false );
+        
+        btnMove.setSelected( true );
+        btnMoveAction();
+        btnMove.setEnabled( false );
+        btnAddState.setEnabled( false );
+        btnAddTransition.setEnabled( false );
+        
+        btnGenerateEquivalentDFA.setEnabled( false );
+        btnGenerateMinimizedDFA.setEnabled( false );
+        
+        btnTest.setEnabled( false );
+        btnReset.setEnabled( false );
+        btnBatchTest.setEnabled( false );
+        
+        statePPanel.disableGUI();
+        transitionPPanel.disableGUI();
+        
+    }
+    
+    private void enableGUI() {
+        
+        btnNew.setEnabled( true );
+        btnOpen.setEnabled( true );
+        btnSave.setEnabled( true );
+        btnSaveAs.setEnabled( true );
+        btnSaveModelAsImage.setEnabled( true );
+        
+        btnMove.setSelected( true );
+        btnMove.setEnabled( true );
+        btnAddState.setEnabled( true );
+        btnAddTransition.setEnabled( true );
+        
+        btnGenerateEquivalentDFA.setEnabled( true );
+        btnGenerateMinimizedDFA.setEnabled( true );
+        
+        btnTest.setEnabled( true );
+        btnReset.setEnabled( true );
+        btnBatchTest.setEnabled( true );
+        
+        statePPanel.enableGUI();
+        transitionPPanel.enableGUI();
+        
+    }
+    
+    private void activateSimulationStep( int step ) {
+        
+        if ( step >= 0 && step < simulationSteps.size() ) {
+            
+            FASimulationStep current = simulationSteps.get( step );
+            current.activateInFA( fa );
+            drawPanel.setCurrentSimulationStep( step );
+            
+            if ( step == simulationSteps.size() - 1 ) {
+                if ( drawPanel.isSimulationAccepted() ) {
+                    setTestToAcceptedInGUI();
+                } else {
+                    setTestToRejectedInGUI();
+                }
+            }
+            
+            drawPanel.repaint();
+            
+        }
+        
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton btnAddState;
     private javax.swing.JToggleButton btnAddTransition;
@@ -1240,7 +1450,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnPreviousStep;
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSave;
-    private javax.swing.JButton btnSaveAss;
+    private javax.swing.JButton btnSaveAs;
     private javax.swing.JButton btnSaveModelAsImage;
     private javax.swing.JToggleButton btnShowGrid;
     private javax.swing.JToggleButton btnShowTransitionControls;
@@ -1252,7 +1462,6 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnZoomOut;
     private br.com.davidbuzatto.yaas.gui.DrawPanel drawPanel;
     private javax.swing.Box.Filler hFiller;
-    private javax.swing.Box.Filler hFillerTS;
     private javax.swing.JLabel lblTestResult;
     private javax.swing.JLabel lblTestString;
     private javax.swing.JPanel panelModel;
@@ -1264,6 +1473,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JToolBar.Separator sep02;
     private javax.swing.JToolBar.Separator sep04;
     private javax.swing.JToolBar.Separator sepTS01;
+    private javax.swing.JToolBar.Separator sepTS02;
     private javax.swing.JToolBar toolBar;
     private javax.swing.JToolBar toolBarTestsAndSimulation;
     private javax.swing.JTextField txtTestString;

@@ -506,12 +506,16 @@ public class FATransition extends AbstractGeometricForm {
         boolean first = true;
         String labelText = "";
         
-        for ( Character s : symbols ) {
-            if ( !first ) {
-                labelText += ", ";
+        if ( symbols.size() <= 4 ) {
+            for ( Character s : symbols ) {
+                if ( !first ) {
+                    labelText += ", ";
+                }
+                labelText += s.toString();
+                first = false;
             }
-            labelText += s.toString();
-            first = false;
+        } else {
+            labelText = String.format( "%c, %c, ..., %c", symbols.get( 0 ), symbols.get( 1 ), symbols.get( symbols.size() - 1 ) );
         }
         
         label.setText( labelText );

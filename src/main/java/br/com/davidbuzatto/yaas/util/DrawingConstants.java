@@ -98,4 +98,15 @@ public interface DrawingConstants {
     public static final Color REJECTED_TEXTFIELD_FOREGROUND_COLOR = new Color( 63, 48, 48 );
     public static final Color REJECTED_TEXTFIELD_BACKGROUND_COLOR = new Color( 204, 154, 154 );
     
+    public static final Color ACCEPTED_SIMULATION_RESULT_COLOR = new Color( 0, 204, 102 );
+    public static final Color REJECTED_SIMULATION_RESULT_COLOR = new Color( 204, 51, 51 );
+    public static final Color ACTIVE_STATE_IN_SIMULATION_STROKE_COLOR = new Color( 68, 4, 168 );
+    public static final Color ACTIVE_STATE_IN_SIMULATION_FILL_COLOR = new Color( 212, 200, 231 );
+    public static final Color SIMULATION_STRING_PROCESSED_COLOR = Color.BLACK;
+    public static final Color SIMULATION_STRING_NON_PROCESSED_COLOR = new Color( 200, 200, 200 );
+    public static final Color ACTIVE_SYMBOL_IN_SIMULATION_COLOR = new Color( 68, 4, 168 );
+    public static final Color ACTIVE_SYMBOL_IN_SIMULATION_BACKGROUND_COLOR = new Color( 212, 200, 231 );
+    
+    public static final Font SIMULATION_STRING_FONT = new Font( Font.MONOSPACED, Font.BOLD, 24 );
+    
 }

@@ -18,11 +18,17 @@ package br.com.davidbuzatto.yaas.gui;
 
 import br.com.davidbuzatto.yaas.gui.model.Arrow;
 import br.com.davidbuzatto.yaas.gui.fa.FA;
+import br.com.davidbuzatto.yaas.gui.fa.FASimulationStep;
 import br.com.davidbuzatto.yaas.util.DrawingConstants;
+import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.Color;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.font.LineMetrics;
+import java.util.List;
 import javax.swing.JPanel;
 
 /**
@@ -42,6 +48,11 @@ public class DrawPanel extends JPanel {
     private int tempTransitionY1;
     private int tempTransitionX2;
     private int tempTransitionY2;
+    
+    private String simulationString;
+    private List<FASimulationStep> simulationSteps;
+    private int currentSimulationStep;
+    private boolean simulationAccepted;
     
     public DrawPanel() {
         tempTransitionArrow = new Arrow();
@@ -95,6 +106,64 @@ public class DrawPanel extends JPanel {
             
         }
         
+        if ( simulationString != null && simulationSteps != null ) {
+            
+            Rectangle r = getVisibleRect();
+            int x1R = (int) r.getX();
+            int y1R = (int) r.getY();
+            int x2R = (int) ( r.getX() + r.getWidth() );
+            int y2R = (int) ( r.getY() + r.getHeight() );
+            int half = x1R + ( x2R - x1R ) / 2;
+        
+            g2d.setFont( DrawingConstants.SIMULATION_STRING_FONT );
+            
+            FontMetrics fm = g2d.getFontMetrics();
+            LineMetrics lm = Utils.getLineMetrics( simulationString, g2d.getFont() );
+            
+            int start = half - fm.stringWidth( simulationString ) / 2;
+            int inc = fm.stringWidth( "0" );
+            int height = (int) lm.getHeight();
+            int ySimulationString = y2R - height / 2 - 10;
+            char[] cs = simulationString.toCharArray();
+            int i;
+            
+            for ( i = 0; i < cs.length; i++ ) {
+            
+                if ( i == currentSimulationStep ) {
+                    g2d.setColor( DrawingConstants.ACTIVE_SYMBOL_IN_SIMULATION_BACKGROUND_COLOR );
+                    g2d.fillRoundRect( start + inc * i - 2, 
+                            ySimulationString - height / 2 - 4, 
+                            inc + 3, 
+                            height / 2 + 8, 10, 10 );
+                    g2d.setColor( DrawingConstants.ACTIVE_SYMBOL_IN_SIMULATION_COLOR );
+                    g2d.drawRoundRect( start + inc * i - 2, 
+                            ySimulationString - height / 2 - 4, 
+                            inc + 3, 
+                            height / 2 + 8, 10, 10 );
+                } else if ( i < currentSimulationStep ) {
+                    g2d.setColor( DrawingConstants.SIMULATION_STRING_PROCESSED_COLOR );
+                } else {
+                    g2d.setColor( DrawingConstants.SIMULATION_STRING_NON_PROCESSED_COLOR );
+                }
+                
+                g2d.drawString( String.valueOf( cs[i] ), 
+                        start + inc * i, 
+                        ySimulationString );
+                
+            }
+            
+            if ( currentSimulationStep == simulationSteps.size() - 1 ) {
+                if ( simulationAccepted ) {
+                    g2d.setColor( DrawingConstants.ACCEPTED_SIMULATION_RESULT_COLOR );
+                    g2d.drawString( " ACCEPTED", start + inc * i, ySimulationString );
+                } else {
+                    g2d.setColor( DrawingConstants.REJECTED_SIMULATION_RESULT_COLOR );
+                    g2d.drawString( " REJECTED", start + inc * i, ySimulationString );
+                }
+            }
+            
+        }
+        
         g2d.setStroke( DrawingConstants.DRAW_PANEL_STROKE );
         g2d.setColor( Color.BLACK );
         g2d.drawRect( 0, 0, getWidth(), getHeight() );
@@ -133,6 +202,26 @@ public class DrawPanel extends JPanel {
 
     public void setTempTransitionY2( int tempTransitionY2 ) {
         this.tempTransitionY2 = tempTransitionY2;
+    }
+
+    public void setSimulationString( String simulationString ) {
+        this.simulationString = simulationString;
+    }
+
+    public void setSimulationSteps( List<FASimulationStep> simulationSteps ) {
+        this.simulationSteps = simulationSteps;
+    }
+
+    public void setCurrentSimulationStep( int currentSimulationStep ) {
+        this.currentSimulationStep = currentSimulationStep;
+    }
+
+    public void setSimulationAccepted( boolean simulationAccepted ) {
+        this.simulationAccepted = simulationAccepted;
+    }
+
+    public boolean isSimulationAccepted() {
+        return simulationAccepted;
     }
     
 }

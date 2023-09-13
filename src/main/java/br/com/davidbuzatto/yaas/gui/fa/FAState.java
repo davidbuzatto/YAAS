@@ -19,6 +19,7 @@ package br.com.davidbuzatto.yaas.gui.fa;
 import br.com.davidbuzatto.yaas.gui.model.AbstractGeometricForm;
 import br.com.davidbuzatto.yaas.gui.model.Arrow;
 import br.com.davidbuzatto.yaas.util.DrawingConstants;
+import java.awt.Color;
 import java.awt.Graphics2D;
 
 /**
@@ -40,6 +41,10 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
     
     private Arrow arrow;
     
+    protected boolean activeInSimulation;
+    private Color activeInSimulationStrokeColor;
+    private Color activeInSimulationFillColor;
+    
     public FAState() {
         
         font = DrawingConstants.DEFAULT_FONT;
@@ -51,6 +56,9 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
         selectedFillColor = DrawingConstants.STATE_SELECTED_FILL_COLOR;
         selectedStrokeColor = DrawingConstants.STATE_SELECTED_STROKE_COLOR;
         
+        activeInSimulationFillColor = DrawingConstants.ACTIVE_STATE_IN_SIMULATION_FILL_COLOR;
+        activeInSimulationStrokeColor = DrawingConstants.ACTIVE_STATE_IN_SIMULATION_STROKE_COLOR;
+        
         radius = DrawingConstants.STATE_RADIUS;
         radiusSquared = DrawingConstants.STATE_RADIUS_SQUARED;
         diameter = DrawingConstants.STATE_DIAMETER;
@@ -58,6 +66,7 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
         arrow = new Arrow();
         arrow.setMouseHoverStrokeColor( DrawingConstants.STATE_MOUSE_HOVER_STROKE_COLOR );
         arrow.setSelectedStrokeColor( DrawingConstants.STATE_SELECTED_STROKE_COLOR );
+        arrow.setActiveInSimulationStrokeColor( DrawingConstants.ACTIVE_STATE_IN_SIMULATION_STROKE_COLOR );
         
     }
     
@@ -71,11 +80,14 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
         arrow.setMouseHover( mouseHover );
         arrow.setSelected( selected );
         arrow.setStrokeColor( strokeColor );
+        arrow.setActiveInSimulation( activeInSimulation );
         
         if ( mouseHover ) {
             g2d.setColor( mouseHoverStrokeColor );
         } else if ( selected ) {
             g2d.setColor( selectedStrokeColor );
+        } else if ( activeInSimulation ) {
+            g2d.setColor( activeInSimulationStrokeColor );
         } else {
             g2d.setColor( strokeColor );
         }
@@ -91,6 +103,8 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
             g2d.setColor( mouseHoverFillColor );
         } else if ( selected ) {
             g2d.setColor( selectedFillColor );
+        } else if ( activeInSimulation ) {
+            g2d.setColor( activeInSimulationFillColor );
         } else {
             g2d.setColor( fillColor );
         }
@@ -101,6 +115,8 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
             g2d.setColor( mouseHoverStrokeColor );
         } else if ( selected ) {
             g2d.setColor( selectedStrokeColor );
+        } else if ( activeInSimulation ) {
+            g2d.setColor( activeInSimulationStrokeColor );
         } else {
             g2d.setColor( strokeColor );
         }
@@ -176,6 +192,30 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
 
     public void setAccepting( boolean accepting ) {
         this.accepting = accepting;
+    }
+
+    public boolean isActiveInSimulation() {
+        return activeInSimulation;
+    }
+
+    public void setActiveInSimulation( boolean activeInSimulation ) {
+        this.activeInSimulation = activeInSimulation;
+    }
+
+    public Color getActiveInSimulationStrokeColor() {
+        return activeInSimulationStrokeColor;
+    }
+
+    public void setActiveInSimulationStrokeColor( Color activeInSimulationStrokeColor ) {
+        this.activeInSimulationStrokeColor = activeInSimulationStrokeColor;
+    }
+
+    public Color getActiveInSimulationFillColor() {
+        return activeInSimulationFillColor;
+    }
+
+    public void setActiveInSimulationFillColor( Color activeInSimulationFillColor ) {
+        this.activeInSimulationFillColor = activeInSimulationFillColor;
     }
 
     public int getRadius() {

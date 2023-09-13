@@ -298,7 +298,18 @@ public class FAStatePropertiesPanel extends javax.swing.JPanel {
         
     }//GEN-LAST:event_ccpColorMouseReleased
 
-
+    public void disableGUI() {
+        checkInitial.setEnabled( false );
+        checkAccepting.setEnabled( false );
+        btnRemove.setEnabled( false );
+    }
+    
+    public void enableGUI() {
+        checkInitial.setEnabled( true );
+        checkAccepting.setEnabled( true );
+        btnRemove.setEnabled( true );
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRemove;
     private br.com.davidbuzatto.yaas.gui.ColorChooserPanel ccpColor;

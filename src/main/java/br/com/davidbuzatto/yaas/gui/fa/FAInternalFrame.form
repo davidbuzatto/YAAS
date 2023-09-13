@@ -107,7 +107,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSaveActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="btnSaveAss">
+        <Component class="javax.swing.JButton" name="btnSaveAs">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/disk_multiple.png"/>
@@ -430,6 +430,22 @@
                 </Component>
                 <Component class="javax.swing.JToolBar$Separator" name="sepTS01">
                 </Component>
+                <Component class="javax.swing.JButton" name="btnBatchTest">
+                  <Properties>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/book.png"/>
+                    </Property>
+                    <Property name="toolTipText" type="java.lang.String" value="Batch Test"/>
+                    <Property name="focusable" type="boolean" value="false"/>
+                    <Property name="horizontalTextPosition" type="int" value="0"/>
+                    <Property name="verticalTextPosition" type="int" value="3"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBatchTestActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JToolBar$Separator" name="sepTS02">
+                </Component>
                 <Component class="javax.swing.JButton" name="btnStart">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
@@ -450,6 +466,7 @@
                       <Image iconType="3" name="/control_start_blue.png"/>
                     </Property>
                     <Property name="toolTipText" type="java.lang.String" value="First Step"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
                     <Property name="verticalTextPosition" type="int" value="3"/>
@@ -464,6 +481,7 @@
                       <Image iconType="3" name="/control_rewind_blue.png"/>
                     </Property>
                     <Property name="toolTipText" type="java.lang.String" value="Previous Step"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
                     <Property name="verticalTextPosition" type="int" value="3"/>
@@ -478,6 +496,7 @@
                       <Image iconType="3" name="/control_fastforward_blue.png"/>
                     </Property>
                     <Property name="toolTipText" type="java.lang.String" value="Next Step"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
                     <Property name="verticalTextPosition" type="int" value="3"/>
@@ -492,6 +511,7 @@
                       <Image iconType="3" name="/control_end_blue.png"/>
                     </Property>
                     <Property name="toolTipText" type="java.lang.String" value="Last Step"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
                     <Property name="verticalTextPosition" type="int" value="3"/>
@@ -506,36 +526,13 @@
                       <Image iconType="3" name="/control_stop_blue.png"/>
                     </Property>
                     <Property name="toolTipText" type="java.lang.String" value="Stop Simulation"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
                     <Property name="verticalTextPosition" type="int" value="3"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnStopActionPerformed"/>
-                  </Events>
-                </Component>
-                <Component class="javax.swing.Box$Filler" name="hFillerTS">
-                  <Properties>
-                    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[32767, 0]"/>
-                    </Property>
-                  </Properties>
-                  <AuxValues>
-                    <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalGlue"/>
-                  </AuxValues>
-                </Component>
-                <Component class="javax.swing.JButton" name="btnBatchTest">
-                  <Properties>
-                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/book.png"/>
-                    </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="Batch Test"/>
-                    <Property name="focusable" type="boolean" value="false"/>
-                    <Property name="horizontalTextPosition" type="int" value="0"/>
-                    <Property name="verticalTextPosition" type="int" value="3"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBatchTestActionPerformed"/>
                   </Events>
                 </Component>
               </SubComponents>

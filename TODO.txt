@@ -1,4 +1,6 @@
-Simulation: step by step
+Simulation: step by step  <- manage empty string languages
+Transitions: limit to four
+
 Create examples.
 Implement main menu.
 

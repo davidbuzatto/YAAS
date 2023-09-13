@@ -57,6 +57,10 @@ public class FA extends AbstractGeometricForm {
     }
     
     public boolean accepts( String str ) {
+        return accepts( str, null );
+    }
+    
+    public boolean accepts( String str, List<FASimulationStep> simulationSteps ) {
         
         if ( canExecute() ) {
             
@@ -65,6 +69,10 @@ public class FA extends AbstractGeometricForm {
             
             Set<FAState> currentStates = new HashSet<>();
             currentStates.addAll( ecloses.get( initialState ) );
+            
+            if ( simulationSteps != null ) {
+                simulationSteps.add( new FASimulationStep( currentStates, Character.MIN_SURROGATE ) );
+            }
             
             for ( char c : str.toCharArray() ) {
                 
@@ -93,6 +101,10 @@ public class FA extends AbstractGeometricForm {
                 System.out.println();*/
                 
                 currentStates = targetEclose;
+                
+                if ( simulationSteps != null ) {
+                    simulationSteps.add( new FASimulationStep( currentStates, c ) );
+                }
                 
             }
             
@@ -583,6 +595,12 @@ public class FA extends AbstractGeometricForm {
 
     public List<FATransition> getTransitions() {
         return transitions;
+    }
+    
+    public void deactivateAllStatesInSimulation() {
+        for ( FAState s : states ) {
+            s.setActiveInSimulation( false );
+        }
     }
     
 }
