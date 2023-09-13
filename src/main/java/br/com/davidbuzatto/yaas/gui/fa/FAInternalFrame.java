@@ -31,6 +31,8 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -90,10 +92,23 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
      * Creates new form FAInternalFrame
      */
     public FAInternalFrame( MainWindow mainWindow ) {
+        this( mainWindow, null );
+    }
+    
+    public FAInternalFrame( MainWindow mainWindow, FA fa ) {
+        
         this.mainWindow = mainWindow;
         this.simulationSteps = new ArrayList<>();
+        
+        if ( fa == null ) {
+            this.fa = new FA();
+        } else {
+            this.fa = fa;
+        }
+        
         initComponents();
         customInit();
+        
     }
 
     private void customInit() {
@@ -107,14 +122,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         panelProperties.add( statePPanel, STATE_PROPERTIES_CARD );
         panelProperties.add( transitionPPanel, TRANSITION_PROPERTIES_CARD );
         
-        fa = new FA();
         drawPanel.setFa( fa );
-        
-        //createFATest();
-        //reateDFATest();
-        //createNFATest();
-        createENFATest();
-        //drawPanel.setTransitionsControlPointsVisible( true );
         
         faPPanel.setFa( fa );
         faPPanel.readProperties();
@@ -127,202 +135,21 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         txtTestStringDefaultFC = txtTestString.getForeground();
         lblTestResultDefaultFC = lblTestResult.getForeground();
         
-    }
-
-    private void createFATest() {
+        scrollPaneModel.getHorizontalScrollBar().addAdjustmentListener( 
+                new AdjustmentListener(){
+            @Override
+            public void adjustmentValueChanged( AdjustmentEvent e ) {
+                repaintDrawPanel();
+            }
+        });
         
-        FAState s0 = new FAState();
-        s0.setX1( 100 );
-        s0.setY1( 200 );
-        s0.setLabel( "q" + currentState++ );
-        s0.setInitial( true );
-        
-        FAState s1 = new FAState();
-        s1.setX1( 250 );
-        s1.setY1( 100 );
-        s1.setLabel( "q" + currentState++ );
-        
-        FAState s2 = new FAState();
-        s2.setX1( 400 );
-        s2.setY1( 200 );
-        s2.setLabel( "q" + currentState++ );
-        
-        FAState s3 = new FAState();
-        s3.setX1( 250 );
-        s3.setY1( 300 );
-        s3.setAccepting( true );
-        s3.setLabel( "q" + currentState++ );
-        
-        FATransition t1 = new FATransition( s0, s1, 'a', 'b', 'c' );
-        FATransition t2 = new FATransition( s0, s3, 'a' );
-        FATransition t3 = new FATransition( s1, s2, 'a' );
-        FATransition t4 = new FATransition( s2, s3, 'a' );
-        FATransition t5 = new FATransition( s0, s0, 'a' );
-        
-        fa.addState( s0 );
-        fa.addState( s1 );
-        fa.addState( s2 );
-        fa.addState( s3 );
-        fa.addTransition( t1 );
-        fa.addTransition( t2 );
-        fa.addTransition( t3 );
-        fa.addTransition( t4 );
-        fa.addTransition( t5 );
-        
-    }
-    
-    private void createDFATest() {
-        
-        FAState s0 = new FAState();
-        s0.setX1( 100 );
-        s0.setY1( 200 );
-        s0.setInitial( true );
-        s0.setLabel( "q" + currentState++ );
-        
-        FAState s1 = new FAState();
-        s1.setX1( 250 );
-        s1.setY1( 200 );
-        s1.setLabel( "q" + currentState++ );
-        
-        FAState s2 = new FAState();
-        s2.setX1( 400 );
-        s2.setY1( 200 );
-        s2.setAccepting( true );
-        s2.setLabel( "q" + currentState++ );
-        
-        FATransition t1 = new FATransition( s0, s0, '1' );
-        FATransition t2 = new FATransition( s0, s1, '0' );
-        FATransition t3 = new FATransition( s1, s1, '0' );
-        FATransition t4 = new FATransition( s1, s2, '1' );
-        FATransition t5 = new FATransition( s2, s2, '0', '1' );
-        
-        fa.addState( s0 );
-        fa.addState( s1 );
-        fa.addState( s2 );
-        fa.addTransition( t1 );
-        fa.addTransition( t2 );
-        fa.addTransition( t3 );
-        fa.addTransition( t4 );
-        fa.addTransition( t5 );
-        
-    }
-    
-    private void createNFATest() {
-        
-        FAState s0 = new FAState();
-        s0.setX1( 100 );
-        s0.setY1( 200 );
-        s0.setInitial( true );
-        s0.setLabel( "q" + currentState++ );
-        
-        FAState s1 = new FAState();
-        s1.setX1( 250 );
-        s1.setY1( 200 );
-        s1.setLabel( "q" + currentState++ );
-        
-        FAState s2 = new FAState();
-        s2.setX1( 400 );
-        s2.setY1( 200 );
-        s2.setAccepting( true );
-        s2.setLabel( "q" + currentState++ );
-        
-        FATransition t1 = new FATransition( s0, s0, '0', '1' );
-        FATransition t2 = new FATransition( s0, s1, '0' );
-        FATransition t3 = new FATransition( s1, s2, '1' );
-        
-        fa.addState( s0 );
-        fa.addState( s1 );
-        fa.addState( s2 );
-        fa.addTransition( t1 );
-        fa.addTransition( t2 );
-        fa.addTransition( t3 );
-        
-    }
-    
-    private void createENFATest() {
-        
-        FAState s0 = new FAState();
-        s0.setX1( 80 );
-        s0.setY1( 150 );
-        s0.setInitial( true );
-        s0.setLabel( "q" + currentState++ );
-        
-        /*FAState s1 = new FAState();
-        s1.setX1( 180 );
-        s1.setY1( 150 );
-        s1.setLabel( "q" + currentState++ );
-        
-        FAState s2 = new FAState();
-        s2.setX1( 280 );
-        s2.setY1( 150 );
-        s2.setLabel( "q" + currentState++ );
-        
-        FAState s3 = new FAState();
-        s3.setX1( 380 );
-        s3.setY1( 150 );
-        s3.setLabel( "q" + currentState++ );
-        
-        FAState s4 = new FAState();
-        s4.setX1( 280 );
-        s4.setY1( 250 );
-        s4.setLabel( "q" + currentState++ );
-        
-        FAState s5 = new FAState();
-        s5.setX1( 480 );
-        s5.setY1( 150 );
-        s5.setAccepting( true );
-        s5.setLabel( "q" + currentState++ );*/
-        
-        FAState s1 = new FAState();
-        s1.setX1( 250 );
-        s1.setY1( 150 );
-        s1.setLabel( "q" + currentState++ );
-        
-        FAState s2 = new FAState();
-        s2.setX1( 350 );
-        s2.setY1( 150 );
-        s2.setLabel( "q" + currentState++ );
-        
-        FAState s3 = new FAState();
-        s3.setX1( 580 );
-        s3.setY1( 150 );
-        s3.setLabel( "q" + currentState++ );
-        
-        FAState s4 = new FAState();
-        s4.setX1( 350 );
-        s4.setY1( 300 );
-        s4.setLabel( "q" + currentState++ );
-        
-        FAState s5 = new FAState();
-        s5.setX1( 680 );
-        s5.setY1( 150 );
-        s5.setAccepting( true );
-        s5.setLabel( "q" + currentState++ );
-        
-        char[] n = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-        FATransition t1 = new FATransition( s0, s1, '+', '-', CharacterConstants.EMPTY_STRING );
-        FATransition t2 = new FATransition( s1, s1, n );
-        FATransition t3 = new FATransition( s1, s2, '.' );
-        FATransition t4 = new FATransition( s1, s4, n );
-        FATransition t5 = new FATransition( s2, s3, n );
-        FATransition t6 = new FATransition( s3, s3, n );
-        FATransition t7 = new FATransition( s3, s5, CharacterConstants.EMPTY_STRING );
-        FATransition t8 = new FATransition( s4, s3, '.' );
-        
-        fa.addState( s0 );
-        fa.addState( s1 );
-        fa.addState( s2 );
-        fa.addState( s3 );
-        fa.addState( s4 );
-        fa.addState( s5 );
-        fa.addTransition( t1 );
-        fa.addTransition( t2 );
-        fa.addTransition( t3 );
-        fa.addTransition( t4 );
-        fa.addTransition( t5 );
-        fa.addTransition( t6 );
-        fa.addTransition( t7 );
-        fa.addTransition( t8 );
+        scrollPaneModel.getVerticalScrollBar().addAdjustmentListener( 
+                new AdjustmentListener(){
+            @Override
+            public void adjustmentValueChanged( AdjustmentEvent e ) {
+                repaintDrawPanel();
+            }
+        });
         
     }
     
@@ -696,11 +523,11 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addComponent(lblTestString)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelTestsAndSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(panelTestsAndSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(toolBarTestsAndSimulation, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
                     .addComponent(txtTestString))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblTestResult, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblTestResult, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         panelTestsAndSimulationLayout.setVerticalGroup(
@@ -1189,13 +1016,14 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             btnStart.setEnabled( false );
             btnStop.setEnabled( true );
             
-            updateSimulationButtons( currentSimulationStep );
-            activateSimulationStep( currentSimulationStep );
             drawPanel.setSimulationString( txtTestString.getText() );
             drawPanel.setSimulationSteps( simulationSteps );
             drawPanel.setCurrentSimulationStep( currentSimulationStep );
             drawPanel.setSimulationAccepted( accepted );
             drawPanel.repaint();
+            
+            updateSimulationButtons( currentSimulationStep );
+            activateSimulationStep( currentSimulationStep );
             
         } else {
             
@@ -1308,7 +1136,12 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     
     private void updateSimulationButtons( int step ) {
         
-        if ( step == 0 ) {
+        if ( step == 0 && simulationSteps.size() == 1 ) {
+            btnFirstStep.setEnabled( false );
+            btnPreviousStep.setEnabled( false );
+            btnNextStep.setEnabled( false );
+            btnLastStep.setEnabled( false );
+        } else if ( step == 0 ) {
             btnFirstStep.setEnabled( false );
             btnPreviousStep.setEnabled( false );
             btnNextStep.setEnabled( true );

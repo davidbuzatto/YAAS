@@ -33,6 +33,8 @@ public interface CharacterConstants {
     public static final Character SUPERSET = '\u2283';
     public static final Character SUBSET_EQUAL = '\u2286';
     public static final Character SUPERSET_EQUAL = '\u2287';
+    public static final Character AND = '\u2227';
+    public static final Character OR = '\u2228';
     public static final Character INTERSECTION = '\u2229';
     public static final Character UNION = '\u222A';
     public static final Character ELEMENT_OF = '\u2208';
@@ -44,5 +46,12 @@ public interface CharacterConstants {
     
     public static final Character ARROW_LEFT = '\u2190';
     public static final Character ARROW_RIGHT = '\u2192';
+    
+    public static final Character SUPER_I = '\u2071';
+    public static final Character SUPER_J = '\u02b2';
+    public static final Character SUPER_K = '\u1d4f';
+    public static final Character SUPER_L = '\u02e1';
+    public static final Character SUPER_M = '\u1d50';
+    public static final Character SUPER_N = '\u207f';
     
 }

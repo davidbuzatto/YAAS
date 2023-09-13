@@ -16,6 +16,8 @@
  */
 package br.com.davidbuzatto.yaas.gui;
 
+import br.com.davidbuzatto.yaas.gui.fa.FA;
+import br.com.davidbuzatto.yaas.gui.fa.FAExamples;
 import br.com.davidbuzatto.yaas.gui.fa.FAInternalFrame;
 import br.com.davidbuzatto.yaas.util.ApplicationPreferences;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
@@ -47,9 +49,7 @@ public class MainWindow extends javax.swing.JFrame {
         
         //setExtendedState( MAXIMIZED_BOTH );
         
-        FAInternalFrame iFrame = new FAInternalFrame( this );
-        desktopPane.add( iFrame );
-        iFrame.setVisible( true );
+        createFAInternalFrame( null );
         
     }
 
@@ -72,8 +72,13 @@ public class MainWindow extends javax.swing.JFrame {
         menuItemExit = new javax.swing.JMenuItem();
         menuExamples = new javax.swing.JMenu();
         menuDFA = new javax.swing.JMenu();
+        miDFASubstring01 = new javax.swing.JMenuItem();
+        miDFAEndsWith01 = new javax.swing.JMenuItem();
+        miDFA0Even1Odd = new javax.swing.JMenuItem();
         menuNFA = new javax.swing.JMenu();
+        miNFAEndsWith01 = new javax.swing.JMenuItem();
         menuENFA = new javax.swing.JMenu();
+        miENFADecimalNumber = new javax.swing.JMenuItem();
         menuHelp = new javax.swing.JMenu();
         menuItemAbout = new javax.swing.JMenuItem();
 
@@ -137,14 +142,62 @@ public class MainWindow extends javax.swing.JFrame {
 
         menuDFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dfa.png"))); // NOI18N
         menuDFA.setText("DFA");
+
+        miDFASubstring01.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dfa.png"))); // NOI18N
+        miDFASubstring01.setText("L = { x01y | x and y are any strings of 0's and 1's }");
+        miDFASubstring01.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miDFASubstring01ActionPerformed(evt);
+            }
+        });
+        menuDFA.add(miDFASubstring01);
+
+        miDFAEndsWith01.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dfa.png"))); // NOI18N
+        miDFAEndsWith01.setText("L = { w | w ends with 01 }");
+        miDFAEndsWith01.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miDFAEndsWith01ActionPerformed(evt);
+            }
+        });
+        menuDFA.add(miDFAEndsWith01);
+
+        miDFA0Even1Odd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dfa.png"))); // NOI18N
+        miDFA0Even1Odd.setText(FAExamples.REG_LANG_0_EVEN_1_ODD);
+        miDFA0Even1Odd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miDFA0Even1OddActionPerformed(evt);
+            }
+        });
+        menuDFA.add(miDFA0Even1Odd);
+
         menuExamples.add(menuDFA);
 
         menuNFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nfa.png"))); // NOI18N
         menuNFA.setText("NFA");
+
+        miNFAEndsWith01.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nfa.png"))); // NOI18N
+        miNFAEndsWith01.setText("L = { w | w ends with 01 }");
+        miNFAEndsWith01.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miNFAEndsWith01ActionPerformed(evt);
+            }
+        });
+        menuNFA.add(miNFAEndsWith01);
+
         menuExamples.add(menuNFA);
 
         menuENFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/enfa.png"))); // NOI18N
         menuENFA.setText(CharacterConstants.EMPTY_STRING.toString() + "-NFA");
+
+        miENFADecimalNumber.setIcon(new javax.swing.ImageIcon(getClass().getResource("/enfa.png"))); // NOI18N
+        miENFADecimalNumber.setText("L = { w | w is a valid decimal number }");
+        miENFADecimalNumber.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miENFADecimalNumberActionPerformed(evt);
+            }
+        });
+        menuENFA.add(miENFADecimalNumber);
+
         menuExamples.add(menuENFA);
 
         menuBar.add(menuExamples);
@@ -180,11 +233,35 @@ public class MainWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnFAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFAActionPerformed
-        FAInternalFrame iFrame = new FAInternalFrame( this );
-        desktopPane.add( iFrame );
-        iFrame.setVisible( true );
+        createFAInternalFrame( null );
     }//GEN-LAST:event_btnFAActionPerformed
 
+    private void miDFASubstring01ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDFASubstring01ActionPerformed
+        createFAInternalFrame( FAExamples.createDFASubstring01() );
+    }//GEN-LAST:event_miDFASubstring01ActionPerformed
+
+    private void miDFAEndsWith01ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDFAEndsWith01ActionPerformed
+        createFAInternalFrame( FAExamples.createDFAEndsWith01() );
+    }//GEN-LAST:event_miDFAEndsWith01ActionPerformed
+
+    private void miDFA0Even1OddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDFA0Even1OddActionPerformed
+        createFAInternalFrame( FAExamples.createDFA0Even1Odd() );
+    }//GEN-LAST:event_miDFA0Even1OddActionPerformed
+
+    private void miNFAEndsWith01ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miNFAEndsWith01ActionPerformed
+        createFAInternalFrame( FAExamples.createNFAEndsWith01() );
+    }//GEN-LAST:event_miNFAEndsWith01ActionPerformed
+
+    private void miENFADecimalNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miENFADecimalNumberActionPerformed
+        createFAInternalFrame( FAExamples.createENFADecimalNumber() );
+    }//GEN-LAST:event_miENFADecimalNumberActionPerformed
+
+    private void createFAInternalFrame( FA fa ) {
+        FAInternalFrame iFrame = new FAInternalFrame( this, fa );
+        desktopPane.add( iFrame );
+        iFrame.setVisible( true );
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -211,6 +288,11 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuItemAbout;
     private javax.swing.JMenuItem menuItemExit;
     private javax.swing.JMenu menuNFA;
+    private javax.swing.JMenuItem miDFA0Even1Odd;
+    private javax.swing.JMenuItem miDFAEndsWith01;
+    private javax.swing.JMenuItem miDFASubstring01;
+    private javax.swing.JMenuItem miENFADecimalNumber;
+    private javax.swing.JMenuItem miNFAEndsWith01;
     private javax.swing.JToolBar toolBar;
     // End of variables declaration//GEN-END:variables
 }

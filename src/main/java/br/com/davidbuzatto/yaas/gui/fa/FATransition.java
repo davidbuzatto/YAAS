@@ -620,6 +620,33 @@ public class FATransition extends AbstractGeometricForm {
         
     }
     
+    public void bendCenter( int amount ) {
+        
+        centralCPMoved = true;
+        targetCPMoved = false;
+        labelMoved = false;
+        targetCPAngle = 0;
+        
+        centralCP.setY1( targetCP.getY1() + amount );
+        leftCP.setY1( targetCP.getY1() + amount );
+        rightCP.setY1( targetCP.getY1() + amount );
+        updateStartAndEndPoints();
+        
+        arrow.setAngle( Math.atan2( 
+                y2 - rightCP.getY1(), x2 - rightCP.getX1() ) );
+        arrow.setX1( x2 );
+        arrow.setY1( y2 );
+        
+        curve.setCurve( 
+                x1, y1, 
+                leftCP.getX1(), leftCP.getY1(), 
+                rightCP.getX1(), rightCP.getY1(), 
+                x2, y2 );
+        
+        updateStartAndEndPoints();
+        
+    }
+    
     @Override
     public void setStrokeColor( Color strokeColor ) {
         this.strokeColor = strokeColor;

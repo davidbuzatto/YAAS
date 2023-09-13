@@ -1,7 +1,4 @@
-Simulation: step by step  <- manage empty string languages
-Transitions: limit to four
-
-Create examples.
+Create examples.  <- implement bend method for transition
 Implement main menu.
 
 Algorithms for automata layout.

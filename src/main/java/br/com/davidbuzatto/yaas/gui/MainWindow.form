@@ -34,6 +34,43 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="DFA"/>
               </Properties>
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="miDFASubstring01">
+                  <Properties>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/dfa.png"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="L = { x01y | x and y are any strings of 0&apos;s and 1&apos;s }"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miDFASubstring01ActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="miDFAEndsWith01">
+                  <Properties>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/dfa.png"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="L = { w | w ends with 01 }"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miDFAEndsWith01ActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="miDFA0Even1Odd">
+                  <Properties>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/dfa.png"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                      <Connection code="FAExamples.REG_LANG_0_EVEN_1_ODD" type="code"/>
+                    </Property>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miDFA0Even1OddActionPerformed"/>
+                  </Events>
+                </MenuItem>
+              </SubComponents>
             </Menu>
             <Menu class="javax.swing.JMenu" name="menuNFA">
               <Properties>
@@ -42,6 +79,19 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="NFA"/>
               </Properties>
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="miNFAEndsWith01">
+                  <Properties>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/nfa.png"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="L = { w | w ends with 01 }"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miNFAEndsWith01ActionPerformed"/>
+                  </Events>
+                </MenuItem>
+              </SubComponents>
             </Menu>
             <Menu class="javax.swing.JMenu" name="menuENFA">
               <Properties>
@@ -52,6 +102,19 @@
                   <Connection code="CharacterConstants.EMPTY_STRING.toString() + &quot;-NFA&quot;" type="code"/>
                 </Property>
               </Properties>
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="miENFADecimalNumber">
+                  <Properties>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/enfa.png"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="L = { w | w is a valid decimal number }"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miENFADecimalNumberActionPerformed"/>
+                  </Events>
+                </MenuItem>
+              </SubComponents>
             </Menu>
           </SubComponents>
         </Menu>
