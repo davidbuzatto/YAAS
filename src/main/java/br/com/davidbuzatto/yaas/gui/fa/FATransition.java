@@ -620,16 +620,35 @@ public class FATransition extends AbstractGeometricForm {
         
     }
     
-    public void bendCenter( int amount ) {
+    @Override
+    public void setStrokeColor( Color strokeColor ) {
+        this.strokeColor = strokeColor;
+        arrow.setStrokeColor( strokeColor );
+        label.setStrokeColor( strokeColor );
+    }
+    
+    private void bend( 
+            int centralCPAmountX, 
+            int centralCPAmountY, 
+            boolean centralCPMoved,
+            int leftCPAmountX, 
+            int leftCPAmountY, 
+            int rightCPAmountX,
+            int rightCPAmountY, 
+            int targetCPAmount,
+            boolean targetCPMoved ) {
         
-        centralCPMoved = true;
-        targetCPMoved = false;
-        labelMoved = false;
-        targetCPAngle = 0;
+        this.centralCPMoved = centralCPMoved;
+        this.targetCPMoved = targetCPMoved;
+        targetCPAngle = Math.toRadians( targetCPAmount );
         
-        centralCP.setY1( targetCP.getY1() + amount );
-        leftCP.setY1( targetCP.getY1() + amount );
-        rightCP.setY1( targetCP.getY1() + amount );
+        centralCP.setX1( centralCP.getX1() + centralCPAmountX );
+        centralCP.setY1( centralCP.getY1() + centralCPAmountY );
+        leftCP.setX1( leftCP.getX1() + leftCPAmountX );
+        leftCP.setY1( leftCP.getY1() + leftCPAmountY );
+        rightCP.setX1( rightCP.getX1() + rightCPAmountX );
+        rightCP.setY1( rightCP.getY1() + rightCPAmountY );
+        
         updateStartAndEndPoints();
         
         arrow.setAngle( Math.atan2( 
@@ -647,11 +666,97 @@ public class FATransition extends AbstractGeometricForm {
         
     }
     
-    @Override
-    public void setStrokeColor( Color strokeColor ) {
-        this.strokeColor = strokeColor;
-        arrow.setStrokeColor( strokeColor );
-        label.setStrokeColor( strokeColor );
+    public void bend( 
+            int centralCPAmountX, 
+            int centralCPAmountY, 
+            int leftCPAmountX, 
+            int leftCPAmountY, 
+            int rightCPAmountX,
+            int rightCPAmountY, 
+            int targetCPAmount ) {
+        bend( centralCPAmountX, centralCPAmountY, true,
+              leftCPAmountX, leftCPAmountY, 
+              rightCPAmountX, rightCPAmountY, 
+              targetCPAmount, true );
+    }
+    
+    public void bendX( 
+            int centralCPAmount, 
+            int leftCPAmount, 
+            int rightCPAmount, 
+            int targetCPAmount ) {
+        bend( centralCPAmount, 0,
+              leftCPAmount, 0, 
+              rightCPAmount, 0,
+              targetCPAmount );
+    }
+    
+    public void bendY( 
+            int centralCPAmount, 
+            int leftCPAmount, 
+            int rightCPAmount, 
+            int targetCPAmount ) {
+        bend( 0, centralCPAmount, 
+              0, leftCPAmount, 
+              0, rightCPAmount, 
+              targetCPAmount );
+    }
+    
+    public void bendByCenterCP( int xAmount, int yAmount ) {
+        bend( xAmount, yAmount, true, 
+              xAmount, yAmount,
+              xAmount, yAmount,
+              0, false );
+    }
+    
+    public void bendByCenterCPX( int amount ) {
+        bendByCenterCP( amount, 0 );
+    }
+    
+    public void bendByCenterCPY( int amount ) {
+        bendByCenterCP( 0, amount );
+    }
+    
+    public void bendByLeftCP( int xAmount, int yAmount ) {
+        bend( 0, 0, false, xAmount, yAmount, 0, 0, 0, false );
+    }
+    
+    public void bendByLeftCPX( int amount ) {
+        bendByLeftCP( amount, 0 );
+    }
+    
+    public void bendByLeftCPY( int amount ) {
+        bendByLeftCP( 0, amount );
+    }
+    
+    public void bendByRightCP( int xAmount, int yAmount ) {
+        bend( 0, 0, false, 0, 0, xAmount, yAmount, 0, false );
+    }
+    
+    public void bendByRightCPX( int amount ) {
+        bendByRightCP( amount, 0 );
+    }
+    
+    public void bendByRightCPY( int amount ) {
+        bendByRightCP( 0, amount );
+    }
+    
+    public void rotateTargetCP( int angle ) {
+        bend( 0, 0, true, 0, 0, 0, 0, angle, true );
+    }
+    
+    public void moveLabel( int xAmount, int yAmount ) {
+        labelMoved = true;
+        label.setX1( label.getX1() + xAmount );
+        label.setY1( label.getY1() + yAmount );
+    }
+    
+    public void moveLabelX( int amount ) {
+        moveLabel( amount, 0 );
+    }
+    
+    public void moveLabelY( int amount ) {
+        moveLabel( 0, amount );
     }
     
     @Override

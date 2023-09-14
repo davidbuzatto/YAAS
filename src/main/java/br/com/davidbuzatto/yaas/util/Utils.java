@@ -511,4 +511,11 @@ public class Utils {
         
     }
     
+    /**
+     * Shows a message to warn about the no implementation of a functinality.
+     */
+    public static void showNotImplementedYetMessage() {
+        JOptionPane.showMessageDialog( null, "Not implemented yet!" );
+    }
+    
 }

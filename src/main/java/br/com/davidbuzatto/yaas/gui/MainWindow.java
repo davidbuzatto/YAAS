@@ -23,6 +23,7 @@ import br.com.davidbuzatto.yaas.util.ApplicationPreferences;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
 import com.formdev.flatlaf.FlatDarculaLaf;
+import java.beans.PropertyVetoException;
 
 /**
  * Main GUI class.
@@ -49,7 +50,7 @@ public class MainWindow extends javax.swing.JFrame {
         
         //setExtendedState( MAXIMIZED_BOTH );
         
-        createFAInternalFrame( null );
+        createFAInternalFrame( FAExamples.createENFADecimalNumber(), true );
         
     }
 
@@ -134,6 +135,11 @@ public class MainWindow extends javax.swing.JFrame {
         menuItemExit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_DOWN_MASK));
         menuItemExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/door_out.png"))); // NOI18N
         menuItemExit.setText("Exit");
+        menuItemExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemExitActionPerformed(evt);
+            }
+        });
         menuFile.add(menuItemExit);
 
         menuBar.add(menuFile);
@@ -207,6 +213,11 @@ public class MainWindow extends javax.swing.JFrame {
         menuItemAbout.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
         menuItemAbout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/help.png"))); // NOI18N
         menuItemAbout.setText("About...");
+        menuItemAbout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemAboutActionPerformed(evt);
+            }
+        });
         menuHelp.add(menuItemAbout);
 
         menuBar.add(menuHelp);
@@ -233,33 +244,49 @@ public class MainWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnFAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFAActionPerformed
-        createFAInternalFrame( null );
+        createFAInternalFrame( null, false );
     }//GEN-LAST:event_btnFAActionPerformed
 
     private void miDFASubstring01ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDFASubstring01ActionPerformed
-        createFAInternalFrame( FAExamples.createDFASubstring01() );
+        createFAInternalFrame( FAExamples.createDFASubstring01(), false );
     }//GEN-LAST:event_miDFASubstring01ActionPerformed
 
     private void miDFAEndsWith01ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDFAEndsWith01ActionPerformed
-        createFAInternalFrame( FAExamples.createDFAEndsWith01() );
+        createFAInternalFrame( FAExamples.createDFAEndsWith01(), false );
     }//GEN-LAST:event_miDFAEndsWith01ActionPerformed
 
     private void miDFA0Even1OddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDFA0Even1OddActionPerformed
-        createFAInternalFrame( FAExamples.createDFA0Even1Odd() );
+        createFAInternalFrame( FAExamples.createDFA0Even1Odd(), false );
     }//GEN-LAST:event_miDFA0Even1OddActionPerformed
 
     private void miNFAEndsWith01ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miNFAEndsWith01ActionPerformed
-        createFAInternalFrame( FAExamples.createNFAEndsWith01() );
+        createFAInternalFrame( FAExamples.createNFAEndsWith01(), false );
     }//GEN-LAST:event_miNFAEndsWith01ActionPerformed
 
     private void miENFADecimalNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miENFADecimalNumberActionPerformed
-        createFAInternalFrame( FAExamples.createENFADecimalNumber() );
+        createFAInternalFrame( FAExamples.createENFADecimalNumber(), false );
     }//GEN-LAST:event_miENFADecimalNumberActionPerformed
 
-    private void createFAInternalFrame( FA fa ) {
+    private void menuItemExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemExitActionPerformed
+        Utils.showNotImplementedYetMessage();
+    }//GEN-LAST:event_menuItemExitActionPerformed
+
+    private void menuItemAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemAboutActionPerformed
+        Utils.showNotImplementedYetMessage();
+    }//GEN-LAST:event_menuItemAboutActionPerformed
+
+    private void createFAInternalFrame( FA fa, boolean maximized ) {
+        
         FAInternalFrame iFrame = new FAInternalFrame( this, fa );
         desktopPane.add( iFrame );
         iFrame.setVisible( true );
+        
+        try {
+            iFrame.setMaximum( maximized );
+        } catch ( PropertyVetoException exc ) {
+            Utils.showException( exc );
+        }
+        
     }
     
     /**

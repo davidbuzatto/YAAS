@@ -1,9 +1,11 @@
-Create examples.  <- implement bend method for transition
-Implement main menu.
-
-Algorithms for automata layout.
-Grid / snap to grid for states;
+Algorithms for automata layout. <- linear (vertical and horizontal), circular, centroid, rectangular, levels
 Zoom-in and zoom-out;
+
+NFA and eNFA to DFA;
+DFA Complement
+DFA Minimization
+
+Implement main menu.
 
 Specialized versions of states (Moore machines); ???
 Specialized versions of transitions (eNFAs, GNFAs, PDAs, Mealy machines and Turing machines); ???

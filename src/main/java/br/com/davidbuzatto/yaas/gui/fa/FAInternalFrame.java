@@ -21,7 +21,6 @@ import br.com.davidbuzatto.yaas.gui.fa.properties.FAPropertiesPanel;
 import br.com.davidbuzatto.yaas.gui.fa.properties.FAStatePropertiesPanel;
 import br.com.davidbuzatto.yaas.gui.fa.properties.FATransitionPropertiesPanel;
 import br.com.davidbuzatto.yaas.util.ApplicationPreferences;
-import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import br.com.davidbuzatto.yaas.util.CustomCursors;
 import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
@@ -33,6 +32,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -66,6 +66,9 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     
     private int xPrev;
     private int yPrev;
+    
+    private int xSnap;
+    private int ySnap;
     
     private int currentState;
     
@@ -176,6 +179,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         sep02 = new javax.swing.JToolBar.Separator();
         btnGenerateEquivalentDFA = new javax.swing.JButton();
         btnGenerateMinimizedDFA = new javax.swing.JButton();
+        btnGenerateComplementDFA = new javax.swing.JButton();
         hFiller = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         btnShowTransitionControls = new javax.swing.JToggleButton();
         seo03 = new javax.swing.JToolBar.Separator();
@@ -255,6 +259,11 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnSaveAs.setFocusable(false);
         btnSaveAs.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSaveAs.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSaveAs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveAsActionPerformed(evt);
+            }
+        });
         toolBar.add(btnSaveAs);
 
         btnSaveModelAsImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture.png"))); // NOI18N
@@ -316,6 +325,11 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnGenerateEquivalentDFA.setFocusable(false);
         btnGenerateEquivalentDFA.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnGenerateEquivalentDFA.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnGenerateEquivalentDFA.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerateEquivalentDFAActionPerformed(evt);
+            }
+        });
         toolBar.add(btnGenerateEquivalentDFA);
 
         btnGenerateMinimizedDFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/arrow_in.png"))); // NOI18N
@@ -323,7 +337,24 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnGenerateMinimizedDFA.setFocusable(false);
         btnGenerateMinimizedDFA.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnGenerateMinimizedDFA.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnGenerateMinimizedDFA.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerateMinimizedDFAActionPerformed(evt);
+            }
+        });
         toolBar.add(btnGenerateMinimizedDFA);
+
+        btnGenerateComplementDFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/shape_flip_horizontal.png"))); // NOI18N
+        btnGenerateComplementDFA.setToolTipText("Generate Complement DFA");
+        btnGenerateComplementDFA.setFocusable(false);
+        btnGenerateComplementDFA.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnGenerateComplementDFA.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnGenerateComplementDFA.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerateComplementDFAActionPerformed(evt);
+            }
+        });
+        toolBar.add(btnGenerateComplementDFA);
         toolBar.add(hFiller);
 
         btnShowTransitionControls.setIcon(new javax.swing.ImageIcon(getClass().getResource("/shape_square_edit.png"))); // NOI18N
@@ -356,11 +387,6 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnSnapToGrid.setFocusable(false);
         btnSnapToGrid.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSnapToGrid.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnSnapToGrid.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSnapToGridActionPerformed(evt);
-            }
-        });
         toolBar.add(btnSnapToGrid);
         toolBar.add(sep04);
 
@@ -661,11 +687,11 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnNewActionPerformed
 
     private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
-        // TODO add your handling code here:
+        Utils.showNotImplementedYetMessage();
     }//GEN-LAST:event_btnOpenActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        // TODO add your handling code here:
+        Utils.showNotImplementedYetMessage();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnMoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveActionPerformed
@@ -696,15 +722,13 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         repaintDrawPanel();
     }//GEN-LAST:event_btnShowGridActionPerformed
 
-    private void btnSnapToGridActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSnapToGridActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSnapToGridActionPerformed
-
     private void btnZoomInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZoomInActionPerformed
+        Utils.showNotImplementedYetMessage();
         zoomIn();
     }//GEN-LAST:event_btnZoomInActionPerformed
 
     private void btnZoomOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZoomOutActionPerformed
+        Utils.showNotImplementedYetMessage();
         zoomOut();
     }//GEN-LAST:event_btnZoomOutActionPerformed
 
@@ -761,6 +785,12 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             newState.setLabel( "q" + currentState++ );
             
             fa.addState( newState );
+            
+            if ( btnSnapToGrid.isSelected() ) {
+                updateSnapPoint( evt );
+                newState.setX1( xSnap );
+                newState.setY1( ySnap );
+            }
             
         } else if ( btnAddTransition.isSelected() ) {
             
@@ -847,8 +877,14 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         if ( btnMove.isSelected() ) {
             
             if ( selectedState != null ) {
-                selectedState.setX1( evt.getX() - xOffset );
-                selectedState.setY1( evt.getY() - yOffset );
+                if ( btnSnapToGrid.isSelected() ) {
+                    updateSnapPoint( evt );
+                    selectedState.setX1( xSnap );
+                    selectedState.setY1( ySnap );
+                } else {
+                    selectedState.setX1( evt.getX() - xOffset );
+                    selectedState.setY1( evt.getY() - yOffset );
+                }
                 fa.updateTransitions();
                 fa.draggTransitions( evt );
             } else if ( selectedTransition != null ) {
@@ -1107,6 +1143,22 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         txtTestString.setText( "" );
     }//GEN-LAST:event_btnResetActionPerformed
 
+    private void btnGenerateEquivalentDFAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateEquivalentDFAActionPerformed
+        Utils.showNotImplementedYetMessage();
+    }//GEN-LAST:event_btnGenerateEquivalentDFAActionPerformed
+
+    private void btnGenerateMinimizedDFAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateMinimizedDFAActionPerformed
+        Utils.showNotImplementedYetMessage();
+    }//GEN-LAST:event_btnGenerateMinimizedDFAActionPerformed
+
+    private void btnGenerateComplementDFAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateComplementDFAActionPerformed
+        Utils.showNotImplementedYetMessage();
+    }//GEN-LAST:event_btnGenerateComplementDFAActionPerformed
+
+    private void btnSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveAsActionPerformed
+        Utils.showNotImplementedYetMessage();
+    }//GEN-LAST:event_btnSaveAsActionPerformed
+
     public void repaintDrawPanel() {
         drawPanel.repaint();
         drawPanel.setPreferredSize( new Dimension( fa.getWidth(), fa.getHeight() ) );
@@ -1210,6 +1262,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         btnGenerateEquivalentDFA.setEnabled( false );
         btnGenerateMinimizedDFA.setEnabled( false );
+        btnGenerateComplementDFA.setEnabled( false );
         
         btnTest.setEnabled( false );
         btnReset.setEnabled( false );
@@ -1235,6 +1288,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         btnGenerateEquivalentDFA.setEnabled( true );
         btnGenerateMinimizedDFA.setEnabled( true );
+        btnGenerateComplementDFA.setEnabled( true );
         
         btnTest.setEnabled( true );
         btnReset.setEnabled( true );
@@ -1267,11 +1321,23 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
     }
     
+    private void updateSnapPoint( MouseEvent evt ) {
+        
+        xSnap = ( evt.getX() + DrawingConstants.STATE_RADIUS / 2 ) / 
+                DrawingConstants.STATE_RADIUS * 
+                DrawingConstants.STATE_RADIUS;
+        ySnap = ( evt.getY() + DrawingConstants.STATE_RADIUS / 2 ) / 
+                DrawingConstants.STATE_RADIUS * 
+                DrawingConstants.STATE_RADIUS;
+        
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton btnAddState;
     private javax.swing.JToggleButton btnAddTransition;
     private javax.swing.JButton btnBatchTest;
     private javax.swing.JButton btnFirstStep;
+    private javax.swing.JButton btnGenerateComplementDFA;
     private javax.swing.JButton btnGenerateEquivalentDFA;
     private javax.swing.JButton btnGenerateMinimizedDFA;
     private javax.swing.ButtonGroup btnGroup;
