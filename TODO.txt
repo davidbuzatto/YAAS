@@ -1,7 +1,8 @@
 Algorithms for automata layout. <- linear (vertical and horizontal), circular, centroid, rectangular, levels
 Zoom-in and zoom-out;
 
-NFA and eNFA to DFA;
+NFA and eNFA to DFA;   <- ok
+DFA Complete specification
 DFA Complement
 DFA Minimization
 

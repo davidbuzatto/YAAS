@@ -234,10 +234,7 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
     
     @Override
     public String toString() {
-        if ( customLabel != null ) {
-            return String.format( "%s (%s)", customLabel, label );
-        }
-        return label;
+        return customLabel != null ? customLabel : label;
     }
 
     @Override

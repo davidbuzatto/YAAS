@@ -261,6 +261,12 @@ public class FA extends AbstractGeometricForm {
         }
     }
     
+    public void resetTransitionsTransformations() {
+        for ( FATransition t : transitions ) {
+            t.resetTransformations();
+        }
+    }
+    
     public void draggTransitions( MouseEvent evt ) {
         for ( FATransition t : transitions ) {
             t.mouseDragged( evt );

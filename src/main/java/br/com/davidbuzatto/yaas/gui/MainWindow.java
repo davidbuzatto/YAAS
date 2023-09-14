@@ -74,10 +74,16 @@ public class MainWindow extends javax.swing.JFrame {
         menuExamples = new javax.swing.JMenu();
         menuDFA = new javax.swing.JMenu();
         miDFASubstring01 = new javax.swing.JMenuItem();
+        miDFAEndsWith00 = new javax.swing.JMenuItem();
         miDFAEndsWith01 = new javax.swing.JMenuItem();
+        miDFAEndsWith10 = new javax.swing.JMenuItem();
+        miDFAEndsWith11 = new javax.swing.JMenuItem();
         miDFA0Even1Odd = new javax.swing.JMenuItem();
         menuNFA = new javax.swing.JMenu();
+        miNFAEndsWith00 = new javax.swing.JMenuItem();
         miNFAEndsWith01 = new javax.swing.JMenuItem();
+        miNFAEndsWith10 = new javax.swing.JMenuItem();
+        miNFAEndsWith11 = new javax.swing.JMenuItem();
         menuENFA = new javax.swing.JMenu();
         miENFADecimalNumber = new javax.swing.JMenuItem();
         menuHelp = new javax.swing.JMenu();
@@ -158,6 +164,15 @@ public class MainWindow extends javax.swing.JFrame {
         });
         menuDFA.add(miDFASubstring01);
 
+        miDFAEndsWith00.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dfa.png"))); // NOI18N
+        miDFAEndsWith00.setText("L = { w | w ends with 00 }");
+        miDFAEndsWith00.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miDFAEndsWith00ActionPerformed(evt);
+            }
+        });
+        menuDFA.add(miDFAEndsWith00);
+
         miDFAEndsWith01.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dfa.png"))); // NOI18N
         miDFAEndsWith01.setText("L = { w | w ends with 01 }");
         miDFAEndsWith01.addActionListener(new java.awt.event.ActionListener() {
@@ -166,6 +181,24 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
         menuDFA.add(miDFAEndsWith01);
+
+        miDFAEndsWith10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dfa.png"))); // NOI18N
+        miDFAEndsWith10.setText("L = { w | w ends with 10 }");
+        miDFAEndsWith10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miDFAEndsWith10ActionPerformed(evt);
+            }
+        });
+        menuDFA.add(miDFAEndsWith10);
+
+        miDFAEndsWith11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dfa.png"))); // NOI18N
+        miDFAEndsWith11.setText("L = { w | w ends with 11 }");
+        miDFAEndsWith11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miDFAEndsWith11ActionPerformed(evt);
+            }
+        });
+        menuDFA.add(miDFAEndsWith11);
 
         miDFA0Even1Odd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dfa.png"))); // NOI18N
         miDFA0Even1Odd.setText(FAExamples.REG_LANG_0_EVEN_1_ODD);
@@ -181,6 +214,15 @@ public class MainWindow extends javax.swing.JFrame {
         menuNFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nfa.png"))); // NOI18N
         menuNFA.setText("NFA");
 
+        miNFAEndsWith00.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nfa.png"))); // NOI18N
+        miNFAEndsWith00.setText("L = { w | w ends with 00 }");
+        miNFAEndsWith00.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miNFAEndsWith00ActionPerformed(evt);
+            }
+        });
+        menuNFA.add(miNFAEndsWith00);
+
         miNFAEndsWith01.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nfa.png"))); // NOI18N
         miNFAEndsWith01.setText("L = { w | w ends with 01 }");
         miNFAEndsWith01.addActionListener(new java.awt.event.ActionListener() {
@@ -189,6 +231,24 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
         menuNFA.add(miNFAEndsWith01);
+
+        miNFAEndsWith10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nfa.png"))); // NOI18N
+        miNFAEndsWith10.setText("L = { w | w ends with 10 }");
+        miNFAEndsWith10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miNFAEndsWith10ActionPerformed(evt);
+            }
+        });
+        menuNFA.add(miNFAEndsWith10);
+
+        miNFAEndsWith11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nfa.png"))); // NOI18N
+        miNFAEndsWith11.setText("L = { w | w ends with 11 }");
+        miNFAEndsWith11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miNFAEndsWith11ActionPerformed(evt);
+            }
+        });
+        menuNFA.add(miNFAEndsWith11);
 
         menuExamples.add(menuNFA);
 
@@ -275,7 +335,31 @@ public class MainWindow extends javax.swing.JFrame {
         Utils.showNotImplementedYetMessage();
     }//GEN-LAST:event_menuItemAboutActionPerformed
 
-    private void createFAInternalFrame( FA fa, boolean maximized ) {
+    private void miNFAEndsWith00ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miNFAEndsWith00ActionPerformed
+        createFAInternalFrame( FAExamples.createNFAEndsWith00(), false );
+    }//GEN-LAST:event_miNFAEndsWith00ActionPerformed
+
+    private void miNFAEndsWith10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miNFAEndsWith10ActionPerformed
+        createFAInternalFrame( FAExamples.createNFAEndsWith10(), false );
+    }//GEN-LAST:event_miNFAEndsWith10ActionPerformed
+
+    private void miNFAEndsWith11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miNFAEndsWith11ActionPerformed
+        createFAInternalFrame( FAExamples.createNFAEndsWith11(), false );
+    }//GEN-LAST:event_miNFAEndsWith11ActionPerformed
+
+    private void miDFAEndsWith00ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDFAEndsWith00ActionPerformed
+        createFAInternalFrame( FAExamples.createDFAEndsWith00(), false );
+    }//GEN-LAST:event_miDFAEndsWith00ActionPerformed
+
+    private void miDFAEndsWith11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDFAEndsWith11ActionPerformed
+        createFAInternalFrame( FAExamples.createDFAEndsWith11(), false );
+    }//GEN-LAST:event_miDFAEndsWith11ActionPerformed
+
+    private void miDFAEndsWith10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDFAEndsWith10ActionPerformed
+        createFAInternalFrame( FAExamples.createDFAEndsWith10(), false );
+    }//GEN-LAST:event_miDFAEndsWith10ActionPerformed
+
+    public void createFAInternalFrame( FA fa, boolean maximized ) {
         
         FAInternalFrame iFrame = new FAInternalFrame( this, fa );
         desktopPane.add( iFrame );
@@ -316,10 +400,16 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuItemExit;
     private javax.swing.JMenu menuNFA;
     private javax.swing.JMenuItem miDFA0Even1Odd;
+    private javax.swing.JMenuItem miDFAEndsWith00;
     private javax.swing.JMenuItem miDFAEndsWith01;
+    private javax.swing.JMenuItem miDFAEndsWith10;
+    private javax.swing.JMenuItem miDFAEndsWith11;
     private javax.swing.JMenuItem miDFASubstring01;
     private javax.swing.JMenuItem miENFADecimalNumber;
+    private javax.swing.JMenuItem miNFAEndsWith00;
     private javax.swing.JMenuItem miNFAEndsWith01;
+    private javax.swing.JMenuItem miNFAEndsWith10;
+    private javax.swing.JMenuItem miNFAEndsWith11;
     private javax.swing.JToolBar toolBar;
     // End of variables declaration//GEN-END:variables
 }

@@ -29,6 +29,7 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.HeadlessException;
 import java.awt.RenderingHints;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
@@ -419,6 +420,12 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         panelTestsAndSimulation.setBorder(javax.swing.BorderFactory.createTitledBorder("Tests and Simulation"));
 
         lblTestString.setText("String:");
+
+        txtTestString.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTestStringActionPerformed(evt);
+            }
+        });
 
         lblTestResult.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblTestResult.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1016,27 +1023,9 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSaveModelAsImageActionPerformed
 
     private void btnTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTestActionPerformed
-        
-        if ( fa.canExecute() ) {
-            
-            if ( fa.accepts( txtTestString.getText() ) ) {
-                setTestToAcceptedInGUI( );
-            } else {
-                setTestToRejectedInGUI( );
-            }
-            
-        } else {
-            
-            JOptionPane.showMessageDialog( 
-                    mainWindow, 
-                    "You must set an initial state!", 
-                    "ERROR", 
-                    JOptionPane.ERROR_MESSAGE );
-            
-        }
-        
+        runSingleTest();
     }//GEN-LAST:event_btnTestActionPerformed
-
+    
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
         
         if ( fa.canExecute() ) {
@@ -1144,7 +1133,12 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnResetActionPerformed
 
     private void btnGenerateEquivalentDFAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateEquivalentDFAActionPerformed
-        Utils.showNotImplementedYetMessage();
+        
+        FA dfa = FAAlgorithms.removeNonDeterminisms( fa );
+        FAAlgorithms.arrangeFAInCircle( dfa, 250, 200, 150 );
+        dfa.resetTransitionsTransformations();
+        mainWindow.createFAInternalFrame( dfa, false );
+        
     }//GEN-LAST:event_btnGenerateEquivalentDFAActionPerformed
 
     private void btnGenerateMinimizedDFAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateMinimizedDFAActionPerformed
@@ -1158,6 +1152,10 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private void btnSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveAsActionPerformed
         Utils.showNotImplementedYetMessage();
     }//GEN-LAST:event_btnSaveAsActionPerformed
+
+    private void txtTestStringActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTestStringActionPerformed
+        runSingleTest();
+    }//GEN-LAST:event_txtTestStringActionPerformed
 
     public void repaintDrawPanel() {
         drawPanel.repaint();
@@ -1184,6 +1182,28 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     
     private void zoomOut() {
         System.out.println( "zoom out" );
+    }
+    
+    private void runSingleTest() throws HeadlessException {
+        
+        if ( fa.canExecute() ) {
+            
+            if ( fa.accepts( txtTestString.getText() ) ) {
+                setTestToAcceptedInGUI( );
+            } else {
+                setTestToRejectedInGUI( );
+            }
+            
+        } else {
+            
+            JOptionPane.showMessageDialog(
+                    mainWindow,
+                    "You must set an initial state!",
+                    "ERROR",
+                    JOptionPane.ERROR_MESSAGE );
+            
+        }
+        
     }
     
     private void updateSimulationButtons( int step ) {
