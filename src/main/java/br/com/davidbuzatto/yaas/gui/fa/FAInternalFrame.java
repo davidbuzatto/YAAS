@@ -26,8 +26,10 @@ import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics2D;
 import java.awt.HeadlessException;
 import java.awt.RenderingHints;
@@ -40,9 +42,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
+import javax.swing.Box;
+import javax.swing.ButtonGroup;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollBar;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -159,7 +171,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         
-        sep04.setVisible( false );
+        sep05.setVisible( false );
         btnZoomIn.setVisible( false );
         btnZoomOut.setVisible( false );
         
@@ -175,6 +187,13 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         btnGroup = new javax.swing.ButtonGroup();
+        popupMenuReorganizeStates = new javax.swing.JPopupMenu();
+        popItemHorizontal = new javax.swing.JMenuItem();
+        popItemVertical = new javax.swing.JMenuItem();
+        popItemDiagonal = new javax.swing.JMenuItem();
+        popItemRectangular = new javax.swing.JMenuItem();
+        popItemCircular = new javax.swing.JMenuItem();
+        popItemByLevel = new javax.swing.JMenuItem();
         toolBar = new javax.swing.JToolBar();
         btnNew = new javax.swing.JButton();
         btnOpen = new javax.swing.JButton();
@@ -188,6 +207,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         sep02 = new javax.swing.JToolBar.Separator();
         btnGenerateEquivalentDFA = new javax.swing.JButton();
         btnGenerateMinimizedDFA = new javax.swing.JButton();
+        btnGenerateAllPossibleTransitionsDFA = new javax.swing.JButton();
         btnGenerateComplementDFA = new javax.swing.JButton();
         hFiller = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         btnShowTransitionControls = new javax.swing.JToggleButton();
@@ -195,6 +215,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnShowGrid = new javax.swing.JToggleButton();
         btnSnapToGrid = new javax.swing.JToggleButton();
         sep04 = new javax.swing.JToolBar.Separator();
+        btnRearrangeStates = new javax.swing.JButton();
+        sep05 = new javax.swing.JToolBar.Separator();
         btnZoomIn = new javax.swing.JButton();
         btnZoomOut = new javax.swing.JButton();
         panelModel = new javax.swing.JPanel();
@@ -217,6 +239,60 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         scrollPaneModel = new javax.swing.JScrollPane();
         drawPanel = new br.com.davidbuzatto.yaas.gui.DrawPanel();
         panelProperties = new javax.swing.JPanel();
+
+        popItemHorizontal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rearrangeHorizontal.png"))); // NOI18N
+        popItemHorizontal.setText("Horizontal");
+        popItemHorizontal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popItemHorizontalActionPerformed(evt);
+            }
+        });
+        popupMenuReorganizeStates.add(popItemHorizontal);
+
+        popItemVertical.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rearrangeVertical.png"))); // NOI18N
+        popItemVertical.setText("Vertical");
+        popItemVertical.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popItemVerticalActionPerformed(evt);
+            }
+        });
+        popupMenuReorganizeStates.add(popItemVertical);
+
+        popItemDiagonal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rearrangeDiagonal.png"))); // NOI18N
+        popItemDiagonal.setText("Diagonal");
+        popItemDiagonal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popItemDiagonalActionPerformed(evt);
+            }
+        });
+        popupMenuReorganizeStates.add(popItemDiagonal);
+
+        popItemRectangular.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rearrangeRectangular.png"))); // NOI18N
+        popItemRectangular.setText("Rectangular");
+        popItemRectangular.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popItemRectangularActionPerformed(evt);
+            }
+        });
+        popupMenuReorganizeStates.add(popItemRectangular);
+
+        popItemCircular.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rearrangeCircular.png"))); // NOI18N
+        popItemCircular.setText("Circular");
+        popItemCircular.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popItemCircularActionPerformed(evt);
+            }
+        });
+        popupMenuReorganizeStates.add(popItemCircular);
+
+        popItemByLevel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rearrangeLevel.png"))); // NOI18N
+        popItemByLevel.setText("By Level");
+        popItemByLevel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popItemByLevelActionPerformed(evt);
+            }
+        });
+        popupMenuReorganizeStates.add(popItemByLevel);
 
         setClosable(true);
         setIconifiable(true);
@@ -353,6 +429,18 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         });
         toolBar.add(btnGenerateMinimizedDFA);
 
+        btnGenerateAllPossibleTransitionsDFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pencil_go.png"))); // NOI18N
+        btnGenerateAllPossibleTransitionsDFA.setToolTipText("Generate All Possible Transitions");
+        btnGenerateAllPossibleTransitionsDFA.setFocusable(false);
+        btnGenerateAllPossibleTransitionsDFA.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnGenerateAllPossibleTransitionsDFA.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnGenerateAllPossibleTransitionsDFA.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerateAllPossibleTransitionsDFAActionPerformed(evt);
+            }
+        });
+        toolBar.add(btnGenerateAllPossibleTransitionsDFA);
+
         btnGenerateComplementDFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/shape_flip_horizontal.png"))); // NOI18N
         btnGenerateComplementDFA.setToolTipText("Generate Complement DFA");
         btnGenerateComplementDFA.setFocusable(false);
@@ -398,6 +486,19 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnSnapToGrid.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         toolBar.add(btnSnapToGrid);
         toolBar.add(sep04);
+
+        btnRearrangeStates.setIcon(new javax.swing.ImageIcon(getClass().getResource("/layers.png"))); // NOI18N
+        btnRearrangeStates.setToolTipText("Rearrange States");
+        btnRearrangeStates.setFocusable(false);
+        btnRearrangeStates.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnRearrangeStates.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnRearrangeStates.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                btnRearrangeStatesMouseReleased(evt);
+            }
+        });
+        toolBar.add(btnRearrangeStates);
+        toolBar.add(sep05);
 
         btnZoomIn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/zoom_in.png"))); // NOI18N
         btnZoomIn.setToolTipText("Zoom In");
@@ -1142,7 +1243,6 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         FA dfa = FAAlgorithms.removeNonDeterminisms( fa );
         FAAlgorithms.arrangeFAInCircle( dfa, 250, 200, 150 );
-        dfa.resetTransitionsTransformations();
         mainWindow.createFAInternalFrame( dfa, false );
         
     }//GEN-LAST:event_btnGenerateEquivalentDFAActionPerformed
@@ -1162,6 +1262,283 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private void txtTestStringActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTestStringActionPerformed
         runSingleTest();
     }//GEN-LAST:event_txtTestStringActionPerformed
+
+    private void btnGenerateAllPossibleTransitionsDFAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateAllPossibleTransitionsDFAActionPerformed
+        Utils.showNotImplementedYetMessage();
+    }//GEN-LAST:event_btnGenerateAllPossibleTransitionsDFAActionPerformed
+
+    private void popItemHorizontalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemHorizontalActionPerformed
+        
+        try {
+            
+            String value = JOptionPane.showInputDialog( "Distance between states:" );
+            
+            if ( value != null ) {
+                
+                int distance = Integer.parseInt( value );
+                if ( distance < 0 ) {
+                    throw new NumberFormatException();
+                }
+                
+                FAAlgorithms.arrangeFAHorizontally( fa, 100, 100, distance );
+                
+                repaintDrawPanel();
+                
+            }
+            
+        } catch ( NumberFormatException exc ) {
+            JOptionPane.showMessageDialog( 
+                    mainWindow, 
+                    "Distance must be greater than zero!", 
+                    "ERROR", 
+                    JOptionPane.ERROR_MESSAGE );
+        }
+        
+    }//GEN-LAST:event_popItemHorizontalActionPerformed
+
+    private void popItemVerticalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemVerticalActionPerformed
+        
+        try {
+            
+            String value = JOptionPane.showInputDialog( "Distance between states:" );
+            
+            if ( value != null ) {
+                
+                int distance = Integer.parseInt( value );
+                if ( distance < 0 ) {
+                    throw new NumberFormatException();
+                }
+                
+                FAAlgorithms.arrangeFAVertically( fa, 100, 100, distance );
+                
+                repaintDrawPanel();
+                
+            }
+            
+        } catch ( NumberFormatException exc ) {
+            JOptionPane.showMessageDialog( 
+                    mainWindow, 
+                    "Distance must be greater than zero!", 
+                    "ERROR", 
+                    JOptionPane.ERROR_MESSAGE );
+        }
+        
+    }//GEN-LAST:event_popItemVerticalActionPerformed
+
+    private void popItemRectangularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemRectangularActionPerformed
+        
+        int size = fa.getStates().size();
+        SpinnerNumberModel spinModel = new SpinnerNumberModel( 1, 1, size == 0 ? 1 : size, 1 );
+        
+        JLabel lblColumns = new JLabel( "How many columns:" );
+        JSpinner spinColumns = new JSpinner( spinModel );
+        JLabel lblDistance = new JLabel( "Distance between states:" );
+        JTextField txtDistance = new JTextField( 20 );
+        
+        JPanel spinPanel = new JPanel();
+        spinPanel.setLayout( new FlowLayout( FlowLayout.LEFT, 0, 0 ) );
+        spinPanel.add( lblColumns );
+        Dimension d = new Dimension( 5, 0 );
+        spinPanel.add( new Box.Filler( d, d, d ) );
+        spinPanel.add( spinColumns );
+        
+        Component[] components = new Component[]{ spinPanel, lblDistance, txtDistance };
+        
+        spinColumns.addAncestorListener( new AncestorListener(){
+            @Override
+            public void ancestorAdded( AncestorEvent evt ) {
+                evt.getComponent().requestFocusInWindow();
+            }
+            @Override
+            public void ancestorRemoved( AncestorEvent evt ) {
+            }
+
+            @Override
+            public void ancestorMoved( AncestorEvent evt ) {
+            }
+        });
+        
+        if ( JOptionPane.showOptionDialog( 
+                mainWindow, 
+                components, 
+                "Input", 
+                JOptionPane.OK_CANCEL_OPTION, 
+                JOptionPane.QUESTION_MESSAGE, 
+                null, 
+                new String[]{ "OK", "Cancel" }, 
+                "OK" ) == JOptionPane.OK_OPTION ) {
+            
+            try {
+                
+                int distance = Integer.parseInt( txtDistance.getText() );
+                if ( distance < 0 ) {
+                    throw new NumberFormatException();
+                }
+
+                FAAlgorithms.arrangeFARectangularly( fa, 100, 100, 
+                        Integer.parseInt( spinColumns.getValue().toString() ), 
+                        distance );
+
+                repaintDrawPanel();
+                
+            } catch ( NumberFormatException exc ) {
+                JOptionPane.showMessageDialog( 
+                        mainWindow, 
+                        "Distance must be greater than zero!", 
+                        "ERROR", 
+                        JOptionPane.ERROR_MESSAGE );
+            }
+            
+        }
+        
+    }//GEN-LAST:event_popItemRectangularActionPerformed
+
+    private void popItemCircularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemCircularActionPerformed
+        
+        try {
+            
+            String value = JOptionPane.showInputDialog( "Circle radius:" );
+            
+            if ( value != null ) {
+                
+                int radius = Integer.parseInt( value );
+                if ( radius < 0 ) {
+                    throw new NumberFormatException();
+                }
+                
+                FAAlgorithms.arrangeFAInCircle( 
+                        fa, radius + 100, radius + 100, radius );
+                
+                repaintDrawPanel();
+                
+            }
+            
+        } catch ( NumberFormatException exc ) {
+            JOptionPane.showMessageDialog( 
+                    mainWindow, 
+                    "Radius must be greater than zero!", 
+                    "ERROR", 
+                    JOptionPane.ERROR_MESSAGE );
+        }
+        
+    }//GEN-LAST:event_popItemCircularActionPerformed
+
+    private void popItemByLevelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemByLevelActionPerformed
+                
+        if ( fa.getInitialState() != null ) {
+        
+            JLabel lblAlign = new JLabel( "Align:" );
+            JRadioButton rbVertical = new JRadioButton( "Vertical" );
+            rbVertical.setSelected( true );
+            JRadioButton rbHorizontal = new JRadioButton( "Horizontal" );
+            ButtonGroup bg = new ButtonGroup();
+            bg.add( rbVertical );
+            bg.add( rbHorizontal );
+
+            JLabel lblDistance = new JLabel( "Distance between levels and states:" );
+            JTextField txtDistance = new JTextField( 20 );
+
+            JPanel spinPanel = new JPanel();
+            spinPanel.setLayout( new FlowLayout( FlowLayout.LEFT, 0, 0 ) );
+            spinPanel.add( lblAlign );
+            Dimension d = new Dimension( 5, 0 );
+            spinPanel.add( new Box.Filler( d, d, d ) );
+            spinPanel.add( rbVertical );
+            spinPanel.add( new Box.Filler( d, d, d ) );
+            spinPanel.add( rbHorizontal );
+
+            Component[] components = new Component[]{ spinPanel, lblDistance, txtDistance };
+
+            txtDistance.addAncestorListener( new AncestorListener(){
+                @Override
+                public void ancestorAdded( AncestorEvent evt ) {
+                    evt.getComponent().requestFocusInWindow();
+                }
+                @Override
+                public void ancestorRemoved( AncestorEvent evt ) {
+                }
+
+                @Override
+                public void ancestorMoved( AncestorEvent evt ) {
+                }
+            });
+
+            if ( JOptionPane.showOptionDialog( 
+                    mainWindow, 
+                    components, 
+                    "Input", 
+                    JOptionPane.OK_CANCEL_OPTION, 
+                    JOptionPane.QUESTION_MESSAGE, 
+                    null, 
+                    new String[]{ "OK", "Cancel" }, 
+                    "OK" ) == JOptionPane.OK_OPTION ) {
+
+                try {
+
+                    int distance = Integer.parseInt( txtDistance.getText() );
+                    if ( distance < 0 ) {
+                        throw new NumberFormatException();
+                    }
+
+                    FAAlgorithms.arrangeFAByLevel( 
+                            fa, 100, 100, distance, rbVertical.isSelected() );
+
+                    repaintDrawPanel();
+
+                } catch ( NumberFormatException exc ) {
+                    JOptionPane.showMessageDialog( 
+                            mainWindow, 
+                            "Distance must be greater than zero!", 
+                            "ERROR", 
+                            JOptionPane.ERROR_MESSAGE );
+                }
+
+            }
+        
+        } else {
+            
+            JOptionPane.showMessageDialog( 
+                        mainWindow, 
+                        "Your Finite Automata must have an initial state!", 
+                        "ERROR", 
+                        JOptionPane.ERROR_MESSAGE );
+            
+        }
+        
+    }//GEN-LAST:event_popItemByLevelActionPerformed
+
+    private void popItemDiagonalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemDiagonalActionPerformed
+        
+        try {
+            
+            String value = JOptionPane.showInputDialog( "Distance between states:" );
+            
+            if ( value != null ) {
+                
+                int distance = Integer.parseInt( value );
+                if ( distance < 0 ) {
+                    throw new NumberFormatException();
+                }
+                
+                FAAlgorithms.arrangeFADiagonally( fa, 100, 100, distance );
+                
+                repaintDrawPanel();
+                
+            }
+            
+        } catch ( NumberFormatException exc ) {
+            JOptionPane.showMessageDialog( 
+                    mainWindow, 
+                    "Distance must be greater than zero!", 
+                    "ERROR", 
+                    JOptionPane.ERROR_MESSAGE );
+        }
+        
+    }//GEN-LAST:event_popItemDiagonalActionPerformed
+
+    private void btnRearrangeStatesMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRearrangeStatesMouseReleased
+        popupMenuReorganizeStates.show( evt.getComponent(), 0, 0 );
+    }//GEN-LAST:event_btnRearrangeStatesMouseReleased
 
     public void repaintDrawPanel() {
         drawPanel.repaint();
@@ -1306,6 +1683,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         btnGenerateEquivalentDFA.setEnabled( false );
         btnGenerateMinimizedDFA.setEnabled( false );
+        btnGenerateAllPossibleTransitionsDFA.setEnabled( false );
         btnGenerateComplementDFA.setEnabled( false );
         
         btnTest.setEnabled( false );
@@ -1332,6 +1710,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         btnGenerateEquivalentDFA.setEnabled( true );
         btnGenerateMinimizedDFA.setEnabled( true );
+        btnGenerateAllPossibleTransitionsDFA.setEnabled( true );
         btnGenerateComplementDFA.setEnabled( true );
         
         btnTest.setEnabled( true );
@@ -1375,12 +1754,17 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 DrawingConstants.STATE_RADIUS;
         
     }
+
+    public void setCurrentState( int currentState ) {
+        this.currentState = currentState;
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton btnAddState;
     private javax.swing.JToggleButton btnAddTransition;
     private javax.swing.JButton btnBatchTest;
     private javax.swing.JButton btnFirstStep;
+    private javax.swing.JButton btnGenerateAllPossibleTransitionsDFA;
     private javax.swing.JButton btnGenerateComplementDFA;
     private javax.swing.JButton btnGenerateEquivalentDFA;
     private javax.swing.JButton btnGenerateMinimizedDFA;
@@ -1391,6 +1775,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnNextStep;
     private javax.swing.JButton btnOpen;
     private javax.swing.JButton btnPreviousStep;
+    private javax.swing.JButton btnRearrangeStates;
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSaveAs;
@@ -1410,11 +1795,19 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JPanel panelModel;
     private javax.swing.JPanel panelProperties;
     private javax.swing.JPanel panelTestsAndSimulation;
+    private javax.swing.JMenuItem popItemByLevel;
+    private javax.swing.JMenuItem popItemCircular;
+    private javax.swing.JMenuItem popItemDiagonal;
+    private javax.swing.JMenuItem popItemHorizontal;
+    private javax.swing.JMenuItem popItemRectangular;
+    private javax.swing.JMenuItem popItemVertical;
+    private javax.swing.JPopupMenu popupMenuReorganizeStates;
     private javax.swing.JScrollPane scrollPaneModel;
     private javax.swing.JToolBar.Separator sep01;
     private javax.swing.JToolBar.Separator sep02;
     private javax.swing.JToolBar.Separator sep03;
     private javax.swing.JToolBar.Separator sep04;
+    private javax.swing.JToolBar.Separator sep05;
     private javax.swing.JToolBar.Separator sepTS01;
     private javax.swing.JToolBar.Separator sepTS02;
     private javax.swing.JToolBar toolBar;

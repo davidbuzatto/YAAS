@@ -460,20 +460,16 @@ public class Utils {
         Component[] components = new Component[]{ lbl, txtField, chkBox };
         
         txtField.addAncestorListener( new AncestorListener(){
-            
             @Override
             public void ancestorAdded( AncestorEvent evt ) {
                 evt.getComponent().requestFocusInWindow();
             }
-
             @Override
             public void ancestorRemoved( AncestorEvent evt ) {
             }
-
             @Override
             public void ancestorMoved( AncestorEvent evt ) {
             }
-            
         });
         
         if ( initialValue != null ) {

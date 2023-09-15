@@ -362,6 +362,8 @@ public class MainWindow extends javax.swing.JFrame {
     public void createFAInternalFrame( FA fa, boolean maximized ) {
         
         FAInternalFrame iFrame = new FAInternalFrame( this, fa );
+        iFrame.setCurrentState( fa.getStates().size() );
+        
         desktopPane.add( iFrame );
         iFrame.setVisible( true );
         

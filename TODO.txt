@@ -1,12 +1,9 @@
-Algorithms for automata layout. <- linear (vertical and horizontal), circular, centroid, rectangular, levels
-Zoom-in and zoom-out;
-
-NFA and eNFA to DFA;   <- ok
 DFA Complete specification
 DFA Complement
 DFA Minimization
 
 Implement main menu.
 
+Zoom-in and zoom-out; (not now)
 Specialized versions of states (Moore machines); ???
 Specialized versions of transitions (eNFAs, GNFAs, PDAs, Mealy machines and Turing machines); ???
