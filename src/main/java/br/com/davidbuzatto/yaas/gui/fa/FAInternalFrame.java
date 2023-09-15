@@ -22,7 +22,6 @@ import br.com.davidbuzatto.yaas.gui.fa.properties.FAPropertiesPanel;
 import br.com.davidbuzatto.yaas.gui.fa.properties.FAStatePropertiesPanel;
 import br.com.davidbuzatto.yaas.gui.fa.properties.FATransitionPropertiesPanel;
 import br.com.davidbuzatto.yaas.util.ApplicationPreferences;
-import br.com.davidbuzatto.yaas.util.CustomCursors;
 import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.CardLayout;
@@ -160,6 +159,10 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         
+        sep04.setVisible( false );
+        btnZoomIn.setVisible( false );
+        btnZoomOut.setVisible( false );
+        
     }
     
     /**
@@ -188,7 +191,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnGenerateComplementDFA = new javax.swing.JButton();
         hFiller = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         btnShowTransitionControls = new javax.swing.JToggleButton();
-        seo03 = new javax.swing.JToolBar.Separator();
+        sep03 = new javax.swing.JToolBar.Separator();
         btnShowGrid = new javax.swing.JToggleButton();
         btnSnapToGrid = new javax.swing.JToggleButton();
         sep04 = new javax.swing.JToolBar.Separator();
@@ -374,7 +377,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         toolBar.add(btnShowTransitionControls);
-        toolBar.add(seo03);
+        toolBar.add(sep03);
 
         btnShowGrid.setIcon(new javax.swing.ImageIcon(getClass().getResource("/note.png"))); // NOI18N
         btnShowGrid.setToolTipText("Show/Hide Grid");
@@ -735,12 +738,10 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnShowGridActionPerformed
 
     private void btnZoomInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZoomInActionPerformed
-        Utils.showNotImplementedYetMessage();
         zoomIn();
     }//GEN-LAST:event_btnZoomInActionPerformed
 
     private void btnZoomOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZoomOutActionPerformed
-        Utils.showNotImplementedYetMessage();
         zoomOut();
     }//GEN-LAST:event_btnZoomOutActionPerformed
 
@@ -1410,9 +1411,9 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JPanel panelProperties;
     private javax.swing.JPanel panelTestsAndSimulation;
     private javax.swing.JScrollPane scrollPaneModel;
-    private javax.swing.JToolBar.Separator seo03;
     private javax.swing.JToolBar.Separator sep01;
     private javax.swing.JToolBar.Separator sep02;
+    private javax.swing.JToolBar.Separator sep03;
     private javax.swing.JToolBar.Separator sep04;
     private javax.swing.JToolBar.Separator sepTS01;
     private javax.swing.JToolBar.Separator sepTS02;

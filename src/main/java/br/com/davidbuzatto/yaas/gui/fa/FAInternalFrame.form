@@ -257,7 +257,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnShowTransitionControlsActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JToolBar$Separator" name="seo03">
+        <Component class="javax.swing.JToolBar$Separator" name="sep03">
         </Component>
         <Component class="javax.swing.JToggleButton" name="btnShowGrid">
           <Properties>
