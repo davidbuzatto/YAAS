@@ -219,15 +219,15 @@ public class DPanel extends JPanel {
         g2d.setColor( Color.WHITE );
         g2d.fillRect( 0, 0, getWidth(), getHeight() );
         
-        g2d.setStroke(DrawingConstants.TRANSITION_STROKE );
+        g2d.setStroke( DrawingConstants.TRANSITION_STROKE );
         g2d.setColor( Color.BLACK );
         g2d.draw( curve );
         
         originArrow.draw( g2d );
         targetArrow.draw( g2d );
         
-        g2d.setStroke(DrawingConstants.TRANSITION_CP_STROKE );
-        g2d.setColor(DrawingConstants.TRANSITION_CP_COLOR );
+        g2d.setStroke( DrawingConstants.TRANSITION_CP_STROKE );
+        g2d.setColor( DrawingConstants.TRANSITION_CP_COLOR );
         g2d.drawLine( cx, cy, c1x, c1y );
         g2d.drawLine( cx, cy, c2x, c2y );
         g2d.fillOval(x1 - DrawingConstants.TRANSITION_CP_RADIUS, 

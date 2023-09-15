@@ -35,7 +35,7 @@ public class FATransitionFunctionTableCellRenderer implements TableCellRenderer 
             boolean isSelected, boolean hasFocus, int row, int column ) {
         
         JLabel lbl = new JLabel( value.toString() );
-        lbl.setFont(DrawingConstants.DEFAULT_TABLE_FONT );
+        lbl.setFont( DrawingConstants.DEFAULT_TABLE_FONT );
         lbl.setHorizontalAlignment( JLabel.CENTER );
         
         return lbl;

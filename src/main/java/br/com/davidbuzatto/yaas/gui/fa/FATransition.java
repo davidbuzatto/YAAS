@@ -101,41 +101,41 @@ public class FATransition extends AbstractGeometricForm {
         label.setStroke( stroke );
         label.setFont( font );
         label.setStrokeColor( strokeColor );
-        label.setMouseHoverStrokeColor(DrawingConstants.TRANSITION_MOUSE_HOVER_STROKE_COLOR );
-        label.setMouseHoverFillColor(DrawingConstants.TRANSITION_MOUSE_HOVER_FILL_COLOR );
-        label.setSelectedStrokeColor(DrawingConstants.TRANSITION_SELECTED_STROKE_COLOR );
-        label.setSelectedFillColor(DrawingConstants.TRANSITION_SELECTED_FILL_COLOR );
+        label.setMouseHoverStrokeColor( DrawingConstants.TRANSITION_MOUSE_HOVER_STROKE_COLOR );
+        label.setMouseHoverFillColor( DrawingConstants.TRANSITION_MOUSE_HOVER_FILL_COLOR );
+        label.setSelectedStrokeColor( DrawingConstants.TRANSITION_SELECTED_STROKE_COLOR );
+        label.setSelectedFillColor( DrawingConstants.TRANSITION_SELECTED_FILL_COLOR );
         updateLabel();
         
         targetCP = new ControlPoint();
         targetCP.setStroke( stroke );
-        targetCP.setRadius(DrawingConstants.TRANSITION_CP_TARGET_RADIUS );
-        targetCP.setFillColor(DrawingConstants.TRANSITION_CP_TARGET_COLOR );
-        targetCP.setMouseHoverStrokeColor(DrawingConstants.TRANSITION_CP_MOUSE_HOVER_STROKE_COLOR );
+        targetCP.setRadius( DrawingConstants.TRANSITION_CP_TARGET_RADIUS );
+        targetCP.setFillColor( DrawingConstants.TRANSITION_CP_TARGET_COLOR );
+        targetCP.setMouseHoverStrokeColor( DrawingConstants.TRANSITION_CP_MOUSE_HOVER_STROKE_COLOR );
         
         centralCP = new ControlPoint();
         centralCP.setStroke( stroke );
-        centralCP.setRadius(DrawingConstants.TRANSITION_CP_RADIUS );
-        centralCP.setFillColor(DrawingConstants.TRANSITION_CP_COLOR );
-        centralCP.setMouseHoverStrokeColor(DrawingConstants.TRANSITION_CP_MOUSE_HOVER_STROKE_COLOR );
+        centralCP.setRadius( DrawingConstants.TRANSITION_CP_RADIUS );
+        centralCP.setFillColor( DrawingConstants.TRANSITION_CP_COLOR );
+        centralCP.setMouseHoverStrokeColor( DrawingConstants.TRANSITION_CP_MOUSE_HOVER_STROKE_COLOR );
         
         leftCP = new ControlPoint();
         leftCP.setStroke( stroke );
-        leftCP.setRadius(DrawingConstants.TRANSITION_CP_RADIUS );
-        leftCP.setFillColor(DrawingConstants.TRANSITION_CP_LEFT_COLOR );
-        leftCP.setMouseHoverStrokeColor(DrawingConstants.TRANSITION_CP_MOUSE_HOVER_STROKE_COLOR );
+        leftCP.setRadius( DrawingConstants.TRANSITION_CP_RADIUS );
+        leftCP.setFillColor( DrawingConstants.TRANSITION_CP_LEFT_COLOR );
+        leftCP.setMouseHoverStrokeColor( DrawingConstants.TRANSITION_CP_MOUSE_HOVER_STROKE_COLOR );
         
         rightCP = new ControlPoint();
         rightCP.setStroke( stroke );
-        rightCP.setRadius(DrawingConstants.TRANSITION_CP_RADIUS );
-        rightCP.setFillColor(DrawingConstants.TRANSITION_CP_RIGHT_COLOR );
-        rightCP.setMouseHoverStrokeColor(DrawingConstants.TRANSITION_CP_MOUSE_HOVER_STROKE_COLOR );
+        rightCP.setRadius( DrawingConstants.TRANSITION_CP_RADIUS );
+        rightCP.setFillColor( DrawingConstants.TRANSITION_CP_RIGHT_COLOR );
+        rightCP.setMouseHoverStrokeColor( DrawingConstants.TRANSITION_CP_MOUSE_HOVER_STROKE_COLOR );
         
         updateStartAndEndPoints();
         
         arrow = new Arrow();
-        arrow.setMouseHoverStrokeColor(DrawingConstants.TRANSITION_MOUSE_HOVER_STROKE_COLOR );
-        arrow.setSelectedStrokeColor(DrawingConstants.TRANSITION_SELECTED_STROKE_COLOR );
+        arrow.setMouseHoverStrokeColor( DrawingConstants.TRANSITION_MOUSE_HOVER_STROKE_COLOR );
+        arrow.setSelectedStrokeColor( DrawingConstants.TRANSITION_SELECTED_STROKE_COLOR );
         arrow.setAngle( Math.atan2( 
                 y2 - rightCP.getY1(), x2 - rightCP.getX1() ) );
         arrow.setX1( x2 );

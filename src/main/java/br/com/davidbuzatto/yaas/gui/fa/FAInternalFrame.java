@@ -17,6 +17,7 @@
 package br.com.davidbuzatto.yaas.gui.fa;
 
 import br.com.davidbuzatto.yaas.gui.MainWindow;
+import br.com.davidbuzatto.yaas.gui.ZoomFacility;
 import br.com.davidbuzatto.yaas.gui.fa.properties.FAPropertiesPanel;
 import br.com.davidbuzatto.yaas.gui.fa.properties.FAStatePropertiesPanel;
 import br.com.davidbuzatto.yaas.gui.fa.properties.FATransitionPropertiesPanel;
@@ -92,6 +93,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private Color txtTestStringDefaultFC;
     private Color lblTestResultDefaultFC;
     
+    private ZoomFacility zoomFacility;
+    
     /**
      * Creates new form FAInternalFrame
      */
@@ -103,12 +106,14 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         this.mainWindow = mainWindow;
         this.simulationSteps = new ArrayList<>();
-        
+       
         if ( fa == null ) {
             this.fa = new FA();
         } else {
             this.fa = fa;
         }
+       
+        this.zoomFacility = new ZoomFacility();
         
         initComponents();
         customInit();
@@ -132,7 +137,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         faPPanel.readProperties();
         cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
         
-        drawPanel.setCursor( CustomCursors.MOVE_CURSOR );
+        drawPanel.setCursor( Cursor.getPredefinedCursor( Cursor.HAND_CURSOR ) );
         repaintDrawPanel();
         
         txtTestStringDefaultBC = txtTestString.getBackground();
@@ -901,7 +906,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 int yAmount = evt.getY() - yPrev;
                 xPrev += xAmount;
                 yPrev += yAmount;
-                fa.move( xAmount, yAmount  );
+                fa.move( xAmount, yAmount );
             }
             
         } else if ( btnAddTransition.isSelected() ) {
@@ -1177,11 +1182,29 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     }
     
     private void zoomIn() {
-        System.out.println( "zoom in" );
+        
+        zoomFacility.zoomIn();
+        
+        btnZoomOut.setEnabled( true );
+        if ( !zoomFacility.canZoomIn() ) {
+            btnZoomIn.setEnabled( false );
+        }
+        
+        repaintDrawPanel();
+        
     }
     
     private void zoomOut() {
-        System.out.println( "zoom out" );
+        
+        zoomFacility.zoomOut();
+        
+        btnZoomIn.setEnabled( true );
+        if ( !zoomFacility.canZoomOut() ) {
+            btnZoomOut.setEnabled( false );
+        }
+        
+        repaintDrawPanel();
+        
     }
     
     private void runSingleTest() throws HeadlessException {
@@ -1263,7 +1286,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         fa.deselectAll();
         cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
         repaintDrawPanel();
-        drawPanel.setCursor( CustomCursors.MOVE_CURSOR );
+        drawPanel.setCursor( Cursor.getPredefinedCursor( Cursor.HAND_CURSOR ) );
     }
     
     private void disableGUI() {

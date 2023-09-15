@@ -498,7 +498,7 @@ public class FAExamples {
         int currentState = 0;
         
         FAState s0 = new FAState();
-        s0.setX1( 80 );
+        s0.setX1( 75 );
         s0.setY1( 150 );
         s0.setInitial( true );
         s0.setLabel( "q" + currentState++ );
@@ -540,7 +540,7 @@ public class FAExamples {
         s2.setLabel( "q" + currentState++ );
         
         FAState s3 = new FAState();
-        s3.setX1( 580 );
+        s3.setX1( 575 );
         s3.setY1( 150 );
         s3.setLabel( "q" + currentState++ );
         
@@ -550,7 +550,7 @@ public class FAExamples {
         s4.setLabel( "q" + currentState++ );
         
         FAState s5 = new FAState();
-        s5.setX1( 680 );
+        s5.setX1( 700 );
         s5.setY1( 150 );
         s5.setAccepting( true );
         s5.setLabel( "q" + currentState++ );
@@ -560,6 +560,7 @@ public class FAExamples {
         FATransition t2 = new FATransition( s1, s1, n );
         FATransition t3 = new FATransition( s1, s2, '.' );
         FATransition t4 = new FATransition( s1, s4, n );
+        t4.moveLabel( -70, 25 );
         FATransition t5 = new FATransition( s2, s3, n );
         FATransition t6 = new FATransition( s3, s3, n );
         FATransition t7 = new FATransition( s3, s5, CharacterConstants.EMPTY_STRING );

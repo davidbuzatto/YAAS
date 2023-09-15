@@ -72,7 +72,7 @@ public class DrawPanel extends JPanel {
         g2d.fillRect( 0, 0, getWidth(), getHeight() );
         
         if ( showGrid ) {
-            g2d.setColor(DrawingConstants.GRID_COLOR );
+            g2d.setColor( DrawingConstants.GRID_COLOR );
             for ( int i = 0; i <= getHeight(); i += DrawingConstants.STATE_RADIUS ) {
                 g2d.drawLine( 0, i, getWidth(), i );
             }
@@ -87,8 +87,8 @@ public class DrawPanel extends JPanel {
         
             if ( drawingTempTransition ) {
 
-                g2d.setStroke(DrawingConstants.TEMP_TRANSITION_STROKE );
-                g2d.setColor(DrawingConstants.TEMP_TRANSITION_COLOR );
+                g2d.setStroke( DrawingConstants.TEMP_TRANSITION_STROKE );
+                g2d.setColor( DrawingConstants.TEMP_TRANSITION_COLOR );
 
                 g2d.drawLine( 
                         tempTransitionX1, tempTransitionY1, 
@@ -96,7 +96,7 @@ public class DrawPanel extends JPanel {
 
                 tempTransitionArrow.setX1( tempTransitionX2 );
                 tempTransitionArrow.setY1( tempTransitionY2 );
-                tempTransitionArrow.setStrokeColor(DrawingConstants.TEMP_TRANSITION_COLOR );
+                tempTransitionArrow.setStrokeColor( DrawingConstants.TEMP_TRANSITION_COLOR );
                 tempTransitionArrow.setAngle( Math.atan2( 
                         tempTransitionY2 - tempTransitionY1, 
                         tempTransitionX2 - tempTransitionX1 ) );
