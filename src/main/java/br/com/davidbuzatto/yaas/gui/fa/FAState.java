@@ -50,6 +50,9 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
         font = DrawingConstants.DEFAULT_FONT;
         stroke = DrawingConstants.STATE_STROKE;
         
+        fillColor = DrawingConstants.STATE_FILL_COLOR;
+        strokeColor = DrawingConstants.STATE_STROKE_COLOR;
+        
         mouseHoverFillColor = DrawingConstants.STATE_MOUSE_HOVER_FILL_COLOR;
         mouseHoverStrokeColor = DrawingConstants.STATE_MOUSE_HOVER_STROKE_COLOR;
         

@@ -1,9 +1,8 @@
-DFA Complete specification
-DFA Complement
-DFA Minimization
+DFA Minimization;
 
+Implement all missing functionalities in FAInternalFrame;
 Implement main menu.
 
-Zoom-in and zoom-out; (not now)
-Specialized versions of states (Moore machines); ???
-Specialized versions of transitions (eNFAs, GNFAs, PDAs, Mealy machines and Turing machines); ???
+??? Specialized versions of states (Moore machines);
+??? Specialized versions of transitions (PDAs, Mealy machines and Turing machines);
+??? Zoom-in and zoom-out;

@@ -293,32 +293,32 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGenerateMinimizedDFAActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="btnGenerateAllPossibleTransitionsDFA">
+        <Component class="javax.swing.JButton" name="btnAddAllMissingTransitionsDFA">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/pencil_go.png"/>
             </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Generate All Possible Transitions"/>
+            <Property name="toolTipText" type="java.lang.String" value="Add All Missing Transitions"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGenerateAllPossibleTransitionsDFAActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddAllMissingTransitionsDFAActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="btnGenerateComplementDFA">
+        <Component class="javax.swing.JButton" name="btnComplementDFA">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/shape_flip_horizontal.png"/>
             </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Generate Complement DFA"/>
+            <Property name="toolTipText" type="java.lang.String" value="Complement the DFA"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGenerateComplementDFAActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnComplementDFAActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.Box$Filler" name="hFiller">

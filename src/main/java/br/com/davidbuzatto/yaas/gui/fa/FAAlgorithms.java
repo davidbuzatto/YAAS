@@ -16,6 +16,9 @@
  */
 package br.com.davidbuzatto.yaas.gui.fa;
 
+import br.com.davidbuzatto.yaas.util.CharacterConstants;
+import br.com.davidbuzatto.yaas.util.DrawingConstants;
+import java.awt.Color;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,6 +31,7 @@ import java.util.Objects;
 import java.util.Queue;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 /**
  * A set of utilitary methods to perform algorithms related to Finite Automata.
@@ -140,7 +144,7 @@ public class FAAlgorithms {
      * @param nfa The Finite Automaton to be processed.
      * @return A new Finite Automaton without any non-determinisms.
      */
-    public static FA removeNonDeterminisms( FA nfa ) {
+    public static FA generateDFARemovingNondeterminisms( FA nfa ) {
         
         FA dfa = new FA();
         int currentState = 0;
@@ -251,6 +255,240 @@ public class FAAlgorithms {
         
         Collections.sort( dfa.getStates() );
         return dfa;
+        
+    }
+    
+    private static class FAStatePair {
+        
+        FAState s1;
+        FAState s2;
+        Set<FAState> ss;
+
+        public FAStatePair( FAState s1, FAState s2 ) {
+            this.s1 = s1;
+            this.s2 = s2;
+            ss = new HashSet<>();
+            ss.add( s1 );
+            ss.add( s2 );
+        }
+        
+        @Override
+        public String toString() {
+            return "FAStatePair{" + s1 + ", " + s2 + '}';
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 3;
+            hash = 73 * hash + Objects.hashCode( this.ss );
+            return hash;
+        }
+
+        @Override
+        public boolean equals( Object obj ) {
+            if ( this == obj ) {
+                return true;
+            }
+            if ( obj == null ) {
+                return false;
+            }
+            if ( getClass() != obj.getClass() ) {
+                return false;
+            }
+            final FAStatePair other = (FAStatePair) obj;
+            return Objects.equals( this.ss, other.ss );
+        }
+        
+    }
+    
+    /**
+     * Uses the Myhill-Nerode Theorem (Table filling method) to create a
+     * minimized DFA.
+     * 
+     * @param fa The DFA to be processed.
+     * @return An equivalent DFA, but minimized.
+     */
+    public static FA generateMinimizedDFA( FA fa ) {
+        
+        FA dfa = new FA();
+        
+        /* Myhill-Nerode Theorem:
+         *
+         * 1) Using all states, create all possible pairs;
+         * 2) Remove all pairs such one element is an accepting state and the
+         *    other is not;
+         * 3) For each remaining pair, verify the transition function
+         *    incrementing the input length. If the transition is not equal,
+         *    remove the pair;
+         * 4) The remaining pairs must be combined with theris equivalent
+         *    states.
+         */
+        
+        // 1) Using all states, create all possible pairs;
+        System.out.println( "Step 01" );
+        List<FAState> states = fa.getStates();
+        Set<FAStatePair> pairs = new LinkedHashSet<>();
+        int sSize = states.size();
+        for ( int i = 0; i < sSize; i++ ) {
+            for ( int j = i+1; j < sSize; j++ ) {
+                pairs.add( new FAStatePair( states.get( i ), states.get( j ) ) );
+            }
+        }
+        
+        for ( FAStatePair sp : pairs ) {
+            System.out.println( sp );
+        }
+        
+        // 2) Remove all pairs such one element is an accepting state and the
+        //    other is not;
+        System.out.println( "Step 02" );
+        Set<FAStatePair> toRemove = new HashSet<>();
+        for ( FAStatePair sp : pairs ) {
+            if ( ( sp.s1.isAccepting() && !sp.s2.isAccepting() ) || 
+                 ( !sp.s1.isAccepting() && sp.s2.isAccepting() ) ) {
+                toRemove.add( sp );
+            }
+        }
+        
+        for ( FAStatePair sp : toRemove ) {
+            System.out.println( "remove step 02: " + sp );
+        }
+        pairs.removeAll( toRemove );
+        
+        for ( FAStatePair sp : pairs ) {
+            System.out.println( sp );
+        }
+        
+        // 3) For each remaining pair, verify the transition function
+        //    incrementing the input length. If the transition is not equal,
+        //    remove the pair;
+        System.out.println( "Step 03" );
+        toRemove.clear();
+        for ( FAStatePair sp : pairs ) {
+            // processing transitions - looking for distinguishable states
+            
+        }
+        
+        for ( FAStatePair sp : toRemove ) {
+            System.out.println( "remove step 03: " + sp );
+        }
+        pairs.removeAll( toRemove );
+        
+        for ( FAStatePair sp : pairs ) {
+            System.out.println( sp );
+        }
+        
+        // 4) The remaining pairs must be combined with theris equivalent
+        //    states.
+        System.out.println( "Step 04" );
+                
+        return dfa;
+        
+    }
+    
+    /**
+     * Add all missing transitions to a DFA.
+     * 
+     * @param fa The DFA to be processed.
+     * @param currentState Whats the current state counter.
+     */
+    public static void addAllMissingTransitions( FA fa, int currentState ) {
+        addAllMissingTransitions( 
+                fa, 
+                currentState, 
+                true, 
+                DrawingConstants.NULL_STATE_FILL_COLOR,
+                DrawingConstants.NULL_STATE_STROKE_COLOR,
+                DrawingConstants.NULL_TRANSITION_STROKE_COLOR );
+    }
+    
+    /**
+     * Add all missing transitions to a DFA.
+     * 
+     * @param fa The DFA to be processed.
+     * @param currentState Whats the current state counter.
+     * @param useNullCustomLabel If it will use the empty set symbol do set the
+     * custom label of the generated state (null state).
+     * @param nullStateFillColor The color to set the fill in the null state.
+     * @param nullStateStrokeColor The color to set the stroke in the null state.
+     * @param nullTransitionStrokeColor The color to set in thes troke the null transition.
+     */
+    public static void addAllMissingTransitions( 
+            FA fa, int currentState, 
+            boolean useNullCustomLabel,
+            Color nullStateFillColor,
+            Color nullStateStrokeColor,
+            Color nullTransitionStrokeColor ) {
+        
+        Map<FAState, Set<Character>> allMissing = new HashMap<>();
+        Map<FAState, Map<Character, List<FAState>>> delta = fa.getDelta();
+        List<Character> alphabet = new ArrayList<>( fa.getAlphabet() );
+        
+        for ( FAState s : fa.getStates() ) {
+            Set<Character> a = new TreeSet<>( alphabet );
+            allMissing.put( s, a );
+        }
+        
+        Set<FAState> toRemove = new HashSet<>();
+        
+        for ( Map.Entry<FAState, Map<Character, List<FAState>>> e : delta.entrySet() ) {
+            for ( Map.Entry<Character, List<FAState>> t : e.getValue().entrySet() ) {
+                Set<Character> cSet = allMissing.get( e.getKey() );
+                if ( !cSet.isEmpty() ) {
+                    cSet.remove( t.getKey() );
+                    if ( cSet.isEmpty() ) {
+                        toRemove.add( e.getKey() );
+                    }
+                }
+            }
+        }
+        
+        for ( FAState s : toRemove ) {
+            allMissing.remove( s );
+        }
+        
+        if ( !allMissing.isEmpty() ) {
+            
+            FAState nullState = new FAState();
+            nullState.setLabel( "q" + currentState );
+            if ( useNullCustomLabel ) {
+                nullState.setCustomLabel( CharacterConstants.EMPTY_SET.toString() );
+            }
+            nullState.setFillColor( nullStateFillColor );
+            nullState.setStrokeColor( nullStateStrokeColor );
+            nullState.setX1( 200 );
+            nullState.setY1( 200 );
+            fa.addState( nullState );
+            
+            FATransition nullTransition = new FATransition( 
+                    nullState, nullState, alphabet );
+            nullTransition.setStrokeColor( nullStateStrokeColor );
+            fa.addTransition( nullTransition );
+            
+            for ( Map.Entry<FAState, Set<Character>> e : allMissing.entrySet() ) {
+                List<Character> s = new ArrayList<>( e.getValue() );
+                FATransition t = new FATransition( e.getKey(), nullState, s );
+                t.setStrokeColor( nullTransitionStrokeColor );
+                fa.addTransition( t );
+            }
+            
+        }
+        
+    }
+    
+    public static void complementDFA( FA fa, int currentState ) {
+        
+        addAllMissingTransitions( 
+                fa, 
+                currentState, 
+                false, 
+                DrawingConstants.STATE_FILL_COLOR,
+                DrawingConstants.STATE_STROKE_COLOR,
+                DrawingConstants.TRANSITION_STROKE_COLOR );
+        
+        for ( FAState s : fa.getStates() ) {
+            s.setAccepting( !s.isAccepting() );
+        }
         
     }
     

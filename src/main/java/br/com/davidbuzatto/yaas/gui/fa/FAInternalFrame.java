@@ -207,8 +207,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         sep02 = new javax.swing.JToolBar.Separator();
         btnGenerateEquivalentDFA = new javax.swing.JButton();
         btnGenerateMinimizedDFA = new javax.swing.JButton();
-        btnGenerateAllPossibleTransitionsDFA = new javax.swing.JButton();
-        btnGenerateComplementDFA = new javax.swing.JButton();
+        btnAddAllMissingTransitionsDFA = new javax.swing.JButton();
+        btnComplementDFA = new javax.swing.JButton();
         hFiller = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         btnShowTransitionControls = new javax.swing.JToggleButton();
         sep03 = new javax.swing.JToolBar.Separator();
@@ -429,29 +429,29 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         });
         toolBar.add(btnGenerateMinimizedDFA);
 
-        btnGenerateAllPossibleTransitionsDFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pencil_go.png"))); // NOI18N
-        btnGenerateAllPossibleTransitionsDFA.setToolTipText("Generate All Possible Transitions");
-        btnGenerateAllPossibleTransitionsDFA.setFocusable(false);
-        btnGenerateAllPossibleTransitionsDFA.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnGenerateAllPossibleTransitionsDFA.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnGenerateAllPossibleTransitionsDFA.addActionListener(new java.awt.event.ActionListener() {
+        btnAddAllMissingTransitionsDFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pencil_go.png"))); // NOI18N
+        btnAddAllMissingTransitionsDFA.setToolTipText("Add All Missing Transitions");
+        btnAddAllMissingTransitionsDFA.setFocusable(false);
+        btnAddAllMissingTransitionsDFA.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAddAllMissingTransitionsDFA.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAddAllMissingTransitionsDFA.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGenerateAllPossibleTransitionsDFAActionPerformed(evt);
+                btnAddAllMissingTransitionsDFAActionPerformed(evt);
             }
         });
-        toolBar.add(btnGenerateAllPossibleTransitionsDFA);
+        toolBar.add(btnAddAllMissingTransitionsDFA);
 
-        btnGenerateComplementDFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/shape_flip_horizontal.png"))); // NOI18N
-        btnGenerateComplementDFA.setToolTipText("Generate Complement DFA");
-        btnGenerateComplementDFA.setFocusable(false);
-        btnGenerateComplementDFA.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnGenerateComplementDFA.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnGenerateComplementDFA.addActionListener(new java.awt.event.ActionListener() {
+        btnComplementDFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/shape_flip_horizontal.png"))); // NOI18N
+        btnComplementDFA.setToolTipText("Complement the DFA");
+        btnComplementDFA.setFocusable(false);
+        btnComplementDFA.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnComplementDFA.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnComplementDFA.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGenerateComplementDFAActionPerformed(evt);
+                btnComplementDFAActionPerformed(evt);
             }
         });
-        toolBar.add(btnGenerateComplementDFA);
+        toolBar.add(btnComplementDFA);
         toolBar.add(hFiller);
 
         btnShowTransitionControls.setIcon(new javax.swing.ImageIcon(getClass().getResource("/shape_square_edit.png"))); // NOI18N
@@ -1241,19 +1241,51 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
     private void btnGenerateEquivalentDFAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateEquivalentDFAActionPerformed
         
-        FA dfa = FAAlgorithms.removeNonDeterminisms( fa );
+        FA dfa = FAAlgorithms.generateDFARemovingNondeterminisms( fa );
         FAAlgorithms.arrangeFAInCircle( dfa, 250, 200, 150 );
         mainWindow.createFAInternalFrame( dfa, false );
         
     }//GEN-LAST:event_btnGenerateEquivalentDFAActionPerformed
 
     private void btnGenerateMinimizedDFAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateMinimizedDFAActionPerformed
-        Utils.showNotImplementedYetMessage();
+        
+        // first convert to DFA
+        //FA dfa = FAAlgorithms.generateDFARemovingNondeterminisms( fa );
+        //FA minDFA = FAAlgorithms.generateMinimizedDFA( dfa );
+        
+        FA minDFA = FAAlgorithms.generateMinimizedDFA( fa );
+        FAAlgorithms.arrangeFAInCircle( minDFA, 250, 200, 150 );
+        mainWindow.createFAInternalFrame( minDFA, false );
+        
     }//GEN-LAST:event_btnGenerateMinimizedDFAActionPerformed
 
-    private void btnGenerateComplementDFAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateComplementDFAActionPerformed
-        Utils.showNotImplementedYetMessage();
-    }//GEN-LAST:event_btnGenerateComplementDFAActionPerformed
+    private void btnComplementDFAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComplementDFAActionPerformed
+        
+        fa.updateType();
+        
+        if ( fa.getType() == FAType.DFA ) {
+            
+            int currentSize = fa.getStates().size();
+            FAAlgorithms.complementDFA( fa, currentState );
+            int newSize = fa.getStates().size();
+            
+            if ( currentSize != newSize ) {
+                currentState++;
+            }
+            
+            repaintDrawPanel();
+            
+        } else {
+            
+            JOptionPane.showMessageDialog( 
+                    mainWindow, 
+                    "To perform this you must have a DFA!", 
+                    "ERROR", 
+                    JOptionPane.ERROR_MESSAGE );
+            
+        }
+        
+    }//GEN-LAST:event_btnComplementDFAActionPerformed
 
     private void btnSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveAsActionPerformed
         Utils.showNotImplementedYetMessage();
@@ -1263,9 +1295,33 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         runSingleTest();
     }//GEN-LAST:event_txtTestStringActionPerformed
 
-    private void btnGenerateAllPossibleTransitionsDFAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateAllPossibleTransitionsDFAActionPerformed
-        Utils.showNotImplementedYetMessage();
-    }//GEN-LAST:event_btnGenerateAllPossibleTransitionsDFAActionPerformed
+    private void btnAddAllMissingTransitionsDFAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddAllMissingTransitionsDFAActionPerformed
+        
+        fa.updateType();
+        
+        if ( fa.getType() == FAType.DFA ) {
+            
+            int currentSize = fa.getStates().size();
+            FAAlgorithms.addAllMissingTransitions( fa, currentState );
+            int newSize = fa.getStates().size();
+            
+            if ( currentSize != newSize ) {
+                currentState++;
+            }
+            
+            repaintDrawPanel();
+            
+        } else {
+            
+            JOptionPane.showMessageDialog( 
+                    mainWindow, 
+                    "To perform this you must have a DFA!", 
+                    "ERROR", 
+                    JOptionPane.ERROR_MESSAGE );
+            
+        }
+        
+    }//GEN-LAST:event_btnAddAllMissingTransitionsDFAActionPerformed
 
     private void popItemHorizontalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemHorizontalActionPerformed
         
@@ -1683,8 +1739,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         btnGenerateEquivalentDFA.setEnabled( false );
         btnGenerateMinimizedDFA.setEnabled( false );
-        btnGenerateAllPossibleTransitionsDFA.setEnabled( false );
-        btnGenerateComplementDFA.setEnabled( false );
+        btnAddAllMissingTransitionsDFA.setEnabled( false );
+        btnComplementDFA.setEnabled( false );
         
         btnTest.setEnabled( false );
         btnReset.setEnabled( false );
@@ -1710,8 +1766,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         btnGenerateEquivalentDFA.setEnabled( true );
         btnGenerateMinimizedDFA.setEnabled( true );
-        btnGenerateAllPossibleTransitionsDFA.setEnabled( true );
-        btnGenerateComplementDFA.setEnabled( true );
+        btnAddAllMissingTransitionsDFA.setEnabled( true );
+        btnComplementDFA.setEnabled( true );
         
         btnTest.setEnabled( true );
         btnReset.setEnabled( true );
@@ -1760,12 +1816,12 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddAllMissingTransitionsDFA;
     private javax.swing.JToggleButton btnAddState;
     private javax.swing.JToggleButton btnAddTransition;
     private javax.swing.JButton btnBatchTest;
+    private javax.swing.JButton btnComplementDFA;
     private javax.swing.JButton btnFirstStep;
-    private javax.swing.JButton btnGenerateAllPossibleTransitionsDFA;
-    private javax.swing.JButton btnGenerateComplementDFA;
     private javax.swing.JButton btnGenerateEquivalentDFA;
     private javax.swing.JButton btnGenerateMinimizedDFA;
     private javax.swing.ButtonGroup btnGroup;

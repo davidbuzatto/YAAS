@@ -92,6 +92,7 @@ public class FATransition extends AbstractGeometricForm {
         this.symbols = new ArrayList<>();
         
         font = DrawingConstants.DEFAULT_FONT;
+        strokeColor = DrawingConstants.TRANSITION_STROKE_COLOR;
         mouseHoverStrokeColor = DrawingConstants.TRANSITION_MOUSE_HOVER_STROKE_COLOR;
         selectedStrokeColor = DrawingConstants.TRANSITION_SELECTED_STROKE_COLOR;
         stroke = DrawingConstants.TRANSITION_STROKE;

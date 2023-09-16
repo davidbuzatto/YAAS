@@ -46,6 +46,9 @@ public interface DrawingConstants {
     public static final Color STATE_SELECTED_FILL_COLOR = 
             new Color( 157, 222, 255 );
     
+    public static final Color STATE_FILL_COLOR = Color.WHITE;
+    public static final Color STATE_STROKE_COLOR = Color.BLACK;
+    
     public static final int TRANSITION_CP_RADIUS = 5;
     public static final int TRANSITION_CP_RADIUS_EQUARED = 
             TRANSITION_CP_RADIUS * TRANSITION_CP_RADIUS;
@@ -56,6 +59,7 @@ public interface DrawingConstants {
             TRANSITION_CP_TARGET_RADIUS * TRANSITION_CP_TARGET_RADIUS;
     public static final int TRANSITION_CP_TARGET_DIAMETER = TRANSITION_CP_TARGET_RADIUS * 2;
     
+    public static final Color TRANSITION_STROKE_COLOR = Color.BLACK;
     public static final Color TRANSITION_CP_COLOR = 
             new Color( 150, 150, 150, 220 );
     public static final Color TRANSITION_CP_LEFT_COLOR = 
@@ -79,14 +83,18 @@ public interface DrawingConstants {
     public static final BasicStroke TRANSITION_STROKE = 
             new BasicStroke( 2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND );
     public static final BasicStroke TRANSITION_CP_STROKE = 
-            new BasicStroke( 2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1
-                    , new float[]{ 5, 5 }, 0 );
+            new BasicStroke( 2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
+                    1, new float[]{ 5, 5 }, 0 );
+    
+    public static final Color NULL_STATE_FILL_COLOR = new Color( 255, 232, 218 );
+    public static final Color NULL_STATE_STROKE_COLOR = new Color( 240, 92, 0 );
+    public static final Color NULL_TRANSITION_STROKE_COLOR = new Color( 240, 92, 0 );
     
     public static final Color GRID_COLOR = new Color( 200, 200, 200, 200 );
     public static final Color TEMP_TRANSITION_COLOR = new Color( 150, 150, 150, 200 );
     public static final BasicStroke TEMP_TRANSITION_STROKE = 
-            new BasicStroke( 2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1
-                    , new float[]{ 5, 5 }, 0 );
+            new BasicStroke( 2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
+                    1, new float[]{ 5, 5 }, 0 );
     
     public static final BasicStroke DEFAULT_ARROW_STROKE = new BasicStroke( 
             2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND );
