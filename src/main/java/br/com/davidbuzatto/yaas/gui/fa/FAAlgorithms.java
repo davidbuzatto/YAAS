@@ -18,7 +18,7 @@ package br.com.davidbuzatto.yaas.gui.fa;
 
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import br.com.davidbuzatto.yaas.util.DrawingConstants;
-import br.com.davidbuzatto.yaas.util.StringGenerator;
+import br.com.davidbuzatto.yaas.util.SigmaStarGeneratorStream;
 import java.awt.Color;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -383,9 +383,9 @@ public class FAAlgorithms {
         //    remove the pair;
         System.out.println( "\nStep 03" );
         toRemove.clear();
-        StringGenerator generator = new StringGenerator( alphabet );
+        SigmaStarGeneratorStream ssgs = new SigmaStarGeneratorStream( alphabet );
         for ( FAStatePair sp : pairs ) {
-            if ( !isDistinguishable( sp.s1, sp.s2, fa, generator ) ) {
+            if ( !isDistinguishable( sp.s1, sp.s2, fa, ssgs ) ) {
                 toRemove.add( sp );
             }
         }
@@ -436,15 +436,14 @@ public class FAAlgorithms {
      * @param s1 One FA state.
      * @param s2 Another FA state.
      * @param fa The automaton containing the states that will be verified.
+     * @param ssgs The Σ* generator
      * @return true if the states are distinguishable, false otherwise.
-     * @param generator
-     * @return 
      */
     public static boolean isDistinguishable( 
             FAState s1, 
             FAState s2,
             FA fa,
-            StringGenerator generator ) {
+            SigmaStarGeneratorStream ssgs ) {
         
         Set<Character> alphabet = fa.getAlphabet();
         Map<FAState, Map<Character, List<FAState>>> delta = fa.getDelta();
@@ -454,8 +453,11 @@ public class FAAlgorithms {
     }
     
     public static void main( String[] args ) {
+        
         FA dfa = FAExamples.createDFAForMinimization();
         FA min = generateMinimizedDFA( dfa );
+        
+        
     }
     
     /**
