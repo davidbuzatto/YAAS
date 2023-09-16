@@ -50,8 +50,7 @@ public class MainWindow extends javax.swing.JFrame {
         
         //setExtendedState( MAXIMIZED_BOTH );
         
-        //createFAInternalFrame( FAExamples.createENFADecimalNumber(), true );
-        createFAInternalFrame( FAExamples.createDFA0Even1Odd(), true );
+        createFAInternalFrame( FAExamples.createDFAForMinimization(), true );
         
     }
 

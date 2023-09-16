@@ -42,8 +42,12 @@ public class FA extends AbstractGeometricForm {
     private FAState initialState;
     private FAType type;
     
+    // cache control
+    private boolean alphabetUpToDate;
     private boolean deltaUpToDate;
     private boolean eclosesUpToDate;
+    
+    private Set<Character> alphabet;
     private Map<FAState, Map<Character, List<FAState>>> delta;
     private Map<FAState, Set<FAState>> ecloses;
     
@@ -249,6 +253,7 @@ public class FA extends AbstractGeometricForm {
             
         }
         
+        alphabetUpToDate = false;
         deltaUpToDate = false;
         eclosesUpToDate = false;
         updateType();
@@ -330,6 +335,7 @@ public class FA extends AbstractGeometricForm {
             transitions.remove( t );
         }
         
+        alphabetUpToDate = false;
         deltaUpToDate = false;
         eclosesUpToDate = false;
         updateType();
@@ -338,6 +344,7 @@ public class FA extends AbstractGeometricForm {
     
     public void removeTransition( FATransition transition ) {
         transitions.remove( transition );
+        alphabetUpToDate = false;
         deltaUpToDate = false;
         eclosesUpToDate = false;
         updateType();
@@ -403,6 +410,27 @@ public class FA extends AbstractGeometricForm {
         def += getAcceptingStatesString();
         
         return def;
+        
+    }
+    
+    public Set<Character> getAlphabet() {
+        
+        if ( alphabet == null || !alphabetUpToDate ) {
+            
+            alphabetUpToDate = true;
+            alphabet = new TreeSet<>();
+        
+            for ( FATransition t : transitions ) {
+                for ( char c : t.getSymbols() ) {
+                    if ( c != CharacterConstants.EMPTY_STRING ) {
+                        alphabet.add( c );
+                    }
+                }
+            }
+        
+        }
+        
+        return alphabet;
         
     }
     
@@ -577,21 +605,6 @@ public class FA extends AbstractGeometricForm {
         str += " }";
         
         return str;
-        
-    }
-    
-    public Set<Character> getAlphabet() {
-        
-        Set<Character> alf = new TreeSet<>();
-        for ( FATransition t : transitions ) {
-            for ( char c : t.getSymbols() ) {
-                if ( c != CharacterConstants.EMPTY_STRING ) {
-                    alf.add( c );
-                }
-            }
-        }
-        
-        return alf;
         
     }
 

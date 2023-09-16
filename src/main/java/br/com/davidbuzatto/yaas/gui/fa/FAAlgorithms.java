@@ -18,6 +18,7 @@ package br.com.davidbuzatto.yaas.gui.fa;
 
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import br.com.davidbuzatto.yaas.util.DrawingConstants;
+import br.com.davidbuzatto.yaas.util.StringGenerator;
 import java.awt.Color;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -44,13 +45,13 @@ public class FAAlgorithms {
      * A helper class that encapsulates data from existing states while the
      * automaton is being processed.
      */
-    private static class HelperS {
+    private static class StateHelper {
         
-        public HelperS( Set<FAState> states ) {
+        public StateHelper( Set<FAState> states ) {
             this( null, states );
         }
         
-        public HelperS( FAState state, Set<FAState> states ) {
+        public StateHelper( FAState state, Set<FAState> states ) {
             this.state = state;
             this.states = states;
         }
@@ -76,7 +77,7 @@ public class FAAlgorithms {
             if ( getClass() != obj.getClass() ) {
                 return false;
             }
-            final HelperS other = (HelperS) obj;
+            final StateHelper other = (StateHelper) obj;
             return Objects.equals( this.states, other.states );
         }
 
@@ -91,13 +92,13 @@ public class FAAlgorithms {
      * A helper class that encapsulates data from existing transitions while the
      * automaton is being processed.
      */
-    private static class HelperT {
+    private static class TransitionHelper {
         
-        HelperS originState;
-        HelperS targetState;
+        StateHelper originState;
+        StateHelper targetState;
         Set<Character> symbols;
         
-        public HelperT( HelperS originState, HelperS targetState, Character symbol ) {
+        public TransitionHelper( StateHelper originState, StateHelper targetState, Character symbol ) {
             this.originState = originState;
             this.targetState = targetState;
             this.symbols = new HashSet<>();
@@ -123,7 +124,7 @@ public class FAAlgorithms {
             if ( getClass() != obj.getClass() ) {
                 return false;
             }
-            final HelperT other = (HelperT) obj;
+            final TransitionHelper other = (TransitionHelper) obj;
             if ( !Objects.equals( this.originState, other.originState ) ) {
                 return false;
             }
@@ -141,43 +142,43 @@ public class FAAlgorithms {
     /**
      * Generates a new Finite Automaton without any non-determinisms
      * 
-     * @param nfa The Finite Automaton to be processed.
+     * @param fa The Finite Automaton to be processed.
      * @return A new Finite Automaton without any non-determinisms.
      */
-    public static FA generateDFARemovingNondeterminisms( FA nfa ) {
+    public static FA generateDFARemovingNondeterminisms( FA fa ) {
         
         FA dfa = new FA();
         int currentState = 0;
         
         // get data from the original automaton
-        Set<Character> alphabet = nfa.getAlphabet();
-        FAState eInitialState = nfa.getInitialState();
-        List<FAState> eAcceptinStates = nfa.getAcceptingStates();
-        Map<FAState, Map<Character, List<FAState>>> eDelta = nfa.getDelta();
-        Map<FAState, Set<FAState>> eEcloses = nfa.getEcloses( eDelta );
+        Set<Character> alphabet = fa.getAlphabet();
+        FAState initialState = fa.getInitialState();
+        List<FAState> acceptinStates = fa.getAcceptingStates();
+        Map<FAState, Map<Character, List<FAState>>> delta = fa.getDelta();
+        Map<FAState, Set<FAState>> ecloses = fa.getEcloses( delta );
         
         // start the process of generation
         
         // creates the new initial state
-        FAState initial = new FAState();
-        initial.setInitial( true );
-        initial.setLabel( "q" + currentState );
-        initial.setCustomLabel( newCustomLabel( currentState++ ) );
-        HelperS cInitial = new HelperS( initial, eEcloses.get( eInitialState ) );
+        FAState dfaInitial = new FAState();
+        dfaInitial.setInitial( true );
+        dfaInitial.setLabel( "q" + currentState );
+        dfaInitial.setCustomLabel( newCustomLabel( currentState++ ) );
+        StateHelper initialSH = new StateHelper( dfaInitial, ecloses.get( initialState ) );
         
         // data strutctures to store transitions and states that will be generated
-        Set<HelperT> generatedTransitions = new LinkedHashSet<>();
-        Set<HelperS> generatedStates = new LinkedHashSet<>();
-        generatedStates.add( cInitial );
+        Set<TransitionHelper> generatedTransitions = new LinkedHashSet<>();
+        Set<StateHelper> generatedStates = new LinkedHashSet<>();
+        generatedStates.add( initialSH );
         
         // a queue to process the generated states
-        Queue<HelperS> queue = new ArrayDeque<>();
-        queue.add( cInitial );
+        Queue<StateHelper> queue = new ArrayDeque<>();
+        queue.add( initialSH );
         
         // on demand process of new states
         while ( !queue.isEmpty() ) {
             
-            HelperS current = queue.poll();
+            StateHelper current = queue.poll();
             
             for ( Character a : alphabet ) {
                 
@@ -185,10 +186,10 @@ public class FAAlgorithms {
                 
                 for ( FAState s : current.states ) {
                     
-                    List<FAState> t = eDelta.get( s ).get( a );
+                    List<FAState> t = delta.get( s ).get( a );
                     if ( t != null && !t.isEmpty() ) {
                         for ( FAState ns : t ) {
-                            targetEclose.addAll( eEcloses.get( ns ) );
+                            targetEclose.addAll( ecloses.get( ns ) );
                         }
                     }
 
@@ -196,28 +197,28 @@ public class FAAlgorithms {
                 
                 if ( !targetEclose.isEmpty() ) {
 
-                    HelperS newCState = new HelperS( targetEclose );
+                    StateHelper newSH = new StateHelper( targetEclose );
                     
-                    if ( !generatedStates.contains( newCState ) ) {
+                    if ( !generatedStates.contains( newSH ) ) {
                         
                         FAState newState = new FAState();
                         newState.setLabel( "q" + currentState );
                         newState.setCustomLabel( newCustomLabel( currentState++ ) );
-                        newCState.state = newState;
-                        generatedStates.add( newCState );
-                        queue.add( newCState );
+                        newSH.state = newState;
+                        generatedStates.add( newSH );
+                        queue.add( newSH );
                         
                     }
                     
-                    HelperT newTransition = new HelperT( current, newCState, a );
-                    if ( generatedTransitions.contains( newTransition ) ) {
-                        for ( HelperT t : generatedTransitions ) {
-                            if ( t.equals( newTransition ) ) {
-                                t.symbols.addAll( newTransition.symbols );
+                    TransitionHelper newTH = new TransitionHelper( current, newSH, a );
+                    if ( generatedTransitions.contains( newTH ) ) {
+                        for ( TransitionHelper t : generatedTransitions ) {
+                            if ( t.equals( newTH ) ) {
+                                t.symbols.addAll( newTH.symbols );
                             }
                         }
                     } else {
-                        generatedTransitions.add( newTransition );
+                        generatedTransitions.add( newTH );
                     }
 
                 }
@@ -226,8 +227,8 @@ public class FAAlgorithms {
             
         }
         
-        for ( HelperS s : generatedStates ) {
-            for ( FAState a : eAcceptinStates ) {
+        for ( StateHelper s : generatedStates ) {
+            for ( FAState a : acceptinStates ) {
                 if ( s.states.contains( a ) ) {
                     s.state.setAccepting( true );
                     break;
@@ -235,16 +236,16 @@ public class FAAlgorithms {
             }
         }
         
-        for ( HelperS s : generatedStates ) {
+        for ( StateHelper s : generatedStates ) {
             dfa.addState( s.state );
         }
         
         Map<Set<FAState>, FAState> m = new HashMap<>();
-        for ( HelperT t : generatedTransitions ) {
+        for ( TransitionHelper t : generatedTransitions ) {
             m.put( t.originState.states, t.originState.state );
         }
         
-        for ( HelperT t : generatedTransitions ) {
+        for ( TransitionHelper t : generatedTransitions ) {
             t.targetState.state = m.get( t.targetState.states );
             List<Character> symbols = new ArrayList<>();
             symbols.addAll( t.symbols );
@@ -258,6 +259,10 @@ public class FAAlgorithms {
         
     }
     
+    /**
+     * A helper class that encapsulates a pair os states while the automaton is
+     * being processed.
+     */
     private static class FAStatePair {
         
         FAState s1;
@@ -267,9 +272,9 @@ public class FAAlgorithms {
         public FAStatePair( FAState s1, FAState s2 ) {
             this.s1 = s1;
             this.s2 = s2;
-            ss = new HashSet<>();
-            ss.add( s1 );
-            ss.add( s2 );
+            this.ss = new HashSet<>();
+            this.ss.add( s1 );
+            this.ss.add( s2 );
         }
         
         @Override
@@ -311,6 +316,21 @@ public class FAAlgorithms {
     public static FA generateMinimizedDFA( FA fa ) {
         
         FA dfa = new FA();
+        Set<Character> alphabet = fa.getAlphabet();
+        Map<FAState, Map<Character, List<FAState>>> delta = fa.getDelta();
+        
+        // pre-processing step(s)
+        // removing inaccessible states
+        System.out.println( "Preprocessing step(s)" );
+        List<FAState> states = new ArrayList<>( fa.getStates() );
+        List<FAState> inaccessibleStates = new ArrayList<>();
+        for ( FAState s : states ) {
+            if ( isInaccessible( s, fa ) ) {
+                System.out.println( "remove inaccesible state: " + s );
+                inaccessibleStates.add( s );
+            }
+        }
+        states.removeAll( inaccessibleStates );
         
         /* Myhill-Nerode Theorem:
          *
@@ -325,8 +345,7 @@ public class FAAlgorithms {
          */
         
         // 1) Using all states, create all possible pairs;
-        System.out.println( "Step 01" );
-        List<FAState> states = fa.getStates();
+        System.out.println( "\nStep 01" );
         Set<FAStatePair> pairs = new LinkedHashSet<>();
         int sSize = states.size();
         for ( int i = 0; i < sSize; i++ ) {
@@ -341,7 +360,7 @@ public class FAAlgorithms {
         
         // 2) Remove all pairs such one element is an accepting state and the
         //    other is not;
-        System.out.println( "Step 02" );
+        System.out.println( "\nStep 02" );
         Set<FAStatePair> toRemove = new HashSet<>();
         for ( FAStatePair sp : pairs ) {
             if ( ( sp.s1.isAccepting() && !sp.s2.isAccepting() ) || 
@@ -362,11 +381,13 @@ public class FAAlgorithms {
         // 3) For each remaining pair, verify the transition function
         //    incrementing the input length. If the transition is not equal,
         //    remove the pair;
-        System.out.println( "Step 03" );
+        System.out.println( "\nStep 03" );
         toRemove.clear();
+        StringGenerator generator = new StringGenerator( alphabet );
         for ( FAStatePair sp : pairs ) {
-            // processing transitions - looking for distinguishable states
-            
+            if ( !isDistinguishable( sp.s1, sp.s2, fa, generator ) ) {
+                toRemove.add( sp );
+            }
         }
         
         for ( FAStatePair sp : toRemove ) {
@@ -378,12 +399,63 @@ public class FAAlgorithms {
             System.out.println( sp );
         }
         
-        // 4) The remaining pairs must be combined with theris equivalent
+        // 4) The remaining pairs must be combined with their equivalent
         //    states.
-        System.out.println( "Step 04" );
+        System.out.println( "\nStep 04" );
                 
         return dfa;
         
+    }
+    
+    /**
+     * Verifies if a state is inaccessible.
+     * 
+     * @param state The state to verify.
+     * @param fa The automaton containing the state that will be verified.
+     * @return true if the state is inaccessible, false otherwise.
+     */
+    public static boolean isInaccessible( FAState state, FA fa ) {
+        
+        if ( state.isInitial() ) {
+            return false;
+        }
+        
+        for ( FATransition t : fa.getTransitions() ) {
+            if ( state.equals(  t.getTargetState() ) ) {
+                return false;
+            }
+        }
+        
+        return true;
+        
+    }
+    
+    /**
+     * Verifies if two states are distinguishable.
+     * 
+     * @param s1 One FA state.
+     * @param s2 Another FA state.
+     * @param fa The automaton containing the states that will be verified.
+     * @return true if the states are distinguishable, false otherwise.
+     * @param generator
+     * @return 
+     */
+    public static boolean isDistinguishable( 
+            FAState s1, 
+            FAState s2,
+            FA fa,
+            StringGenerator generator ) {
+        
+        Set<Character> alphabet = fa.getAlphabet();
+        Map<FAState, Map<Character, List<FAState>>> delta = fa.getDelta();
+            
+        return true;
+        
+    }
+    
+    public static void main( String[] args ) {
+        FA dfa = FAExamples.createDFAForMinimization();
+        FA min = generateMinimizedDFA( dfa );
     }
     
     /**
