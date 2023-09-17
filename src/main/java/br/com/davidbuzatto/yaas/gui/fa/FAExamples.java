@@ -454,6 +454,39 @@ public class FAExamples {
         fa.addTransition( t15 );
         fa.addTransition( t16 );
         
+        //fa.addTransition( new FATransition( s5, s1, '2' ) );
+        
+        // transitivity
+        /*FAState s8 = new FAState();
+        s8.setX1( 100 );
+        s8.setY1( 400 );
+        s8.setCustomLabel( FAAlgorithms.newCustomLabel( currentState ) + "(E)" );
+        s8.setLabel( "q" + currentState++ );
+        
+        FAState s9 = new FAState();
+        s9.setX1( 250 );
+        s9.setY1( 400 );
+        s9.setCustomLabel( FAAlgorithms.newCustomLabel( currentState ) + "(B)" );
+        s9.setLabel( "q" + currentState++ );
+        
+        FATransition tt1 = new FATransition( s6, s8, '1' );
+        FATransition tt2 = new FATransition( s8, s5, '1' );
+        FATransition tt3 = new FATransition( s8, s7, '0' );
+        
+        FATransition tt4 = new FATransition( s0, s9, '0' );
+        FATransition tt5 = new FATransition( s9, s6, '0' );
+        FATransition tt6 = new FATransition( s9, s2, '1' );
+        
+        fa.addState( s8 );
+        fa.addState( s9 );
+        
+        fa.addTransition( tt1 );
+        fa.addTransition( tt2 );
+        fa.addTransition( tt3 );
+        fa.addTransition( tt4 );
+        fa.addTransition( tt5 );
+        fa.addTransition( tt6 );*/
+        
         return fa;
         
     }

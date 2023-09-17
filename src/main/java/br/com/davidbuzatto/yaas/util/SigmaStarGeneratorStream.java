@@ -22,9 +22,10 @@ import java.util.Set;
 
 /**
  * Creates a stream of strings combining all symbols of an alphabet. It
- * simulates the generation of a infinite set like Σ*.
+ * simulates the generation of a infinite set like Σ*. Its possible
+ * to specify which starting length of strings will be produced first.
  * 
- * This classe maintain a cache of the already generated strings for
+ * This class maintain a cache of the already generated strings for
  * performance purposes. About 15*10^6 (15 million) strings per second on
  * the developing machine.
  * 
@@ -45,10 +46,15 @@ public class SigmaStarGeneratorStream {
 
     public SigmaStarGeneratorStream( Set<Character> alphabet )
             throws IllegalArgumentException {
-        this( new ArrayList<>( alphabet ) );
+        this( alphabet, 0 );
     }
     
-    public SigmaStarGeneratorStream( List<Character> alphabet )
+    public SigmaStarGeneratorStream( Set<Character> alphabet, int startingLength )
+            throws IllegalArgumentException {
+        this( new ArrayList<>( alphabet ), startingLength );
+    }
+    
+    public SigmaStarGeneratorStream( List<Character> alphabet, int startingLength )
             throws IllegalArgumentException {
         
         if ( alphabet.isEmpty() ) {
@@ -59,6 +65,19 @@ public class SigmaStarGeneratorStream {
         this.alphabet = alphabet;
         this.generatingCache = new ArrayList<>();
         this.currentCache = new ArrayList<>();
+        
+        while ( currentLength < startingLength ) {
+            next();
+        }
+        
+        if ( startingLength > 0 ) {
+            currentBasePosition = 0;
+            currentAlphabetPosition = 0;
+            if ( !generatingCache.isEmpty() ) {
+                generatingCache.remove( generatingCache.size() - 1 );
+            }
+        }
+        
     }
     
     public String next() {
@@ -101,16 +120,17 @@ public class SigmaStarGeneratorStream {
         
         List<Character> alphabet = new ArrayList<>();
         
-        alphabet.add( '0' );
-        alphabet.add( '1' );
+        /*alphabet.add( '0' );
+        alphabet.add( '1' );*/
         
-        /*alphabet.add( 'a' );
+        alphabet.add( 'a' );
         alphabet.add( 'b' );
-        alphabet.add( 'c' );*/
+        alphabet.add( 'c' );
         
-        SigmaStarGeneratorStream ssgs = new SigmaStarGeneratorStream( alphabet );
+        //SigmaStarGeneratorStream ssgs = new SigmaStarGeneratorStream( alphabet );
+        SigmaStarGeneratorStream ssgs = new SigmaStarGeneratorStream( alphabet, 2 );
         long t = System.currentTimeMillis();
-        for ( int i = 0; i < 1000; i++ ) {
+        for ( int i = 0; i < 100; i++ ) {
             System.out.println( ssgs.next() );
         }
         /*for ( int i = 0; i < 15000000; i++ ) {

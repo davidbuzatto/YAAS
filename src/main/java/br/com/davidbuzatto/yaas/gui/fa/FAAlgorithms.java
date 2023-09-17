@@ -143,7 +143,7 @@ public class FAAlgorithms {
      * Generates a new Finite Automaton without any non-determinisms
      * 
      * @param fa The Finite Automaton to be processed.
-     * @return A new Finite Automaton without any non-determinisms.
+     * @return An equivalent DFA (not minimum).
      */
     public static FA generateDFARemovingNondeterminisms( FA fa ) {
         
@@ -310,23 +310,24 @@ public class FAAlgorithms {
      * Uses the Myhill-Nerode Theorem (Table filling method) to create a
      * minimized DFA.
      * 
-     * @param fa The DFA to be processed.
+     * @param dfa The DFA to be processed.
      * @return An equivalent DFA, but minimized.
      */
-    public static FA generateMinimizedDFA( FA fa ) {
+    public static FA generateMinimizedDFA( FA dfa ) {
         
-        FA dfa = new FA();
-        Set<Character> alphabet = fa.getAlphabet();
-        Map<FAState, Map<Character, List<FAState>>> delta = fa.getDelta();
+        if ( dfa.getType() != FAType.DFA ) {
+            throw new IllegalArgumentException( "You must use an DFA!" );
+        }
+        
+        FA minDfa = new FA();
+        Map<FAState, Map<Character, List<FAState>>> delta = dfa.getDelta();
         
         // pre-processing step(s)
         // removing inaccessible states
-        System.out.println( "Preprocessing step(s)" );
-        List<FAState> states = new ArrayList<>( fa.getStates() );
+        List<FAState> states = new ArrayList<>( dfa.getStates() );
         List<FAState> inaccessibleStates = new ArrayList<>();
         for ( FAState s : states ) {
-            if ( isInaccessible( s, fa ) ) {
-                System.out.println( "remove inaccesible state: " + s );
+            if ( isInaccessible( s, dfa ) ) {
                 inaccessibleStates.add( s );
             }
         }
@@ -340,12 +341,12 @@ public class FAAlgorithms {
          * 3) For each remaining pair, verify the transition function
          *    incrementing the input length. If the transition is not equal,
          *    remove the pair;
-         * 4) The remaining pairs must be combined with theris equivalent
+         * 4) The remaining pairs must be combined with their equivalent
          *    states.
          */
         
         // 1) Using all states, create all possible pairs;
-        System.out.println( "\nStep 01" );
+        //System.out.println( "\nStep 1" );
         Set<FAStatePair> pairs = new LinkedHashSet<>();
         int sSize = states.size();
         for ( int i = 0; i < sSize; i++ ) {
@@ -354,13 +355,8 @@ public class FAAlgorithms {
             }
         }
         
-        for ( FAStatePair sp : pairs ) {
-            System.out.println( sp );
-        }
-        
         // 2) Remove all pairs such one element is an accepting state and the
         //    other is not;
-        System.out.println( "\nStep 02" );
         Set<FAStatePair> toRemove = new HashSet<>();
         for ( FAStatePair sp : pairs ) {
             if ( ( sp.s1.isAccepting() && !sp.s2.isAccepting() ) || 
@@ -368,42 +364,240 @@ public class FAAlgorithms {
                 toRemove.add( sp );
             }
         }
-        
-        for ( FAStatePair sp : toRemove ) {
-            System.out.println( "remove step 02: " + sp );
-        }
         pairs.removeAll( toRemove );
         
-        for ( FAStatePair sp : pairs ) {
-            System.out.println( sp );
-        }
-        
-        // 3) For each remaining pair, verify the transition function
-        //    incrementing the input length. If the transition is not equal,
-        //    remove the pair;
-        System.out.println( "\nStep 03" );
+        // 2.5) Remove all pairs such the transition function with just one
+        // symbol is not the same;
         toRemove.clear();
-        SigmaStarGeneratorStream ssgs = new SigmaStarGeneratorStream( alphabet );
         for ( FAStatePair sp : pairs ) {
-            if ( !isDistinguishable( sp.s1, sp.s2, fa, ssgs ) ) {
+            if ( !haveSameDeltaWithOneSymbol( sp.s1, sp.s2 , dfa ) ) {
                 toRemove.add( sp );
             }
         }
+        pairs.removeAll( toRemove );
         
-        for ( FAStatePair sp : toRemove ) {
-            System.out.println( "remove step 03: " + sp );
+        // 3) For each remaining pair, verify the transition function
+        //    incrementing the input length. If the transition is not equal,
+        //    remove the pair, i.e, if the pair is distinguishable.
+        toRemove.clear();
+        for ( FAStatePair sp : pairs ) {
+            if ( isDistinguishable( sp.s1, sp.s2, dfa ) ) {
+                toRemove.add( sp );
+            }
         }
         pairs.removeAll( toRemove );
         
-        for ( FAStatePair sp : pairs ) {
-            System.out.println( sp );
+        // 4) The remaining pairs must be combined with their equivalent
+        //    states. Applying transitivity.
+        List<Set<FAState>> newStateSets = new ArrayList<>();
+        while ( !pairs.isEmpty() ) {
+            
+            FAStatePair cPair = pairs.iterator().next();
+            Set<FAState> newStateSet = new TreeSet<>();
+            newStateSet.add( cPair.s1 );
+            newStateSet.add( cPair.s2 );
+            
+            if ( newStateSets.isEmpty() ) {
+                newStateSets.add( newStateSet );
+            } else {
+                
+                boolean addNewStateSet = true;
+                
+                for ( Set<FAState> s : newStateSets ) {
+                    if ( s.contains( cPair.s1 ) ) {
+                        s.add( cPair.s2 );
+                        addNewStateSet = false;
+                    }
+                    if ( s.contains( cPair.s2 ) ) {
+                        s.add( cPair.s1 );
+                        addNewStateSet = false;
+                    }
+                }
+                
+                if ( addNewStateSet ) {
+                    newStateSets.add( newStateSet );
+                }
+                
+            }
+            
+            pairs.remove( cPair );
+            
         }
         
-        // 4) The remaining pairs must be combined with their equivalent
-        //    states.
-        System.out.println( "\nStep 04" );
+        // finally, deribing the minized automaton :D
+        // the transition generation needs more testing!!!
+        int currentState = 0;
+        for ( Set<FAState> s : newStateSets ) {
+            states.removeAll( s );
+        }
+        
+        // new initial state
+        FAState dfaIS = new FAState();
+        dfaIS.setInitial( true );
+        
+        FAState iS = dfa.getInitialState();
+        Map<FAState, FAState> ds = new HashMap<>();
+        Map<FAState, FAState> dsRev = new HashMap<>();
+        Map<FAState, Set<FAState>> ids = new HashMap<>();
+        Map<Set<FAState>, FAState> idsRev = new HashMap<>();
+        
+        for ( FAState s : states ) {
+            
+            if ( s.isInitial() ) {
+                dfaIS.setAccepting( s.isAccepting() );
+                dfaIS.setLabel( "q" + currentState++ );
+                dfaIS.setCustomLabel( s.getCustomLabel() );
+                ds.put( dfaIS, s );
+                dsRev.put( s, dfaIS );
+                minDfa.addState( dfaIS );
+            } else {
+                FAState newState = new FAState();
+                newState.setAccepting( s.isAccepting() );
+                newState.setLabel( "q" + currentState++ );
+                newState.setCustomLabel( s.getCustomLabel() );
+                ds.put( newState, s );
+                dsRev.put( s, newState );
+                minDfa.addState( newState );
+            }
+            
+        }
+        
+        for ( Set<FAState> s : newStateSets ) {
+            
+            String label = "";
+            boolean isAccepting = false;
+            
+            for ( FAState ss : s ) {
+                if ( ss.isAccepting() ) {
+                    isAccepting = true;
+                }
+                /*if ( !label.isEmpty() ) {
+                    label += ", ";
+                }*/
+                label += ss.getCustomLabel();
+            }
+            
+            if ( s.contains( iS ) ) {
+                dfaIS.setAccepting( isAccepting );
+                dfaIS.setLabel( "q" + currentState++ );
+                dfaIS.setCustomLabel( label );
+                ids.put( dfaIS, s );
+                idsRev.put( s, dfaIS );
+                minDfa.addState( dfaIS );
+            } else {
+                FAState newState = new FAState();
+                newState.setAccepting( isAccepting );
+                newState.setLabel( "q" + currentState++ );
+                newState.setCustomLabel( label );
+                ids.put( newState, s );
+                idsRev.put( s, newState );
+                minDfa.addState( newState );
+            }
+            
+        }
+        
+        // creating the transitions <-- needs more testing!!!
+        for ( FAState s : minDfa.getStates() ) {
+            
+            if ( ds.containsKey( s ) ) {
                 
-        return dfa;
+                FAState oS = ds.get( s );
+                
+                for ( FATransition t : dfa.getTransitions() ) {
+                    
+                    if ( t.getOriginState().equals( oS ) ) {
+                        
+                        FAState target = t.getTargetState();
+                        FATransition newT = null;
+                        
+                        if ( dsRev.containsKey( target ) ) {
+                            newT = new FATransition( s, dsRev.get( target ), 
+                                    new ArrayList<>( t.getSymbols() ) );
+                        } else {
+                            for ( Set<FAState> ss : idsRev.keySet() ) {
+                                if ( ss.contains( target ) ) {
+                                    newT = new FATransition( s, idsRev.get( ss ), 
+                                            new ArrayList<>( t.getSymbols() ) );
+                                }
+                            }
+                        }
+                        
+                        if ( newT != null ) {
+                            minDfa.addTransition( newT );
+                        }
+                        
+                    }
+                    
+                }
+                
+            } else if ( ids.containsKey( s ) ) {
+                
+                Set<FAState> oS = ids.get( s );
+                
+                for ( FATransition t : dfa.getTransitions() ) {
+                    
+                    if ( oS.contains( t.getOriginState() ) ) {
+                        
+                        FAState target = t.getTargetState();
+                        FATransition newT = null;
+                        
+                        if ( dsRev.containsKey( target ) ) {
+                            newT = new FATransition( s, dsRev.get( target ), 
+                                    new ArrayList<>( t.getSymbols() ) );
+                        } else {
+                            for ( Set<FAState> ss : idsRev.keySet() ) {
+                                if ( ss.contains( target ) ) {
+                                    newT = new FATransition( s, idsRev.get( ss ), 
+                                            new ArrayList<>( t.getSymbols() ) );
+                                }
+                            }
+                        }
+                        
+                        if ( newT != null ) {
+                            minDfa.addTransition( newT );
+                        }
+                        
+                    }
+                    
+                }
+                
+            }
+            
+        }
+        
+        return minDfa;
+        
+    }
+    
+    /**
+     * Acceptance algorithm for a DFA, using a custom initialState.
+     * 
+     * @param str The string to be tested.
+     * @param dfa The DFA to be processed.
+     * @param initialState The initial state to use (regardless the current
+     * DFA initial state)
+     * @return true if the string is accepted, false otherwise.
+     */
+    public static boolean acceptsDFA( String str, FA dfa, FAState initialState )
+            throws IllegalArgumentException {
+        
+        if ( dfa.getType() != FAType.DFA ) {
+            throw new IllegalArgumentException( "You must use an DFA!" );
+        }
+        
+        FAState current = initialState;
+        Map<FAState, Map<Character, List<FAState>>> delta = dfa.getDelta();
+        
+        for ( char c : str.toCharArray() ) {
+            List<FAState> target = delta.get( current ).get( c );
+            if ( target != null ) {
+                current = target.get( 0 );
+            } else {
+                return false;
+            }
+        }
+        
+        return current.isAccepting();
         
     }
     
@@ -431,44 +625,93 @@ public class FAAlgorithms {
     }
     
     /**
+     * Verifies if two have the same transition function to a next state
+     * with a input of one symbol. It will consider if the states have 
+     * different symbols to in their transitions.
+     * 
+     * @param s1 One FA state.
+     * @param s2 Another FA state.
+     * @param dfa The automaton containing the states that will be verified.
+     * @return true if the states have the same transition function,
+     * false otherwise.
+     */
+    public static boolean haveSameDeltaWithOneSymbol( 
+            FAState s1, 
+            FAState s2,
+            FA dfa ) throws IllegalArgumentException {
+        
+        if ( dfa.getType() != FAType.DFA ) {
+            throw new IllegalArgumentException( "You must use an DFA!" );
+        }
+        
+        Map<FAState, Map<Character, List<FAState>>> delta = dfa.getDelta();
+        Map<Character, Boolean> t1 = new HashMap<>();
+        Map<Character, Boolean> t2 = new HashMap<>();
+        
+        // assumes DFA
+        for ( Map.Entry<Character, List<FAState>> e : delta.get( s1 ).entrySet() ) {
+            t1.put( e.getKey(), e.getValue().get( 0 ).isAccepting() );
+        }
+        for ( Map.Entry<Character, List<FAState>> e : delta.get( s2 ).entrySet() ) {
+            t2.put( e.getKey(), e.getValue().get( 0 ).isAccepting() );
+        }
+        
+        return t1.equals( t2 );
+        
+    }
+    
+    /**
      * Verifies if two states are distinguishable.
      * 
      * @param s1 One FA state.
      * @param s2 Another FA state.
-     * @param fa The automaton containing the states that will be verified.
-     * @param ssgs The Σ* generator
+     * @param dfa The automaton containing the states that will be verified.
      * @return true if the states are distinguishable, false otherwise.
      */
     public static boolean isDistinguishable( 
             FAState s1, 
             FAState s2,
-            FA fa,
-            SigmaStarGeneratorStream ssgs ) {
+            FA dfa ) throws IllegalArgumentException {
         
-        Set<Character> alphabet = fa.getAlphabet();
-        Map<FAState, Map<Character, List<FAState>>> delta = fa.getDelta();
+        if ( dfa.getType() != FAType.DFA ) {
+            throw new IllegalArgumentException( "You must use an DFA!" );
+        }
+        
+        Map<FAState, Map<Character, List<FAState>>> delta = dfa.getDelta();
+        
+        // assumes s1 and s2 have the same transition function with one symbol
+        Set<Character> alphabet = delta.get( s1 ).keySet();
+        
+        // generate strings starting with length = 2
+        SigmaStarGeneratorStream ssgs = new SigmaStarGeneratorStream( alphabet, 2 );
+        
+        // max length => n-2, n being the number os states of the DFA
+        int maxLength = dfa.getStates().size() - 2;
+        
+        for ( int i = 2; i <= maxLength; i++ ) {
+            String str = ssgs.next();
+            if ( str.length() > i ) {
+                break;
+            }
+            if ( acceptsDFA( str, dfa, s1 ) != acceptsDFA( str, dfa, s2 ) ) {
+                return true;
+            }
+        }
             
-        return true;
-        
-    }
-    
-    public static void main( String[] args ) {
-        
-        FA dfa = FAExamples.createDFAForMinimization();
-        FA min = generateMinimizedDFA( dfa );
-        
+        return false;
         
     }
     
     /**
      * Add all missing transitions to a DFA.
      * 
-     * @param fa The DFA to be processed.
+     * @param dfa The DFA to be processed.
      * @param currentState Whats the current state counter.
      */
-    public static void addAllMissingTransitions( FA fa, int currentState ) {
+    public static void addAllMissingTransitions( FA dfa, int currentState )
+            throws IllegalArgumentException {
         addAllMissingTransitions( 
-                fa, 
+                dfa, 
                 currentState, 
                 true, 
                 DrawingConstants.NULL_STATE_FILL_COLOR,
@@ -479,7 +722,7 @@ public class FAAlgorithms {
     /**
      * Add all missing transitions to a DFA.
      * 
-     * @param fa The DFA to be processed.
+     * @param dfa The DFA to be processed.
      * @param currentState Whats the current state counter.
      * @param useNullCustomLabel If it will use the empty set symbol do set the
      * custom label of the generated state (null state).
@@ -488,17 +731,22 @@ public class FAAlgorithms {
      * @param nullTransitionStrokeColor The color to set in thes troke the null transition.
      */
     public static void addAllMissingTransitions( 
-            FA fa, int currentState, 
+            FA dfa,
+            int currentState, 
             boolean useNullCustomLabel,
             Color nullStateFillColor,
             Color nullStateStrokeColor,
-            Color nullTransitionStrokeColor ) {
+            Color nullTransitionStrokeColor ) throws IllegalArgumentException {
+        
+        if ( dfa.getType() != FAType.DFA ) {
+            throw new IllegalArgumentException( "You must use an DFA!" );
+        }
         
         Map<FAState, Set<Character>> allMissing = new HashMap<>();
-        Map<FAState, Map<Character, List<FAState>>> delta = fa.getDelta();
-        List<Character> alphabet = new ArrayList<>( fa.getAlphabet() );
+        Map<FAState, Map<Character, List<FAState>>> delta = dfa.getDelta();
+        List<Character> alphabet = new ArrayList<>( dfa.getAlphabet() );
         
-        for ( FAState s : fa.getStates() ) {
+        for ( FAState s : dfa.getStates() ) {
             Set<Character> a = new TreeSet<>( alphabet );
             allMissing.put( s, a );
         }
@@ -532,35 +780,42 @@ public class FAAlgorithms {
             nullState.setStrokeColor( nullStateStrokeColor );
             nullState.setX1( 200 );
             nullState.setY1( 200 );
-            fa.addState( nullState );
+            dfa.addState( nullState );
             
             FATransition nullTransition = new FATransition( 
                     nullState, nullState, alphabet );
             nullTransition.setStrokeColor( nullStateStrokeColor );
-            fa.addTransition( nullTransition );
+            dfa.addTransition( nullTransition );
             
             for ( Map.Entry<FAState, Set<Character>> e : allMissing.entrySet() ) {
                 List<Character> s = new ArrayList<>( e.getValue() );
                 FATransition t = new FATransition( e.getKey(), nullState, s );
                 t.setStrokeColor( nullTransitionStrokeColor );
-                fa.addTransition( t );
+                dfa.addTransition( t );
             }
             
         }
         
     }
     
-    public static void complementDFA( FA fa, int currentState ) {
+    /**
+     * Complement a DFA.
+     * 
+     * @param dfa The dfa to be complemented.
+     * @param currentState for state label generation
+     */
+    public static void complementDFA( FA dfa, int currentState )
+            throws IllegalArgumentException {
         
         addAllMissingTransitions( 
-                fa, 
+                dfa, 
                 currentState, 
                 false, 
                 DrawingConstants.STATE_FILL_COLOR,
                 DrawingConstants.STATE_STROKE_COLOR,
                 DrawingConstants.TRANSITION_STROKE_COLOR );
         
-        for ( FAState s : fa.getStates() ) {
+        for ( FAState s : dfa.getStates() ) {
             s.setAccepting( !s.isAccepting() );
         }
         

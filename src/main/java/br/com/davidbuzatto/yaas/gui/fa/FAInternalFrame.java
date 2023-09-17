@@ -1249,13 +1249,23 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
     private void btnGenerateMinimizedDFAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateMinimizedDFAActionPerformed
         
-        // first convert to DFA
-        //FA dfa = FAAlgorithms.generateDFARemovingNondeterminisms( fa );
-        //FA minDFA = FAAlgorithms.generateMinimizedDFA( dfa );
+        fa.updateType();
         
-        FA minDFA = FAAlgorithms.generateMinimizedDFA( fa );
-        FAAlgorithms.arrangeFAInCircle( minDFA, 250, 200, 150 );
-        mainWindow.createFAInternalFrame( minDFA, false );
+        if ( fa.getType() == FAType.DFA ) {
+            
+            FA minDFA = FAAlgorithms.generateMinimizedDFA( fa );
+            FAAlgorithms.arrangeFAInCircle( minDFA, 250, 200, 150 );
+            mainWindow.createFAInternalFrame( minDFA, false );
+            
+        } else {
+            
+            JOptionPane.showMessageDialog( 
+                    mainWindow, 
+                    "To perform this you must have a DFA!", 
+                    "ERROR", 
+                    JOptionPane.ERROR_MESSAGE );
+            
+        }
         
     }//GEN-LAST:event_btnGenerateMinimizedDFAActionPerformed
 
