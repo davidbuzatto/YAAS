@@ -1,8 +1,6 @@
 Implement all missing functionalities in FAInternalFrame;
 Implement main menu.
 
-DFA Minimization (needs more testing of transition generation);
-
 ??? Specialized versions of states (Moore machines);
 ??? Specialized versions of transitions (PDAs, Mealy machines and Turing machines);
 ??? Zoom-in and zoom-out;

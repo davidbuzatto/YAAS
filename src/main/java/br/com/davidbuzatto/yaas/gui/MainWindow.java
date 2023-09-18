@@ -51,9 +51,9 @@ public class MainWindow extends javax.swing.JFrame {
         
         //setExtendedState( MAXIMIZED_BOTH );
         
-        //createFAInternalFrame( FAExamplesForDFAMinimizationTest.createDFAForMinimizationTest01(), true );
+        createFAInternalFrame( FAExamplesForDFAMinimizationTest.createDFAForMinimizationTest01(), true );
         //createFAInternalFrame( FAExamplesForDFAMinimizationTest.createDFAForMinimizationTest02(), true );
-        createFAInternalFrame( FAExamplesForDFAMinimizationTest.createDFAForMinimizationTest03(), true );
+        //createFAInternalFrame( FAExamplesForDFAMinimizationTest.createDFAForMinimizationTest03(), true );
         
     }
 

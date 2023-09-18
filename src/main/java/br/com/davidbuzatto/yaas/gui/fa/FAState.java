@@ -69,8 +69,8 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
         selectedFillColor = DrawingConstants.STATE_SELECTED_FILL_COLOR;
         selectedStrokeColor = DrawingConstants.STATE_SELECTED_STROKE_COLOR;
         
-        activeInSimulationFillColor = DrawingConstants.ACTIVE_STATE_IN_SIMULATION_FILL_COLOR;
-        activeInSimulationStrokeColor = DrawingConstants.ACTIVE_STATE_IN_SIMULATION_STROKE_COLOR;
+        activeInSimulationFillColor = DrawingConstants.STATE_ACTIVE_IN_SIMULATION_FILL_COLOR;
+        activeInSimulationStrokeColor = DrawingConstants.STATE_ACTIVE_IN_SIMULATION_STROKE_COLOR;
         
         radius = DrawingConstants.STATE_RADIUS;
         radiusSquared = DrawingConstants.STATE_RADIUS_SQUARED;
@@ -79,7 +79,7 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
         arrow = new Arrow();
         arrow.setMouseHoverStrokeColor( DrawingConstants.STATE_MOUSE_HOVER_STROKE_COLOR );
         arrow.setSelectedStrokeColor( DrawingConstants.STATE_SELECTED_STROKE_COLOR );
-        arrow.setActiveInSimulationStrokeColor( DrawingConstants.ACTIVE_STATE_IN_SIMULATION_STROKE_COLOR );
+        arrow.setActiveInSimulationStrokeColor(DrawingConstants.STATE_ACTIVE_IN_SIMULATION_STROKE_COLOR );
         
     }
     

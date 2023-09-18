@@ -64,7 +64,7 @@ public class FATransition extends AbstractGeometricForm {
     
     private boolean labelDragging;
     private boolean labelMoved;
-    
+
     
     private int prevCentralCPX;
     private int prevCentralCPY;
@@ -85,6 +85,8 @@ public class FATransition extends AbstractGeometricForm {
     
     private boolean controlPointsVisible;
     
+    private Color activeInSimulationStrokeColor;
+    
     public FATransition( FAState originState, FAState targetState, List<Character> symbols ) {
         
         this.originState = originState;
@@ -95,6 +97,7 @@ public class FATransition extends AbstractGeometricForm {
         strokeColor = DrawingConstants.TRANSITION_STROKE_COLOR;
         mouseHoverStrokeColor = DrawingConstants.TRANSITION_MOUSE_HOVER_STROKE_COLOR;
         selectedStrokeColor = DrawingConstants.TRANSITION_SELECTED_STROKE_COLOR;
+        activeInSimulationStrokeColor = DrawingConstants.TRANSITION_ACTIVE_IN_SIMULATION_STROKE_COLOR;
         stroke = DrawingConstants.TRANSITION_STROKE;
         cpStroke = DrawingConstants.TRANSITION_CP_STROKE;
         
@@ -106,6 +109,8 @@ public class FATransition extends AbstractGeometricForm {
         label.setMouseHoverFillColor( DrawingConstants.TRANSITION_MOUSE_HOVER_FILL_COLOR );
         label.setSelectedStrokeColor( DrawingConstants.TRANSITION_SELECTED_STROKE_COLOR );
         label.setSelectedFillColor( DrawingConstants.TRANSITION_SELECTED_FILL_COLOR );
+        label.setActiveInSimulationStrokeColor(DrawingConstants.LABEL_ACTIVE_IN_SIMULATION_STROKE_COLOR );
+        label.setActiveInSimulationFillColor(DrawingConstants.LABEL_ACTIVE_IN_SIMULATION_FILL_COLOR );
         updateLabel();
         
         targetCP = new ControlPoint();
@@ -361,20 +366,24 @@ public class FATransition extends AbstractGeometricForm {
         
         g2d.setFont( font );
         g2d.setStroke( stroke );
-        arrow.setMouseHover( mouseHover );
-        arrow.setSelected( selected );
+        arrow.setMouseHover( mouseHover || originState.isMouseHover() );
+        arrow.setSelected( selected || originState.isSelected() );
+        arrow.setActiveInSimulation( originState.isActiveInSimulation() );
         
-        label.setMouseHover( mouseHover );
-        label.setSelected( selected );
+        label.setMouseHover( mouseHover || originState.isMouseHover() );
+        label.setSelected( selected || originState.isSelected() );
+        label.setActiveInSimulation( originState.isActiveInSimulation() );
         
         targetCP.setMouseHover( mouseHover );
         centralCP.setMouseHover( mouseHover );
         leftCP.setMouseHover( mouseHover );
         rightCP.setMouseHover( mouseHover );
         
-        if ( mouseHover ) {
+        if ( mouseHover || originState.isMouseHover() ) {
             g2d.setColor( mouseHoverStrokeColor );
-        } else if ( selected ) {
+        } else if ( originState.isActiveInSimulation() ) {
+            g2d.setColor( activeInSimulationStrokeColor );
+        } else if ( selected || originState.isSelected() ) {
             g2d.setColor( selectedStrokeColor );
         } else {
             g2d.setColor( strokeColor );

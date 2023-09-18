@@ -18,6 +18,7 @@ package br.com.davidbuzatto.yaas.gui.fa;
 
 import br.com.davidbuzatto.yaas.gui.model.AbstractGeometricForm;
 import br.com.davidbuzatto.yaas.util.Utils;
+import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.font.LineMetrics;
@@ -33,6 +34,10 @@ public class FATransitionLabel extends AbstractGeometricForm {
     private int textWidth;
     private int textHeight;
     
+    private boolean activeInSimulation;
+    private Color activeInSimulationStrokeColor;
+    private Color activeInSimulationFillColor;
+    
     @Override
     public void draw( Graphics2D g2d ) {
         
@@ -41,30 +46,37 @@ public class FATransitionLabel extends AbstractGeometricForm {
         g2d.setStroke( stroke );
         g2d.setFont( font );
         
+        boolean drawBackground = false;
+        Color localFillColor = null;
+        Color localStrokeColor = null;
+        
         if ( mouseHover ) {
-            g2d.setColor( mouseHoverFillColor );
-            g2d.fillRoundRect( 
-                    x1 - textWidth/2 - 4, y1 - textHeight / 2 - 6, 
-                    textWidth + 8, textHeight + 8,
-                    10, 10 );
-            g2d.setColor( mouseHoverStrokeColor );
-            g2d.drawRoundRect( 
-                    x1 - textWidth/2 - 4, y1 - textHeight / 2 - 6, 
-                    textWidth + 8, textHeight + 8,
-                    10, 10 );
+            localFillColor = mouseHoverFillColor;
+            localStrokeColor = mouseHoverStrokeColor;
+            drawBackground = true;
+        } else if ( activeInSimulation ) {
+            localFillColor = activeInSimulationFillColor;
+            localStrokeColor = activeInSimulationStrokeColor;
+            drawBackground = true;
         } else if ( selected ) {
-            g2d.setColor( selectedFillColor );
-            g2d.fillRoundRect( 
-                    x1 - textWidth/2 - 4, y1 - textHeight / 2 - 6, 
-                    textWidth + 8, textHeight + 8,
-                    10, 10 );
-            g2d.setColor( selectedStrokeColor );
-            g2d.drawRoundRect( 
-                    x1 - textWidth/2 - 4, y1 - textHeight / 2 - 6, 
-                    textWidth + 8, textHeight + 8,
-                    10, 10 );
+            localFillColor = selectedFillColor;
+            localStrokeColor = selectedStrokeColor;
+            drawBackground = true;
         } else {
             g2d.setColor( strokeColor );
+        }
+        
+        if ( drawBackground ) {
+            g2d.setColor( localFillColor );
+            g2d.fillRoundRect( 
+                    x1 - textWidth/2 - 4, y1 - textHeight / 2 - 6, 
+                    textWidth + 8, textHeight + 8,
+                    10, 10 );
+            g2d.setColor( localStrokeColor );
+            g2d.drawRoundRect( 
+                    x1 - textWidth/2 - 4, y1 - textHeight / 2 - 6, 
+                    textWidth + 8, textHeight + 8,
+                    10, 10 );
         }
         
         if ( text != null ) {
@@ -102,6 +114,30 @@ public class FATransitionLabel extends AbstractGeometricForm {
 
     public int getTextHeight() {
         return textHeight;
+    }
+
+    public boolean isActiveInSimulation() {
+        return activeInSimulation;
+    }
+
+    public void setActiveInSimulation( boolean activeInSimulation ) {
+        this.activeInSimulation = activeInSimulation;
+    }
+
+    public Color getActiveInSimulationStrokeColor() {
+        return activeInSimulationStrokeColor;
+    }
+
+    public void setActiveInSimulationStrokeColor( Color activeInSimulationStrokeColor ) {
+        this.activeInSimulationStrokeColor = activeInSimulationStrokeColor;
+    }
+
+    public Color getActiveInSimulationFillColor() {
+        return activeInSimulationFillColor;
+    }
+
+    public void setActiveInSimulationFillColor( Color activeInSimulationFillColor ) {
+        this.activeInSimulationFillColor = activeInSimulationFillColor;
     }
     
 }

@@ -132,12 +132,12 @@ public class DrawPanel extends JPanel {
             for ( i = 0; i < cs.length; i++ ) {
             
                 if ( i == currentSimulationStep ) {
-                    g2d.setColor( DrawingConstants.ACTIVE_SYMBOL_IN_SIMULATION_BACKGROUND_COLOR );
+                    g2d.setColor(DrawingConstants.SYMBOL_ACTIVE_IN_SIMULATION_BACKGROUND_COLOR );
                     g2d.fillRoundRect( start + inc * i - 2, 
                             ySimulationString - height / 2 - 4, 
                             inc + 3, 
                             height / 2 + 8, 10, 10 );
-                    g2d.setColor( DrawingConstants.ACTIVE_SYMBOL_IN_SIMULATION_COLOR );
+                    g2d.setColor(DrawingConstants.SYMBOL_ACTIVE_IN_SIMULATION_COLOR );
                     g2d.drawRoundRect( start + inc * i - 2, 
                             ySimulationString - height / 2 - 4, 
                             inc + 3, 
