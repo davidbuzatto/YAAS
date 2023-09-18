@@ -32,6 +32,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics2D;
 import java.awt.HeadlessException;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
@@ -40,7 +41,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
@@ -87,6 +90,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     
     private FAState selectedState;
     private FATransition selectedTransition;
+    private Set<FAState> selectedStates;
     
     private FAState originState;
     private FAState targetState;
@@ -123,7 +127,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         } else {
             this.fa = fa;
         }
-       
+        
+        this.selectedStates = new HashSet<>();
         this.zoomFacility = new ZoomFacility();
         
         initComponents();
@@ -201,6 +206,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnSaveAs = new javax.swing.JButton();
         btnSaveModelAsImage = new javax.swing.JButton();
         sep01 = new javax.swing.JToolBar.Separator();
+        btnSelectMultipleStates = new javax.swing.JToggleButton();
         btnMove = new javax.swing.JToggleButton();
         btnAddState = new javax.swing.JToggleButton();
         btnAddTransition = new javax.swing.JToggleButton();
@@ -363,6 +369,19 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         });
         toolBar.add(btnSaveModelAsImage);
         toolBar.add(sep01);
+
+        btnGroup.add(btnSelectMultipleStates);
+        btnSelectMultipleStates.setIcon(new javax.swing.ImageIcon(getClass().getResource("/selection.png"))); // NOI18N
+        btnSelectMultipleStates.setToolTipText("Select Multiple States");
+        btnSelectMultipleStates.setFocusable(false);
+        btnSelectMultipleStates.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnSelectMultipleStates.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSelectMultipleStates.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSelectMultipleStatesActionPerformed(evt);
+            }
+        });
+        toolBar.add(btnSelectMultipleStates);
 
         btnGroup.add(btnMove);
         btnMove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cursor_openhand.png"))); // NOI18N
@@ -815,6 +834,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnMoveActionPerformed
 
     private void btnAddStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddStateActionPerformed
+        selectedStates.clear();
         fa.deselectAll();
         cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
         repaintDrawPanel();
@@ -822,6 +842,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnAddStateActionPerformed
 
     private void btnAddTransitionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddTransitionActionPerformed
+        selectedStates.clear();
         fa.deselectAll();
         cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
         repaintDrawPanel();
@@ -854,41 +875,81 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         xPrev = xPressed;
         yPrev = yPressed;
         
-        if ( btnMove.isSelected() ) {
+        if ( btnSelectMultipleStates.isSelected() ) {
             
-            fa.deselectAll();
-            selectedState = fa.getStateAt( xPressed, yPressed );
+            if ( !evt.isShiftDown() ) {
+                selectedStates.clear();
+            }
             
-            if ( selectedState != null ) {
+            for ( FAState s : fa.getStates() ) {
+                if ( !selectedStates.contains( s ) ) {
+                    s.setSelected( false );
+                }
+                s.setMouseHover( false );
+            }
+            
+            repaintDrawPanel();
+            
+        } else if ( btnMove.isSelected() ) {
+            
+            boolean defaultMove = false;
+            
+            if ( !selectedStates.isEmpty() ) {
                 
-                xOffset = xPressed - selectedState.getX1();
-                yOffset = yPressed - selectedState.getY1();
-                fa.updateTransitions();
+                selectedState = fa.getStateAt( xPressed, yPressed );
                 
-                statePPanel.setFa( fa );
-                statePPanel.setState( selectedState );
-                statePPanel.readProperties();
-                cardLayout.show( panelProperties, STATE_PROPERTIES_CARD );
-                
-            } else {
-                
-                selectedTransition = fa.getTransitionAt( xPressed, yPressed );
-                
-                if ( selectedTransition != null ) {
+                if ( selectedStates.contains( selectedState ) ) {
                     
-                    transitionPPanel.setFa( fa );
-                    transitionPPanel.setTransition( selectedTransition );
-                    transitionPPanel.readProperties();
-                    cardLayout.show( panelProperties, TRANSITION_PROPERTIES_CARD );
+                    xOffset = xPressed - selectedState.getX1();
+                    yOffset = yPressed - selectedState.getY1();
+                    fa.updateTransitions();
                     
                 } else {
-                    
-                    faPPanel.setFa( fa );
-                    faPPanel.readProperties();
-                    cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
-                    
+                    selectedStates.clear();
+                    defaultMove = true;
                 }
                 
+            } else {
+                defaultMove = true;
+            }
+            
+            if ( defaultMove ) {
+                
+                fa.deselectAll();
+                selectedState = fa.getStateAt( xPressed, yPressed );
+
+                if ( selectedState != null ) {
+
+                    xOffset = xPressed - selectedState.getX1();
+                    yOffset = yPressed - selectedState.getY1();
+                    fa.updateTransitions();
+
+                    statePPanel.setFa( fa );
+                    statePPanel.setState( selectedState );
+                    statePPanel.readProperties();
+                    cardLayout.show( panelProperties, STATE_PROPERTIES_CARD );
+
+                } else {
+
+                    selectedTransition = fa.getTransitionAt( xPressed, yPressed );
+
+                    if ( selectedTransition != null ) {
+
+                        transitionPPanel.setFa( fa );
+                        transitionPPanel.setTransition( selectedTransition );
+                        transitionPPanel.readProperties();
+                        cardLayout.show( panelProperties, TRANSITION_PROPERTIES_CARD );
+
+                    } else {
+
+                        faPPanel.setFa( fa );
+                        faPPanel.readProperties();
+                        cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
+
+                    }
+
+                }
+            
             }
             
         } else if ( btnAddState.isSelected() ) {
@@ -929,7 +990,26 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
     private void drawPanelMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drawPanelMouseReleased
         
-        if ( btnMove.isSelected() ) {
+        if ( btnSelectMultipleStates.isSelected() ) {
+            
+            Rectangle rectangle = new Rectangle( 
+                    xPressed <= evt.getX() ? xPressed : evt.getX(), 
+                    yPressed <= evt.getY() ? yPressed : evt.getY(), 
+                    xPressed <= evt.getX() ? evt.getX() - xPressed : xPressed - evt.getX(), 
+                    yPressed <= evt.getY() ? evt.getY() - yPressed : yPressed - evt.getY() );
+            
+            for ( FAState s : fa.getStates() ) {
+                if ( s.intersects( rectangle ) ) {
+                    s.setSelected( true );
+                    selectedStates.add( s );
+                }
+                s.setMouseHover( false );
+            }
+            
+            drawPanel.setSelectionRectangle( null );
+            repaintDrawPanel();
+            
+        } else if ( btnMove.isSelected() ) {
             
             selectedState = null;
 
@@ -988,9 +1068,38 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     
     private void drawPanelMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drawPanelMouseDragged
         
-        if ( btnMove.isSelected() ) {
+        if ( btnSelectMultipleStates.isSelected() ) {
             
-            if ( selectedState != null ) {
+            Rectangle rectangle = new Rectangle( 
+                    xPressed <= evt.getX() ? xPressed : evt.getX(), 
+                    yPressed <= evt.getY() ? yPressed : evt.getY(), 
+                    xPressed <= evt.getX() ? evt.getX() - xPressed : xPressed - evt.getX(), 
+                    yPressed <= evt.getY() ? evt.getY() - yPressed : yPressed - evt.getY() );
+            
+            for ( FAState s : fa.getStates() ) {
+                if ( s.intersects( rectangle ) ) {
+                    s.setMouseHover( true );
+                } else {
+                    s.setMouseHover( false );
+                }
+            }
+            
+            drawPanel.setSelectionRectangle( rectangle );
+            repaintDrawPanel();
+            
+        } else if ( btnMove.isSelected() ) {
+            
+            if ( !selectedStates.isEmpty() ) {
+                int xAmount = evt.getX() - xPrev;
+                int yAmount = evt.getY() - yPrev;
+                xPrev += xAmount;
+                yPrev += yAmount;
+                for ( FAState s : selectedStates ) {
+                    s.move( xAmount, yAmount );
+                }
+                fa.updateTransitions();
+                fa.draggTransitions( evt );
+            } else if ( selectedState != null ) {
                 if ( btnSnapToGrid.isSelected() ) {
                     updateSnapPoint( evt );
                     selectedState.setX1( xSnap );
@@ -1140,6 +1249,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             txtTestString.setEditable( false );
             resetTestInGUI();
             disableGUI();
+            fa.deselectAll();
+            selectedStates.clear();
             simulationSteps.clear();
             currentSimulationStep = 0;
             
@@ -1606,6 +1717,14 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         popupMenuReorganizeStates.show( evt.getComponent(), 0, 0 );
     }//GEN-LAST:event_btnRearrangeStatesMouseReleased
 
+    private void btnSelectMultipleStatesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectMultipleStatesActionPerformed
+        selectedStates.clear();
+        fa.deselectAll();
+        cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
+        repaintDrawPanel();
+        drawPanel.setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR ) );
+    }//GEN-LAST:event_btnSelectMultipleStatesActionPerformed
+
     public void repaintDrawPanel() {
         drawPanel.repaint();
         drawPanel.setPreferredSize( new Dimension( fa.getWidth(), fa.getHeight() ) );
@@ -1727,10 +1846,15 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     }
     
     private void btnMoveAction() {
-        fa.deselectAll();
+        
+        if ( selectedStates.isEmpty() ) {
+            fa.deselectAll();
+        }
+        
         cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
         repaintDrawPanel();
         drawPanel.setCursor( Cursor.getPredefinedCursor( Cursor.HAND_CURSOR ) );
+        
     }
     
     private void disableGUI() {
@@ -1741,9 +1865,10 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnSaveAs.setEnabled( false );
         btnSaveModelAsImage.setEnabled( false );
         
-        btnMove.setSelected( true );
+        if ( btnAddState.isSelected() || btnAddTransition.isSelected() ) {
+            btnMove.setSelected( true );
+        }
         btnMoveAction();
-        btnMove.setEnabled( false );
         btnAddState.setEnabled( false );
         btnAddTransition.setEnabled( false );
         
@@ -1769,8 +1894,6 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnSaveAs.setEnabled( true );
         btnSaveModelAsImage.setEnabled( true );
         
-        btnMove.setSelected( true );
-        btnMove.setEnabled( true );
         btnAddState.setEnabled( true );
         btnAddTransition.setEnabled( true );
         
@@ -1846,6 +1969,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSaveAs;
     private javax.swing.JButton btnSaveModelAsImage;
+    private javax.swing.JToggleButton btnSelectMultipleStates;
     private javax.swing.JToggleButton btnShowGrid;
     private javax.swing.JToggleButton btnShowTransitionControls;
     private javax.swing.JToggleButton btnSnapToGrid;

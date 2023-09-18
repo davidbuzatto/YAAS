@@ -21,6 +21,7 @@ import br.com.davidbuzatto.yaas.gui.model.Arrow;
 import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
 /**
  * A generic automaton state.
@@ -46,6 +47,15 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
     private Color activeInSimulationFillColor;
     
     public FAState() {
+        this( "", null, false, false );
+    }
+    
+    public FAState( String label, String customLabel, boolean initial, boolean accepting ) {
+        
+        this.label = label;
+        this.customLabel = customLabel;
+        this.initial = initial;
+        this.accepting = accepting;
         
         font = DrawingConstants.DEFAULT_FONT;
         stroke = DrawingConstants.STATE_STROKE;
@@ -87,10 +97,10 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
         
         if ( mouseHover ) {
             g2d.setColor( mouseHoverStrokeColor );
-        } else if ( selected ) {
-            g2d.setColor( selectedStrokeColor );
         } else if ( activeInSimulation ) {
             g2d.setColor( activeInSimulationStrokeColor );
+        } else if ( selected ) {
+            g2d.setColor( selectedStrokeColor );
         } else {
             g2d.setColor( strokeColor );
         }
@@ -104,10 +114,10 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
         
         if ( mouseHover ) {
             g2d.setColor( mouseHoverFillColor );
-        } else if ( selected ) {
-            g2d.setColor( selectedFillColor );
         } else if ( activeInSimulation ) {
             g2d.setColor( activeInSimulationFillColor );
+        } else if ( selected ) {
+            g2d.setColor( selectedFillColor );
         } else {
             g2d.setColor( fillColor );
         }
@@ -116,10 +126,10 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
         
         if ( mouseHover ) {
             g2d.setColor( mouseHoverStrokeColor );
-        } else if ( selected ) {
-            g2d.setColor( selectedStrokeColor );
         } else if ( activeInSimulation ) {
             g2d.setColor( activeInSimulationStrokeColor );
+        } else if ( selected ) {
+            g2d.setColor( selectedStrokeColor );
         } else {
             g2d.setColor( strokeColor );
         }
@@ -151,7 +161,7 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
     }
     
     public void mouseHover( int x, int y ) {
-        if ( intercepts( x, y ) ) {
+        if ( FAState.this.intersects( x, y ) ) {
             mouseHover = true;
             return;
         }
@@ -159,10 +169,18 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
     }
     
     @Override
-    public boolean intercepts( int x, int y ) {
+    public boolean intersects( int x, int y ) {
         x = x1 - x;
         y = y1 - y;
         return x*x + y*y <= radiusSquared;
+    }
+    
+    public boolean intersects( Rectangle rectangle ) {
+        return new Rectangle( 
+                x1 - radius, 
+                y1 - radius, 
+                diameter, 
+                diameter ).intersects( rectangle );
     }
 
     public String getLabel() {

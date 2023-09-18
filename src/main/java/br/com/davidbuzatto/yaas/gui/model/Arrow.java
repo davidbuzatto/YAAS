@@ -46,10 +46,10 @@ public class Arrow extends AbstractGeometricForm {
         
         if ( mouseHover ) {
             g2d.setColor( mouseHoverStrokeColor );
-        } else if ( selected ) {
-            g2d.setColor( selectedStrokeColor );
         } else if ( activeInSimulation ) {
             g2d.setColor( activeInSimulationStrokeColor );
+        } else if ( selected ) {
+            g2d.setColor( selectedStrokeColor );
         } else {
             g2d.setColor( strokeColor );
         }
@@ -67,7 +67,7 @@ public class Arrow extends AbstractGeometricForm {
     }
 
     @Override
-    public boolean intercepts( int x, int y ) {
+    public boolean intersects( int x, int y ) {
         return false;
     }
 

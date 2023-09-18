@@ -163,7 +163,7 @@ public class FA extends AbstractGeometricForm {
     }
 
     @Override
-    public boolean intercepts( int x, int y ) {
+    public boolean intersects( int x, int y ) {
         return false;
     }
 
@@ -180,7 +180,7 @@ public class FA extends AbstractGeometricForm {
     public FAState getStateAt( int x, int y ) {
         
         for ( FAState s : states ) {
-            if ( s.intercepts( x, y ) ) {
+            if ( s.intersects( x, y ) ) {
                 s.setSelected( true );
                 return s;
             }
@@ -193,7 +193,7 @@ public class FA extends AbstractGeometricForm {
     public FATransition getTransitionAt( int x, int y ) {
         
         for ( FATransition t : transitions ) {
-            if ( t.intercepts( x - x1, y - y1 ) ) {
+            if ( t.intersects( x - x1, y - y1 ) ) {
                 t.setSelected( true );
                 return t;
             }

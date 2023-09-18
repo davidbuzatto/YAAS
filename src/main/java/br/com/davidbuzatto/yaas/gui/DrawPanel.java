@@ -49,6 +49,8 @@ public class DrawPanel extends JPanel {
     private int tempTransitionX2;
     private int tempTransitionY2;
     
+    private Rectangle selectionRectangle;
+    
     private String simulationString;
     private List<FASimulationStep> simulationSteps;
     private int currentSimulationStep;
@@ -164,6 +166,21 @@ public class DrawPanel extends JPanel {
             
         }
         
+        if ( selectionRectangle != null ) {
+            
+            g2d.setColor( DrawingConstants.SELECTION_RETANGLE_FILL_COLOR );
+            g2d.fillRect( 
+                    selectionRectangle.x, selectionRectangle.y, 
+                    selectionRectangle.width, selectionRectangle.height );
+            
+            g2d.setStroke( DrawingConstants.SELECTION_RETANGLE_STROKE );
+            g2d.setColor( DrawingConstants.SELECTION_RETANGLE_STROKE_COLOR );
+            g2d.drawRect( 
+                    selectionRectangle.x, selectionRectangle.y, 
+                    selectionRectangle.width, selectionRectangle.height );
+
+        }
+        
         g2d.setStroke( DrawingConstants.DRAW_PANEL_STROKE );
         g2d.setColor( Color.BLACK );
         g2d.drawRect( 0, 0, getWidth(), getHeight() );
@@ -202,6 +219,10 @@ public class DrawPanel extends JPanel {
 
     public void setTempTransitionY2( int tempTransitionY2 ) {
         this.tempTransitionY2 = tempTransitionY2;
+    }
+
+    public void setSelectionRectangle( Rectangle selectionRectangle ) {
+        this.selectionRectangle = selectionRectangle;
     }
 
     public void setSimulationString( String simulationString ) {

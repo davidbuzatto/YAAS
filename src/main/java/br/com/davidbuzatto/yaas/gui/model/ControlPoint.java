@@ -48,7 +48,7 @@ public class ControlPoint extends AbstractGeometricForm {
     }
 
     @Override
-    public boolean intercepts( int x, int y ) {
+    public boolean intersects( int x, int y ) {
         x = x1 - x;
         y = y1 - y;        
         return x*x + y*y <= radiusSquared;

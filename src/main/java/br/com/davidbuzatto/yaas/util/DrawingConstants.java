@@ -96,6 +96,12 @@ public interface DrawingConstants {
             new BasicStroke( 2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
                     1, new float[]{ 5, 5 }, 0 );
     
+    public static final Color SELECTION_RETANGLE_STROKE_COLOR = new Color( 0, 102, 153, 150 );
+    public static final Color SELECTION_RETANGLE_FILL_COLOR = new Color( 0, 102, 153, 50 );
+    public static final BasicStroke SELECTION_RETANGLE_STROKE = 
+            new BasicStroke( 1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
+                    1, new float[]{ 5, 5 }, 0 );
+    
     public static final BasicStroke DEFAULT_ARROW_STROKE = new BasicStroke( 
             2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND );
     

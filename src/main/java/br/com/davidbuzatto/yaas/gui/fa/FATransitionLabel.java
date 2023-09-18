@@ -76,7 +76,7 @@ public class FATransitionLabel extends AbstractGeometricForm {
     }
 
     @Override
-    public boolean intercepts( int x, int y ) {
+    public boolean intersects( int x, int y ) {
         return 
                 x >= x1 - textWidth/2 - 4 && 
                 x <= x1 + textWidth/2 + 8 &&

@@ -18,6 +18,7 @@ package br.com.davidbuzatto.yaas.gui;
 
 import br.com.davidbuzatto.yaas.gui.fa.FA;
 import br.com.davidbuzatto.yaas.gui.fa.FAExamples;
+import br.com.davidbuzatto.yaas.gui.fa.FAExamplesForDFAMinimizationTest;
 import br.com.davidbuzatto.yaas.gui.fa.FAInternalFrame;
 import br.com.davidbuzatto.yaas.util.ApplicationPreferences;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
@@ -50,7 +51,9 @@ public class MainWindow extends javax.swing.JFrame {
         
         //setExtendedState( MAXIMIZED_BOTH );
         
-        createFAInternalFrame( FAExamples.createDFAForMinimization(), true );
+        //createFAInternalFrame( FAExamplesForDFAMinimizationTest.createDFAForMinimizationTest01(), true );
+        //createFAInternalFrame( FAExamplesForDFAMinimizationTest.createDFAForMinimizationTest02(), true );
+        createFAInternalFrame( FAExamplesForDFAMinimizationTest.createDFAForMinimizationTest03(), true );
         
     }
 

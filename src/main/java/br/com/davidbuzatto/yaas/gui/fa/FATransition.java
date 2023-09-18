@@ -262,26 +262,26 @@ public class FATransition extends AbstractGeometricForm {
     public void mouseHover( int x, int y ) {
 
         if ( controlPointsVisible ) {
-            if ( targetCP.intercepts( x, y ) ) {
+            if ( targetCP.intersects( x, y ) ) {
                 mouseHover = true;
                 targetCP.setMouseHover( true );
                 return;
-            } else if ( centralCP.intercepts( x, y ) ) {
+            } else if ( centralCP.intersects( x, y ) ) {
                 mouseHover = true;
                 centralCP.setMouseHover( true );
                 return;
-            } else if ( leftCP.intercepts( x, y ) ) {
+            } else if ( leftCP.intersects( x, y ) ) {
                 mouseHover = true;
                 leftCP.setMouseHover( true );
                 return;
-            } else if ( rightCP.intercepts( x, y ) ) {
+            } else if ( rightCP.intersects( x, y ) ) {
                 mouseHover = true;
                 rightCP.setMouseHover( true );
                 return;
             }
         }
         
-        if ( label.intercepts( x, y ) ) {
+        if ( label.intersects( x, y ) ) {
             mouseHover = true;
             return;
         }
@@ -447,7 +447,7 @@ public class FATransition extends AbstractGeometricForm {
     }
 
     @Override
-    public boolean intercepts( int x, int y ) {
+    public boolean intersects( int x, int y ) {
         
         prevCentralCPX = centralCP.getX1();
         prevCentralCPY = centralCP.getY1();
@@ -456,20 +456,20 @@ public class FATransition extends AbstractGeometricForm {
         prevRightCPX = rightCP.getX1();
         prevRightCPY = rightCP.getY1();
 
-        if ( label.intercepts( x, y ) ) {
+        if ( label.intersects( x, y ) ) {
             labelDragging = true;
             xOffset = x - label.getX1();
             yOffset = y - label.getY1();
         }
         
         if ( !labelDragging && controlPointsVisible ) {
-            if ( targetCP.intercepts( x, y ) ) {
+            if ( targetCP.intersects( x, y ) ) {
                 targetCPDragging = true;
-            } else if ( centralCP.intercepts( x, y ) ) {
+            } else if ( centralCP.intersects( x, y ) ) {
                 centralCPDragging = true;
-            } else if ( leftCP.intercepts( x, y ) ) {
+            } else if ( leftCP.intersects( x, y ) ) {
                 leftCPDragging = true;
-            } else if ( rightCP.intercepts( x, y ) ) {
+            } else if ( rightCP.intersects( x, y ) ) {
                 rightCPDragging = true;
             }
         }

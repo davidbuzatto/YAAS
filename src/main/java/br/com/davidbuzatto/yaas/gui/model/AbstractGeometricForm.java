@@ -57,7 +57,7 @@ public abstract class AbstractGeometricForm {
     }
     
     public abstract void draw( Graphics2D g2d );
-    public abstract boolean intercepts( int x, int y );
+    public abstract boolean intersects( int x, int y );
 
     public void move( int xAmount, int yAmount ) {
         x1 += xAmount;
