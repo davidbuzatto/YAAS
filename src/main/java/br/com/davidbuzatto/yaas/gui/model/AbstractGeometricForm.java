@@ -20,13 +20,16 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
+import java.io.Serializable;
 
 /**
  * An abstract class with the basic behavior of drawable forms.
  * 
  * @author Prof. Dr. David Buzatto
  */
-public abstract class AbstractGeometricForm {
+public abstract class AbstractGeometricForm implements Serializable {
+    
+    private static final long serialVersionUID = 1L;
     
     private static int idGenerator;
     protected int id;
@@ -50,7 +53,7 @@ public abstract class AbstractGeometricForm {
     protected Color selectedFillColor = Color.WHITE;
     
     protected Font font;
-    protected Stroke stroke;
+    protected SerializableBasicStroke stroke;
     
     public AbstractGeometricForm() {
         id = idGenerator++;
@@ -170,11 +173,11 @@ public abstract class AbstractGeometricForm {
         this.font = font;
     }
 
-    public Stroke getStroke() {
+    public SerializableBasicStroke getStroke() {
         return stroke;
     }
 
-    public void setStroke( Stroke stroke ) {
+    public void setStroke( SerializableBasicStroke stroke ) {
         this.stroke = stroke;
     }
 

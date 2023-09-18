@@ -42,7 +42,7 @@ public class Arrow extends AbstractGeometricForm {
         
         g2d = (Graphics2D) g2d.create();
         g2d.rotate( angle, x1, y1 );
-        g2d.setStroke( stroke );
+        g2d.setStroke( stroke.getBasicStroke() );
         
         if ( mouseHover ) {
             g2d.setColor( mouseHoverStrokeColor );

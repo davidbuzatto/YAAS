@@ -51,9 +51,7 @@ public class MainWindow extends javax.swing.JFrame {
         
         //setExtendedState( MAXIMIZED_BOTH );
         
-        createFAInternalFrame( FAExamplesForDFAMinimizationTest.createDFAForMinimizationTest01(), true );
-        //createFAInternalFrame( FAExamplesForDFAMinimizationTest.createDFAForMinimizationTest02(), true );
-        //createFAInternalFrame( FAExamplesForDFAMinimizationTest.createDFAForMinimizationTest03(), true );
+        createFAInternalFrame( FAExamplesForDFAMinimizationTest.createDFAForMinimizationTest01(), true, true );
         
     }
 
@@ -139,11 +137,14 @@ public class MainWindow extends javax.swing.JFrame {
         btnTM.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         toolBar.add(btnTM);
 
+        menuFile.setMnemonic('F');
         menuFile.setText("File");
 
         menuItemExit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_DOWN_MASK));
         menuItemExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/door_out.png"))); // NOI18N
+        menuItemExit.setMnemonic('x');
         menuItemExit.setText("Exit");
+        menuItemExit.setToolTipText("");
         menuItemExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuItemExitActionPerformed(evt);
@@ -153,10 +154,14 @@ public class MainWindow extends javax.swing.JFrame {
 
         menuBar.add(menuFile);
 
+        menuExamples.setMnemonic('x');
         menuExamples.setText("Examples");
+        menuExamples.setToolTipText("");
 
         menuDFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dfa.png"))); // NOI18N
+        menuDFA.setMnemonic('D');
         menuDFA.setText("DFA");
+        menuDFA.setToolTipText("");
 
         miDFASubstring01.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dfa.png"))); // NOI18N
         miDFASubstring01.setText("L = { x01y | x and y are any strings of 0's and 1's }");
@@ -215,6 +220,7 @@ public class MainWindow extends javax.swing.JFrame {
         menuExamples.add(menuDFA);
 
         menuNFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nfa.png"))); // NOI18N
+        menuNFA.setMnemonic('N');
         menuNFA.setText("NFA");
 
         miNFAEndsWith00.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nfa.png"))); // NOI18N
@@ -256,6 +262,7 @@ public class MainWindow extends javax.swing.JFrame {
         menuExamples.add(menuNFA);
 
         menuENFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/enfa.png"))); // NOI18N
+        menuENFA.setMnemonic('F');
         menuENFA.setText(CharacterConstants.EMPTY_STRING.toString() + "-NFA");
 
         miENFADecimalNumber.setIcon(new javax.swing.ImageIcon(getClass().getResource("/enfa.png"))); // NOI18N
@@ -271,10 +278,12 @@ public class MainWindow extends javax.swing.JFrame {
 
         menuBar.add(menuExamples);
 
+        menuHelp.setMnemonic('H');
         menuHelp.setText("Help");
 
         menuItemAbout.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
         menuItemAbout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/help.png"))); // NOI18N
+        menuItemAbout.setMnemonic('A');
         menuItemAbout.setText("About...");
         menuItemAbout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -307,27 +316,27 @@ public class MainWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnFAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFAActionPerformed
-        createFAInternalFrame( null, false );
+        createFAInternalFrame( null, false, true );
     }//GEN-LAST:event_btnFAActionPerformed
 
     private void miDFASubstring01ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDFASubstring01ActionPerformed
-        createFAInternalFrame( FAExamples.createDFASubstring01(), false );
+        createFAInternalFrame( FAExamples.createDFASubstring01(), false, false );
     }//GEN-LAST:event_miDFASubstring01ActionPerformed
 
     private void miDFAEndsWith01ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDFAEndsWith01ActionPerformed
-        createFAInternalFrame( FAExamples.createDFAEndsWith01(), false );
+        createFAInternalFrame( FAExamples.createDFAEndsWith01(), false, false );
     }//GEN-LAST:event_miDFAEndsWith01ActionPerformed
 
     private void miDFA0Even1OddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDFA0Even1OddActionPerformed
-        createFAInternalFrame( FAExamples.createDFA0Even1Odd(), false );
+        createFAInternalFrame( FAExamples.createDFA0Even1Odd(), false, false );
     }//GEN-LAST:event_miDFA0Even1OddActionPerformed
 
     private void miNFAEndsWith01ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miNFAEndsWith01ActionPerformed
-        createFAInternalFrame( FAExamples.createNFAEndsWith01(), false );
+        createFAInternalFrame( FAExamples.createNFAEndsWith01(), false, false );
     }//GEN-LAST:event_miNFAEndsWith01ActionPerformed
 
     private void miENFADecimalNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miENFADecimalNumberActionPerformed
-        createFAInternalFrame( FAExamples.createENFADecimalNumber(), false );
+        createFAInternalFrame( FAExamples.createENFADecimalNumber(), false, false );
     }//GEN-LAST:event_miENFADecimalNumberActionPerformed
 
     private void menuItemExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemExitActionPerformed
@@ -339,33 +348,38 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_menuItemAboutActionPerformed
 
     private void miNFAEndsWith00ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miNFAEndsWith00ActionPerformed
-        createFAInternalFrame( FAExamples.createNFAEndsWith00(), false );
+        createFAInternalFrame( FAExamples.createNFAEndsWith00(), false, false );
     }//GEN-LAST:event_miNFAEndsWith00ActionPerformed
 
     private void miNFAEndsWith10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miNFAEndsWith10ActionPerformed
-        createFAInternalFrame( FAExamples.createNFAEndsWith10(), false );
+        createFAInternalFrame( FAExamples.createNFAEndsWith10(), false, false );
     }//GEN-LAST:event_miNFAEndsWith10ActionPerformed
 
     private void miNFAEndsWith11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miNFAEndsWith11ActionPerformed
-        createFAInternalFrame( FAExamples.createNFAEndsWith11(), false );
+        createFAInternalFrame( FAExamples.createNFAEndsWith11(), false, false );
     }//GEN-LAST:event_miNFAEndsWith11ActionPerformed
 
     private void miDFAEndsWith00ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDFAEndsWith00ActionPerformed
-        createFAInternalFrame( FAExamples.createDFAEndsWith00(), false );
+        createFAInternalFrame( FAExamples.createDFAEndsWith00(), false, false );
     }//GEN-LAST:event_miDFAEndsWith00ActionPerformed
 
     private void miDFAEndsWith11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDFAEndsWith11ActionPerformed
-        createFAInternalFrame( FAExamples.createDFAEndsWith11(), false );
+        createFAInternalFrame( FAExamples.createDFAEndsWith11(), false, false );
     }//GEN-LAST:event_miDFAEndsWith11ActionPerformed
 
     private void miDFAEndsWith10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDFAEndsWith10ActionPerformed
-        createFAInternalFrame( FAExamples.createDFAEndsWith10(), false );
+        createFAInternalFrame( FAExamples.createDFAEndsWith10(), false, false );
     }//GEN-LAST:event_miDFAEndsWith10ActionPerformed
 
-    public void createFAInternalFrame( FA fa, boolean maximized ) {
+    public void createFAInternalFrame( FA fa, boolean maximized, boolean currentFileSaved ) {
+        
+        if ( fa == null ) {
+            fa = new FA();
+        }
         
         FAInternalFrame iFrame = new FAInternalFrame( this, fa );
         iFrame.setCurrentState( fa.getStates().size() );
+        iFrame.setCurrentFileSaved( currentFileSaved );
         
         desktopPane.add( iFrame );
         iFrame.setVisible( true );

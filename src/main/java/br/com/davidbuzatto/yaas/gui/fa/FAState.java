@@ -89,7 +89,7 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
         g2d = (Graphics2D) g2d.create();
         
         g2d.setFont( font );
-        g2d.setStroke( stroke );
+        g2d.setStroke( stroke.getBasicStroke() );
         arrow.setMouseHover( mouseHover );
         arrow.setSelected( selected );
         arrow.setStrokeColor( strokeColor );

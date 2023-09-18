@@ -34,7 +34,7 @@ public class ControlPoint extends AbstractGeometricForm {
         
         g2d = (Graphics2D) g2d.create();
         
-        g2d.setStroke( stroke );
+        g2d.setStroke( stroke.getBasicStroke() );
         g2d.setColor( fillColor );
         g2d.fillOval( x1 - radius, y1 - radius, diameter, diameter );
         

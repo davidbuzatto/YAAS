@@ -244,12 +244,14 @@ public class FAStatePropertiesPanel extends javax.swing.JPanel {
             state.setInitial( false );
         }
         
+        faIFrame.setCurrentFileSaved( false );
         faIFrame.repaintDrawPanel();
         
     }//GEN-LAST:event_checkInitialActionPerformed
 
     private void checkAcceptingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkAcceptingActionPerformed
         state.setAccepting( checkAccepting.isSelected() );
+        faIFrame.setCurrentFileSaved( false );
         faIFrame.repaintDrawPanel();
     }//GEN-LAST:event_checkAcceptingActionPerformed
 
@@ -263,6 +265,7 @@ public class FAStatePropertiesPanel extends javax.swing.JPanel {
                     "Confirmation",
                     JOptionPane.YES_NO_OPTION ) == JOptionPane.YES_OPTION ) {
                 fa.removeState( state );
+                faIFrame.setCurrentFileSaved( false );
                 faIFrame.repaintDrawPanel();
                 faIFrame.updateAfterRemotion();
                 state = null;
@@ -282,6 +285,7 @@ public class FAStatePropertiesPanel extends javax.swing.JPanel {
 
     private void txtCustomLabelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCustomLabelActionPerformed
         state.setCustomLabel( txtCustomLabel.getText() );
+        faIFrame.setCurrentFileSaved( false );
         faIFrame.repaintDrawPanel();
     }//GEN-LAST:event_txtCustomLabelActionPerformed
 
@@ -293,6 +297,7 @@ public class FAStatePropertiesPanel extends javax.swing.JPanel {
             ccpColor.setColor( c );
             ccpColor.repaint();
             state.setStrokeColor( c );
+            faIFrame.setCurrentFileSaved( false );
             faIFrame.repaintDrawPanel();
         }
         

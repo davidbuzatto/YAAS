@@ -39,7 +39,11 @@ import java.awt.event.AdjustmentListener;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -110,6 +114,10 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     
     private ZoomFacility zoomFacility;
     
+    private boolean currentFileSaved;
+    private File currentFile;
+    private String baseTitle;
+    
     /**
      * Creates new form FAInternalFrame
      */
@@ -161,7 +169,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         lblTestResultDefaultFC = lblTestResult.getForeground();
         
         scrollPaneModel.getHorizontalScrollBar().addAdjustmentListener( 
-                new AdjustmentListener(){
+                new AdjustmentListener() {
             @Override
             public void adjustmentValueChanged( AdjustmentEvent e ) {
                 repaintDrawPanel();
@@ -169,7 +177,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         });
         
         scrollPaneModel.getVerticalScrollBar().addAdjustmentListener( 
-                new AdjustmentListener(){
+                new AdjustmentListener() {
             @Override
             public void adjustmentValueChanged( AdjustmentEvent e ) {
                 repaintDrawPanel();
@@ -179,6 +187,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         sep05.setVisible( false );
         btnZoomIn.setVisible( false );
         btnZoomOut.setVisible( false );
+        baseTitle = getTitle();
+        setCurrentFileSaved( true );
         
     }
     
@@ -204,7 +214,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnOpen = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
         btnSaveAs = new javax.swing.JButton();
-        btnSaveModelAsImage = new javax.swing.JButton();
+        btnSaveFAAsImage = new javax.swing.JButton();
         sep01 = new javax.swing.JToolBar.Separator();
         btnSelectMultipleStates = new javax.swing.JToggleButton();
         btnMove = new javax.swing.JToggleButton();
@@ -301,11 +311,29 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         popupMenuReorganizeStates.add(popItemByLevel);
 
         setClosable(true);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
         setTitle("Finite Automata");
         setFrameIcon(new javax.swing.ImageIcon(getClass().getResource("/fa.png"))); // NOI18N
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameClosing(evt);
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
 
         toolBar.setRollover(true);
 
@@ -357,17 +385,17 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         });
         toolBar.add(btnSaveAs);
 
-        btnSaveModelAsImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture.png"))); // NOI18N
-        btnSaveModelAsImage.setToolTipText("Save Model as Image");
-        btnSaveModelAsImage.setFocusable(false);
-        btnSaveModelAsImage.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnSaveModelAsImage.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnSaveModelAsImage.addActionListener(new java.awt.event.ActionListener() {
+        btnSaveFAAsImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture.png"))); // NOI18N
+        btnSaveFAAsImage.setToolTipText("Save Finite Automaton as Image");
+        btnSaveFAAsImage.setFocusable(false);
+        btnSaveFAAsImage.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnSaveFAAsImage.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSaveFAAsImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveModelAsImageActionPerformed(evt);
+                btnSaveFAAsImageActionPerformed(evt);
             }
         });
-        toolBar.add(btnSaveModelAsImage);
+        toolBar.add(btnSaveFAAsImage);
         toolBar.add(sep01);
 
         btnGroup.add(btnSelectMultipleStates);
@@ -800,6 +828,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 JOptionPane.YES_NO_OPTION ) == JOptionPane.YES_OPTION ) {
             
             fa = new FA();
+            setCurrentFileSaved( false );
             
             drawPanel.setFa( fa );
             faPPanel.setFa( fa );
@@ -820,14 +849,6 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         }
         
     }//GEN-LAST:event_btnNewActionPerformed
-
-    private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
-        Utils.showNotImplementedYetMessage();
-    }//GEN-LAST:event_btnOpenActionPerformed
-
-    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        Utils.showNotImplementedYetMessage();
-    }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnMoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveActionPerformed
         btnMoveAction();
@@ -967,6 +988,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 newState.setY1( ySnap );
             }
             
+            setCurrentFileSaved( false );
+            
         } else if ( btnAddTransition.isSelected() ) {
             
             if ( originState == null ) {
@@ -1044,6 +1067,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                             FATransition t = new FATransition( 
                                     originState, targetState, symbols );
                             fa.addTransition( t );
+                            setCurrentFileSaved( false );
                         }
                         
                     }
@@ -1120,6 +1144,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 fa.move( xAmount, yAmount );
             }
             
+            setCurrentFileSaved( false );
+            
         } else if ( btnAddTransition.isSelected() ) {
             drawPanel.setTempTransitionX2( evt.getX() );
             drawPanel.setTempTransitionY2( evt.getY() );
@@ -1168,10 +1194,10 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_drawPanelMouseWheelMoved
 
-    private void btnSaveModelAsImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveModelAsImageActionPerformed
+    private void btnSaveFAAsImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveFAAsImageActionPerformed
         
         JFileChooser jfc = new JFileChooser( new File( ApplicationPreferences.getPref( ApplicationPreferences.PREF_DEFAULT_FOLDER_PATH ) ) );
-        jfc.setDialogTitle( "Save Model as Image" );
+        jfc.setDialogTitle( "Save Finite Automaton as Image" );
         jfc.setMultiSelectionEnabled( false );
         jfc.setFileSelectionMode( JFileChooser.FILES_ONLY );
         jfc.removeChoosableFileFilter( jfc.getFileFilter() );
@@ -1236,7 +1262,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             
         }
         
-    }//GEN-LAST:event_btnSaveModelAsImageActionPerformed
+    }//GEN-LAST:event_btnSaveFAAsImageActionPerformed
 
     private void btnTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTestActionPerformed
         runSingleTest();
@@ -1352,9 +1378,23 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
     private void btnGenerateEquivalentDFAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateEquivalentDFAActionPerformed
         
-        FA dfa = FAAlgorithms.generateDFARemovingNondeterminisms( fa );
-        FAAlgorithms.arrangeFAInCircle( dfa, 250, 200, 150 );
-        mainWindow.createFAInternalFrame( dfa, false );
+        fa.updateType();
+        
+        if ( fa.getType() != FAType.EMPTY ) {
+            
+            FA dfa = FAAlgorithms.generateDFARemovingNondeterminisms( fa );
+            FAAlgorithms.arrangeFAInCircle( dfa, 250, 200, 150 );
+            mainWindow.createFAInternalFrame( dfa, false, false );
+            
+        } else {
+            
+            JOptionPane.showMessageDialog( 
+                    mainWindow, 
+                    "You must define a Finite Automaton First!", 
+                    "ERROR", 
+                    JOptionPane.ERROR_MESSAGE );
+            
+        }
         
     }//GEN-LAST:event_btnGenerateEquivalentDFAActionPerformed
 
@@ -1366,7 +1406,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             
             FA minDFA = FAAlgorithms.generateMinimizedDFA( fa );
             FAAlgorithms.arrangeFAInCircle( minDFA, 250, 200, 150 );
-            mainWindow.createFAInternalFrame( minDFA, false );
+            mainWindow.createFAInternalFrame( minDFA, false, false );
             
         } else {
             
@@ -1394,6 +1434,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 currentState++;
             }
             
+            setCurrentFileSaved( false );
             repaintDrawPanel();
             
         } else {
@@ -1407,10 +1448,6 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         }
         
     }//GEN-LAST:event_btnComplementDFAActionPerformed
-
-    private void btnSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveAsActionPerformed
-        Utils.showNotImplementedYetMessage();
-    }//GEN-LAST:event_btnSaveAsActionPerformed
 
     private void txtTestStringActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTestStringActionPerformed
         runSingleTest();
@@ -1430,6 +1467,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 currentState++;
             }
             
+            setCurrentFileSaved( false );
             repaintDrawPanel();
             
         } else {
@@ -1459,6 +1497,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 
                 FAAlgorithms.arrangeFAHorizontally( fa, 100, 100, distance );
                 
+                setCurrentFileSaved( false );
                 repaintDrawPanel();
                 
             }
@@ -1488,6 +1527,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 
                 FAAlgorithms.arrangeFAVertically( fa, 100, 100, distance );
                 
+                setCurrentFileSaved( false );
                 repaintDrawPanel();
                 
             }
@@ -1556,6 +1596,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                         Integer.parseInt( spinColumns.getValue().toString() ), 
                         distance );
 
+                setCurrentFileSaved( false );
                 repaintDrawPanel();
                 
             } catch ( NumberFormatException exc ) {
@@ -1586,6 +1627,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 FAAlgorithms.arrangeFAInCircle( 
                         fa, radius + 100, radius + 100, radius );
                 
+                setCurrentFileSaved( false );
                 repaintDrawPanel();
                 
             }
@@ -1660,6 +1702,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                     FAAlgorithms.arrangeFAByLevel( 
                             fa, 100, 100, distance, rbVertical.isSelected() );
 
+                    setCurrentFileSaved( false );
                     repaintDrawPanel();
 
                 } catch ( NumberFormatException exc ) {
@@ -1699,6 +1742,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 
                 FAAlgorithms.arrangeFADiagonally( fa, 100, 100, distance );
                 
+                setCurrentFileSaved( false );
                 repaintDrawPanel();
                 
             }
@@ -1724,6 +1768,62 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         repaintDrawPanel();
         drawPanel.setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR ) );
     }//GEN-LAST:event_btnSelectMultipleStatesActionPerformed
+
+    private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
+
+        if ( !currentFileSaved ) {
+            
+            int r = JOptionPane.showConfirmDialog( 
+                    mainWindow, 
+                    "Save modifications before oppening?", 
+                    "Confirmation", 
+                    JOptionPane.YES_NO_CANCEL_OPTION );
+            
+            if ( r == JOptionPane.YES_OPTION ) {
+                if ( saveFA() ) {
+                    openFA();
+                }
+            } else if ( r == JOptionPane.NO_OPTION ) {
+                openFA();
+            }
+            
+        } else {
+            openFA();
+        }
+        
+    }//GEN-LAST:event_btnOpenActionPerformed
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        saveFA();
+    }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void btnSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveAsActionPerformed
+        saveFAAs( "Save Finite Automaton As..." );
+    }//GEN-LAST:event_btnSaveAsActionPerformed
+
+    private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
+        
+        if ( !currentFileSaved ) {
+            
+            int r = JOptionPane.showConfirmDialog( 
+                    mainWindow, 
+                    "Save modifications before close?", 
+                    "Confirmation", 
+                    JOptionPane.YES_NO_CANCEL_OPTION );
+            
+            if ( r == JOptionPane.YES_OPTION ) {
+                if ( saveFA() ) {
+                    dispose();
+                }
+            } else if ( r == JOptionPane.NO_OPTION ) {
+                dispose();
+            }
+            
+        } else {
+            dispose();
+        }
+        
+    }//GEN-LAST:event_formInternalFrameClosing
 
     public void repaintDrawPanel() {
         drawPanel.repaint();
@@ -1753,6 +1853,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             btnZoomIn.setEnabled( false );
         }
         
+        setCurrentFileSaved( false );
         repaintDrawPanel();
         
     }
@@ -1766,6 +1867,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             btnZoomOut.setEnabled( false );
         }
         
+        setCurrentFileSaved( false );
         repaintDrawPanel();
         
     }
@@ -1863,7 +1965,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnOpen.setEnabled( false );
         btnSave.setEnabled( false );
         btnSaveAs.setEnabled( false );
-        btnSaveModelAsImage.setEnabled( false );
+        btnSaveFAAsImage.setEnabled( false );
         
         if ( btnAddState.isSelected() || btnAddTransition.isSelected() ) {
             btnMove.setSelected( true );
@@ -1892,7 +1994,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnOpen.setEnabled( true );
         btnSave.setEnabled( true );
         btnSaveAs.setEnabled( true );
-        btnSaveModelAsImage.setEnabled( true );
+        btnSaveFAAsImage.setEnabled( true );
         
         btnAddState.setEnabled( true );
         btnAddTransition.setEnabled( true );
@@ -1947,6 +2049,147 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     public void setCurrentState( int currentState ) {
         this.currentState = currentState;
     }
+
+    public void setCurrentFileSaved( boolean currentFileSaved ) {
+        this.currentFileSaved = currentFileSaved;
+        updateTitle();
+    }
+    
+    private void updateTitle() {
+        
+        if ( currentFile == null ) {
+            setTitle( String.format( "*%s - %s", "new", baseTitle ) );
+        } else {
+            
+            if ( currentFileSaved ) {
+                setTitle( String.format( "%s - %s", currentFile.getName(), baseTitle ) );
+            } else {
+                setTitle( String.format( "*%s - %s", currentFile.getName(), baseTitle ) );
+            }
+            
+        }
+        
+    }
+    
+    private void serializeFAToFile( File file ) {
+        
+        try ( FileOutputStream fos = new FileOutputStream( file );
+                ObjectOutputStream oos = new ObjectOutputStream( fos ) ) {
+
+            oos.writeObject( fa );
+            oos.flush();
+            currentFile = file;
+            setCurrentFileSaved( true );
+
+        } catch ( IOException exc ) {
+            Utils.showException( exc );
+        }
+        
+    }
+    
+    private boolean saveFA() {
+        
+        if ( currentFile == null ) {
+            return saveFAAs( "Save Finite Automaton" );
+        } else {
+            serializeFAToFile( currentFile );
+            return true;
+        }
+        
+    }
+    
+    private boolean saveFAAs( String saveDialogTitle ) {
+        
+        JFileChooser jfc = new JFileChooser( new File( ApplicationPreferences.getPref( ApplicationPreferences.PREF_DEFAULT_FOLDER_PATH ) ) );
+        jfc.setDialogTitle( saveDialogTitle );
+        jfc.setMultiSelectionEnabled( false );
+        jfc.setFileSelectionMode( JFileChooser.FILES_ONLY );
+        jfc.removeChoosableFileFilter( jfc.getFileFilter() );
+        jfc.setFileFilter( new FileNameExtensionFilter( "YAAS Finite Automaton", "yfa" ) );
+
+        if ( jfc.showSaveDialog( mainWindow ) == JFileChooser.APPROVE_OPTION ) {
+
+            File f = jfc.getSelectedFile();
+
+            if ( !f.getName().endsWith( ".yfa" ) ) {
+                f = new File( f.getAbsolutePath() + ".yfa" );
+            }
+
+            boolean save = true;
+
+            if ( f.exists() ) {
+                if ( JOptionPane.showConfirmDialog( 
+                        mainWindow, 
+                        "The file already exists. Do you want to overwrite it?", 
+                        "Confirmation", 
+                        JOptionPane.YES_NO_OPTION ) == JOptionPane.NO_OPTION ) {
+                    save = false;
+                }
+            }
+
+            if ( save ) {
+
+                ApplicationPreferences.setPref( 
+                        ApplicationPreferences.PREF_DEFAULT_FOLDER_PATH, 
+                        f.getParentFile().getAbsolutePath() );
+
+                serializeFAToFile( f );
+                return true;
+
+            }
+
+        }
+        
+        return false;
+            
+    }
+    
+    private void openFA() {
+        
+        JFileChooser jfc = new JFileChooser( new File( ApplicationPreferences.getPref( ApplicationPreferences.PREF_DEFAULT_FOLDER_PATH ) ) );
+        jfc.setDialogTitle( "Open Finite Automaton" );
+        jfc.setMultiSelectionEnabled( false );
+        jfc.setFileSelectionMode( JFileChooser.FILES_ONLY );
+        jfc.removeChoosableFileFilter( jfc.getFileFilter() );
+        jfc.setFileFilter( new FileNameExtensionFilter( "YAAS Finite Automaton", "yfa" ) );
+        
+        if ( jfc.showSaveDialog( mainWindow ) == JFileChooser.APPROVE_OPTION ) {
+
+            File f = jfc.getSelectedFile();
+
+            if ( f.exists() ) {
+                
+                ApplicationPreferences.setPref( 
+                        ApplicationPreferences.PREF_DEFAULT_FOLDER_PATH, 
+                        f.getParentFile().getAbsolutePath() );
+                
+                try ( FileInputStream fis = new FileInputStream( f );
+                      ObjectInputStream ois = new ObjectInputStream( fis ) ) {
+                    
+                    fa = (FA) ois.readObject();
+                    fa.deactivateAllStatesInSimulation();
+                    fa.deselectAll();
+                    fa.setTransitionsControlPointsVisible( false );
+                    drawPanel.setFa( fa );
+                    
+                    faPPanel.setFa( fa );
+                    faPPanel.readProperties();
+                    cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
+        
+                    currentFile = f;
+                    setCurrentFileSaved( true );
+                    
+                    repaintDrawPanel();
+                    
+                } catch ( IOException | ClassNotFoundException exc ) {
+                    Utils.showException( exc );
+                }
+                
+            }
+            
+        }
+        
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddAllMissingTransitionsDFA;
@@ -1968,7 +2211,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSaveAs;
-    private javax.swing.JButton btnSaveModelAsImage;
+    private javax.swing.JButton btnSaveFAAsImage;
     private javax.swing.JToggleButton btnSelectMultipleStates;
     private javax.swing.JToggleButton btnShowGrid;
     private javax.swing.JToggleButton btnShowTransitionControls;

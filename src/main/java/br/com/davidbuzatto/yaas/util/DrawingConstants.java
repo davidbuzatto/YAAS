@@ -16,7 +16,7 @@
  */
 package br.com.davidbuzatto.yaas.util;
 
-import java.awt.BasicStroke;
+import br.com.davidbuzatto.yaas.gui.model.SerializableBasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 
@@ -30,12 +30,12 @@ public interface DrawingConstants {
     public static final Font DEFAULT_FONT = new Font( Font.MONOSPACED, Font.BOLD, 18 );
     public static final Font DEFAULT_TABLE_FONT = new Font( Font.MONOSPACED, Font.BOLD, 16 );
     
-    public static final BasicStroke DRAW_PANEL_STROKE = new BasicStroke( 2 );
+    public static final SerializableBasicStroke DRAW_PANEL_STROKE = new SerializableBasicStroke( 2 );
     
     public static final int STATE_RADIUS = 25;
     public static final int STATE_RADIUS_SQUARED = STATE_RADIUS * STATE_RADIUS;
     public static final int STATE_DIAMETER = STATE_RADIUS * 2;
-    public static final BasicStroke STATE_STROKE = new BasicStroke( 2 );
+    public static final SerializableBasicStroke STATE_STROKE = new SerializableBasicStroke( 2 );
     
     public static final Color STATE_MOUSE_HOVER_STROKE_COLOR = 
             new Color( 0, 102, 153 );
@@ -80,10 +80,12 @@ public interface DrawingConstants {
     public static final Color TRANSITION_SELECTED_FILL_COLOR = 
             new Color( 157, 222, 255, 220 );
     
-    public static final BasicStroke TRANSITION_STROKE = 
-            new BasicStroke( 2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND );
-    public static final BasicStroke TRANSITION_CP_STROKE = 
-            new BasicStroke( 2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
+    public static final SerializableBasicStroke TRANSITION_STROKE = 
+            new SerializableBasicStroke( 2, SerializableBasicStroke.CAP_ROUND, 
+                    SerializableBasicStroke.JOIN_ROUND );
+    public static final SerializableBasicStroke TRANSITION_CP_STROKE = 
+            new SerializableBasicStroke( 2, SerializableBasicStroke.CAP_ROUND, 
+                    SerializableBasicStroke.JOIN_ROUND,
                     1, new float[]{ 5, 5 }, 0 );
     
     public static final Color NULL_STATE_FILL_COLOR = new Color( 255, 232, 218 );
@@ -93,18 +95,20 @@ public interface DrawingConstants {
     public static final Color GRID_COLOR = new Color( 200, 200, 200, 200 );
     
     public static final Color TEMP_TRANSITION_COLOR = new Color( 0, 102, 153, 200 );
-    public static final BasicStroke TEMP_TRANSITION_STROKE = 
-            new BasicStroke( 2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
+    public static final SerializableBasicStroke TEMP_TRANSITION_STROKE = 
+            new SerializableBasicStroke( 2, SerializableBasicStroke.CAP_ROUND, 
+                    SerializableBasicStroke.JOIN_ROUND,
                     1, new float[]{ 5, 5 }, 0 );
     
     public static final Color SELECTION_RETANGLE_STROKE_COLOR = new Color( 0, 102, 153, 150 );
     public static final Color SELECTION_RETANGLE_FILL_COLOR = new Color( 0, 102, 153, 50 );
-    public static final BasicStroke SELECTION_RETANGLE_STROKE = 
-            new BasicStroke( 1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
+    public static final SerializableBasicStroke SELECTION_RETANGLE_STROKE = 
+            new SerializableBasicStroke( 1, SerializableBasicStroke.CAP_ROUND, 
+                    SerializableBasicStroke.JOIN_ROUND,
                     1, new float[]{ 5, 5 }, 0 );
     
-    public static final BasicStroke DEFAULT_ARROW_STROKE = new BasicStroke( 
-            2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND );
+    public static final SerializableBasicStroke DEFAULT_ARROW_STROKE = new SerializableBasicStroke( 
+            2, SerializableBasicStroke.CAP_ROUND, SerializableBasicStroke.JOIN_ROUND );
     
     public static final Color ACCEPTED_LABEL_FOREGROUND_COLOR = new Color( 0, 204, 102 );
     public static final Color ACCEPTED_TEXTFIELD_FOREGROUND_COLOR = new Color( 46, 61, 54 );

@@ -19,6 +19,7 @@ package br.com.davidbuzatto.yaas.gui.fa;
 import br.com.davidbuzatto.yaas.gui.model.AbstractGeometricForm;
 import br.com.davidbuzatto.yaas.gui.model.Arrow;
 import br.com.davidbuzatto.yaas.gui.model.ControlPoint;
+import br.com.davidbuzatto.yaas.gui.model.SerializableBasicStroke;
 import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.Color;
@@ -56,7 +57,7 @@ public class FATransition extends AbstractGeometricForm {
     private final ControlPoint leftCP;
     private final ControlPoint rightCP;
     
-    private final Stroke cpStroke;
+    private final SerializableBasicStroke cpStroke;
     
     
     private int xOffset;
@@ -365,7 +366,7 @@ public class FATransition extends AbstractGeometricForm {
         g2d = (Graphics2D) g2d.create();
         
         g2d.setFont( font );
-        g2d.setStroke( stroke );
+        g2d.setStroke( stroke.getBasicStroke() );
         arrow.setMouseHover( mouseHover || originState.isMouseHover() );
         arrow.setSelected( selected || originState.isSelected() );
         arrow.setActiveInSimulation( originState.isActiveInSimulation() );
@@ -418,7 +419,7 @@ public class FATransition extends AbstractGeometricForm {
             
             if ( controlPointsVisible ) {
             
-                g2d.setStroke( cpStroke );
+                g2d.setStroke( cpStroke.getBasicStroke() );
 
                 Point2D p = Utils.cubicBezierPoint( curve, 0.5 );
 

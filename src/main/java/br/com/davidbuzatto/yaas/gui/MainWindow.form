@@ -6,6 +6,7 @@
       <SubComponents>
         <Menu class="javax.swing.JMenu" name="menuFile">
           <Properties>
+            <Property name="mnemonic" type="int" value="70"/>
             <Property name="text" type="java.lang.String" value="File"/>
           </Properties>
           <SubComponents>
@@ -17,7 +18,9 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/door_out.png"/>
                 </Property>
+                <Property name="mnemonic" type="int" value="120"/>
                 <Property name="text" type="java.lang.String" value="Exit"/>
+                <Property name="toolTipText" type="java.lang.String" value=""/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuItemExitActionPerformed"/>
@@ -27,7 +30,9 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="menuExamples">
           <Properties>
+            <Property name="mnemonic" type="int" value="120"/>
             <Property name="text" type="java.lang.String" value="Examples"/>
+            <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
           <SubComponents>
             <Menu class="javax.swing.JMenu" name="menuDFA">
@@ -35,7 +40,9 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/dfa.png"/>
                 </Property>
+                <Property name="mnemonic" type="int" value="68"/>
                 <Property name="text" type="java.lang.String" value="DFA"/>
+                <Property name="toolTipText" type="java.lang.String" value=""/>
               </Properties>
               <SubComponents>
                 <MenuItem class="javax.swing.JMenuItem" name="miDFASubstring01">
@@ -113,6 +120,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/nfa.png"/>
                 </Property>
+                <Property name="mnemonic" type="int" value="78"/>
                 <Property name="text" type="java.lang.String" value="NFA"/>
               </Properties>
               <SubComponents>
@@ -167,6 +175,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/enfa.png"/>
                 </Property>
+                <Property name="mnemonic" type="int" value="70"/>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="CharacterConstants.EMPTY_STRING.toString() + &quot;-NFA&quot;" type="code"/>
                 </Property>
@@ -189,6 +198,7 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="menuHelp">
           <Properties>
+            <Property name="mnemonic" type="int" value="72"/>
             <Property name="text" type="java.lang.String" value="Help"/>
           </Properties>
           <SubComponents>
@@ -200,6 +210,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/help.png"/>
                 </Property>
+                <Property name="mnemonic" type="int" value="65"/>
                 <Property name="text" type="java.lang.String" value="About..."/>
               </Properties>
               <Events>

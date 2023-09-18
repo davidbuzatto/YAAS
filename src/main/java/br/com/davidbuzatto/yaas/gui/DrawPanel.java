@@ -89,7 +89,7 @@ public class DrawPanel extends JPanel {
         
             if ( drawingTempTransition ) {
 
-                g2d.setStroke( DrawingConstants.TEMP_TRANSITION_STROKE );
+                g2d.setStroke( DrawingConstants.TEMP_TRANSITION_STROKE.getBasicStroke() );
                 g2d.setColor( DrawingConstants.TEMP_TRANSITION_COLOR );
 
                 g2d.drawLine( 
@@ -173,7 +173,7 @@ public class DrawPanel extends JPanel {
                     selectionRectangle.x, selectionRectangle.y, 
                     selectionRectangle.width, selectionRectangle.height );
             
-            g2d.setStroke( DrawingConstants.SELECTION_RETANGLE_STROKE );
+            g2d.setStroke( DrawingConstants.SELECTION_RETANGLE_STROKE.getBasicStroke() );
             g2d.setColor( DrawingConstants.SELECTION_RETANGLE_STROKE_COLOR );
             g2d.drawRect( 
                     selectionRectangle.x, selectionRectangle.y, 
@@ -181,7 +181,7 @@ public class DrawPanel extends JPanel {
 
         }
         
-        g2d.setStroke( DrawingConstants.DRAW_PANEL_STROKE );
+        g2d.setStroke( DrawingConstants.DRAW_PANEL_STROKE.getBasicStroke() );
         g2d.setColor( Color.BLACK );
         g2d.drawRect( 0, 0, getWidth(), getHeight() );
         

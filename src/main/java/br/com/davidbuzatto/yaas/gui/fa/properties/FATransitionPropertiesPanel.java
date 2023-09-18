@@ -261,6 +261,7 @@ public class FATransitionPropertiesPanel extends javax.swing.JPanel {
                     }
                     transition.setSymbols( symbols );
                     readProperties();
+                    faIFrame.setCurrentFileSaved( false );
                     faIFrame.repaintDrawPanel();
                     faIFrame.updateAfterUpdate();
                 }
@@ -282,6 +283,7 @@ public class FATransitionPropertiesPanel extends javax.swing.JPanel {
         
         if ( transition != null ) {
             transition.resetTransformations();
+            faIFrame.setCurrentFileSaved( false );
             faIFrame.repaintDrawPanel();
         } else {
             
@@ -304,6 +306,7 @@ public class FATransitionPropertiesPanel extends javax.swing.JPanel {
                     "Confirmation",
                     JOptionPane.YES_NO_OPTION ) == JOptionPane.YES_OPTION ) {
                 fa.removeTransition( transition );
+                faIFrame.setCurrentFileSaved( false );
                 faIFrame.repaintDrawPanel();
                 faIFrame.updateAfterRemotion();
                 transition = null;
@@ -329,6 +332,7 @@ public class FATransitionPropertiesPanel extends javax.swing.JPanel {
             ccpColor.setColor( c );
             ccpColor.repaint();
             transition.setStrokeColor( c );
+            faIFrame.setCurrentFileSaved( false );
             faIFrame.repaintDrawPanel();
         }
         

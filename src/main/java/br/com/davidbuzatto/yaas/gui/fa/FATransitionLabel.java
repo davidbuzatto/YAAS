@@ -43,7 +43,7 @@ public class FATransitionLabel extends AbstractGeometricForm {
         
         g2d = (Graphics2D) g2d.create();
         
-        g2d.setStroke( stroke );
+        g2d.setStroke( stroke.getBasicStroke() );
         g2d.setFont( font );
         
         boolean drawBackground = false;
