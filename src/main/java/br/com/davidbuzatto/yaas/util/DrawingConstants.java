@@ -91,7 +91,8 @@ public interface DrawingConstants {
     public static final Color NULL_TRANSITION_STROKE_COLOR = new Color( 240, 92, 0 );
     
     public static final Color GRID_COLOR = new Color( 200, 200, 200, 200 );
-    public static final Color TEMP_TRANSITION_COLOR = new Color( 150, 150, 150, 200 );
+    
+    public static final Color TEMP_TRANSITION_COLOR = new Color( 0, 102, 153, 200 );
     public static final BasicStroke TEMP_TRANSITION_STROKE = 
             new BasicStroke( 2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
                     1, new float[]{ 5, 5 }, 0 );
