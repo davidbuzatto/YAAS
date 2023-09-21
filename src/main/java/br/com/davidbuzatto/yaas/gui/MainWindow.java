@@ -25,6 +25,7 @@ import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
 import com.formdev.flatlaf.FlatDarculaLaf;
 import java.beans.PropertyVetoException;
+import javax.swing.JOptionPane;
 
 /**
  * Main GUI class.
@@ -49,9 +50,9 @@ public class MainWindow extends javax.swing.JFrame {
                 " - v" + 
                 Utils.getMavenModel().getVersion() );
         
-        //setExtendedState( MAXIMIZED_BOTH );
+        setExtendedState( MAXIMIZED_BOTH );
         
-        createFAInternalFrame( FAExamplesForDFAMinimizationTest.createDFAForMinimizationTest01(), true, true );
+        //createFAInternalFrame( FAExamplesForDFAMinimizationTest.createDFAForMinimizationTest01(), true, true );
         
     }
 
@@ -90,9 +91,14 @@ public class MainWindow extends javax.swing.JFrame {
         menuHelp = new javax.swing.JMenu();
         menuItemAbout = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("YAAS");
         setIconImage(new javax.swing.ImageIcon( getClass().getResource( "/yaas.png" ) ).getImage());
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         javax.swing.GroupLayout desktopPaneLayout = new javax.swing.GroupLayout(desktopPane);
         desktopPane.setLayout(desktopPaneLayout);
@@ -123,18 +129,26 @@ public class MainWindow extends javax.swing.JFrame {
         btnPDA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pdaBig.png"))); // NOI18N
         btnPDA.setText("Pushdown Automata");
         btnPDA.setToolTipText("");
-        btnPDA.setEnabled(false);
         btnPDA.setFocusable(false);
         btnPDA.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnPDA.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnPDA.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPDAActionPerformed(evt);
+            }
+        });
         toolBar.add(btnPDA);
 
         btnTM.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turingBig.png"))); // NOI18N
         btnTM.setText("Turing Machines");
-        btnTM.setEnabled(false);
         btnTM.setFocusable(false);
         btnTM.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnTM.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnTM.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTMActionPerformed(evt);
+            }
+        });
         toolBar.add(btnTM);
 
         menuFile.setMnemonic('F');
@@ -340,11 +354,24 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_miENFADecimalNumberActionPerformed
 
     private void menuItemExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemExitActionPerformed
-        Utils.showNotImplementedYetMessage();
+        close();
     }//GEN-LAST:event_menuItemExitActionPerformed
 
     private void menuItemAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemAboutActionPerformed
-        Utils.showNotImplementedYetMessage();
+        
+        JOptionPane.showMessageDialog( this, 
+                String.format( """
+                Yet Another Automaton Simulator (YASS) is a prototype tool for
+                simulating the execution of Finite Automatas, Pushdown Automatas
+                and Turing Machines.
+                               
+                This tool is developed by Prof. Dr. David Buzatto.
+                
+                Current version: %s
+                """, Utils.getMavenModel().getVersion() ),
+                "About...", 
+                JOptionPane.INFORMATION_MESSAGE );
+        
     }//GEN-LAST:event_menuItemAboutActionPerformed
 
     private void miNFAEndsWith00ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miNFAEndsWith00ActionPerformed
@@ -371,6 +398,18 @@ public class MainWindow extends javax.swing.JFrame {
         createFAInternalFrame( FAExamples.createDFAEndsWith10(), false, false );
     }//GEN-LAST:event_miDFAEndsWith10ActionPerformed
 
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        close();
+    }//GEN-LAST:event_formWindowClosing
+
+    private void btnPDAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPDAActionPerformed
+        Utils.showNotImplementedYetMessage();
+    }//GEN-LAST:event_btnPDAActionPerformed
+
+    private void btnTMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTMActionPerformed
+        Utils.showNotImplementedYetMessage();
+    }//GEN-LAST:event_btnTMActionPerformed
+
     public void createFAInternalFrame( FA fa, boolean maximized, boolean currentFileSaved ) {
         
         if ( fa == null ) {
@@ -388,6 +427,20 @@ public class MainWindow extends javax.swing.JFrame {
             iFrame.setMaximum( maximized );
         } catch ( PropertyVetoException exc ) {
             Utils.showException( exc );
+        }
+        
+    }
+    
+    @SuppressWarnings( "unchecked" )
+    private void close() {
+        
+        if ( JOptionPane.showConfirmDialog( 
+                this, 
+                "Do you really want to quit?\n" +
+                "All unsaved data will be lost!", 
+                "Confirmation", 
+                JOptionPane.YES_NO_OPTION ) == JOptionPane.OK_OPTION ) {
+            System.exit( 0 );
         }
         
     }

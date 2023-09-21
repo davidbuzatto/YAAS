@@ -148,7 +148,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/page_white_add.png"/>
             </Property>
-            <Property name="toolTipText" type="java.lang.String" value="New"/>
+            <Property name="toolTipText" type="java.lang.String" value="New (Ctrl+N)"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -162,7 +162,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/folder.png"/>
             </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Open"/>
+            <Property name="toolTipText" type="java.lang.String" value="Open (Ctrl+O)"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -176,7 +176,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/disk.png"/>
             </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Save"/>
+            <Property name="toolTipText" type="java.lang.String" value="Save (Ctrl+S)"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -190,7 +190,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/disk_multiple.png"/>
             </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Save as..."/>
+            <Property name="toolTipText" type="java.lang.String" value="Save as... (Ctrl+Shift+S)"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -204,7 +204,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/picture.png"/>
             </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Save Finite Automaton as Image"/>
+            <Property name="toolTipText" type="java.lang.String" value="Save Finite Automaton as Image (Ctrl+Shift+I)"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -223,7 +223,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/selection.png"/>
             </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Select Multiple States"/>
+            <Property name="toolTipText" type="java.lang.String" value="Select Multiple States (Shift+U)"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -241,7 +241,7 @@
               <Image iconType="3" name="/cursor_openhand.png"/>
             </Property>
             <Property name="selected" type="boolean" value="true"/>
-            <Property name="toolTipText" type="java.lang.String" value="Move"/>
+            <Property name="toolTipText" type="java.lang.String" value="Move (Shift+M)"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -258,7 +258,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/state.png"/>
             </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Add State"/>
+            <Property name="toolTipText" type="java.lang.String" value="Add State (Shift+S)"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -275,7 +275,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/transition.png"/>
             </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Add Transition"/>
+            <Property name="toolTipText" type="java.lang.String" value="Add Transition (Shift+T)"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -291,7 +291,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/dfa.png"/>
             </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Generate Equivalent DFA"/>
+            <Property name="toolTipText" type="java.lang.String" value="Generate Equivalent DFA (Alt+Shift+D)"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -305,7 +305,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/arrow_in.png"/>
             </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Generate Minimized DFA"/>
+            <Property name="toolTipText" type="java.lang.String" value="Generate Minimized DFA (Alt+Shift+M)"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -319,7 +319,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/pencil_go.png"/>
             </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Add All Missing Transitions"/>
+            <Property name="toolTipText" type="java.lang.String" value="Add All Missing Transitions (Alt+Shift+T)"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -333,7 +333,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/shape_flip_horizontal.png"/>
             </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Complement the DFA"/>
+            <Property name="toolTipText" type="java.lang.String" value="Complement the DFA (Alt+Shift+C)"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -357,7 +357,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/shape_square_edit.png"/>
             </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Show/Hide Transition Control Points"/>
+            <Property name="toolTipText" type="java.lang.String" value="Show/Hide Transition Control Points (Ctrl+Shift+C)"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -373,7 +373,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/note.png"/>
             </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Show/Hide Grid"/>
+            <Property name="toolTipText" type="java.lang.String" value="Show/Hide Grid (Ctrl+Shift+G)"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -387,7 +387,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/magnet.png"/>
             </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Snap to Grid"/>
+            <Property name="toolTipText" type="java.lang.String" value="Snap to Grid (Ctrl+Shift+N)"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -553,7 +553,7 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/accept.png"/>
                     </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="Execute Test"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Execute Test (Ctrl+Alt+T)"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
                     <Property name="verticalTextPosition" type="int" value="3"/>
@@ -583,7 +583,7 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/book.png"/>
                     </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="Batch Test"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Batch Test (Ctrl+Alt+B)"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
                     <Property name="verticalTextPosition" type="int" value="3"/>
@@ -599,7 +599,7 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/control_play_blue.png"/>
                     </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="Start Simulation"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Start Simulation (Ctrl+Alt+S)"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
                     <Property name="verticalTextPosition" type="int" value="3"/>
@@ -613,7 +613,7 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/control_start_blue.png"/>
                     </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="First Step"/>
+                    <Property name="toolTipText" type="java.lang.String" value="First Step (Ctrl+Left)"/>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -628,7 +628,7 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/control_rewind_blue.png"/>
                     </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="Previous Step"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Previous Step (Left)"/>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -643,7 +643,7 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/control_fastforward_blue.png"/>
                     </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="Next Step"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Next Step (Right)"/>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -658,7 +658,7 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/control_end_blue.png"/>
                     </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="Last Step"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Last Step (Ctrl+Right)"/>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -673,7 +673,7 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/control_stop_blue.png"/>
                     </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="Stop Simulation"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Stop Simulation (Esc)"/>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>

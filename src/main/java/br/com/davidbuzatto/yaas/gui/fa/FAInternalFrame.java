@@ -34,8 +34,10 @@ import java.awt.Graphics2D;
 import java.awt.HeadlessException;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -49,8 +51,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.imageio.ImageIO;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
+import javax.swing.InputMap;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -59,6 +64,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollBar;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
@@ -189,6 +195,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnZoomOut.setVisible( false );
         baseTitle = getTitle();
         setCurrentFileSaved( true );
+        
+        registerActions();
         
     }
     
@@ -338,7 +346,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         toolBar.setRollover(true);
 
         btnNew.setIcon(new javax.swing.ImageIcon(getClass().getResource("/page_white_add.png"))); // NOI18N
-        btnNew.setToolTipText("New");
+        btnNew.setToolTipText("New (Ctrl+N)");
         btnNew.setFocusable(false);
         btnNew.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnNew.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -350,7 +358,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         toolBar.add(btnNew);
 
         btnOpen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/folder.png"))); // NOI18N
-        btnOpen.setToolTipText("Open");
+        btnOpen.setToolTipText("Open (Ctrl+O)");
         btnOpen.setFocusable(false);
         btnOpen.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnOpen.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -362,7 +370,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         toolBar.add(btnOpen);
 
         btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/disk.png"))); // NOI18N
-        btnSave.setToolTipText("Save");
+        btnSave.setToolTipText("Save (Ctrl+S)");
         btnSave.setFocusable(false);
         btnSave.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSave.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -374,7 +382,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         toolBar.add(btnSave);
 
         btnSaveAs.setIcon(new javax.swing.ImageIcon(getClass().getResource("/disk_multiple.png"))); // NOI18N
-        btnSaveAs.setToolTipText("Save as...");
+        btnSaveAs.setToolTipText("Save as... (Ctrl+Shift+S)");
         btnSaveAs.setFocusable(false);
         btnSaveAs.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSaveAs.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -386,7 +394,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         toolBar.add(btnSaveAs);
 
         btnSaveFAAsImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture.png"))); // NOI18N
-        btnSaveFAAsImage.setToolTipText("Save Finite Automaton as Image");
+        btnSaveFAAsImage.setToolTipText("Save Finite Automaton as Image (Ctrl+Shift+I)");
         btnSaveFAAsImage.setFocusable(false);
         btnSaveFAAsImage.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSaveFAAsImage.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -400,7 +408,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
         btnGroup.add(btnSelectMultipleStates);
         btnSelectMultipleStates.setIcon(new javax.swing.ImageIcon(getClass().getResource("/selection.png"))); // NOI18N
-        btnSelectMultipleStates.setToolTipText("Select Multiple States");
+        btnSelectMultipleStates.setToolTipText("Select Multiple States (Shift+U)");
         btnSelectMultipleStates.setFocusable(false);
         btnSelectMultipleStates.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSelectMultipleStates.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -414,7 +422,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnGroup.add(btnMove);
         btnMove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cursor_openhand.png"))); // NOI18N
         btnMove.setSelected(true);
-        btnMove.setToolTipText("Move");
+        btnMove.setToolTipText("Move (Shift+M)");
         btnMove.setFocusable(false);
         btnMove.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnMove.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -427,7 +435,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
         btnGroup.add(btnAddState);
         btnAddState.setIcon(new javax.swing.ImageIcon(getClass().getResource("/state.png"))); // NOI18N
-        btnAddState.setToolTipText("Add State");
+        btnAddState.setToolTipText("Add State (Shift+S)");
         btnAddState.setFocusable(false);
         btnAddState.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnAddState.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -440,7 +448,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
         btnGroup.add(btnAddTransition);
         btnAddTransition.setIcon(new javax.swing.ImageIcon(getClass().getResource("/transition.png"))); // NOI18N
-        btnAddTransition.setToolTipText("Add Transition");
+        btnAddTransition.setToolTipText("Add Transition (Shift+T)");
         btnAddTransition.setFocusable(false);
         btnAddTransition.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnAddTransition.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -453,7 +461,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         toolBar.add(sep02);
 
         btnGenerateEquivalentDFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dfa.png"))); // NOI18N
-        btnGenerateEquivalentDFA.setToolTipText("Generate Equivalent DFA");
+        btnGenerateEquivalentDFA.setToolTipText("Generate Equivalent DFA (Alt+Shift+D)");
         btnGenerateEquivalentDFA.setFocusable(false);
         btnGenerateEquivalentDFA.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnGenerateEquivalentDFA.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -465,7 +473,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         toolBar.add(btnGenerateEquivalentDFA);
 
         btnGenerateMinimizedDFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/arrow_in.png"))); // NOI18N
-        btnGenerateMinimizedDFA.setToolTipText("Generate Minimized DFA");
+        btnGenerateMinimizedDFA.setToolTipText("Generate Minimized DFA (Alt+Shift+M)");
         btnGenerateMinimizedDFA.setFocusable(false);
         btnGenerateMinimizedDFA.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnGenerateMinimizedDFA.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -477,7 +485,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         toolBar.add(btnGenerateMinimizedDFA);
 
         btnAddAllMissingTransitionsDFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pencil_go.png"))); // NOI18N
-        btnAddAllMissingTransitionsDFA.setToolTipText("Add All Missing Transitions");
+        btnAddAllMissingTransitionsDFA.setToolTipText("Add All Missing Transitions (Alt+Shift+T)");
         btnAddAllMissingTransitionsDFA.setFocusable(false);
         btnAddAllMissingTransitionsDFA.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnAddAllMissingTransitionsDFA.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -489,7 +497,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         toolBar.add(btnAddAllMissingTransitionsDFA);
 
         btnComplementDFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/shape_flip_horizontal.png"))); // NOI18N
-        btnComplementDFA.setToolTipText("Complement the DFA");
+        btnComplementDFA.setToolTipText("Complement the DFA (Alt+Shift+C)");
         btnComplementDFA.setFocusable(false);
         btnComplementDFA.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnComplementDFA.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -502,7 +510,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         toolBar.add(hFiller);
 
         btnShowTransitionControls.setIcon(new javax.swing.ImageIcon(getClass().getResource("/shape_square_edit.png"))); // NOI18N
-        btnShowTransitionControls.setToolTipText("Show/Hide Transition Control Points");
+        btnShowTransitionControls.setToolTipText("Show/Hide Transition Control Points (Ctrl+Shift+C)");
         btnShowTransitionControls.setFocusable(false);
         btnShowTransitionControls.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnShowTransitionControls.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -515,7 +523,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         toolBar.add(sep03);
 
         btnShowGrid.setIcon(new javax.swing.ImageIcon(getClass().getResource("/note.png"))); // NOI18N
-        btnShowGrid.setToolTipText("Show/Hide Grid");
+        btnShowGrid.setToolTipText("Show/Hide Grid (Ctrl+Shift+G)");
         btnShowGrid.setFocusable(false);
         btnShowGrid.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnShowGrid.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -527,7 +535,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         toolBar.add(btnShowGrid);
 
         btnSnapToGrid.setIcon(new javax.swing.ImageIcon(getClass().getResource("/magnet.png"))); // NOI18N
-        btnSnapToGrid.setToolTipText("Snap to Grid");
+        btnSnapToGrid.setToolTipText("Snap to Grid (Ctrl+Shift+N)");
         btnSnapToGrid.setFocusable(false);
         btnSnapToGrid.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSnapToGrid.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -590,7 +598,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         toolBarTestsAndSimulation.setRollover(true);
 
         btnTest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/accept.png"))); // NOI18N
-        btnTest.setToolTipText("Execute Test");
+        btnTest.setToolTipText("Execute Test (Ctrl+Alt+T)");
         btnTest.setFocusable(false);
         btnTest.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnTest.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -615,7 +623,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         toolBarTestsAndSimulation.add(sepTS01);
 
         btnBatchTest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/book.png"))); // NOI18N
-        btnBatchTest.setToolTipText("Batch Test");
+        btnBatchTest.setToolTipText("Batch Test (Ctrl+Alt+B)");
         btnBatchTest.setFocusable(false);
         btnBatchTest.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnBatchTest.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -628,7 +636,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         toolBarTestsAndSimulation.add(sepTS02);
 
         btnStart.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_play_blue.png"))); // NOI18N
-        btnStart.setToolTipText("Start Simulation");
+        btnStart.setToolTipText("Start Simulation (Ctrl+Alt+S)");
         btnStart.setFocusable(false);
         btnStart.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnStart.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -640,7 +648,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         toolBarTestsAndSimulation.add(btnStart);
 
         btnFirstStep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_start_blue.png"))); // NOI18N
-        btnFirstStep.setToolTipText("First Step");
+        btnFirstStep.setToolTipText("First Step (Ctrl+Left)");
         btnFirstStep.setEnabled(false);
         btnFirstStep.setFocusable(false);
         btnFirstStep.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -653,7 +661,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         toolBarTestsAndSimulation.add(btnFirstStep);
 
         btnPreviousStep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_rewind_blue.png"))); // NOI18N
-        btnPreviousStep.setToolTipText("Previous Step");
+        btnPreviousStep.setToolTipText("Previous Step (Left)");
         btnPreviousStep.setEnabled(false);
         btnPreviousStep.setFocusable(false);
         btnPreviousStep.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -666,7 +674,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         toolBarTestsAndSimulation.add(btnPreviousStep);
 
         btnNextStep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_fastforward_blue.png"))); // NOI18N
-        btnNextStep.setToolTipText("Next Step");
+        btnNextStep.setToolTipText("Next Step (Right)");
         btnNextStep.setEnabled(false);
         btnNextStep.setFocusable(false);
         btnNextStep.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -679,7 +687,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         toolBarTestsAndSimulation.add(btnNextStep);
 
         btnLastStep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_end_blue.png"))); // NOI18N
-        btnLastStep.setToolTipText("Last Step");
+        btnLastStep.setToolTipText("Last Step (Ctrl+Right)");
         btnLastStep.setEnabled(false);
         btnLastStep.setFocusable(false);
         btnLastStep.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -692,7 +700,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         toolBarTestsAndSimulation.add(btnLastStep);
 
         btnStop.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_stop_blue.png"))); // NOI18N
-        btnStop.setToolTipText("Stop Simulation");
+        btnStop.setToolTipText("Stop Simulation (Esc)");
         btnStop.setEnabled(false);
         btnStop.setFocusable(false);
         btnStop.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -820,11 +828,13 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
         
-        if ( JOptionPane.showConfirmDialog( 
-                mainWindow, 
-                "Do you really want to create a new model?\n" +
-                "All non saved modifications will be lost!", 
-                "New model", 
+        if ( JOptionPane.showConfirmDialog(
+                mainWindow,
+                """
+                Do you really want to create a new model?
+                All non saved modifications will be lost!
+                """,
+                "New model",
                 JOptionPane.YES_NO_OPTION ) == JOptionPane.YES_OPTION ) {
             
             fa = new FA();
@@ -849,7 +859,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         }
         
     }//GEN-LAST:event_btnNewActionPerformed
-
+    
     private void btnMoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveActionPerformed
         btnMoveAction();
     }//GEN-LAST:event_btnMoveActionPerformed
@@ -889,6 +899,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnZoomOutActionPerformed
 
     private void drawPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drawPanelMousePressed
+
+        drawPanel.requestFocus();
         
         xPressed = evt.getX();
         yPressed = evt.getY();
@@ -1293,6 +1305,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             
             updateSimulationButtons( currentSimulationStep );
             activateSimulationStep( currentSimulationStep );
+            
+            drawPanel.requestFocus();
             
         } else {
             
@@ -1770,7 +1784,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSelectMultipleStatesActionPerformed
 
     private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
-
+        
         if ( !currentFileSaved ) {
             
             int r = JOptionPane.showConfirmDialog( 
@@ -1846,6 +1860,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     
     private void zoomIn() {
         
+        System.out.println( "zoom in" );
         zoomFacility.zoomIn();
         
         btnZoomOut.setEnabled( true );
@@ -1860,6 +1875,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     
     private void zoomOut() {
         
+        System.out.println( "zoom out" );
         zoomFacility.zoomOut();
         
         btnZoomIn.setEnabled( true );
@@ -2188,6 +2204,226 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
             
         }
+        
+    }
+    
+    private void registerActions() {
+        
+        InputMap im = drawPanel.getInputMap();
+        ActionMap am = drawPanel.getActionMap();
+        
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK ), "createNewModel" );
+        am.put( "createNewModel", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                btnNew.doClick();
+            }
+        });
+        
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK ), "openModel" );
+        am.put( "openModel", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                btnOpen.doClick();
+            }
+        });
+        
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK ), "saveModel" );
+        am.put( "saveModel", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                btnSave.doClick();
+            }
+        });
+        
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK + KeyEvent.SHIFT_DOWN_MASK ), "saveModelAs" );
+        am.put( "saveModelAs", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                btnSaveAs.doClick();
+            }
+        });
+        
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_I, KeyEvent.CTRL_DOWN_MASK + KeyEvent.SHIFT_DOWN_MASK ), "saveModelAsImage" );
+        am.put( "saveModelAsImage", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                btnSaveFAAsImage.doClick();
+            }
+        });
+        
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_U, KeyEvent.SHIFT_DOWN_MASK ), "multipleSelection" );
+        am.put( "multipleSelection", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                btnSelectMultipleStates.doClick();
+            }
+        });
+        
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_M, KeyEvent.SHIFT_DOWN_MASK ), "move" );
+        am.put( "move", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                btnMove.doClick();
+            }
+        });
+        
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_S, KeyEvent.SHIFT_DOWN_MASK ), "addState" );
+        am.put( "addState", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                btnAddState.doClick();
+            }
+        });
+        
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_T, KeyEvent.SHIFT_DOWN_MASK ), "addTransition" );
+        am.put( "addTransition", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                btnAddTransition.doClick();
+            }
+        });
+        
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_D, KeyEvent.ALT_DOWN_MASK + KeyEvent.SHIFT_DOWN_MASK ), "toDFA" );
+        am.put( "toDFA", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                btnGenerateMinimizedDFA.doClick();
+            }
+        });
+        
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_M, KeyEvent.ALT_DOWN_MASK + KeyEvent.SHIFT_DOWN_MASK ), "minimizeDFA" );
+        am.put( "minimizeDFA", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                btnGenerateMinimizedDFA.doClick();
+            }
+        });
+        
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_T, KeyEvent.ALT_DOWN_MASK + KeyEvent.SHIFT_DOWN_MASK ), "addAllTransitions" );
+        am.put( "addAllTransitions", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                btnAddAllMissingTransitionsDFA.doClick();
+            }
+        });
+        
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_C, KeyEvent.ALT_DOWN_MASK + KeyEvent.SHIFT_DOWN_MASK ), "complementDFA" );
+        am.put( "complementDFA", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                btnComplementDFA.doClick();
+            }
+        });
+        
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK + KeyEvent.SHIFT_DOWN_MASK ), "showCP" );
+        am.put( "showCP", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                btnShowTransitionControls.doClick();
+            }
+        });
+        
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_G, KeyEvent.CTRL_DOWN_MASK + KeyEvent.SHIFT_DOWN_MASK ), "showGrid" );
+        am.put( "showGrid", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                btnShowGrid.doClick();;
+            }
+        });
+        
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK + KeyEvent.SHIFT_DOWN_MASK ), "snapToGrid" );
+        am.put( "snapToGrid", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                btnSnapToGrid.doClick();
+            }
+        });
+        
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_T, KeyEvent.CTRL_DOWN_MASK + KeyEvent.ALT_DOWN_MASK ), "runTest" );
+        am.put( "runTest", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                btnTest.doClick();
+            }
+        });
+        
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_B, KeyEvent.CTRL_DOWN_MASK + KeyEvent.ALT_DOWN_MASK ), "openBatch" );
+        am.put( "openBatch", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                btnBatchTest.doClick();
+            }
+        });
+        
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK + KeyEvent.ALT_DOWN_MASK ), "runSimulation" );
+        am.put( "runSimulation", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                btnStart.doClick();
+            }
+        });
+        
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_LEFT, KeyEvent.CTRL_DOWN_MASK ), "firstStep" );
+        am.put( "firstStep", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                btnFirstStep.doClick();
+            }
+        });
+        
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_LEFT, 0 ), "previousStep" );
+        am.put( "previousStep", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                btnPreviousStep.doClick();
+            }
+        });
+        
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_RIGHT, 0 ), "nextStep" );
+        am.put( "nextStep", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                btnNextStep.doClick();
+            }
+        });
+        
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_RIGHT, KeyEvent.CTRL_DOWN_MASK ), "lastStep" );
+        am.put( "lastStep", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                btnLastStep.doClick();
+            }
+        });
+        
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_ESCAPE, 0 ), "stop" );
+        am.put( "stop", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                btnStop.doClick();
+            }
+        });
+        
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_PLUS, KeyEvent.CTRL_DOWN_MASK ), "zoomIn" );
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_EQUALS, KeyEvent.CTRL_DOWN_MASK ), "zoomIn" );
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_ADD, KeyEvent.CTRL_DOWN_MASK ), "zoomIn" );
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_UP, KeyEvent.CTRL_DOWN_MASK ), "zoomIn" );
+        am.put( "zoomIn", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                zoomIn();
+            }
+        });
+        
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_MINUS, KeyEvent.CTRL_DOWN_MASK ), "zoomOut" );
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_SUBTRACT, KeyEvent.CTRL_DOWN_MASK ), "zoomOut" );
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_DOWN, KeyEvent.CTRL_DOWN_MASK ), "zoomOut" );
+        am.put( "zoomOut", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                zoomOut();
+            }
+        });
         
     }
     

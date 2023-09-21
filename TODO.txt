@@ -1,6 +1,3 @@
-Set shortcuts in internal frame toolbar
-Implement main menu (exit and about);
-
 ??? Specialized versions of states (Moore machines);
 ??? Specialized versions of transitions (PDAs, Mealy machines and Turing machines);
 ??? Zoom-in and zoom-out;
