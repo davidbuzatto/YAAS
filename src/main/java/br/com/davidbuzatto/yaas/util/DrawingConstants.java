@@ -27,15 +27,18 @@ import java.awt.Font;
  */
 public interface DrawingConstants {
     
-    public static final Font DEFAULT_FONT = new Font( Font.MONOSPACED, Font.BOLD, 18 );
-    public static final Font DEFAULT_TABLE_FONT = new Font( Font.MONOSPACED, Font.BOLD, 16 );
+    public static final Font DEFAULT_FONT = new Font( Font.MONOSPACED, Font.PLAIN, 16 );
+    public static final Font DEFAULT_TABLE_FONT = new Font( Font.MONOSPACED, Font.PLAIN, 16 );
+    public static final Font SIMULATION_STRING_FONT = new Font( Font.MONOSPACED, Font.BOLD, 24 );
     
     public static final SerializableBasicStroke DRAW_PANEL_STROKE = new SerializableBasicStroke( 2 );
+    
+    public static final int ARROW_LENGTH = 10; // 15
     
     public static final int STATE_RADIUS = 25;
     public static final int STATE_RADIUS_SQUARED = STATE_RADIUS * STATE_RADIUS;
     public static final int STATE_DIAMETER = STATE_RADIUS * 2;
-    public static final SerializableBasicStroke STATE_STROKE = new SerializableBasicStroke( 2 );
+    public static final SerializableBasicStroke STATE_STROKE = new SerializableBasicStroke( 1 );
     
     public static final Color STATE_MOUSE_HOVER_STROKE_COLOR = 
             new Color( 0, 102, 153 );
@@ -54,7 +57,7 @@ public interface DrawingConstants {
             TRANSITION_CP_RADIUS * TRANSITION_CP_RADIUS;
     public static final int TRANSITION_CP_DIAMETER = TRANSITION_CP_RADIUS * 2;
     
-    public static final int TRANSITION_CP_TARGET_RADIUS = TRANSITION_CP_DIAMETER;
+    public static final int TRANSITION_CP_TARGET_RADIUS = (int) (TRANSITION_CP_DIAMETER * 0.8);
     public static final int TRANSITION_CP_TARGET_RADIUS_SQUARED = 
             TRANSITION_CP_TARGET_RADIUS * TRANSITION_CP_TARGET_RADIUS;
     public static final int TRANSITION_CP_TARGET_DIAMETER = TRANSITION_CP_TARGET_RADIUS * 2;
@@ -63,9 +66,11 @@ public interface DrawingConstants {
     public static final Color TRANSITION_CP_COLOR = 
             new Color( 150, 150, 150, 220 );
     public static final Color TRANSITION_CP_LEFT_COLOR = 
-            new Color( 255, 78, 8, 220 );
+            //new Color( 255, 78, 8, 220 );
+            new Color( 34, 177, 76, 220 );
     public static final Color TRANSITION_CP_RIGHT_COLOR = 
-            new Color( 187, 16, 242, 220 );
+            //new Color( 187, 16, 242, 220 );
+            new Color( 34, 177, 76, 220 );
     public static final Color TRANSITION_CP_TARGET_COLOR = 
             new Color( 150, 150, 150, 220 );
     public static final Color TRANSITION_CP_MOUSE_HOVER_STROKE_COLOR = 
@@ -81,10 +86,10 @@ public interface DrawingConstants {
             new Color( 157, 222, 255, 220 );
     
     public static final SerializableBasicStroke TRANSITION_STROKE = 
-            new SerializableBasicStroke( 2, SerializableBasicStroke.CAP_ROUND, 
+            new SerializableBasicStroke( 1, SerializableBasicStroke.CAP_ROUND, 
                     SerializableBasicStroke.JOIN_ROUND );
     public static final SerializableBasicStroke TRANSITION_CP_STROKE = 
-            new SerializableBasicStroke( 2, SerializableBasicStroke.CAP_ROUND, 
+            new SerializableBasicStroke( 1, SerializableBasicStroke.CAP_ROUND, 
                     SerializableBasicStroke.JOIN_ROUND,
                     1, new float[]{ 5, 5 }, 0 );
     
@@ -128,7 +133,5 @@ public interface DrawingConstants {
     public static final Color LABEL_ACTIVE_IN_SIMULATION_STROKE_COLOR = new Color( 68, 4, 168 );
     public static final Color LABEL_ACTIVE_IN_SIMULATION_FILL_COLOR = new Color( 212, 200, 231 );
     public static final Color TRANSITION_ACTIVE_IN_SIMULATION_STROKE_COLOR = new Color( 68, 4, 168 );
-    
-    public static final Font SIMULATION_STRING_FONT = new Font( Font.MONOSPACED, Font.BOLD, 24 );
     
 }

@@ -30,11 +30,18 @@ public class Arrow extends AbstractGeometricForm {
     
     private double angle = 0;
     
-    protected boolean activeInSimulation;
+    private int arrowLength;
+    private int halfArrowLength;
+    private int oneThirdArrowLength;
+    
+    private boolean activeInSimulation;
     private Color activeInSimulationStrokeColor;
     
     public Arrow() {
         stroke = DrawingConstants.DEFAULT_ARROW_STROKE;
+        arrowLength = DrawingConstants.ARROW_LENGTH;
+        halfArrowLength = arrowLength/2;
+        oneThirdArrowLength = arrowLength/3;
     }
     
     @Override
@@ -56,8 +63,8 @@ public class Arrow extends AbstractGeometricForm {
         
         Path2D p = new Path2D.Double();
         p.moveTo( x1, y1 );
-        p.lineTo( x1-15, y1-7 );
-        p.quadTo( x1-5, y1, x1-15, y1+7 );
+        p.lineTo( x1 - arrowLength, y1 - halfArrowLength );
+        p.quadTo( x1 - oneThirdArrowLength, y1, x1 - arrowLength, y1 + halfArrowLength );
         p.closePath();
         g2d.fill( p );
         g2d.draw( p );

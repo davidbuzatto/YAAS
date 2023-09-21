@@ -20,6 +20,7 @@ import br.com.davidbuzatto.yaas.gui.fa.table.FATransitionFunctionTableCellRender
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
+import javax.swing.border.TitledBorder;
 
 /**
  * A dialog to show the formal definition of Finite Automata.
@@ -38,6 +39,8 @@ public class FAFormalDefinitionDialog extends javax.swing.JDialog {
         this.fa = fa;
         initComponents();
         customInit();
+        TitledBorder b = (TitledBorder) panelDelta.getBorder();
+        b.setTitle( b.getTitle() + " (partial)" );
     }
     
     private void customInit() {

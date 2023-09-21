@@ -19,7 +19,6 @@ package br.com.davidbuzatto.yaas.gui.model;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.Stroke;
 import java.io.Serializable;
 
 /**

@@ -50,9 +50,9 @@ public class MainWindow extends javax.swing.JFrame {
                 " - v" + 
                 Utils.getMavenModel().getVersion() );
         
-        setExtendedState( MAXIMIZED_BOTH );
+        //setExtendedState( MAXIMIZED_BOTH );
         
-        //createFAInternalFrame( FAExamplesForDFAMinimizationTest.createDFAForMinimizationTest01(), true, true );
+        createFAInternalFrame( FAExamplesForDFAMinimizationTest.createDFAForMinimizationTest05(), true, true );
         
     }
 

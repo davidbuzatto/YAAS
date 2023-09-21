@@ -24,7 +24,6 @@ import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Stroke;
 import java.awt.event.MouseEvent;
 import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Point2D;
@@ -638,7 +637,7 @@ public class FATransition extends AbstractGeometricForm {
         label.setStrokeColor( strokeColor );
     }
     
-    private void bend( 
+    private FATransition bend( 
             int centralCPAmountX, 
             int centralCPAmountY, 
             boolean centralCPMoved,
@@ -675,9 +674,11 @@ public class FATransition extends AbstractGeometricForm {
         
         updateStartAndEndPoints();
         
+        return this;
+        
     }
     
-    public void bend( 
+    public FATransition bend( 
             int centralCPAmountX, 
             int centralCPAmountY, 
             int leftCPAmountX, 
@@ -685,89 +686,90 @@ public class FATransition extends AbstractGeometricForm {
             int rightCPAmountX,
             int rightCPAmountY, 
             int targetCPAmount ) {
-        bend( centralCPAmountX, centralCPAmountY, true,
+        return bend( centralCPAmountX, centralCPAmountY, true,
               leftCPAmountX, leftCPAmountY, 
               rightCPAmountX, rightCPAmountY, 
               targetCPAmount, true );
     }
     
-    public void bendX( 
+    public FATransition bendX( 
             int centralCPAmount, 
             int leftCPAmount, 
             int rightCPAmount, 
             int targetCPAmount ) {
-        bend( centralCPAmount, 0,
+        return bend( centralCPAmount, 0,
               leftCPAmount, 0, 
               rightCPAmount, 0,
               targetCPAmount );
     }
     
-    public void bendY( 
+    public FATransition bendY( 
             int centralCPAmount, 
             int leftCPAmount, 
             int rightCPAmount, 
             int targetCPAmount ) {
-        bend( 0, centralCPAmount, 
+        return bend( 0, centralCPAmount, 
               0, leftCPAmount, 
               0, rightCPAmount, 
               targetCPAmount );
     }
     
-    public void bendByCenterCP( int xAmount, int yAmount ) {
-        bend( xAmount, yAmount, true, 
+    public FATransition bendByCenterCP( int xAmount, int yAmount ) {
+        return bend( xAmount, yAmount, true, 
               xAmount, yAmount,
               xAmount, yAmount,
               0, false );
     }
     
-    public void bendByCenterCPX( int amount ) {
-        bendByCenterCP( amount, 0 );
+    public FATransition bendByCenterCPX( int amount ) {
+        return bendByCenterCP( amount, 0 );
     }
     
-    public void bendByCenterCPY( int amount ) {
-        bendByCenterCP( 0, amount );
+    public FATransition bendByCenterCPY( int amount ) {
+        return bendByCenterCP( 0, amount );
     }
     
-    public void bendByLeftCP( int xAmount, int yAmount ) {
-        bend( 0, 0, false, xAmount, yAmount, 0, 0, 0, false );
+    public FATransition bendByLeftCP( int xAmount, int yAmount ) {
+        return bend( 0, 0, false, xAmount, yAmount, 0, 0, 0, false );
     }
     
-    public void bendByLeftCPX( int amount ) {
-        bendByLeftCP( amount, 0 );
+    public FATransition bendByLeftCPX( int amount ) {
+        return bendByLeftCP( amount, 0 );
     }
     
-    public void bendByLeftCPY( int amount ) {
-        bendByLeftCP( 0, amount );
+    public FATransition bendByLeftCPY( int amount ) {
+        return bendByLeftCP( 0, amount );
     }
     
-    public void bendByRightCP( int xAmount, int yAmount ) {
-        bend( 0, 0, false, 0, 0, xAmount, yAmount, 0, false );
+    public FATransition bendByRightCP( int xAmount, int yAmount ) {
+        return bend( 0, 0, false, 0, 0, xAmount, yAmount, 0, false );
     }
     
-    public void bendByRightCPX( int amount ) {
-        bendByRightCP( amount, 0 );
+    public FATransition bendByRightCPX( int amount ) {
+        return bendByRightCP( amount, 0 );
     }
     
-    public void bendByRightCPY( int amount ) {
-        bendByRightCP( 0, amount );
+    public FATransition bendByRightCPY( int amount ) {
+        return bendByRightCP( 0, amount );
     }
     
-    public void rotateTargetCP( int angle ) {
-        bend( 0, 0, true, 0, 0, 0, 0, angle, true );
+    public FATransition rotateTargetCP( int angle ) {
+        return bend( 0, 0, true, 0, 0, 0, 0, angle, true );
     }
     
-    public void moveLabel( int xAmount, int yAmount ) {
+    public FATransition moveLabel( int xAmount, int yAmount ) {
         labelMoved = true;
         label.setX1( label.getX1() + xAmount );
         label.setY1( label.getY1() + yAmount );
+        return this;
     }
     
-    public void moveLabelX( int amount ) {
-        moveLabel( amount, 0 );
+    public FATransition moveLabelX( int amount ) {
+        return moveLabel( amount, 0 );
     }
     
-    public void moveLabelY( int amount ) {
-        moveLabel( 0, amount );
+    public FATransition moveLabelY( int amount ) {
+        return moveLabel( 0, amount );
     }
     
     @Override

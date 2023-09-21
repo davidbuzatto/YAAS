@@ -16,6 +16,8 @@
  */
 package br.com.davidbuzatto.yaas.gui.fa;
 
+import br.com.davidbuzatto.yaas.util.CharacterConstants;
+
 /**
  * A set of methods to construct example DFAs for testing purposes of 
  * the minimization algorithm.
@@ -26,7 +28,7 @@ public class FAExamplesForDFAMinimizationTest {
     
     public static FA createDFAForMinimizationTest01() {
         
-        FA fa = new FA();
+        FA dfa = new FA();
         int currentState = 0;
         
         FAState s0 = new FAState();
@@ -108,31 +110,31 @@ public class FAExamplesForDFAMinimizationTest {
         t15.moveLabel( 40, 35 );
         FATransition t16 = new FATransition( s7, s6, '0' );
         
-        fa.addState( s0 );
-        fa.addState( s1 );
-        fa.addState( s2 );
-        fa.addState( s3 );
-        fa.addState( s4 );
-        fa.addState( s5 );
-        fa.addState( s6 );
-        fa.addState( s7 );
+        dfa.addState( s0 );
+        dfa.addState( s1 );
+        dfa.addState( s2 );
+        dfa.addState( s3 );
+        dfa.addState( s4 );
+        dfa.addState( s5 );
+        dfa.addState( s6 );
+        dfa.addState( s7 );
         
-        fa.addTransition( t1 );
-        fa.addTransition( t2 );
-        fa.addTransition( t3 );
-        fa.addTransition( t4 );
-        fa.addTransition( t5 );
-        fa.addTransition( t6 );
-        fa.addTransition( t7 );
-        fa.addTransition( t8 );
-        fa.addTransition( t9 );
-        fa.addTransition( t10 );
-        fa.addTransition( t11 );
-        fa.addTransition( t12 );
-        fa.addTransition( t13 );
-        fa.addTransition( t14 );
-        fa.addTransition( t15 );
-        fa.addTransition( t16 );
+        dfa.addTransition( t1 );
+        dfa.addTransition( t2 );
+        dfa.addTransition( t3 );
+        dfa.addTransition( t4 );
+        dfa.addTransition( t5 );
+        dfa.addTransition( t6 );
+        dfa.addTransition( t7 );
+        dfa.addTransition( t8 );
+        dfa.addTransition( t9 );
+        dfa.addTransition( t10 );
+        dfa.addTransition( t11 );
+        dfa.addTransition( t12 );
+        dfa.addTransition( t13 );
+        dfa.addTransition( t14 );
+        dfa.addTransition( t15 );
+        dfa.addTransition( t16 );
         
         //fa.addTransition( new FATransition( s5, s1, '2' ) );
         
@@ -167,13 +169,13 @@ public class FAExamplesForDFAMinimizationTest {
         fa.addTransition( tt5 );
         fa.addTransition( tt6 );*/
         
-        return fa;
+        return dfa;
         
     }
     
     public static FA createDFAForMinimizationTest02() {
         
-        FA fa = new FA();
+        FA dfa = new FA();
         int currentState = 0;
         
         /*************************
@@ -205,41 +207,41 @@ public class FAExamplesForDFAMinimizationTest {
         FAState h = new FAState( "q" + currentState, 
                 FAAlgorithms.newCustomLabel( currentState++ ), false, false );
         
-        fa.addState( a );
-        fa.addState( b );
-        fa.addState( c );
-        fa.addState( d );
-        fa.addState( e );
-        fa.addState( f );
-        fa.addState( g );
-        fa.addState( h );
+        dfa.addState( a );
+        dfa.addState( b );
+        dfa.addState( c );
+        dfa.addState( d );
+        dfa.addState( e );
+        dfa.addState( f );
+        dfa.addState( g );
+        dfa.addState( h );
         
-        fa.addTransition( new FATransition( a, b, '0' ) );
-        fa.addTransition( new FATransition( a, a, '1' ) );
-        fa.addTransition( new FATransition( b, a, '0' ) );
-        fa.addTransition( new FATransition( b, c, '1' ) );
-        fa.addTransition( new FATransition( c, d, '0' ) );
-        fa.addTransition( new FATransition( c, b, '1' ) );
-        fa.addTransition( new FATransition( d, d, '0' ) );
-        fa.addTransition( new FATransition( d, a, '1' ) );
-        fa.addTransition( new FATransition( e, d, '0' ) );
-        fa.addTransition( new FATransition( e, f, '1' ) );
-        fa.addTransition( new FATransition( f, g, '0' ) );
-        fa.addTransition( new FATransition( f, e, '1' ) );
-        fa.addTransition( new FATransition( g, f, '0' ) );
-        fa.addTransition( new FATransition( g, g, '1' ) );
-        fa.addTransition( new FATransition( h, g, '0' ) );
-        fa.addTransition( new FATransition( h, d, '1' ) );
+        dfa.addTransition( new FATransition( a, b, '0' ) );
+        dfa.addTransition( new FATransition( a, a, '1' ) );
+        dfa.addTransition( new FATransition( b, a, '0' ) );
+        dfa.addTransition( new FATransition( b, c, '1' ) );
+        dfa.addTransition( new FATransition( c, d, '0' ) );
+        dfa.addTransition( new FATransition( c, b, '1' ) );
+        dfa.addTransition( new FATransition( d, d, '0' ) );
+        dfa.addTransition( new FATransition( d, a, '1' ) );
+        dfa.addTransition( new FATransition( e, d, '0' ) );
+        dfa.addTransition( new FATransition( e, f, '1' ) );
+        dfa.addTransition( new FATransition( f, g, '0' ) );
+        dfa.addTransition( new FATransition( f, e, '1' ) );
+        dfa.addTransition( new FATransition( g, f, '0' ) );
+        dfa.addTransition( new FATransition( g, g, '1' ) );
+        dfa.addTransition( new FATransition( h, g, '0' ) );
+        dfa.addTransition( new FATransition( h, d, '1' ) );
         
-        FAAlgorithms.arrangeFARectangularly( fa, 100, 100, 4, 150 );
+        FAAlgorithms.arrangeFARectangularly( dfa, 100, 100, 4, 150 );
         
-        return fa;
+        return dfa;
         
     }
     
     public static FA createDFAForMinimizationTest03() {
         
-        FA fa = new FA();
+        FA dfa = new FA();
         int currentState = 0;
         
         /*************************
@@ -274,38 +276,111 @@ public class FAExamplesForDFAMinimizationTest {
         FAState i = new FAState( "q" + currentState, 
                 FAAlgorithms.newCustomLabel( currentState++ ), false, true );
         
-        fa.addState( a );
-        fa.addState( b );
-        fa.addState( c );
-        fa.addState( d );
-        fa.addState( e );
-        fa.addState( f );
-        fa.addState( g );
-        fa.addState( h );
-        fa.addState( i );
+        dfa.addState( a );
+        dfa.addState( b );
+        dfa.addState( c );
+        dfa.addState( d );
+        dfa.addState( e );
+        dfa.addState( f );
+        dfa.addState( g );
+        dfa.addState( h );
+        dfa.addState( i );
         
-        fa.addTransition( new FATransition( a, b, '0' ) );
-        fa.addTransition( new FATransition( a, e, '1' ) );
-        fa.addTransition( new FATransition( b, c, '0' ) );
-        fa.addTransition( new FATransition( b, f, '1' ) );
-        fa.addTransition( new FATransition( c, d, '0' ) );
-        fa.addTransition( new FATransition( c, h, '1' ) );
-        fa.addTransition( new FATransition( d, e, '0' ) );
-        fa.addTransition( new FATransition( d, h, '1' ) );
-        fa.addTransition( new FATransition( e, f, '0' ) );
-        fa.addTransition( new FATransition( e, i, '1' ) );
-        fa.addTransition( new FATransition( f, g, '0' ) );
-        fa.addTransition( new FATransition( f, b, '1' ) );
-        fa.addTransition( new FATransition( g, h, '0' ) );
-        fa.addTransition( new FATransition( g, b, '1' ) );
-        fa.addTransition( new FATransition( h, i, '0' ) );
-        fa.addTransition( new FATransition( h, c, '1' ) );
-        fa.addTransition( new FATransition( i, a, '0' ) );
-        fa.addTransition( new FATransition( i, e, '1' ) );
+        dfa.addTransition( new FATransition( a, b, '0' ) );
+        dfa.addTransition( new FATransition( a, e, '1' ) );
+        dfa.addTransition( new FATransition( b, c, '0' ) );
+        dfa.addTransition( new FATransition( b, f, '1' ) );
+        dfa.addTransition( new FATransition( c, d, '0' ) );
+        dfa.addTransition( new FATransition( c, h, '1' ) );
+        dfa.addTransition( new FATransition( d, e, '0' ) );
+        dfa.addTransition( new FATransition( d, h, '1' ) );
+        dfa.addTransition( new FATransition( e, f, '0' ) );
+        dfa.addTransition( new FATransition( e, i, '1' ) );
+        dfa.addTransition( new FATransition( f, g, '0' ) );
+        dfa.addTransition( new FATransition( f, b, '1' ) );
+        dfa.addTransition( new FATransition( g, h, '0' ) );
+        dfa.addTransition( new FATransition( g, b, '1' ) );
+        dfa.addTransition( new FATransition( h, i, '0' ) );
+        dfa.addTransition( new FATransition( h, c, '1' ) );
+        dfa.addTransition( new FATransition( i, a, '0' ) );
+        dfa.addTransition( new FATransition( i, e, '1' ) );
         
-        FAAlgorithms.arrangeFARectangularly( fa, 100, 100, 4, 150 );
+        FAAlgorithms.arrangeFARectangularly( dfa, 100, 100, 4, 150 );
         
-        return fa;
+        return dfa;
+        
+    }
+    
+    public static FA createDFAForMinimizationTest04() {
+        
+        FA dfa = new FA();
+        int currentState = 0;
+        
+        FAState q0 = new FAState( "q" + currentState++, true, false );
+        FAState q1 = new FAState( "q" + currentState++, false, false );
+        FAState q2 = new FAState( "q" + currentState++, false, false);
+        FAState q3 = new FAState( "q" + currentState++, false, true );
+        
+        dfa.addState( q0 );
+        dfa.addState( q1 );
+        dfa.addState( q2 );
+        dfa.addState( q3 );
+        
+        FAAlgorithms.arrangeFARectangularly( dfa, 100, 100, 4, 150 );
+        
+        dfa.addTransition( new FATransition( q0, q0, '0', '1' ) );
+        dfa.addTransition( new FATransition( q0, q1, '0' ) );
+        dfa.addTransition( new FATransition( q1, q2, '0', '1' ) );
+        dfa.addTransition( new FATransition( q2, q2, '0', '1' ) );
+        dfa.addTransition( new FATransition( q2, q3, '0' ) );
+        dfa.addTransition( new FATransition( q3, q3, '0', '1' ) );
+        dfa.addTransition( new FATransition( q3, q0, '0' ).bendByCenterCPY( 60 ).rotateTargetCP( 210 ) );
+        
+        return dfa;
+        
+    }
+    
+    public static FA createDFAForMinimizationTest05() {
+        
+        FA dfa = new FA();
+        int currentState = 0;
+        
+        FAState q0 = new FAState( "q" + currentState++, true, false );
+        FAState q1 = new FAState( "q" + currentState++, false, false );
+        FAState q2 = new FAState( "q" + currentState++, false, false);
+        FAState q3 = new FAState( "q" + currentState++, false, true );
+        FAState q4 = new FAState( "q" + currentState++, false, false );
+        FAState q5 = new FAState( "q" + currentState++, false, false );
+        FAState q6 = new FAState( "q" + currentState++, false, true );
+        
+        dfa.addState( q0 );
+        dfa.addState( q1 );
+        dfa.addState( q2 );
+        dfa.addState( q3 );
+        dfa.addState( q4 );
+        dfa.addState( q5 );
+        dfa.addState( q6 );
+        
+        FAAlgorithms.arrangeFARectangularly( dfa, 100, 100, 4, 150 );
+        q0.move( 0, 75 );
+        q4.move( 150, 0 );
+        q5.move( 150, 0 );
+        q6.move( 150, 0 );
+        
+        dfa.addTransition( new FATransition( q0, q1, CharacterConstants.EMPTY_STRING ) );
+        dfa.addTransition( new FATransition( q0, q4, CharacterConstants.EMPTY_STRING ) );
+        dfa.addTransition( new FATransition( q1, q2, CharacterConstants.EMPTY_STRING ) );
+        dfa.addTransition( new FATransition( q2, q3, CharacterConstants.EMPTY_STRING ) );
+        dfa.addTransition( new FATransition( q4, q5, CharacterConstants.EMPTY_STRING ) );
+        dfa.addTransition( new FATransition( q5, q6, CharacterConstants.EMPTY_STRING ) );
+        dfa.addTransition( new FATransition( q1, q1, 'a' ) );
+        dfa.addTransition( new FATransition( q2, q2, 'b' ) );
+        dfa.addTransition( new FATransition( q3, q3, 'a' ) );
+        dfa.addTransition( new FATransition( q4, q4, 'b' ) );
+        dfa.addTransition( new FATransition( q5, q5, 'a' ) );
+        dfa.addTransition( new FATransition( q6, q6, 'b' ) );
+        
+        return dfa;
         
     }
     

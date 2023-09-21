@@ -42,12 +42,16 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
     
     private Arrow arrow;
     
-    protected boolean activeInSimulation;
+    private boolean activeInSimulation;
     private Color activeInSimulationStrokeColor;
     private Color activeInSimulationFillColor;
     
     public FAState() {
         this( "", null, false, false );
+    }
+    
+    public FAState( String label, boolean initial, boolean accepting ) {
+        this( label, null, initial, accepting );
     }
     
     public FAState( String label, String customLabel, boolean initial, boolean accepting ) {
@@ -60,8 +64,9 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
         font = DrawingConstants.DEFAULT_FONT;
         stroke = DrawingConstants.STATE_STROKE;
         
-        fillColor = DrawingConstants.STATE_FILL_COLOR;
-        strokeColor = DrawingConstants.STATE_STROKE_COLOR;
+        /*fillColor = DrawingConstants.STATE_FILL_COLOR;
+        strokeColor = DrawingConstants.STATE_STROKE_COLOR;*/
+        setStrokeColor( DrawingConstants.STATE_STROKE_COLOR );
         
         mouseHoverFillColor = DrawingConstants.STATE_MOUSE_HOVER_FILL_COLOR;
         mouseHoverStrokeColor = DrawingConstants.STATE_MOUSE_HOVER_STROKE_COLOR;
@@ -251,6 +256,26 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
         this.radius = radius;
         this.radiusSquared = radius * radius;
         this.diameter = radius * 2;
+    }
+
+    @Override
+    public void setStrokeColor( Color strokeColor ) {
+        
+        this.strokeColor = strokeColor;
+        
+        float[] hsb = Color.RGBtoHSB( strokeColor.getRed(), strokeColor.getGreen(), strokeColor.getBlue(), null );
+        
+        // grayscale
+        if ( strokeColor.getRed() == strokeColor.getGreen() && strokeColor.getGreen() == strokeColor.getBlue() ) {
+            hsb[2] = 0.95f;
+        } else {
+            hsb[1] = 0.1f;
+            hsb[2] = 1;
+        }
+        
+        int rbg = Color.HSBtoRGB( hsb[0], hsb[1], hsb[2] );
+        this.fillColor = new Color( rbg );
+        
     }
     
     @Override
