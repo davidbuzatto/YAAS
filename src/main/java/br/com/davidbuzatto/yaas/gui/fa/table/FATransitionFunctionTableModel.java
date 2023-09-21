@@ -31,6 +31,7 @@ public class FATransitionFunctionTableModel implements TableModel {
     private List<String> symbols;
     private List<String> states;
     private List<List<String>> data;
+    private boolean partial;
     
     public FATransitionFunctionTableModel() {
         symbols = new ArrayList<>();
@@ -109,6 +110,14 @@ public class FATransitionFunctionTableModel implements TableModel {
 
     @Override
     public void removeTableModelListener( TableModelListener l ) {
+    }
+
+    public boolean isPartial() {
+        return partial;
+    }
+
+    public void setPartial( boolean partial ) {
+        this.partial = partial;
     }
     
 }

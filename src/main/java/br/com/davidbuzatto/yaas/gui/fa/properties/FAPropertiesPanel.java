@@ -137,13 +137,13 @@ public class FAPropertiesPanel extends javax.swing.JPanel {
         
         if ( fa.getStates().isEmpty() ) {
             JOptionPane.showMessageDialog( 
-                    this, 
+                    faIFrame, 
                     "First add at least one state!", 
                     "Warning", 
                     JOptionPane.WARNING_MESSAGE );
         } else if ( fa.getInitialState() == null ) {
             JOptionPane.showMessageDialog( 
-                    this, 
+                    faIFrame, 
                     "Set the initial state!", 
                     "Warning", JOptionPane.WARNING_MESSAGE );
         } else {

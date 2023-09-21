@@ -246,7 +246,7 @@ public class FATransitionPropertiesPanel extends javax.swing.JPanel {
             }
             s = s.trim();
             
-            String input = Utils.showInputDialogEmptyString( this, 
+            String input = Utils.showInputDialogEmptyString( faIFrame, 
                     "New transition symbol(s)", 
                     "Edit Transition Symbol(s)", s );
             List<Character> symbols = new ArrayList<>();
@@ -270,7 +270,7 @@ public class FATransitionPropertiesPanel extends javax.swing.JPanel {
             
         } else {
             
-            JOptionPane.showMessageDialog( this,
+            JOptionPane.showMessageDialog( faIFrame,
                     "There's no selected transition!",
                     "ERROR",
                     JOptionPane.ERROR_MESSAGE );
@@ -287,7 +287,7 @@ public class FATransitionPropertiesPanel extends javax.swing.JPanel {
             faIFrame.repaintDrawPanel();
         } else {
             
-            JOptionPane.showMessageDialog( this,
+            JOptionPane.showMessageDialog( faIFrame,
                     "There's no selected transition!",
                     "ERROR",
                     JOptionPane.ERROR_MESSAGE );
@@ -301,7 +301,7 @@ public class FATransitionPropertiesPanel extends javax.swing.JPanel {
         if ( transition != null ) {
         
             if ( JOptionPane.showConfirmDialog( 
-                    this, 
+                    faIFrame, 
                     "Do you really want to remove the selected transition?" , 
                     "Confirmation",
                     JOptionPane.YES_NO_OPTION ) == JOptionPane.YES_OPTION ) {
@@ -315,7 +315,7 @@ public class FATransitionPropertiesPanel extends javax.swing.JPanel {
         
         } else {
             
-            JOptionPane.showMessageDialog( this,
+            JOptionPane.showMessageDialog( faIFrame,
                     "There's no selected transition!",
                     "ERROR",
                     JOptionPane.ERROR_MESSAGE );
@@ -326,7 +326,8 @@ public class FATransitionPropertiesPanel extends javax.swing.JPanel {
 
     private void ccpColorMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ccpColorMouseReleased
         
-        Color c = JColorChooser.showDialog( this, "Transition Color", ccpColor.getForeground() );
+        Color c = JColorChooser.showDialog( faIFrame, "Transition Color", 
+                ccpColor.getForeground() );
         
         if ( c != null ) {
             ccpColor.setColor( c );

@@ -52,7 +52,7 @@ public class MainWindow extends javax.swing.JFrame {
         
         //setExtendedState( MAXIMIZED_BOTH );
         
-        createFAInternalFrame( FAExamplesForDFAMinimizationTest.createDFAForMinimizationTest05(), true, true );
+        createFAInternalFrame( FAExamplesForDFAMinimizationTest.createDFAForMinimizationTest06(), true, true );
         
     }
 

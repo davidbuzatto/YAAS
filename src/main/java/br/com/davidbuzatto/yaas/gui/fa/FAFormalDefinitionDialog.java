@@ -17,6 +17,7 @@
 package br.com.davidbuzatto.yaas.gui.fa;
 
 import br.com.davidbuzatto.yaas.gui.fa.table.FATransitionFunctionTableCellRenderer;
+import br.com.davidbuzatto.yaas.gui.fa.table.FATransitionFunctionTableModel;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
@@ -39,19 +40,21 @@ public class FAFormalDefinitionDialog extends javax.swing.JDialog {
         this.fa = fa;
         initComponents();
         customInit();
-        TitledBorder b = (TitledBorder) panelDelta.getBorder();
-        b.setTitle( b.getTitle() + " (partial)" );
     }
     
     private void customInit() {
         
         getRootPane().setDefaultButton( btnClose );
+        FATransitionFunctionTableModel m = Utils.createFATransitionFunctionTableModel( fa );
         
         textAreaFD.setText( fa.getFormalDefinition() );
         tableDelta.getTableHeader().setFont( DrawingConstants.DEFAULT_TABLE_FONT );
         tableDelta.setDefaultRenderer( 
                 String.class, new FATransitionFunctionTableCellRenderer() );
-        tableDelta.setModel( Utils.createFATransitionFunctionTableModel( fa ) );
+        tableDelta.setModel( m );
+        
+        TitledBorder b = (TitledBorder) panelDelta.getBorder();
+        b.setTitle( b.getTitle() + ( m.isPartial() ? " (partial)" : " (total)" ) );
         
         Utils.resizeColumnWidth( tableDelta, 300 );
         

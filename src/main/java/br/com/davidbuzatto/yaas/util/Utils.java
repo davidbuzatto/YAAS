@@ -405,6 +405,7 @@ public class Utils {
                 
                 if ( targetStates == null || targetStates.isEmpty() ) {
                     data.add( CharacterConstants.EMPTY_SET.toString() );
+                    tm.setPartial( true );
                 } else {
                     
                     String targetStr;

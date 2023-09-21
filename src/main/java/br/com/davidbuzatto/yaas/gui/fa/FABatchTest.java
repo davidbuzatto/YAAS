@@ -17,6 +17,7 @@
 package br.com.davidbuzatto.yaas.gui.fa;
 
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
+import java.awt.Frame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -28,14 +29,18 @@ import javax.swing.JTextArea;
  */
 public class FABatchTest extends javax.swing.JDialog {
 
+    private FAInternalFrame faIFrame;
+    
     private FA fa;
     
     /**
      * Creates new form FABatchTest
      */
-    public FABatchTest( java.awt.Frame parent, boolean modal ) {
+    public FABatchTest( Frame parent, FAInternalFrame faIFrame, boolean modal ) {
         super( parent, modal );
+        this.faIFrame = faIFrame;
         initComponents();
+        setLocationRelativeTo( faIFrame );
     }
 
     /**

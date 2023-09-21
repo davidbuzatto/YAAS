@@ -128,7 +128,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
      * Creates new form FAInternalFrame
      */
     public FAInternalFrame( MainWindow mainWindow ) {
-        this( mainWindow, null );
+        this( mainWindow, new FA() );
     }
     
     public FAInternalFrame( MainWindow mainWindow, FA fa ) {
@@ -829,7 +829,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
         
         if ( JOptionPane.showConfirmDialog(
-                mainWindow,
+                this,
                 """
                 Do you really want to create a new model?
                 All non saved modifications will be lost!
@@ -1063,7 +1063,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             
                 if ( targetState != null ) {
                     
-                    String input = Utils.showInputDialogEmptyString( mainWindow, 
+                    String input = Utils.showInputDialogEmptyString( this, 
                             "Transition symbol(s)", 
                             "Add Transition Symbol(s)", null );
                     List<Character> symbols = new ArrayList<>();
@@ -1227,7 +1227,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
             if ( f.exists() ) {
                 if ( JOptionPane.showConfirmDialog( 
-                        mainWindow, 
+                        this, 
                         "The file already exists. Do you want to overwrite it?", 
                         "Confirmation", 
                         JOptionPane.YES_NO_OPTION ) == JOptionPane.NO_OPTION ) {
@@ -1242,7 +1242,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                         f.getParentFile().getAbsolutePath() );
                 
                 int r = JOptionPane.showConfirmDialog( 
-                        mainWindow, 
+                        this, 
                         "Do you want transparent background?", 
                         "Transparent background", 
                         JOptionPane.YES_NO_OPTION );
@@ -1311,7 +1311,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         } else {
             
             JOptionPane.showMessageDialog( 
-                    mainWindow, 
+                    this, 
                     "You must set an initial state!", 
                     "ERROR", 
                     JOptionPane.ERROR_MESSAGE );
@@ -1379,7 +1379,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
     private void btnBatchTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatchTestActionPerformed
         if ( faBatchTestDialog == null ) {
-            faBatchTestDialog = new FABatchTest( mainWindow, true );
+            faBatchTestDialog = new FABatchTest( mainWindow, this, true );
         }
         faBatchTestDialog.setFa( fa );
         faBatchTestDialog.setVisible( true );
@@ -1394,19 +1394,27 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         fa.updateType();
         
-        if ( fa.getType() != FAType.EMPTY ) {
+        if ( fa.getType() == FAType.EMPTY ) {
+            
+            JOptionPane.showMessageDialog( 
+                    this, 
+                    "You must define a Finite Automaton First!", 
+                    "ERROR", 
+                    JOptionPane.ERROR_MESSAGE );
+            
+        } else if ( fa.getType() == FAType.DFA ) {
+            
+            JOptionPane.showMessageDialog( 
+                    this, 
+                    "You already have a DFA!", 
+                    "ERROR", 
+                    JOptionPane.ERROR_MESSAGE );
+            
+        } else {
             
             FA dfa = FAAlgorithms.generateDFARemovingNondeterminisms( fa );
             FAAlgorithms.arrangeFAInCircle( dfa, 250, 200, 150 );
             mainWindow.createFAInternalFrame( dfa, false, false );
-            
-        } else {
-            
-            JOptionPane.showMessageDialog( 
-                    mainWindow, 
-                    "You must define a Finite Automaton First!", 
-                    "ERROR", 
-                    JOptionPane.ERROR_MESSAGE );
             
         }
         
@@ -1425,7 +1433,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         } else {
             
             JOptionPane.showMessageDialog( 
-                    mainWindow, 
+                    this, 
                     "To perform this you must have a DFA!", 
                     "ERROR", 
                     JOptionPane.ERROR_MESSAGE );
@@ -1454,7 +1462,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         } else {
             
             JOptionPane.showMessageDialog( 
-                    mainWindow, 
+                    this, 
                     "To perform this you must have a DFA!", 
                     "ERROR", 
                     JOptionPane.ERROR_MESSAGE );
@@ -1487,7 +1495,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         } else {
             
             JOptionPane.showMessageDialog( 
-                    mainWindow, 
+                    this, 
                     "To perform this you must have a DFA!", 
                     "ERROR", 
                     JOptionPane.ERROR_MESSAGE );
@@ -1518,7 +1526,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             
         } catch ( NumberFormatException exc ) {
             JOptionPane.showMessageDialog( 
-                    mainWindow, 
+                    this, 
                     "Distance must be greater than zero!", 
                     "ERROR", 
                     JOptionPane.ERROR_MESSAGE );
@@ -1548,7 +1556,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             
         } catch ( NumberFormatException exc ) {
             JOptionPane.showMessageDialog( 
-                    mainWindow, 
+                    this, 
                     "Distance must be greater than zero!", 
                     "ERROR", 
                     JOptionPane.ERROR_MESSAGE );
@@ -1590,7 +1598,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         });
         
         if ( JOptionPane.showOptionDialog( 
-                mainWindow, 
+                this, 
                 components, 
                 "Input", 
                 JOptionPane.OK_CANCEL_OPTION, 
@@ -1615,7 +1623,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 
             } catch ( NumberFormatException exc ) {
                 JOptionPane.showMessageDialog( 
-                        mainWindow, 
+                        this, 
                         "Distance must be greater than zero!", 
                         "ERROR", 
                         JOptionPane.ERROR_MESSAGE );
@@ -1648,7 +1656,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             
         } catch ( NumberFormatException exc ) {
             JOptionPane.showMessageDialog( 
-                    mainWindow, 
+                    this, 
                     "Radius must be greater than zero!", 
                     "ERROR", 
                     JOptionPane.ERROR_MESSAGE );
@@ -1697,7 +1705,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             });
 
             if ( JOptionPane.showOptionDialog( 
-                    mainWindow, 
+                    this, 
                     components, 
                     "Input", 
                     JOptionPane.OK_CANCEL_OPTION, 
@@ -1721,7 +1729,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
                 } catch ( NumberFormatException exc ) {
                     JOptionPane.showMessageDialog( 
-                            mainWindow, 
+                            this, 
                             "Distance must be greater than zero!", 
                             "ERROR", 
                             JOptionPane.ERROR_MESSAGE );
@@ -1732,7 +1740,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         } else {
             
             JOptionPane.showMessageDialog( 
-                        mainWindow, 
+                        this, 
                         "Your Finite Automata must have an initial state!", 
                         "ERROR", 
                         JOptionPane.ERROR_MESSAGE );
@@ -1763,7 +1771,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             
         } catch ( NumberFormatException exc ) {
             JOptionPane.showMessageDialog( 
-                    mainWindow, 
+                    this, 
                     "Distance must be greater than zero!", 
                     "ERROR", 
                     JOptionPane.ERROR_MESSAGE );
@@ -1788,7 +1796,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         if ( !currentFileSaved ) {
             
             int r = JOptionPane.showConfirmDialog( 
-                    mainWindow, 
+                    this, 
                     "Save modifications before oppening?", 
                     "Confirmation", 
                     JOptionPane.YES_NO_CANCEL_OPTION );
@@ -1820,7 +1828,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         if ( !currentFileSaved ) {
             
             int r = JOptionPane.showConfirmDialog( 
-                    mainWindow, 
+                    this, 
                     "Save modifications before close?", 
                     "Confirmation", 
                     JOptionPane.YES_NO_CANCEL_OPTION );
@@ -1901,7 +1909,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         } else {
             
             JOptionPane.showMessageDialog(
-                    mainWindow,
+                    this,
                     "You must set an initial state!",
                     "ERROR",
                     JOptionPane.ERROR_MESSAGE );
@@ -2135,7 +2143,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
             if ( f.exists() ) {
                 if ( JOptionPane.showConfirmDialog( 
-                        mainWindow, 
+                        this, 
                         "The file already exists. Do you want to overwrite it?", 
                         "Confirmation", 
                         JOptionPane.YES_NO_OPTION ) == JOptionPane.NO_OPTION ) {

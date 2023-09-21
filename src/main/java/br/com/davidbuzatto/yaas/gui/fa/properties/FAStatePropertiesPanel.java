@@ -260,7 +260,7 @@ public class FAStatePropertiesPanel extends javax.swing.JPanel {
         if ( state != null ) {
         
             if ( JOptionPane.showConfirmDialog( 
-                    this, 
+                    faIFrame, 
                     "Do you really want to remove the selected state?" , 
                     "Confirmation",
                     JOptionPane.YES_NO_OPTION ) == JOptionPane.YES_OPTION ) {
@@ -274,7 +274,7 @@ public class FAStatePropertiesPanel extends javax.swing.JPanel {
         
         } else {
             
-            JOptionPane.showMessageDialog( this,
+            JOptionPane.showMessageDialog( faIFrame,
                     "There's no selected state!",
                     "ERROR",
                     JOptionPane.ERROR_MESSAGE );
@@ -291,7 +291,8 @@ public class FAStatePropertiesPanel extends javax.swing.JPanel {
 
     private void ccpColorMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ccpColorMouseReleased
         
-        Color c = JColorChooser.showDialog( this, "State Color", ccpColor.getForeground() );
+        Color c = JColorChooser.showDialog( faIFrame, "State Color", 
+                ccpColor.getForeground() );
         
         if ( c != null ) {
             ccpColor.setColor( c );

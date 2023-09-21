@@ -318,7 +318,7 @@ public class FAExamplesForDFAMinimizationTest {
         
         FAState q0 = new FAState( "q" + currentState++, true, false );
         FAState q1 = new FAState( "q" + currentState++, false, false );
-        FAState q2 = new FAState( "q" + currentState++, false, false);
+        FAState q2 = new FAState( "q" + currentState++, false, false );
         FAState q3 = new FAState( "q" + currentState++, false, true );
         
         dfa.addState( q0 );
@@ -347,7 +347,7 @@ public class FAExamplesForDFAMinimizationTest {
         
         FAState q0 = new FAState( "q" + currentState++, true, false );
         FAState q1 = new FAState( "q" + currentState++, false, false );
-        FAState q2 = new FAState( "q" + currentState++, false, false);
+        FAState q2 = new FAState( "q" + currentState++, false, false );
         FAState q3 = new FAState( "q" + currentState++, false, true );
         FAState q4 = new FAState( "q" + currentState++, false, false );
         FAState q5 = new FAState( "q" + currentState++, false, false );
@@ -379,6 +379,41 @@ public class FAExamplesForDFAMinimizationTest {
         dfa.addTransition( new FATransition( q4, q4, 'b' ) );
         dfa.addTransition( new FATransition( q5, q5, 'a' ) );
         dfa.addTransition( new FATransition( q6, q6, 'b' ) );
+        
+        return dfa;
+        
+    }
+    
+    public static FA createDFAForMinimizationTest06() {
+        
+        FA dfa = new FA();
+        int currentState = 0;
+        
+        FAState q0 = new FAState( "q" + currentState++, true, false );
+        FAState q1 = new FAState( "q" + currentState++, false, false );
+        FAState q2 = new FAState( "q" + currentState++, false, true );
+        FAState q3 = new FAState( "q" + currentState++, false, false );
+        FAState q4 = new FAState( "q" + currentState++, false, true );
+        
+        dfa.addState( q0 );
+        dfa.addState( q1 );
+        dfa.addState( q2 );
+        dfa.addState( q3 );
+        dfa.addState( q4 );
+        
+        FAAlgorithms.arrangeFARectangularly( dfa, 100, 100, 3, 150 );
+        q0.move( 0, 75 );
+        q3.move( 150, 0 );
+        q4.move( 150, 0 );
+        
+        dfa.addTransition( new FATransition( q0, q1, 'a' ) );
+        dfa.addTransition( new FATransition( q0, q3, 'b' ) );
+        dfa.addTransition( new FATransition( q1, q1, 'd' ) );
+        dfa.addTransition( new FATransition( q1, q2, 'e' ) );
+        dfa.addTransition( new FATransition( q1, q3, 'c' ).bendByCenterCPX( 30 ).moveLabel( 15, 25 ).rotateTargetCP( 120 ) );
+        dfa.addTransition( new FATransition( q3, q3, 'd' ).rotateTargetCP( 180 ) );
+        dfa.addTransition( new FATransition( q3, q4, 'e' ) );
+        dfa.addTransition( new FATransition( q3, q1, 'c' ).bendByCenterCPX( -30 ).moveLabelX( -15 ).rotateTargetCP( -60 ) );
         
         return dfa;
         

@@ -346,7 +346,6 @@ public class FAAlgorithms {
          */
         
         // 1) Using all states, create all possible pairs;
-        //System.out.println( "\nStep 1" );
         Set<FAStatePair> pairs = new LinkedHashSet<>();
         int sSize = states.size();
         for ( int i = 0; i < sSize; i++ ) {
@@ -653,8 +652,7 @@ public class FAAlgorithms {
         addAllMissingTransitions( 
                 dfa, 
                 currentState, 
-                true, 
-                DrawingConstants.NULL_STATE_FILL_COLOR,
+                true,
                 DrawingConstants.NULL_STATE_STROKE_COLOR,
                 DrawingConstants.NULL_TRANSITION_STROKE_COLOR );
     }
@@ -666,7 +664,6 @@ public class FAAlgorithms {
      * @param currentState Whats the current state counter.
      * @param useNullCustomLabel If it will use the empty set symbol do set the
      * custom label of the generated state (null state).
-     * @param nullStateFillColor The color to set the fill in the null state.
      * @param nullStateStrokeColor The color to set the stroke in the null state.
      * @param nullTransitionStrokeColor The color to set in thes troke the null transition.
      */
@@ -674,7 +671,6 @@ public class FAAlgorithms {
             FA dfa,
             int currentState, 
             boolean useNullCustomLabel,
-            Color nullStateFillColor,
             Color nullStateStrokeColor,
             Color nullTransitionStrokeColor ) throws IllegalArgumentException {
         
@@ -716,7 +712,6 @@ public class FAAlgorithms {
             if ( useNullCustomLabel ) {
                 nullState.setCustomLabel( CharacterConstants.EMPTY_SET.toString() );
             }
-            nullState.setFillColor( nullStateFillColor );
             nullState.setStrokeColor( nullStateStrokeColor );
             nullState.setX1( 200 );
             nullState.setY1( 200 );
@@ -750,8 +745,7 @@ public class FAAlgorithms {
         addAllMissingTransitions( 
                 dfa, 
                 currentState, 
-                false, 
-                DrawingConstants.STATE_FILL_COLOR,
+                false,
                 DrawingConstants.STATE_STROKE_COLOR,
                 DrawingConstants.TRANSITION_STROKE_COLOR );
         

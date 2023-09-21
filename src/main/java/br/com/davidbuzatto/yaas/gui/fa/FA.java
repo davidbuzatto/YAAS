@@ -51,7 +51,6 @@ public class FA extends AbstractGeometricForm {
     private Map<FAState, Map<Character, List<FAState>>> delta;
     private Map<FAState, Set<FAState>> ecloses;
     
-    
     private boolean transitionControlPointsVisible;
     
     public FA() {
