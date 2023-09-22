@@ -260,6 +260,7 @@ public class FATransitionPropertiesPanel extends javax.swing.JPanel {
                         symbols.add( c );
                     }
                     transition.setSymbols( symbols );
+                    fa.markAllCachesAsObsolete();
                     readProperties();
                     faIFrame.setCurrentFileSaved( false );
                     faIFrame.repaintDrawPanel();

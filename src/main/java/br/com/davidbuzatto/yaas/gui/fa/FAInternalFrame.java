@@ -21,6 +21,7 @@ import br.com.davidbuzatto.yaas.gui.ZoomFacility;
 import br.com.davidbuzatto.yaas.gui.fa.properties.FAPropertiesPanel;
 import br.com.davidbuzatto.yaas.gui.fa.properties.FAStatePropertiesPanel;
 import br.com.davidbuzatto.yaas.gui.fa.properties.FATransitionPropertiesPanel;
+import br.com.davidbuzatto.yaas.util.ApplicationConstants;
 import br.com.davidbuzatto.yaas.util.ApplicationPreferences;
 import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
@@ -190,9 +191,12 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         
-        sep05.setVisible( false );
-        btnZoomIn.setVisible( false );
-        btnZoomOut.setVisible( false );
+        if ( ApplicationConstants.IN_PRODUCTION ) {
+            sep05.setVisible( false );
+            btnZoomIn.setVisible( false );
+            btnZoomOut.setVisible( false );
+        }
+        
         baseTitle = getTitle();
         setCurrentFileSaved( true );
         
@@ -1669,10 +1673,10 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         if ( fa.getInitialState() != null ) {
         
             JLabel lblAlign = new JLabel( "Align:" );
-            JRadioButton rbVertical = new JRadioButton( "Vertical" );
-            rbVertical.setSelected( true );
             JRadioButton rbHorizontal = new JRadioButton( "Horizontal" );
+            rbHorizontal.setSelected( true );
             ButtonGroup bg = new ButtonGroup();
+            JRadioButton rbVertical = new JRadioButton( "Vertical" );
             bg.add( rbVertical );
             bg.add( rbHorizontal );
 
@@ -1684,9 +1688,9 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             spinPanel.add( lblAlign );
             Dimension d = new Dimension( 5, 0 );
             spinPanel.add( new Box.Filler( d, d, d ) );
-            spinPanel.add( rbVertical );
-            spinPanel.add( new Box.Filler( d, d, d ) );
             spinPanel.add( rbHorizontal );
+            spinPanel.add( new Box.Filler( d, d, d ) );
+            spinPanel.add( rbVertical );
 
             Component[] components = new Component[]{ spinPanel, lblDistance, txtDistance };
 

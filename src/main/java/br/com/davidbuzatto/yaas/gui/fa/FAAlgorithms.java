@@ -423,85 +423,241 @@ public class FAAlgorithms {
             
         }
         
-        // finally, deribing the minized automaton :D
+        // finally, deriving the minized automaton :D
         // the transition generation needs more testing!!!
         int currentState = 0;
         for ( Set<FAState> s : newStateSets ) {
             states.removeAll( s );
         }
         
-        // new initial state
-        FAState dfaIS = new FAState();
-        dfaIS.setInitial( true );
+        boolean runBetter = true;
         
-        FAState iS = dfa.getInitialState();
-        Map<FAState, Set<FAState>> newToSet = new HashMap<>();
-        Map<FAState, FAState> originalToNew = new HashMap<>();
-        
-        for ( FAState s : states ) {
+        if ( runBetter ) {
             
-            if ( s.isInitial() ) {
-                dfaIS.setAccepting( s.isAccepting() );
-                dfaIS.setLabel( "q" + currentState++ );
-                dfaIS.setCustomLabel( s.getCustomLabel() );
-                minDfa.addState( dfaIS );
-                originalToNew.put( s, dfaIS );
-            } else {
-                FAState newState = new FAState();
-                newState.setAccepting( s.isAccepting() );
-                newState.setLabel( "q" + currentState++ );
-                newState.setCustomLabel( s.getCustomLabel() );
-                minDfa.addState( newState );
-                originalToNew.put( s, newState );
-            }
-            
-        }
-        
-        for ( Set<FAState> s : newStateSets ) {
-            
-            String label = "";
-            boolean isAccepting = false;
-            
-            for ( FAState ss : s ) {
-                if ( ss.isAccepting() ) {
-                    isAccepting = true;
+            // new initial state
+            FAState dfaIS = new FAState();
+            dfaIS.setInitial( true );
+
+            FAState iS = dfa.getInitialState();
+            Map<FAState, Set<FAState>> newToSet = new HashMap<>();
+            Map<FAState, FAState> originalToNew = new HashMap<>();
+
+            for ( FAState s : states ) {
+
+                if ( s.isInitial() ) {
+                    dfaIS.setAccepting( s.isAccepting() );
+                    dfaIS.setLabel( s.getLabel() );
+                    dfaIS.setCustomLabel( s.getCustomLabel() );
+                    minDfa.addState( dfaIS );
+                    originalToNew.put( s, dfaIS );
+                } else {
+                    FAState newState = new FAState();
+                    newState.setAccepting( s.isAccepting() );
+                    newState.setLabel( s.getLabel() );
+                    newState.setCustomLabel( s.getCustomLabel() );
+                    minDfa.addState( newState );
+                    originalToNew.put( s, newState );
                 }
-                /*if ( !label.isEmpty() ) {
-                    label += ", ";
-                }*/
-                label += ss.getCustomLabel();
+
             }
-            
-            if ( s.contains( iS ) ) {
-                dfaIS.setAccepting( isAccepting );
-                dfaIS.setLabel( "q" + currentState++ );
-                dfaIS.setCustomLabel( label );
-                newToSet.put( dfaIS, s );
-                minDfa.addState( dfaIS );
-            } else {
-                FAState newState = new FAState();
-                newState.setAccepting( isAccepting );
-                newState.setLabel( "q" + currentState++ );
-                newState.setCustomLabel( label );
-                newToSet.put( newState, s );
-                minDfa.addState( newState );
+
+            for ( Set<FAState> s : newStateSets ) {
+
+                String label = "";
+                boolean isAccepting = false;
+                boolean customLabel = false;
+
+                for ( FAState ss : s ) {
+                    if ( ss.isAccepting() ) {
+                        isAccepting = true;
+                    }
+                    if ( ss.getCustomLabel() != null ) {
+                        label += ss.getCustomLabel();
+                        customLabel = true;
+                    } else {
+                        label += ss.getLabel();
+                    }
+                }
+
+                if ( s.contains( iS ) ) {
+                    dfaIS.setAccepting( isAccepting );
+                    dfaIS.setLabel( "q0" );
+                    if ( customLabel ) {
+                        dfaIS.setCustomLabel( label );
+                    }
+                    newToSet.put( dfaIS, s );
+                    minDfa.addState( dfaIS );
+                } else {
+                    FAState newState = new FAState();
+                    newState.setAccepting( isAccepting );
+                    newState.setLabel( label );
+                    if ( customLabel ) {
+                        newState.setCustomLabel( label );
+                    }
+                    newToSet.put( newState, s );
+                    minDfa.addState( newState );
+                }
+
             }
-            
-        }
-        
-        for ( Map.Entry<FAState, Set<FAState>> e : newToSet.entrySet() ) {
-            for ( FAState s : e.getValue() ) {
-                originalToNew.put( s, e.getKey() );
-            }
-        }
-        
-        // creating the transitions
-        for ( Map.Entry<FAState, FAState> e : originalToNew.entrySet() ) {
-            for ( Map.Entry<Character, List<FAState>> tr : delta.get( e.getKey() ).entrySet() ) {
-                for ( FAState target : tr.getValue() ) {
-                    minDfa.addTransition( new FATransition( e.getValue(), originalToNew.get( target ), tr.getKey() ) );
+
+            for ( Map.Entry<FAState, Set<FAState>> e : newToSet.entrySet() ) {
+                for ( FAState s : e.getValue() ) {
+                    originalToNew.put( s, e.getKey() );
                 }
             }
+
+            // creating the transitions
+            for ( Map.Entry<FAState, FAState> e : originalToNew.entrySet() ) {
+                for ( Map.Entry<Character, List<FAState>> tr : delta.get( e.getKey() ).entrySet() ) {
+                    for ( FAState target : tr.getValue() ) {
+                        minDfa.addTransition( new FATransition( e.getValue(), originalToNew.get( target ), tr.getKey() ) );
+                    }
+                }
+            }
+                
+        } else {
+            
+            // new initial state
+            FAState dfaIS = new FAState();
+            dfaIS.setInitial( true );
+
+            FAState iS = dfa.getInitialState();
+            Map<FAState, FAState> ds = new HashMap<>();
+            Map<FAState, FAState> dsRev = new HashMap<>();
+            Map<FAState, Set<FAState>> ids = new HashMap<>();
+            Map<Set<FAState>, FAState> idsRev = new HashMap<>();
+
+            for ( FAState s : states ) {
+
+                if ( s.isInitial() ) {
+                    dfaIS.setAccepting( s.isAccepting() );
+                    dfaIS.setLabel( "q" + currentState++ );
+                    dfaIS.setCustomLabel( s.getCustomLabel() );
+                    ds.put( dfaIS, s );
+                    dsRev.put( s, dfaIS );
+                    minDfa.addState( dfaIS );
+                } else {
+                    FAState newState = new FAState();
+                    newState.setAccepting( s.isAccepting() );
+                    newState.setLabel( "q" + currentState++ );
+                    newState.setCustomLabel( s.getCustomLabel() );
+                    ds.put( newState, s );
+                    dsRev.put( s, newState );
+                    minDfa.addState( newState );
+                }
+
+            }
+
+            for ( Set<FAState> s : newStateSets ) {
+
+                String label = "";
+                boolean isAccepting = false;
+                boolean customLabel = false;
+
+                for ( FAState ss : s ) {
+                    if ( ss.isAccepting() ) {
+                        isAccepting = true;
+                    }
+                    if ( ss.getCustomLabel() != null ) {
+                        label += ss.getCustomLabel();
+                        customLabel = true;
+                    } else {
+                        label += ss.getLabel();
+                    }
+                }
+
+                if ( s.contains( iS ) ) {
+                    dfaIS.setAccepting( isAccepting );
+                    dfaIS.setLabel( "q0" );
+                    if ( customLabel ) {
+                        dfaIS.setCustomLabel( label );
+                    }
+                    ids.put( dfaIS, s );
+                    idsRev.put( s, dfaIS );
+                    minDfa.addState( dfaIS );
+                } else {
+                    FAState newState = new FAState();
+                    newState.setAccepting( isAccepting );
+                    newState.setLabel( label );
+                    if ( customLabel ) {
+                        newState.setCustomLabel( label );
+                    }
+                    ids.put( newState, s );
+                    idsRev.put( s, newState );
+                    minDfa.addState( newState );
+                }
+
+            }
+
+            // creating the transitions <-- needs more testing!!!
+            for ( FAState s : minDfa.getStates() ) {
+
+                if ( ds.containsKey( s ) ) {
+
+                    FAState oS = ds.get( s );
+
+                    for ( FATransition t : dfa.getTransitions() ) {
+
+                        if ( t.getOriginState().equals( oS ) ) {
+
+                            FAState target = t.getTargetState();
+                            FATransition newT = null;
+
+                            if ( dsRev.containsKey( target ) ) {
+                                newT = new FATransition( s, dsRev.get( target ), 
+                                        new ArrayList<>( t.getSymbols() ) );
+                            } else {
+                                for ( Set<FAState> ss : idsRev.keySet() ) {
+                                    if ( ss.contains( target ) ) {
+                                        newT = new FATransition( s, idsRev.get( ss ), 
+                                                new ArrayList<>( t.getSymbols() ) );
+                                    }
+                                }
+                            }
+
+                            if ( newT != null ) {
+                                minDfa.addTransition( newT );
+                            }
+
+                        }
+
+                    }
+
+                } else if ( ids.containsKey( s ) ) {
+
+                    Set<FAState> oS = ids.get( s );
+
+                    for ( FATransition t : dfa.getTransitions() ) {
+
+                        if ( oS.contains( t.getOriginState() ) ) {
+
+                            FAState target = t.getTargetState();
+                            FATransition newT = null;
+
+                            if ( dsRev.containsKey( target ) ) {
+                                newT = new FATransition( s, dsRev.get( target ), 
+                                        new ArrayList<>( t.getSymbols() ) );
+                            } else {
+                                for ( Set<FAState> ss : idsRev.keySet() ) {
+                                    if ( ss.contains( target ) ) {
+                                        newT = new FATransition( s, idsRev.get( ss ), 
+                                                new ArrayList<>( t.getSymbols() ) );
+                                    }
+                                }
+                            }
+
+                            if ( newT != null ) {
+                                minDfa.addTransition( newT );
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+        
         }
         
         return minDfa;
@@ -537,6 +693,47 @@ public class FAAlgorithms {
         }
         
         return current.isAccepting();
+        
+    }
+    
+    public static boolean acceptsDFATest( String str, FA dfa, FAState initialState1, FAState initialState2 )
+            throws IllegalArgumentException {
+        
+        if ( dfa.getType() != FAType.DFA ) {
+            throw new IllegalArgumentException( "You must use an DFA!" );
+        }
+        
+        Map<FAState, Map<Character, List<FAState>>> delta = dfa.getDelta();
+        
+        FAState current1 = initialState1;
+        FAState current2 = initialState2;
+        
+        for ( char c : str.toCharArray() ) {
+            if ( current1 != null ) {
+                List<FAState> target = delta.get( current1 ).get( c );
+                if ( target != null ) {
+                    current1 = target.get( 0 );
+                } else {
+                    current1 = null;
+                }
+            }
+            if ( current2 != null ) {
+                List<FAState> target = delta.get( current2 ).get( c );
+                if ( target != null ) {
+                    current2 = target.get( 0 );
+                } else {
+                    current2 = null;
+                }
+            }
+        }
+        
+        if ( current1 == null || current2 == null ) {
+            return false;
+        } else if ( current1 != current2 ) {
+            return false;
+        } else {
+            return current1.isAccepting();
+        }
         
     }
     
@@ -619,24 +816,29 @@ public class FAAlgorithms {
         Map<FAState, Map<Character, List<FAState>>> delta = dfa.getDelta();
         
         // assumes s1 and s2 have the same transition function with one symbol
-        Set<Character> alphabet = delta.get( s1 ).keySet();
+        Set<Character> alphabet = new TreeSet<>( delta.get( s1 ).keySet() );
+        alphabet.addAll( delta.get( s2 ).keySet() ); // should not add any symbol
         
-        // generate strings starting with length = 2
-        SigmaStarGeneratorStream ssgs = new SigmaStarGeneratorStream( alphabet, 2 );
-        
-        // max length => n-2, n being the number os states of the DFA
-        int maxLength = dfa.getStates().size() - 2;
-        
-        for ( int i = 2; i <= maxLength; i++ ) {
-            String str = ssgs.next();
-            if ( str.length() > i ) {
-                break;
-            }
-            if ( acceptsDFA( str, dfa, s1 ) != acceptsDFA( str, dfa, s2 ) ) {
-                return true;
-            }
-        }
+        if ( !alphabet.isEmpty() ) {
             
+            // generate strings starting with length = 2
+            SigmaStarGeneratorStream ssgs = new SigmaStarGeneratorStream( alphabet, 2 );
+
+            // max length => n-2, n being the number os states of the DFA
+            int maxLength = dfa.getStates().size() - 2;
+
+            for ( int i = 2; i <= maxLength; i++ ) {
+                String str = ssgs.next();
+                if ( str.length() > i ) {
+                    break;
+                }
+                if ( acceptsDFA( str, dfa, s1 ) != acceptsDFA( str, dfa, s2 ) ) {
+                    return true;
+                }
+            }
+            
+        }
+        
         return false;
         
     }

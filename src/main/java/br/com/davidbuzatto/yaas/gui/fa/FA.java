@@ -223,8 +223,7 @@ public class FA extends AbstractGeometricForm {
             
         }
         
-        deltaUpToDate = false;
-        eclosesUpToDate = false;
+        markAllCachesAsObsolete();
         updateType();
         
     }
@@ -252,9 +251,7 @@ public class FA extends AbstractGeometricForm {
             
         }
         
-        alphabetUpToDate = false;
-        deltaUpToDate = false;
-        eclosesUpToDate = false;
+        markAllCachesAsObsolete();
         updateType();
         
     }
@@ -301,8 +298,7 @@ public class FA extends AbstractGeometricForm {
         
         this.initialState = initialState;
         
-        deltaUpToDate = false;
-        eclosesUpToDate = false;
+        markAllCachesAsObsolete();
         updateType();
         
     }
@@ -334,18 +330,14 @@ public class FA extends AbstractGeometricForm {
             transitions.remove( t );
         }
         
-        alphabetUpToDate = false;
-        deltaUpToDate = false;
-        eclosesUpToDate = false;
+        markAllCachesAsObsolete();
         updateType();
         
     }
     
     public void removeTransition( FATransition transition ) {
         transitions.remove( transition );
-        alphabetUpToDate = false;
-        deltaUpToDate = false;
-        eclosesUpToDate = false;
+        markAllCachesAsObsolete();
         updateType();
     }
     
@@ -619,6 +611,12 @@ public class FA extends AbstractGeometricForm {
         for ( FAState s : states ) {
             s.setActiveInSimulation( false );
         }
+    }
+    
+    public void markAllCachesAsObsolete() {
+        alphabetUpToDate = false;
+        deltaUpToDate = false;
+        eclosesUpToDate = false;
     }
     
 }

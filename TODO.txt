@@ -1,3 +1,7 @@
 ??? Specialized versions of states (Moore machines);
 ??? Specialized versions of transitions (PDAs, Mealy machines and Turing machines);
 ??? Zoom-in and zoom-out;
+
+Minimization:
+    start distinguishable test using accepting state pairs?
+    check if in case of acceptance the accepting state is the same?
