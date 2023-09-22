@@ -35,6 +35,9 @@ import java.awt.Graphics2D;
 import java.awt.HeadlessException;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
@@ -63,7 +66,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SpinnerNumberModel;
@@ -195,6 +200,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             sep05.setVisible( false );
             btnZoomIn.setVisible( false );
             btnZoomOut.setVisible( false );
+            btnCodeGen.setVisible( false );
         }
         
         baseTitle = getTitle();
@@ -227,6 +233,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnSave = new javax.swing.JButton();
         btnSaveAs = new javax.swing.JButton();
         btnSaveFAAsImage = new javax.swing.JButton();
+        btnCodeGen = new javax.swing.JButton();
         sep01 = new javax.swing.JToolBar.Separator();
         btnSelectMultipleStates = new javax.swing.JToggleButton();
         btnMove = new javax.swing.JToggleButton();
@@ -408,6 +415,18 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         toolBar.add(btnSaveFAAsImage);
+
+        btnCodeGen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/script_gear.png"))); // NOI18N
+        btnCodeGen.setToolTipText("Generate Code and Copy to Clipboard");
+        btnCodeGen.setFocusable(false);
+        btnCodeGen.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnCodeGen.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnCodeGen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCodeGenActionPerformed(evt);
+            }
+        });
+        toolBar.add(btnCodeGen);
         toolBar.add(sep01);
 
         btnGroup.add(btnSelectMultipleStates);
@@ -1851,6 +1870,32 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_formInternalFrameClosing
 
+    private void btnCodeGenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCodeGenActionPerformed
+        
+        String code = fa.generateCode();
+        StringSelection codeSelection = new StringSelection( code );
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents( codeSelection, null );
+        
+        if ( JOptionPane.showConfirmDialog( this,
+                """
+                The generated code has been copied to the clipboard!
+                Do you want to see it?
+                """, "Generated Code", JOptionPane.YES_NO_OPTION ) == JOptionPane.YES_OPTION ) {
+            
+            JTextArea textArea = new JTextArea( 20, 60 );
+            textArea.setFont( DrawingConstants.DEFAULT_FONT );
+            textArea.setEditable( false );
+            textArea.setText( code );
+            textArea.setCaretPosition( 0 );
+            
+            JOptionPane.showMessageDialog( this, new JScrollPane( textArea ), 
+                    "Generated Code", JOptionPane.INFORMATION_MESSAGE );
+        
+        }
+        
+    }//GEN-LAST:event_btnCodeGenActionPerformed
+
     public void repaintDrawPanel() {
         drawPanel.repaint();
         drawPanel.setPreferredSize( new Dimension( fa.getWidth(), fa.getHeight() ) );
@@ -2444,6 +2489,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JToggleButton btnAddState;
     private javax.swing.JToggleButton btnAddTransition;
     private javax.swing.JButton btnBatchTest;
+    private javax.swing.JButton btnCodeGen;
     private javax.swing.JButton btnComplementDFA;
     private javax.swing.JButton btnFirstStep;
     private javax.swing.JButton btnGenerateEquivalentDFA;

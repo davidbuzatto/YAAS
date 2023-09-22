@@ -25,16 +25,23 @@ import br.com.davidbuzatto.yaas.util.CharacterConstants;
  */
 public enum FAType {
     
-    EMPTY( "Empty" ),
-    DFA( "Deterministic Finite Automaton" ),
-    NFA( "Nondeterministic Finite Automaton" ),
-    ENFA( "Finite Automaton with " + CharacterConstants.SMALL_EPSILON + "-transitions" ),
-    GNFA( "Generalized Nondeterministic Finite Automaton" );
+    EMPTY( "Empty", "Empty" ),
+    DFA( "DFA", "Deterministic Finite Automaton" ),
+    NFA( "NFA", "Nondeterministic Finite Automaton" ),
+    ENFA( CharacterConstants.SMALL_EPSILON + "-NFA", 
+            "Finite Automaton with " + CharacterConstants.SMALL_EPSILON + "-transitions" ),
+    GNFA( "GNFA", "Generalized Nondeterministic Finite Automaton" );
     
+    private final String acronym;
     private final String description;
     
-    FAType( String description ) {
+    FAType( String acronym, String description ) {
+        this.acronym = acronym;
         this.description = description;
+    }
+
+    public String getAcronym() {
+        return acronym;
     }
     
     public String getDescription() {

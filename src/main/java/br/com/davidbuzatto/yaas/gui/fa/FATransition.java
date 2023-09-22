@@ -20,6 +20,7 @@ import br.com.davidbuzatto.yaas.gui.model.AbstractGeometricForm;
 import br.com.davidbuzatto.yaas.gui.model.Arrow;
 import br.com.davidbuzatto.yaas.gui.model.ControlPoint;
 import br.com.davidbuzatto.yaas.gui.model.SerializableBasicStroke;
+import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.Color;
@@ -637,6 +638,42 @@ public class FATransition extends AbstractGeometricForm {
         label.setStrokeColor( strokeColor );
     }
     
+    public FATransition moveCPsTo( 
+            int centralCPX1, 
+            int centralCPY1, 
+            int leftCPX1, 
+            int leftCPY1, 
+            int rightCPX1,
+            int rightCPY1 ) {
+        
+        this.centralCPMoved = true;
+        
+        centralCP.setX1( centralCPX1 );
+        centralCP.setY1( centralCPY1 );
+        leftCP.setX1( leftCPX1 );
+        leftCP.setY1( leftCPY1 );
+        rightCP.setX1( rightCPX1 );
+        rightCP.setY1( rightCPY1 );
+        
+        updateStartAndEndPoints();
+        
+        arrow.setAngle( Math.atan2( 
+                y2 - rightCP.getY1(), x2 - rightCP.getX1() ) );
+        arrow.setX1( x2 );
+        arrow.setY1( y2 );
+        
+        curve.setCurve( 
+                x1, y1, 
+                leftCP.getX1(), leftCP.getY1(), 
+                rightCP.getX1(), rightCP.getY1(), 
+                x2, y2 );
+        
+        updateStartAndEndPoints();
+        
+        return this;
+        
+    }
+    
     private FATransition bend( 
             int centralCPAmountX, 
             int centralCPAmountY, 
@@ -757,6 +794,13 @@ public class FATransition extends AbstractGeometricForm {
         return bend( 0, 0, true, 0, 0, 0, 0, angle, true );
     }
     
+    public FATransition moveLabelTo( int x1, int y1 ) {
+        labelMoved = true;
+        label.setX1( x1 );
+        label.setY1( y1 );
+        return this;
+    }
+    
     public FATransition moveLabel( int xAmount, int yAmount ) {
         labelMoved = true;
         label.setX1( label.getX1() + xAmount );
@@ -776,6 +820,60 @@ public class FATransition extends AbstractGeometricForm {
     public String toString() {
         return String.format( "(%s) - %s -> (%s)",
                 originState, label.getText(), targetState );
+    }
+    
+    public String generateCode( String modelName ) {
+        
+        String className = getClass().getSimpleName();
+        String tName = originState.getLabel() + targetState.getLabel();
+        
+        String sy = "";
+        boolean fs = true;
+        for ( char c : symbols ) {
+            if ( !fs ) {
+                sy += ", ";
+            }
+            if ( c == CharacterConstants.EMPTY_STRING ) {
+                sy += "CharacterConstants.EMPTY_STRING";
+            } else {
+                sy += String.format( "'%c'", c );
+            }
+            fs = false;
+        }
+        
+        String def = String.format( "    %s %s = new %s( %s, %s, %s );", 
+                className, 
+                tName, 
+                className, 
+                originState.getLabel(), 
+                targetState.getLabel(), 
+                sy );
+        
+        String pos = "";
+        
+        if ( labelMoved ) {
+            pos += String.format( "\n    %s.moveLabelTo( %d, %d );", 
+                    tName, 
+                    label.getX1(), label.getY1() );
+        }
+        
+        if ( targetCPMoved ) {
+            pos += String.format( "\n    %s.rotateTargetCP( %d );", tName,
+                    Utils.roundToNearest( (int) Math.toDegrees( targetCPAngle ), 5 ) );
+        }
+        
+        if ( originState != targetState && centralCPMoved ) {
+            pos += String.format( "\n    %s.moveCPsTo( %d, %d, %d, %d, %d, %d );", 
+                    tName, 
+                    centralCP.getX1(), centralCP.getY1(),
+                    leftCP.getX1(), leftCP.getY1(),
+                    rightCP.getX1(), rightCP.getY1() );
+        }
+        
+        String add = String.format( "\n    %s.addTransition( %s );", modelName, tName );
+        
+        return def + pos + add;
+        
     }
     
 }

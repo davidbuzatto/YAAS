@@ -509,6 +509,17 @@ public class Utils {
     }
     
     /**
+     * Round to the nearest integer by a multple.
+     * 
+     * @param value The value to be rounded.
+     * @param multiple The multiple to use.
+     * @return The rounded value.
+     */
+    public static int roundToNearest( int value, int multiple ) {
+        return (int) ( Math.round( value / (double) multiple ) * multiple );
+    }
+    
+    /**
      * Shows a message to warn about the no implementation of a functinality.
      */
     public static void showNotImplementedYetMessage() {

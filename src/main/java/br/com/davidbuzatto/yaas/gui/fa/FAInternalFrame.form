@@ -213,6 +213,20 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSaveFAAsImageActionPerformed"/>
           </Events>
         </Component>
+        <Component class="javax.swing.JButton" name="btnCodeGen">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/script_gear.png"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Generate Code and Copy to Clipboard"/>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="horizontalTextPosition" type="int" value="0"/>
+            <Property name="verticalTextPosition" type="int" value="3"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCodeGenActionPerformed"/>
+          </Events>
+        </Component>
         <Component class="javax.swing.JToolBar$Separator" name="sep01">
         </Component>
         <Component class="javax.swing.JToggleButton" name="btnSelectMultipleStates">

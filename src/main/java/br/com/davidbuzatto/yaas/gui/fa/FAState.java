@@ -296,4 +296,23 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
         return id - o.id;
     }
     
+    public String generateCode( String modelName ) {
+        
+        String className = getClass().getSimpleName();
+        
+        String def = String.format( "    %s %s = new %s( \"%s\", %s, %b, %b );", 
+                className, 
+                label, 
+                className, 
+                label, 
+                customLabel == null ? null : String.format( "\"%s\"", customLabel ), 
+                initial, 
+                accepting );
+        String pos = String.format( "\n    %s.setX1Y1( %d, %d );", label, x1, y1 );
+        String add = String.format( "\n    %s.addState( %s );", modelName, label );
+        
+        return def + pos + add;
+        
+    }
+    
 }

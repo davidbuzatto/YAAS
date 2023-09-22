@@ -57,7 +57,7 @@ public class FAPropertiesPanel extends javax.swing.JPanel {
             txtFAType.setText( "" );
             txtFAType.setToolTipText( "" );
         } else {
-            txtFAType.setText( fa.getType().name() );
+            txtFAType.setText( fa.getType().getAcronym() );
             txtFAType.setToolTipText( fa.getType().getDescription() );
         }
     }

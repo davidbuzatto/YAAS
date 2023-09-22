@@ -619,4 +619,70 @@ public class FA extends AbstractGeometricForm {
         eclosesUpToDate = false;
     }
     
+    public String generateCode() {
+        
+        updateType();
+        String className = getClass().getSimpleName();
+        String modelName = "";
+        
+        switch ( type ) {
+            case EMPTY:
+                modelName = "fa";
+                break;
+            case DFA:
+                modelName = "dfa";
+                break;
+            case NFA:
+                modelName = "nfa";
+                break;
+            case ENFA:
+                modelName = "enfa";
+                break;
+        }
+        
+        String template =
+                """
+                public static %s create%s() {
+                
+                    %s %s = new %s();
+                
+                    // states
+                %s
+                
+                    // transitions
+                %s
+                
+                    return %s;
+                
+                }""";
+        
+        StringBuilder stBuilderInst = new StringBuilder();
+        boolean first = true;
+        for ( FAState s : this.states ) {
+            if ( !first ) {
+                stBuilderInst.append( "\n\n" );
+            }
+            stBuilderInst.append( s.generateCode( modelName ) );
+            first = false;
+        }
+        
+        StringBuilder tBuilder = new StringBuilder();
+        first = true;
+        for ( FATransition t : this.transitions ) {
+            if ( !first ) {
+                tBuilder.append( "\n\n" );
+            }
+            tBuilder.append( t.generateCode( modelName ) );
+            first = false;
+        }
+        
+        return String.format( template, 
+                className, modelName.toUpperCase(), 
+                className, modelName, className, 
+                stBuilderInst.toString(), 
+                tBuilder.toString(),
+                modelName );
+        
+    }
+    
 }
