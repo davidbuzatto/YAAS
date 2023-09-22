@@ -50,8 +50,16 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
         this( "", null, false, false );
     }
     
+    public FAState( int labelNumber, boolean initial, boolean accepting ) {
+        this( "q" + labelNumber, null, initial, accepting );
+    }
+    
     public FAState( String label, boolean initial, boolean accepting ) {
         this( label, null, initial, accepting );
+    }
+    
+    public FAState( int labelNumber, String customLabel, boolean initial, boolean accepting ) {
+        this( "q" + labelNumber, customLabel, initial, accepting );
     }
     
     public FAState( String label, String customLabel, boolean initial, boolean accepting ) {

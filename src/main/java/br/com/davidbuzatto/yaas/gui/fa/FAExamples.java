@@ -33,555 +33,391 @@ public class FAExamples {
     
     public static FA createDFASubstring01() {
         
-        FA fa = new FA();
+        FA dfa = new FA();
         int currentState = 0;
         
-        FAState s0 = new FAState();
-        s0.setX1( 100 );
-        s0.setY1( 200 );
-        s0.setInitial( true );
-        s0.setLabel( "q" + currentState++ );
+        FAState q0 = new FAState( currentState++, true, false );
+        q0.setX1( 100 );
+        q0.setY1( 200 );
         
-        FAState s1 = new FAState();
-        s1.setX1( 250 );
-        s1.setY1( 200 );
-        s1.setLabel( "q" + currentState++ );
+        FAState q1 = new FAState( currentState++, false, false );
+        q1.setX1( 250 );
+        q1.setY1( 200 );
         
-        FAState s2 = new FAState();
-        s2.setX1( 400 );
-        s2.setY1( 200 );
-        s2.setAccepting( true );
-        s2.setLabel( "q" + currentState++ );
+        FAState q2 = new FAState( currentState++, false, true );
+        q2.setX1( 400 );
+        q2.setY1( 200 );
         
-        FATransition t1 = new FATransition( s0, s0, '1' );
-        FATransition t2 = new FATransition( s0, s1, '0' );
-        FATransition t3 = new FATransition( s1, s1, '0' );
-        FATransition t4 = new FATransition( s1, s2, '1' );
-        FATransition t5 = new FATransition( s2, s2, '0', '1' );
+        dfa.addState( q0 );
+        dfa.addState( q1 );
+        dfa.addState( q2 );
         
-        fa.addState( s0 );
-        fa.addState( s1 );
-        fa.addState( s2 );
-        fa.addTransition( t1 );
-        fa.addTransition( t2 );
-        fa.addTransition( t3 );
-        fa.addTransition( t4 );
-        fa.addTransition( t5 );
+        dfa.addTransition( new FATransition( q0, q0, '1' ) );
+        dfa.addTransition( new FATransition( q0, q1, '0' ) );
+        dfa.addTransition( new FATransition( q1, q1, '0' ) );
+        dfa.addTransition( new FATransition( q1, q2, '1' ) );
+        dfa.addTransition( new FATransition( q2, q2, '0', '1' ) );
         
-        return fa;
+        return dfa;
         
     }
     
     public static FA createDFAEndsWith00() {
         
-        FA fa = new FA();
+        FA dfa = new FA();
         int currentState = 0;
         
-        FAState s0 = new FAState();
-        s0.setX1( 100 );
-        s0.setY1( 200 );
-        s0.setInitial( true );
-        s0.setLabel( "q" + currentState++ );
+        FAState q0 = new FAState( currentState++, true, false );
+        q0.setX1( 100 );
+        q0.setY1( 200 );
         
-        FAState s1 = new FAState();
-        s1.setX1( 250 );
-        s1.setY1( 200 );
-        s1.setLabel( "q" + currentState++ );
+        FAState q1 = new FAState( currentState++, false, false );
+        q1.setX1( 250 );
+        q1.setY1( 200 );
         
-        FAState s2 = new FAState();
-        s2.setX1( 400 );
-        s2.setY1( 200 );
-        s2.setAccepting( true );
-        s2.setLabel( "q" + currentState++ );
+        FAState q2 = new FAState( currentState++, false, true );
+        q2.setX1( 400 );
+        q2.setY1( 200 );
         
-        FATransition t1 = new FATransition( s0, s0, '1' );
-        FATransition t2 = new FATransition( s0, s1, '0' );
-        FATransition t3 = new FATransition( s1, s2, '0' );
-        FATransition t4 = new FATransition( s1, s0, '1' );
-        FATransition t5 = new FATransition( s2, s2, '0' );
-        FATransition t6 = new FATransition( s2, s0, '1' );
+        dfa.addState( q0 );
+        dfa.addState( q1 );
+        dfa.addState( q2 );
         
-        t2.bendY( -30, -30, -30, 30 );
-        t2.moveLabelX( 12 );
-        t4.bendY( 30, 30, 30, 210 );
-        t4.moveLabelX( -12 );
-        t6.bendY( 80, 80, 80, 210 );
-        t6.moveLabelX( -12 );
-        t6.rotateTargetCP( 230 );
+        dfa.addTransition( new FATransition( q0, q0, '1' ) );
+        dfa.addTransition( new FATransition( q0, q1, '0' )
+                .bendY( -30, -30, -30, 30 ).moveLabelX( 12 ) );
+        dfa.addTransition( new FATransition( q1, q2, '0' ) );
+        dfa.addTransition( new FATransition( q1, q0, '1' )
+                .bendY( 30, 30, 30, 210 ).moveLabelX( -12 ) );
+        dfa.addTransition( new FATransition( q2, q2, '0' ) );
+        dfa.addTransition( new FATransition( q2, q0, '1' )
+                .bendY( 80, 80, 80, 210 ).moveLabelX( -12 )
+                .rotateTargetCP( 230 ) );
         
-        fa.addState( s0 );
-        fa.addState( s1 );
-        fa.addState( s2 );
-        fa.addTransition( t1 );
-        fa.addTransition( t2 );
-        fa.addTransition( t3 );
-        fa.addTransition( t4 );
-        fa.addTransition( t5 );
-        fa.addTransition( t6 );
-        
-        return fa;
+        return dfa;
         
     }
     
     public static FA createDFAEndsWith01() {
         
-        FA fa = new FA();
+        FA dfa = new FA();
         int currentState = 0;
         
-        FAState s0 = new FAState();
-        s0.setX1( 100 );
-        s0.setY1( 200 );
-        s0.setInitial( true );
-        s0.setLabel( "q" + currentState++ );
+        FAState q0 = new FAState( currentState++, true, false );
+        q0.setX1( 100 );
+        q0.setY1( 200 );
         
-        FAState s1 = new FAState();
-        s1.setX1( 250 );
-        s1.setY1( 200 );
-        s1.setLabel( "q" + currentState++ );
+        FAState q1 = new FAState( currentState++, false, false );
+        q1.setX1( 250 );
+        q1.setY1( 200 );
         
-        FAState s2 = new FAState();
-        s2.setX1( 400 );
-        s2.setY1( 200 );
-        s2.setAccepting( true );
-        s2.setLabel( "q" + currentState++ );
+        FAState q2 = new FAState( currentState++, false, true );
+        q2.setX1( 400 );
+        q2.setY1( 200 );
         
-        FATransition t1 = new FATransition( s0, s0, '1' );
-        FATransition t2 = new FATransition( s0, s1, '0' );
-        FATransition t3 = new FATransition( s1, s1, '0' );
-        FATransition t4 = new FATransition( s1, s2, '1' );
-        t4.bendY( -30, -30, -30, 30 );
-        t4.moveLabelX( 12 );
-        FATransition t5 = new FATransition( s2, s1, '0' );
-        t5.bendY( 30, 30, 30, 210 );
-        t5.moveLabelX( -12 );
-        FATransition t6 = new FATransition( s2, s0, '1' );
-        t6.bendY( 80, 80, 80, 210 );
-        t6.moveLabelX( -12 );
+        dfa.addState( q0 );
+        dfa.addState( q1 );
+        dfa.addState( q2 );
         
-        fa.addState( s0 );
-        fa.addState( s1 );
-        fa.addState( s2 );
-        fa.addTransition( t1 );
-        fa.addTransition( t2 );
-        fa.addTransition( t3 );
-        fa.addTransition( t4 );
-        fa.addTransition( t5 );
-        fa.addTransition( t6 );
+        dfa.addTransition( new FATransition( q0, q0, '1' ) );
+        dfa.addTransition( new FATransition( q0, q1, '0' ) );
+        dfa.addTransition( new FATransition( q1, q1, '0' ) );
+        dfa.addTransition( new FATransition( q1, q2, '1' )
+                .bendY( -30, -30, -30, 30 ).moveLabelX( 12 ) );
+        dfa.addTransition( new FATransition( q2, q1, '0' )
+                .bendY( 30, 30, 30, 210 ).moveLabelX( -12  ) );
+        dfa.addTransition( new FATransition( q2, q0, '1' )
+                .bendY( 80, 80, 80, 210 ).moveLabelX( -12 ) );
         
-        return fa;
+        return dfa;
         
     }
     
     public static FA createDFAEndsWith10() {
         
-        FA fa = new FA();
+        FA dfa = new FA();
         int currentState = 0;
         
-        FAState s0 = new FAState();
-        s0.setX1( 100 );
-        s0.setY1( 200 );
-        s0.setInitial( true );
-        s0.setLabel( "q" + currentState++ );
+        FAState q0 = new FAState( currentState++, true, false );
+        q0.setX1( 100 );
+        q0.setY1( 200 );
         
-        FAState s1 = new FAState();
-        s1.setX1( 250 );
-        s1.setY1( 200 );
-        s1.setLabel( "q" + currentState++ );
+        FAState q1 = new FAState( currentState++, false, false );
+        q1.setX1( 250 );
+        q1.setY1( 200 );
         
-        FAState s2 = new FAState();
-        s2.setX1( 400 );
-        s2.setY1( 200 );
-        s2.setAccepting( true );
-        s2.setLabel( "q" + currentState++ );
+        FAState q2 = new FAState( currentState++, false, true );
+        q2.setX1( 400 );
+        q2.setY1( 200 );
         
-        FATransition t1 = new FATransition( s0, s0, '0' );
-        FATransition t2 = new FATransition( s0, s1, '1' );
-        FATransition t3 = new FATransition( s1, s1, '1' );
-        FATransition t4 = new FATransition( s1, s2, '0' );
-        t4.bendY( -30, -30, -30, 30 );
-        t4.moveLabelX( 12 );
-        FATransition t5 = new FATransition( s2, s1, '1' );
-        t5.bendY( 30, 30, 30, 210 );
-        t5.moveLabelX( -12 );
-        FATransition t6 = new FATransition( s2, s0, '0' );
-        t6.bendY( 80, 80, 80, 210 );
-        t6.moveLabelX( -12 );
+        dfa.addState( q0 );
+        dfa.addState( q1 );
+        dfa.addState( q2 );
         
-        fa.addState( s0 );
-        fa.addState( s1 );
-        fa.addState( s2 );
-        fa.addTransition( t1 );
-        fa.addTransition( t2 );
-        fa.addTransition( t3 );
-        fa.addTransition( t4 );
-        fa.addTransition( t5 );
-        fa.addTransition( t6 );
+        dfa.addTransition( new FATransition( q0, q0, '0' ) );
+        dfa.addTransition( new FATransition( q0, q1, '1' ) );
+        dfa.addTransition( new FATransition( q1, q1, '1' ) );
+        dfa.addTransition( new FATransition( q1, q2, '0' )
+                .bendY( -30, -30, -30, 30 ).moveLabelX( 12 ) );
+        dfa.addTransition( new FATransition( q2, q1, '1' )
+                .bendY( 30, 30, 30, 210 ).moveLabelX( -12 ) );
+        dfa.addTransition( new FATransition( q2, q0, '0' )
+                .bendY( 80, 80, 80, 210 ).moveLabelX( -12 ) );
         
-        return fa;
+        return dfa;
         
     }
     
     public static FA createDFAEndsWith11() {
         
-        FA fa = new FA();
+        FA dfa = new FA();
         int currentState = 0;
         
-        FAState s0 = new FAState();
-        s0.setX1( 100 );
-        s0.setY1( 200 );
-        s0.setInitial( true );
-        s0.setLabel( "q" + currentState++ );
+        FAState q0 = new FAState( currentState++, true, false );
+        q0.setX1( 100 );
+        q0.setY1( 200 );
         
-        FAState s1 = new FAState();
-        s1.setX1( 250 );
-        s1.setY1( 200 );
-        s1.setLabel( "q" + currentState++ );
+        FAState q1 = new FAState( currentState++, false, false );
+        q1.setX1( 250 );
+        q1.setY1( 200 );
         
-        FAState s2 = new FAState();
-        s2.setX1( 400 );
-        s2.setY1( 200 );
-        s2.setAccepting( true );
-        s2.setLabel( "q" + currentState++ );
+        FAState q2 = new FAState( currentState++, false, true );
+        q2.setX1( 400 );
+        q2.setY1( 200 );
         
-        FATransition t1 = new FATransition( s0, s0, '0' );
-        FATransition t2 = new FATransition( s0, s1, '1' );
-        FATransition t3 = new FATransition( s1, s2, '1' );
-        FATransition t4 = new FATransition( s1, s0, '0' );
-        FATransition t5 = new FATransition( s2, s2, '1' );
-        FATransition t6 = new FATransition( s2, s0, '0' );
+        dfa.addState( q0 );
+        dfa.addState( q1 );
+        dfa.addState( q2 );
         
-        t2.bendY( -30, -30, -30, 30 );
-        t2.moveLabelX( 12 );
-        t4.bendY( 30, 30, 30, 210 );
-        t4.moveLabelX( -12 );
-        t6.bendY( 80, 80, 80, 210 );
-        t6.moveLabelX( -12 );
-        t6.rotateTargetCP( 230 );
+        dfa.addTransition( new FATransition( q0, q0, '0' ) );
+        dfa.addTransition( new FATransition( q0, q1, '1' )
+                .bendY( -30, -30, -30, 30 ).moveLabelX( 12 ) );
+        dfa.addTransition( new FATransition( q1, q2, '1' ) );
+        dfa.addTransition( new FATransition( q1, q0, '0' )
+                .bendY( 30, 30, 30, 210 ).moveLabelX( -12 ) );
+        dfa.addTransition( new FATransition( q2, q2, '1' ) );
+        dfa.addTransition( new FATransition( q2, q0, '0' )
+                .bendY( 80, 80, 80, 210 ).moveLabelX( -12 )
+                .rotateTargetCP( 230 ) );
         
-        fa.addState( s0 );
-        fa.addState( s1 );
-        fa.addState( s2 );
-        fa.addTransition( t1 );
-        fa.addTransition( t2 );
-        fa.addTransition( t3 );
-        fa.addTransition( t4 );
-        fa.addTransition( t5 );
-        fa.addTransition( t6 );
-        
-        return fa;
+        return dfa;
         
     }
     
     public static FA createDFA0Even1Odd() {
         
-        FA fa = new FA();
+        FA dfa = new FA();
         int currentState = 0;
         
-        FAState s0 = new FAState();
-        s0.setX1( 100 );
-        s0.setY1( 200 );
-        s0.setInitial( true );
-        s0.setLabel( "q" + currentState++ );
+        FAState q0 = new FAState( currentState++, true, false );
+        q0.setX1( 100 );
+        q0.setY1( 200 );
         
-        FAState s1 = new FAState();
-        s1.setX1( 250 );
-        s1.setY1( 100 );
-        s1.setLabel( "q" + currentState++ );
+        FAState q1 = new FAState( currentState++, false, false );
+        q1.setX1( 250 );
+        q1.setY1( 100 );
         
-        FAState s2 = new FAState();
-        s2.setX1( 400 );
-        s2.setY1( 100 );
-        s2.setAccepting( true );
-        s2.setLabel( "q" + currentState++ );
+        FAState q2 = new FAState( currentState++, false, true );
+        q2.setX1( 400 );
+        q2.setY1( 100 );
         
-        FAState s3 = new FAState();
-        s3.setX1( 250 );
-        s3.setY1( 300 );
-        s3.setAccepting( true );
-        s3.setLabel( "q" + currentState++ );
+        FAState q3 = new FAState( currentState++, false, true );
+        q3.setX1( 250 );
+        q3.setY1( 300 );
         
-        FAState s4 = new FAState();
-        s4.setX1( 400 );
-        s4.setY1( 300 );
-        s4.setLabel( "q" + currentState++ );
+        FAState q4 = new FAState( currentState++, false, false );
+        q4.setX1( 400 );
+        q4.setY1( 300 );
         
-        FATransition t1 = new FATransition( s0, s1, '0' );
-        t1.bendByCenterCPY( -30 );
-        t1.rotateTargetCP( 0 );
-        FATransition t2 = new FATransition( s0, s3, '1' );
-        t2.bendByCenterCPY( 30 );
-        t2.rotateTargetCP( 0 );
-        FATransition t3 = new FATransition( s1, s2, '0' );
-        t3.bendByCenterCPY( -30 );
-        t3.rotateTargetCP( 30 );
-        t3.moveLabelX( 12 );
-        FATransition t4 = new FATransition( s2, s1, '0' );
-        t4.bendByCenterCPY( 30 );
-        t4.rotateTargetCP( 210 );
-        t4.moveLabelX( -12 );
-        FATransition t5 = new FATransition( s3, s4, '1' );
-        t5.bendByCenterCPY( -30 );
-        t5.rotateTargetCP( 30 );
-        t5.moveLabelX( 12 );
-        FATransition t6 = new FATransition( s4, s3, '1' );
-        t6.bendByCenterCPY( 30 );
-        t6.rotateTargetCP( 210 );
-        t6.moveLabelX( -12 );
+        dfa.addState( q0 );
+        dfa.addState( q1 );
+        dfa.addState( q2 );
+        dfa.addState( q3 );
+        dfa.addState( q4 );
         
-        fa.addState( s0 );
-        fa.addState( s1 );
-        fa.addState( s2 );
-        fa.addState( s3 );
-        fa.addState( s4 );
-        fa.addTransition( t1 );
-        fa.addTransition( t2 );
-        fa.addTransition( t3 );
-        fa.addTransition( t4 );
-        fa.addTransition( t5 );
-        fa.addTransition( t6 );
+        dfa.addTransition( new FATransition( q0, q1, '0' )
+                .bendByCenterCPY( -30 ).rotateTargetCP( 0 ) );
+        dfa.addTransition( new FATransition( q0, q3, '1' )
+                .bendByCenterCPY( 30 ).rotateTargetCP( 0 ) );
+        dfa.addTransition( new FATransition( q1, q2, '0' )
+                .bendByCenterCPY( -30 ).rotateTargetCP( 30 ).moveLabelX( 12 ) );
+        dfa.addTransition( new FATransition( q2, q1, '0' )
+                .bendByCenterCPY( 30 ).rotateTargetCP( 210 ).moveLabelX( -12 ) );
+        dfa.addTransition( new FATransition( q3, q4, '1' )
+                .bendByCenterCPY( -30 ).rotateTargetCP( 30 ).moveLabelX( 12 ) );
+        dfa.addTransition( new FATransition( q4, q3, '1' )
+                .bendByCenterCPY( 30 ).rotateTargetCP( 210 ).moveLabelX( -12 ) );
         
-        return fa;
+        return dfa;
         
     }
     
     public static FA createNFAEndsWith00() {
         
-        FA fa = new FA();
+        FA nfa = new FA();
         int currentState = 0;
         
-        FAState s0 = new FAState();
-        s0.setX1( 100 );
-        s0.setY1( 200 );
-        s0.setInitial( true );
-        s0.setLabel( "q" + currentState++ );
+        FAState q0 = new FAState( currentState++, true, false );
+        q0.setX1( 100 );
+        q0.setY1( 200 );
         
-        FAState s1 = new FAState();
-        s1.setX1( 250 );
-        s1.setY1( 200 );
-        s1.setLabel( "q" + currentState++ );
+        FAState q1 = new FAState( currentState++, false, false );
+        q1.setX1( 250 );
+        q1.setY1( 200 );
         
-        FAState s2 = new FAState();
-        s2.setX1( 400 );
-        s2.setY1( 200 );
-        s2.setAccepting( true );
-        s2.setLabel( "q" + currentState++ );
+        FAState q2 = new FAState( currentState++, false, true );
+        q2.setX1( 400 );
+        q2.setY1( 200 );
         
-        FATransition t1 = new FATransition( s0, s0, '0', '1' );
-        FATransition t2 = new FATransition( s0, s1, '0' );
-        FATransition t3 = new FATransition( s1, s2, '0' );
+        nfa.addState( q0 );
+        nfa.addState( q1 );
+        nfa.addState( q2 );
         
-        fa.addState( s0 );
-        fa.addState( s1 );
-        fa.addState( s2 );
-        fa.addTransition( t1 );
-        fa.addTransition( t2 );
-        fa.addTransition( t3 );
+        nfa.addTransition( new FATransition( q0, q0, '0', '1' ) );
+        nfa.addTransition( new FATransition( q0, q1, '0' ) );
+        nfa.addTransition( new FATransition( q1, q2, '0' ) );
         
-        return fa;
+        return nfa;
         
     }
     
     public static FA createNFAEndsWith01() {
         
-        FA fa = new FA();
+        FA nfa = new FA();
         int currentState = 0;
         
-        FAState s0 = new FAState();
-        s0.setX1( 100 );
-        s0.setY1( 200 );
-        s0.setInitial( true );
-        s0.setLabel( "q" + currentState++ );
+        FAState q0 = new FAState( currentState++, true, false );
+        q0.setX1( 100 );
+        q0.setY1( 200 );
         
-        FAState s1 = new FAState();
-        s1.setX1( 250 );
-        s1.setY1( 200 );
-        s1.setLabel( "q" + currentState++ );
+        FAState q1 = new FAState( currentState++, false, false );
+        q1.setX1( 250 );
+        q1.setY1( 200 );
         
-        FAState s2 = new FAState();
-        s2.setX1( 400 );
-        s2.setY1( 200 );
-        s2.setAccepting( true );
-        s2.setLabel( "q" + currentState++ );
+        FAState q2 = new FAState( currentState++, false, true );
+        q2.setX1( 400 );
+        q2.setY1( 200 );
         
-        FATransition t1 = new FATransition( s0, s0, '0', '1' );
-        FATransition t2 = new FATransition( s0, s1, '0' );
-        FATransition t3 = new FATransition( s1, s2, '1' );
+        nfa.addState( q0 );
+        nfa.addState( q1 );
+        nfa.addState( q2 );
         
-        fa.addState( s0 );
-        fa.addState( s1 );
-        fa.addState( s2 );
-        fa.addTransition( t1 );
-        fa.addTransition( t2 );
-        fa.addTransition( t3 );
+        nfa.addTransition( new FATransition( q0, q0, '0', '1' ) );
+        nfa.addTransition( new FATransition( q0, q1, '0' ) );
+        nfa.addTransition( new FATransition( q1, q2, '1' ) );
         
-        return fa;
+        return nfa;
         
     }
     
     public static FA createNFAEndsWith10() {
         
-        FA fa = new FA();
+        FA nfa = new FA();
         int currentState = 0;
         
-        FAState s0 = new FAState();
-        s0.setX1( 100 );
-        s0.setY1( 200 );
-        s0.setInitial( true );
-        s0.setLabel( "q" + currentState++ );
+        FAState q0 = new FAState( currentState++, true, false );
+        q0.setX1( 100 );
+        q0.setY1( 200 );
         
-        FAState s1 = new FAState();
-        s1.setX1( 250 );
-        s1.setY1( 200 );
-        s1.setLabel( "q" + currentState++ );
+        FAState q1 = new FAState( currentState++, false, false );
+        q1.setX1( 250 );
+        q1.setY1( 200 );
         
-        FAState s2 = new FAState();
-        s2.setX1( 400 );
-        s2.setY1( 200 );
-        s2.setAccepting( true );
-        s2.setLabel( "q" + currentState++ );
+        FAState q2 = new FAState( currentState++, false, true );
+        q2.setX1( 400 );
+        q2.setY1( 200 );
         
-        FATransition t1 = new FATransition( s0, s0, '0', '1' );
-        FATransition t2 = new FATransition( s0, s1, '1' );
-        FATransition t3 = new FATransition( s1, s2, '0' );
+        nfa.addState( q0 );
+        nfa.addState( q1 );
+        nfa.addState( q2 );
         
-        fa.addState( s0 );
-        fa.addState( s1 );
-        fa.addState( s2 );
-        fa.addTransition( t1 );
-        fa.addTransition( t2 );
-        fa.addTransition( t3 );
+        nfa.addTransition( new FATransition( q0, q0, '0', '1' ) );
+        nfa.addTransition( new FATransition( q0, q1, '1' ) );
+        nfa.addTransition( new FATransition( q1, q2, '0' ) );
         
-        return fa;
+        return nfa;
         
     }
     
     public static FA createNFAEndsWith11() {
         
-        FA fa = new FA();
+        FA nfa = new FA();
         int currentState = 0;
         
-        FAState s0 = new FAState();
-        s0.setX1( 100 );
-        s0.setY1( 200 );
-        s0.setInitial( true );
-        s0.setLabel( "q" + currentState++ );
+        FAState q0 = new FAState( currentState++, true, false );
+        q0.setX1( 100 );
+        q0.setY1( 200 );
         
-        FAState s1 = new FAState();
-        s1.setX1( 250 );
-        s1.setY1( 200 );
-        s1.setLabel( "q" + currentState++ );
+        FAState q1 = new FAState( currentState++, false, false );
+        q1.setX1( 250 );
+        q1.setY1( 200 );
         
-        FAState s2 = new FAState();
-        s2.setX1( 400 );
-        s2.setY1( 200 );
-        s2.setAccepting( true );
-        s2.setLabel( "q" + currentState++ );
+        FAState q2 = new FAState( currentState++, false, true );
+        q2.setX1( 400 );
+        q2.setY1( 200 );
         
-        FATransition t1 = new FATransition( s0, s0, '0', '1' );
-        FATransition t2 = new FATransition( s0, s1, '1' );
-        FATransition t3 = new FATransition( s1, s2, '1' );
+        nfa.addState( q0 );
+        nfa.addState( q1 );
+        nfa.addState( q2 );
         
-        fa.addState( s0 );
-        fa.addState( s1 );
-        fa.addState( s2 );
-        fa.addTransition( t1 );
-        fa.addTransition( t2 );
-        fa.addTransition( t3 );
+        nfa.addTransition( new FATransition( q0, q0, '0', '1' ) );
+        nfa.addTransition( new FATransition( q0, q1, '1' ) );
+        nfa.addTransition( new FATransition( q1, q2, '1' ) );
         
-        return fa;
+        return nfa;
         
     }
     
     public static FA createENFADecimalNumber() {
         
-        FA fa = new FA();
+        FA enfa = new FA();
         int currentState = 0;
         
-        FAState s0 = new FAState();
-        s0.setX1( 75 );
-        s0.setY1( 150 );
-        s0.setInitial( true );
-        s0.setLabel( "q" + currentState++ );
+        FAState q0 = new FAState( currentState++, true, false );
+        q0.setX1( 75 );
+        q0.setY1( 150 );
         
-        /*FAState s1 = new FAState();
-        s1.setX1( 180 );
-        s1.setY1( 150 );
-        s1.setLabel( "q" + currentState++ );
+        FAState q1 = new FAState( currentState++, false, false );
+        q1.setX1( 250 );
+        q1.setY1( 150 );
         
-        FAState s2 = new FAState();
-        s2.setX1( 280 );
-        s2.setY1( 150 );
-        s2.setLabel( "q" + currentState++ );
+        FAState q2 = new FAState( currentState++, false, false );
+        q2.setX1( 350 );
+        q2.setY1( 150 );
         
-        FAState s3 = new FAState();
-        s3.setX1( 380 );
-        s3.setY1( 150 );
-        s3.setLabel( "q" + currentState++ );
+        FAState q3 = new FAState( currentState++, false, false );
+        q3.setX1( 575 );
+        q3.setY1( 150 );
         
-        FAState s4 = new FAState();
-        s4.setX1( 280 );
-        s4.setY1( 250 );
-        s4.setLabel( "q" + currentState++ );
+        FAState q4 = new FAState( currentState++, false, false );
+        q4.setX1( 350 );
+        q4.setY1( 300 );
         
-        FAState s5 = new FAState();
-        s5.setX1( 480 );
-        s5.setY1( 150 );
-        s5.setAccepting( true );
-        s5.setLabel( "q" + currentState++ );*/
-        
-        FAState s1 = new FAState();
-        s1.setX1( 250 );
-        s1.setY1( 150 );
-        s1.setLabel( "q" + currentState++ );
-        
-        FAState s2 = new FAState();
-        s2.setX1( 350 );
-        s2.setY1( 150 );
-        s2.setLabel( "q" + currentState++ );
-        
-        FAState s3 = new FAState();
-        s3.setX1( 575 );
-        s3.setY1( 150 );
-        s3.setLabel( "q" + currentState++ );
-        
-        FAState s4 = new FAState();
-        s4.setX1( 350 );
-        s4.setY1( 300 );
-        s4.setLabel( "q" + currentState++ );
-        
-        FAState s5 = new FAState();
-        s5.setX1( 700 );
-        s5.setY1( 150 );
-        s5.setAccepting( true );
-        s5.setLabel( "q" + currentState++ );
+        FAState q5 = new FAState( currentState++, false, true );
+        q5.setX1( 700 );
+        q5.setY1( 150 );
         
         char[] n = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-        FATransition t1 = new FATransition( s0, s1, '+', '-', CharacterConstants.EMPTY_STRING );
-        FATransition t2 = new FATransition( s1, s1, n );
-        FATransition t3 = new FATransition( s1, s2, '.' );
-        FATransition t4 = new FATransition( s1, s4, n );
-        t4.moveLabel( -70, 25 );
-        FATransition t5 = new FATransition( s2, s3, n );
-        FATransition t6 = new FATransition( s3, s3, n );
-        FATransition t7 = new FATransition( s3, s5, CharacterConstants.EMPTY_STRING );
-        FATransition t8 = new FATransition( s4, s3, '.' );
         
-        fa.addState( s0 );
-        fa.addState( s1 );
-        fa.addState( s2 );
-        fa.addState( s3 );
-        fa.addState( s4 );
-        fa.addState( s5 );
-        fa.addTransition( t1 );
-        fa.addTransition( t2 );
-        fa.addTransition( t3 );
-        fa.addTransition( t4 );
-        fa.addTransition( t5 );
-        fa.addTransition( t6 );
-        fa.addTransition( t7 );
-        fa.addTransition( t8 );
+        enfa.addState( q0 );
+        enfa.addState( q1 );
+        enfa.addState( q2 );
+        enfa.addState( q3 );
+        enfa.addState( q4 );
+        enfa.addState( q5 );
         
-        return fa;
+        enfa.addTransition( new FATransition( q0, q1, '+', '-',
+                CharacterConstants.EMPTY_STRING ) );
+        enfa.addTransition( new FATransition( q1, q1, n ) );
+        enfa.addTransition( new FATransition( q1, q2, '.' ) );
+        enfa.addTransition( new FATransition( q1, q4, n ).moveLabel( -70, 25 ) );
+        enfa.addTransition( new FATransition( q2, q3, n ) );
+        enfa.addTransition( new FATransition( q3, q3, n ) );
+        enfa.addTransition( new FATransition( q3, q5,
+                CharacterConstants.EMPTY_STRING ) );
+        enfa.addTransition( new FATransition( q4, q3, '.' ) );
+        
+        return enfa;
         
     }
     
