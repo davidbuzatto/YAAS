@@ -55,7 +55,7 @@ public class MainWindow extends javax.swing.JFrame {
             menuMinimizationTest.setVisible( false );
             setExtendedState( MAXIMIZED_BOTH );
         } else {
-            createFAInternalFrame(FAExamplesForMinimizationTest.createFAForMinimizationTest08(), true, true );
+            createFAInternalFrame(FAExamplesForMinimizationTest.createDFAForMinimizationTest08(), true, true );
         }
         
     }
@@ -500,47 +500,47 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_btnTMActionPerformed
 
     private void miMiniT01ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniT01ActionPerformed
-        createFAInternalFrame(FAExamplesForMinimizationTest.createFAForMinimizationTest01(), 
+        createFAInternalFrame(FAExamplesForMinimizationTest.createDFAForMinimizationTest01(), 
                 false, false );
     }//GEN-LAST:event_miMiniT01ActionPerformed
 
     private void miMiniT02ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniT02ActionPerformed
-        createFAInternalFrame(FAExamplesForMinimizationTest.createFAForMinimizationTest02(), 
+        createFAInternalFrame(FAExamplesForMinimizationTest.createDFAForMinimizationTest02(), 
                 false, false );
     }//GEN-LAST:event_miMiniT02ActionPerformed
 
     private void miMiniT03ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniT03ActionPerformed
-        createFAInternalFrame(FAExamplesForMinimizationTest.createFAForMinimizationTest03(), 
+        createFAInternalFrame(FAExamplesForMinimizationTest.createDFAForMinimizationTest03(), 
                 false, false );
     }//GEN-LAST:event_miMiniT03ActionPerformed
 
     private void miMiniT04ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniT04ActionPerformed
-        createFAInternalFrame(FAExamplesForMinimizationTest.createFAForMinimizationTest04(), 
+        createFAInternalFrame(FAExamplesForMinimizationTest.createDFAForMinimizationTest04(), 
                 false, false );
     }//GEN-LAST:event_miMiniT04ActionPerformed
 
     private void miMiniT05ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniT05ActionPerformed
-        createFAInternalFrame(FAExamplesForMinimizationTest.createFAForMinimizationTest05(), 
+        createFAInternalFrame(FAExamplesForMinimizationTest.createDFAForMinimizationTest05(), 
                 false, false );
     }//GEN-LAST:event_miMiniT05ActionPerformed
 
     private void miMiniT06ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniT06ActionPerformed
-        createFAInternalFrame(FAExamplesForMinimizationTest.createFAForMinimizationTest06(), 
+        createFAInternalFrame(FAExamplesForMinimizationTest.createDFAForMinimizationTest06(), 
                 false, false );
     }//GEN-LAST:event_miMiniT06ActionPerformed
 
     private void miMiniT07ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniT07ActionPerformed
-        createFAInternalFrame(FAExamplesForMinimizationTest.createFAForMinimizationTest07(), 
+        createFAInternalFrame(FAExamplesForMinimizationTest.createDFAForMinimizationTest07(), 
                 false, false );
     }//GEN-LAST:event_miMiniT07ActionPerformed
 
     private void miMiniT08ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniT08ActionPerformed
-        createFAInternalFrame(FAExamplesForMinimizationTest.createFAForMinimizationTest08(), 
+        createFAInternalFrame(FAExamplesForMinimizationTest.createDFAForMinimizationTest08(), 
                 false, false );
     }//GEN-LAST:event_miMiniT08ActionPerformed
 
     private void miMiniT09ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniT09ActionPerformed
-        createFAInternalFrame(FAExamplesForMinimizationTest.createFAForMinimizationTest09(), 
+        createFAInternalFrame(FAExamplesForMinimizationTest.createDFAForMinimizationTest09(), 
                 false, false );
     }//GEN-LAST:event_miMiniT09ActionPerformed
 

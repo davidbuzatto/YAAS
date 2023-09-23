@@ -16,8 +16,6 @@
  */
 package br.com.davidbuzatto.yaas.gui.fa;
 
-import br.com.davidbuzatto.yaas.util.CharacterConstants;
-
 /**
  * A set of methods to construct example DFAs for testing purposes of 
  * the minimization algorithm.
@@ -26,7 +24,7 @@ import br.com.davidbuzatto.yaas.util.CharacterConstants;
  */
 public class FAExamplesForMinimizationTest {
     
-    public static FA createFAForMinimizationTest01() {
+    public static FA createDFAForMinimizationTest01() {
         
         FA dfa = new FA();
         int currentState = 0;
@@ -128,7 +126,7 @@ public class FAExamplesForMinimizationTest {
         
     }
     
-    public static FA createFAForMinimizationTest02() {
+    public static FA createDFAForMinimizationTest02() {
         
         /*************************
                     0    1
@@ -305,7 +303,7 @@ public class FAExamplesForMinimizationTest {
         
     }
     
-    public static FA createFAForMinimizationTest03() {
+    public static FA createDFAForMinimizationTest03() {
         
         /*************************
                     0    1
@@ -504,9 +502,9 @@ public class FAExamplesForMinimizationTest {
         
     }
     
-    public static FA createFAForMinimizationTest04() {
+    public static FA createDFAForMinimizationTest04() {
         
-        FA nfa = new FA();
+        /*FA nfa = new FA();
         int currentState = 0;
         
         FAState q0 = new FAState( currentState++, true, false );
@@ -530,13 +528,85 @@ public class FAExamplesForMinimizationTest {
         nfa.addTransition( new FATransition( q3, q0, '0' )
                 .bendByCenterCPY( 60 ).rotateTargetCP( 210 ) );
         
-        return nfa;
+        return nfa;*/
+
+        FA dfa = new FA();
+
+        // states
+        FAState q0 = new FAState( "q0", "A", true, false );
+        q0.setX1Y1( 75, 150 );
+        dfa.addState( q0 );
+
+        FAState q1 = new FAState( "q1", "B", false, false );
+        q1.setX1Y1( 175, 150 );
+        dfa.addState( q1 );
+
+        FAState q2 = new FAState( "q2", "C", false, false );
+        q2.setX1Y1( 275, 50 );
+        dfa.addState( q2 );
+
+        FAState q3 = new FAState( "q3", "D", false, false );
+        q3.setX1Y1( 275, 250 );
+        dfa.addState( q3 );
+
+        FAState q4 = new FAState( "q4", "E", false, true );
+        q4.setX1Y1( 375, 150 );
+        dfa.addState( q4 );
+
+        FAState q5 = new FAState( "q5", "F", false, true );
+        q5.setX1Y1( 525, 150 );
+        dfa.addState( q5 );
+
+        // transitions
+        FATransition q0q1 = new FATransition( q0, q1, '0' );
+        dfa.addTransition( q0q1 );
+
+        FATransition q0q0 = new FATransition( q0, q0, '1' );
+        dfa.addTransition( q0q0 );
+
+        FATransition q1q2 = new FATransition( q1, q2, '0' );
+        dfa.addTransition( q1q2 );
+
+        FATransition q1q3 = new FATransition( q1, q3, '1' );
+        dfa.addTransition( q1q3 );
+
+        FATransition q2q4 = new FATransition( q2, q4, '0' );
+        dfa.addTransition( q2q4 );
+
+        FATransition q2q3 = new FATransition( q2, q3, '1' );
+        q2q3.moveLabelTo( 262, 149 );
+        dfa.addTransition( q2q3 );
+
+        FATransition q3q4 = new FATransition( q3, q4, '0' );
+        dfa.addTransition( q3q4 );
+
+        FATransition q3q3 = new FATransition( q3, q3, '1' );
+        q3q3.rotateTargetCP( -180 );
+        dfa.addTransition( q3q3 );
+
+        FATransition q4q4 = new FATransition( q4, q4, '0' );
+        dfa.addTransition( q4q4 );
+
+        FATransition q4q5 = new FATransition( q4, q5, '1' );
+        q4q5.rotateTargetCP( 20 );
+        q4q5.moveCPsTo( 451, 118, 430, 118, 473, 118 );
+        dfa.addTransition( q4q5 );
+
+        FATransition q5q4 = new FATransition( q5, q4, '0' );
+        q5q4.rotateTargetCP( -150 );
+        q5q4.moveCPsTo( 450, 184, 471, 184, 428, 184 );
+        dfa.addTransition( q5q4 );
+
+        FATransition q5q5 = new FATransition( q5, q5, '1' );
+        dfa.addTransition( q5q5 );
+
+        return dfa;
         
     }
     
-    public static FA createFAForMinimizationTest05() {
+    public static FA createDFAForMinimizationTest05() {
         
-        FA enfa = new FA();
+        /*FA enfa = new FA();
         int currentState = 0;
         
         FAState q0 = new FAState( currentState++, true, false );
@@ -574,11 +644,81 @@ public class FAExamplesForMinimizationTest {
         enfa.addTransition( new FATransition( q5, q5, 'a' ) );
         enfa.addTransition( new FATransition( q6, q6, 'b' ) );
         
-        return enfa;
+        return enfa;*/
+        
+        FA dfa = new FA();
+
+        // states
+        FAState q0 = new FAState( "q0", "A", true, true );
+        q0.setX1Y1( 100, 175 );
+        dfa.addState( q0 );
+
+        FAState q1 = new FAState( "q1", "B", false, true );
+        q1.setX1Y1( 250, 100 );
+        dfa.addState( q1 );
+
+        FAState q2 = new FAState( "q2", "C", false, true );
+        q2.setX1Y1( 250, 250 );
+        dfa.addState( q2 );
+
+        FAState q3 = new FAState( "q3", "D", false, true );
+        q3.setX1Y1( 400, 100 );
+        dfa.addState( q3 );
+
+        FAState q4 = new FAState( "q4", "E", false, true );
+        q4.setX1Y1( 400, 250 );
+        dfa.addState( q4 );
+
+        FAState q5 = new FAState( "q5", "F", false, true );
+        q5.setX1Y1( 550, 100 );
+        dfa.addState( q5 );
+
+        FAState q6 = new FAState( "q6", "G", false, true );
+        q6.setX1Y1( 550, 250 );
+        dfa.addState( q6 );
+
+        // transitions
+        FATransition q0q1 = new FATransition( q0, q1, 'a' );
+        dfa.addTransition( q0q1 );
+
+        FATransition q0q2 = new FATransition( q0, q2, 'b' );
+        dfa.addTransition( q0q2 );
+
+        FATransition q1q1 = new FATransition( q1, q1, 'a' );
+        dfa.addTransition( q1q1 );
+
+        FATransition q1q3 = new FATransition( q1, q3, 'b' );
+        dfa.addTransition( q1q3 );
+
+        FATransition q2q4 = new FATransition( q2, q4, 'a' );
+        dfa.addTransition( q2q4 );
+
+        FATransition q2q2 = new FATransition( q2, q2, 'b' );
+        dfa.addTransition( q2q2 );
+
+        FATransition q3q5 = new FATransition( q3, q5, 'a' );
+        dfa.addTransition( q3q5 );
+
+        FATransition q3q3 = new FATransition( q3, q3, 'b' );
+        dfa.addTransition( q3q3 );
+
+        FATransition q4q4 = new FATransition( q4, q4, 'a' );
+        dfa.addTransition( q4q4 );
+
+        FATransition q4q6 = new FATransition( q4, q6, 'b' );
+        dfa.addTransition( q4q6 );
+
+        FATransition q5q5 = new FATransition( q5, q5, 'a' );
+        dfa.addTransition( q5q5 );
+
+        FATransition q6q6 = new FATransition( q6, q6, 'b' );
+        dfa.addTransition( q6q6 );
+
+        return dfa;
         
     }
     
-    public static FA createFAForMinimizationTest06() {
+    public static FA createDFAForMinimizationTest06() {
         
         FA dfa = new FA();
         int currentState = 0;
@@ -618,7 +758,7 @@ public class FAExamplesForMinimizationTest {
         
     }
     
-    public static FA createFAForMinimizationTest07() {
+    public static FA createDFAForMinimizationTest07() {
         
         FA dfa = new FA();
         int currentState = 0;
@@ -653,7 +793,7 @@ public class FAExamplesForMinimizationTest {
         
     }
     
-    public static FA createFAForMinimizationTest08() {
+    public static FA createDFAForMinimizationTest08() {
         
         FA dfa = new FA();
         int currentState = 0;
@@ -695,7 +835,7 @@ public class FAExamplesForMinimizationTest {
         
     }
     
-    public static FA createFAForMinimizationTest09() {
+    public static FA createDFAForMinimizationTest09() {
         
         FA dfa = new FA();
 
