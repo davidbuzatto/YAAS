@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -683,6 +684,36 @@ public class FA extends AbstractGeometricForm {
                 tBuilder.toString(),
                 modelName );
         
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 23 * hash + Objects.hashCode( this.states );
+        hash = 23 * hash + Objects.hashCode( this.transitions );
+        hash = 23 * hash + Objects.hashCode( this.initialState );
+        return hash;
+    }
+
+    @Override
+    public boolean equals( Object obj ) {
+        if ( this == obj ) {
+            return true;
+        }
+        if ( obj == null ) {
+            return false;
+        }
+        if ( getClass() != obj.getClass() ) {
+            return false;
+        }
+        final FA other = (FA) obj;
+        if ( !Objects.equals( this.states, other.states ) ) {
+            return false;
+        }
+        if ( !Objects.equals( this.transitions, other.transitions ) ) {
+            return false;
+        }
+        return Objects.equals( this.initialState, other.initialState );
     }
     
 }

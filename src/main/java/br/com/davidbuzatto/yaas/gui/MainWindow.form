@@ -42,7 +42,7 @@
                 </Property>
                 <Property name="mnemonic" type="int" value="68"/>
                 <Property name="text" type="java.lang.String" value="DFA"/>
-                <Property name="toolTipText" type="java.lang.String" value=""/>
+                <Property name="toolTipText" type="java.lang.String" value="Deterministic Finite Automaton"/>
               </Properties>
               <SubComponents>
                 <MenuItem class="javax.swing.JMenuItem" name="miDFASubstring01">
@@ -122,6 +122,7 @@
                 </Property>
                 <Property name="mnemonic" type="int" value="78"/>
                 <Property name="text" type="java.lang.String" value="NFA"/>
+                <Property name="toolTipText" type="java.lang.String" value="Nondeterministic Finite Automaton"/>
               </Properties>
               <SubComponents>
                 <MenuItem class="javax.swing.JMenuItem" name="miNFAEndsWith00">
@@ -179,6 +180,9 @@
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="CharacterConstants.EMPTY_STRING.toString() + &quot;-NFA&quot;" type="code"/>
                 </Property>
+                <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="&quot;Finite Automaton with &quot; + CharacterConstants.SMALL_EPSILON + &quot;-transitions&quot;" type="code"/>
+                </Property>
               </Properties>
               <SubComponents>
                 <MenuItem class="javax.swing.JMenuItem" name="miENFADecimalNumber">
@@ -235,7 +239,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="miMiniT05">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Test 05 &lt;--"/>
+                <Property name="text" type="java.lang.String" value="Test 05"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miMiniT05ActionPerformed"/>
@@ -259,7 +263,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="miMiniT08">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Test 08 &lt;--"/>
+                <Property name="text" type="java.lang.String" value="Test 08"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miMiniT08ActionPerformed"/>

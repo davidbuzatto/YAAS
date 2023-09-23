@@ -41,6 +41,9 @@ import java.util.TreeSet;
  */
 public class FAAlgorithms {
     
+    // debug flag for testing more complicated algorithms
+    private static final boolean DEBUG = false;
+    
     /**
      * A helper class that encapsulates data from existing states while the
      * automaton is being processed.
@@ -311,7 +314,8 @@ public class FAAlgorithms {
      * minimized DFA.
      * 
      * @param dfa The DFA to be processed.
-     * @return An equivalent DFA, but minimized.
+     * @return An equivalent DFA, but minimized. If the processed DFA is already
+     * mimimum, it will be returned instead of a new DFA.
      */
     public static FA generateMinimizedDFA( FA dfa ) {
         
@@ -324,14 +328,27 @@ public class FAAlgorithms {
         
         // pre-processing step(s)
         // removing inaccessible states
+        if ( DEBUG ) {
+            System.out.println( "Pre-processing - removing inaccessible states:" );
+        }
         List<FAState> states = new ArrayList<>( dfa.getStates() );
         List<FAState> inaccessibleStates = new ArrayList<>();
         for ( FAState s : states ) {
             if ( isInaccessible( s, dfa ) ) {
                 inaccessibleStates.add( s );
+                if ( DEBUG ) {
+                    System.out.println( "    Inacessible state: " + s );
+                }
             }
         }
         states.removeAll( inaccessibleStates );
+        
+        if ( DEBUG ) {
+            System.out.println( "    Remaining states:" );
+            for ( FAState s : states ) {
+                System.out.println( "        " + s );
+            }
+        }
         
         /* Myhill-Nerode Theorem:
          *
@@ -346,48 +363,117 @@ public class FAAlgorithms {
          */
         
         // 1) Using all states, create all possible pairs;
+        if ( DEBUG ) {
+            System.out.println( "\nStep 01 - creating all possible pairs:" );
+        }
         Set<FAStatePair> pairs = new LinkedHashSet<>();
         int sSize = states.size();
         for ( int i = 0; i < sSize; i++ ) {
             for ( int j = i+1; j < sSize; j++ ) {
-                pairs.add( new FAStatePair( states.get( i ), states.get( j ) ) );
+                FAStatePair pair = new FAStatePair( states.get( i ), states.get( j ) );
+                pairs.add( pair );
+                if ( DEBUG ) {
+                    System.out.println( "    Created pair: " + pair );
+                }
             }
         }
         
         // 2) Remove all pairs such one element is an accepting state and the
         //    other is not;
+        if ( DEBUG ) {
+            System.out.println( """
+
+                    Step 02 - first equivalente class, removing
+                    all pairs such one element is an accepting
+                    state and the other is not.""" );
+        }
         Set<FAStatePair> toRemove = new HashSet<>();
         for ( FAStatePair sp : pairs ) {
             if ( ( sp.s1.isAccepting() && !sp.s2.isAccepting() ) || 
                  ( !sp.s1.isAccepting() && sp.s2.isAccepting() ) ) {
                 toRemove.add( sp );
+                if ( DEBUG ) {
+                    System.out.println( "    Removing: " + sp );
+                }
             }
         }
         pairs.removeAll( toRemove );
         
+        if ( DEBUG ) {
+            System.out.println( "    Remaining pairs:" );
+            for ( FAStatePair p : pairs ) {
+                System.out.println( "        " + p );
+            }
+        }
+        
         // 2.5) Remove all pairs such the transition function with just one
         // symbol is not the same;
+        if ( DEBUG ) {
+            System.out.println( """
+
+                    Step 02.5 - second equivalence class,
+                    removing all pairs such the transition
+                    function with just one symbol is not
+                    the same.""" );
+        }
         toRemove.clear();
         for ( FAStatePair sp : pairs ) {
             if ( !haveSameDeltaWithOneSymbol( sp.s1, sp.s2 , dfa ) ) {
                 toRemove.add( sp );
+                if ( DEBUG ) {
+                    System.out.println( "    Removing: " + sp );
+                }
             }
         }
         pairs.removeAll( toRemove );
+        
+        if ( DEBUG ) {
+            System.out.println( "    Remaining pairs:" );
+            for ( FAStatePair p : pairs ) {
+                System.out.println( "        " + p );
+            }
+        }
         
         // 3) For each remaining pair, verify the transition function
         //    incrementing the input length. If the transition is not equal,
         //    remove the pair, i.e, if the pair is distinguishable.
+        if ( DEBUG ) {
+            System.out.println( """
+
+                    Step 03 - remaining equivalence classes,
+                    removing all pairs such the acceptance when
+                    incrementing the input string doesn't match.""" );
+        }
         toRemove.clear();
         for ( FAStatePair sp : pairs ) {
             if ( isDistinguishable( sp.s1, sp.s2, dfa ) ) {
                 toRemove.add( sp );
+                if ( DEBUG ) {
+                    System.out.println( "        Removing: " + sp );
+                }
             }
         }
         pairs.removeAll( toRemove );
         
+        if ( DEBUG ) {
+            System.out.println( "    Remaining pairs:" );
+            for ( FAStatePair p : pairs ) {
+                System.out.println( "        " + p );
+            }
+        }
+        
+        /* If all pairs are removed, all of them are distinguishable, so the
+         * DFA is already minimum and it is returned.
+         */
+        if ( pairs.isEmpty() ) {
+            return dfa;
+        }
+        
         // 4) The remaining pairs must be combined with their equivalent
         //    states. Applying transitivity.
+        if ( DEBUG ) {
+            System.out.println( "\nStep 04 - combining states:" );
+        }
         List<Set<FAState>> newStateSets = new ArrayList<>();
         while ( !pairs.isEmpty() ) {
             
@@ -398,6 +484,9 @@ public class FAAlgorithms {
             
             if ( newStateSets.isEmpty() ) {
                 newStateSets.add( newStateSet );
+                if ( DEBUG ) {
+                    System.out.println( "    Combining: " + newStateSet );
+                }
             } else {
                 
                 boolean addNewStateSet = true;
@@ -415,12 +504,22 @@ public class FAAlgorithms {
                 
                 if ( addNewStateSet ) {
                     newStateSets.add( newStateSet );
+                    if ( DEBUG ) {
+                        System.out.println( "    Combining: " + newStateSet );
+                    }
                 }
                 
             }
             
             pairs.remove( cPair );
             
+        }
+        
+        if ( DEBUG ) {
+            System.out.println( "    Remaining pairs:" );
+            for ( FAStatePair p : pairs ) {
+                System.out.println( "        " + p );
+            }
         }
         
         // finally, deriving the minized automaton :D
@@ -696,47 +795,6 @@ public class FAAlgorithms {
         
     }
     
-    public static boolean acceptsDFATest( String str, FA dfa, FAState initialState1, FAState initialState2 )
-            throws IllegalArgumentException {
-        
-        if ( dfa.getType() != FAType.DFA ) {
-            throw new IllegalArgumentException( "You must use an DFA!" );
-        }
-        
-        Map<FAState, Map<Character, List<FAState>>> delta = dfa.getDelta();
-        
-        FAState current1 = initialState1;
-        FAState current2 = initialState2;
-        
-        for ( char c : str.toCharArray() ) {
-            if ( current1 != null ) {
-                List<FAState> target = delta.get( current1 ).get( c );
-                if ( target != null ) {
-                    current1 = target.get( 0 );
-                } else {
-                    current1 = null;
-                }
-            }
-            if ( current2 != null ) {
-                List<FAState> target = delta.get( current2 ).get( c );
-                if ( target != null ) {
-                    current2 = target.get( 0 );
-                } else {
-                    current2 = null;
-                }
-            }
-        }
-        
-        if ( current1 == null || current2 == null ) {
-            return false;
-        } else if ( current1 != current2 ) {
-            return false;
-        } else {
-            return current1.isAccepting();
-        }
-        
-    }
-    
     /**
      * Verifies if a state is inaccessible.
      * 
@@ -809,6 +867,8 @@ public class FAAlgorithms {
             FAState s2,
             FA dfa ) throws IllegalArgumentException {
         
+        boolean result = false;
+        
         if ( dfa.getType() != FAType.DFA ) {
             throw new IllegalArgumentException( "You must use an DFA!" );
         }
@@ -826,20 +886,35 @@ public class FAAlgorithms {
 
             // max length => n-2, n being the number os states of the DFA
             int maxLength = dfa.getStates().size() - 2;
-
-            for ( int i = 2; i <= maxLength; i++ ) {
+            
+            if ( DEBUG ) {
+                System.out.println( "    Testing " + s1 + " and " + s2 + ":" );
+            }
+            
+            while ( true ) {
                 String str = ssgs.next();
-                if ( str.length() > i ) {
+                if ( str.length() > maxLength ) {
+                    result = false;
                     break;
-                }
-                if ( acceptsDFA( str, dfa, s1 ) != acceptsDFA( str, dfa, s2 ) ) {
-                    return true;
+                } else {
+                    if ( DEBUG ) {
+                        System.out.print( "        " + str + ": " );
+                    }
+                    if ( acceptsDFA( str, dfa, s1 ) != acceptsDFA( str, dfa, s2 ) ) {
+                        result = true;
+                        if ( DEBUG ) {
+                            System.out.println( "don't match." );
+                        }
+                        break;
+                    } else if ( DEBUG ) {
+                        System.out.println( "match." );
+                    }
                 }
             }
             
         }
         
-        return false;
+        return result;
         
     }
     

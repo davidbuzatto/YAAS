@@ -55,7 +55,7 @@ public class MainWindow extends javax.swing.JFrame {
             menuMinimizationTest.setVisible( false );
             setExtendedState( MAXIMIZED_BOTH );
         } else {
-            createFAInternalFrame(FAExamplesForMinimizationTest.createDFAForMinimizationTest08(), true, true );
+            createFAInternalFrame(FAExamplesForMinimizationTest.createDFAForMinimizationTest05(), true, true );
         }
         
     }
@@ -189,7 +189,7 @@ public class MainWindow extends javax.swing.JFrame {
         menuDFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dfa.png"))); // NOI18N
         menuDFA.setMnemonic('D');
         menuDFA.setText("DFA");
-        menuDFA.setToolTipText("");
+        menuDFA.setToolTipText("Deterministic Finite Automaton");
 
         miDFASubstring01.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dfa.png"))); // NOI18N
         miDFASubstring01.setText("L = { x01y | x and y are any strings of 0's and 1's }");
@@ -250,6 +250,7 @@ public class MainWindow extends javax.swing.JFrame {
         menuNFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nfa.png"))); // NOI18N
         menuNFA.setMnemonic('N');
         menuNFA.setText("NFA");
+        menuNFA.setToolTipText("Nondeterministic Finite Automaton");
 
         miNFAEndsWith00.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nfa.png"))); // NOI18N
         miNFAEndsWith00.setText("L = { w | w ends with 00 }");
@@ -292,6 +293,7 @@ public class MainWindow extends javax.swing.JFrame {
         menuENFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/enfa.png"))); // NOI18N
         menuENFA.setMnemonic('F');
         menuENFA.setText(CharacterConstants.EMPTY_STRING.toString() + "-NFA");
+        menuENFA.setToolTipText("Finite Automaton with " + CharacterConstants.SMALL_EPSILON + "-transitions");
 
         miENFADecimalNumber.setIcon(new javax.swing.ImageIcon(getClass().getResource("/enfa.png"))); // NOI18N
         miENFADecimalNumber.setText("L = { w | w is a valid decimal number }");
@@ -340,7 +342,7 @@ public class MainWindow extends javax.swing.JFrame {
         });
         menuMinimizationTest.add(miMiniT04);
 
-        miMiniT05.setText("Test 05 <--");
+        miMiniT05.setText("Test 05");
         miMiniT05.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 miMiniT05ActionPerformed(evt);
@@ -364,7 +366,7 @@ public class MainWindow extends javax.swing.JFrame {
         });
         menuMinimizationTest.add(miMiniT07);
 
-        miMiniT08.setText("Test 08 <--");
+        miMiniT08.setText("Test 08");
         miMiniT08.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 miMiniT08ActionPerformed(evt);

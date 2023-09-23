@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>br.com.davidbuzatto</groupId>
     <artifactId>YAAS</artifactId>
-    <version>0.7.0</version>
+    <version>0.7.1</version>
     <packaging>jar</packaging>
     <name>YAAS</name>
     <description>Yet Another Automaton Simulator (YAAS) is a prototype tool for simulating the execution of Finite Automatas, Pushdown Automatas and Turing Machines.</description>

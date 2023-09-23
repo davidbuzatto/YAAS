@@ -1450,8 +1450,17 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         if ( fa.getType() == FAType.DFA ) {
             
             FA minDFA = FAAlgorithms.generateMinimizedDFA( fa );
-            FAAlgorithms.arrangeFAInCircle( minDFA, 250, 200, 150 );
-            mainWindow.createFAInternalFrame( minDFA, false, false );
+            
+            if ( minDFA.equals( fa ) ) {
+                JOptionPane.showMessageDialog( 
+                    this, 
+                    "Your DFA is already mimimum!", 
+                    "Information", 
+                    JOptionPane.INFORMATION_MESSAGE );
+            } else {
+                FAAlgorithms.arrangeFAInCircle( minDFA, 250, 200, 150 );
+                mainWindow.createFAInternalFrame( minDFA, false, false );
+            }
             
         } else {
             
