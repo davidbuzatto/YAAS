@@ -6,7 +6,7 @@
     <version>0.7.1</version>
     <packaging>jar</packaging>
     <name>YAAS</name>
-    <description>Yet Another Automaton Simulator (YAAS) is a prototype tool for simulating the execution of Finite Automatas, Pushdown Automatas and Turing Machines.</description>
+    <description>Yet Another Automata Simulator (YAAS) is a prototype tool for simulating the execution of Finite Automata, Pushdown Automata and Turing Machines.</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>18</maven.compiler.source>
