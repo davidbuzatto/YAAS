@@ -12,7 +12,7 @@
         <maven.compiler.source>18</maven.compiler.source>
         <maven.compiler.target>18</maven.compiler.target>
         <exec.mainClass>br.com.davidbuzatto.yaas.YAAS</exec.mainClass>
-        <production>true</production>
+        <production>false</production>
     </properties>
     <dependencies>
         <dependency>
