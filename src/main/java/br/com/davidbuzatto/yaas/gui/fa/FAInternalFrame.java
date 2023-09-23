@@ -1880,8 +1880,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         if ( JOptionPane.showConfirmDialog( this,
                 """
                 The generated code has been copied to the clipboard!
-                Do you want to see it?
-                """, "Generated Code", JOptionPane.YES_NO_OPTION ) == JOptionPane.YES_OPTION ) {
+                Do you want to see it?""",
+                "Generated Code", JOptionPane.YES_NO_OPTION ) == JOptionPane.YES_OPTION ) {
             
             JTextArea textArea = new JTextArea( 20, 60 );
             textArea.setFont( DrawingConstants.DEFAULT_FONT );

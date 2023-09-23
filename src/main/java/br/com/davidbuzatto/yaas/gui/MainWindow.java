@@ -451,14 +451,13 @@ public class MainWindow extends javax.swing.JFrame {
         
         JOptionPane.showMessageDialog( this, 
                 String.format( """
-                Yet Another Automaton Simulator (YASS) is a prototype tool for
+                Yet Another Automaton Simulator (YAAS) is a prototype tool for
                 simulating the execution of Finite Automatas, Pushdown Automatas
                 and Turing Machines.
                                
                 This tool is developed by Prof. Dr. David Buzatto.
                 
-                Current version: %s
-                """, Utils.getMavenModel().getVersion() ),
+                Current version: %s""", Utils.getMavenModel().getVersion() ),
                 "About...", 
                 JOptionPane.INFORMATION_MESSAGE );
         
@@ -569,10 +568,10 @@ public class MainWindow extends javax.swing.JFrame {
     @SuppressWarnings( "unchecked" )
     private void close() {
         
-        if ( JOptionPane.showConfirmDialog( 
-                this, 
-                "Do you really want to quit?\n" +
-                "All unsaved data will be lost!", 
+        if ( JOptionPane.showConfirmDialog(this,
+                """
+                Do you really want to quit?
+                All unsaved data will be lost!""", 
                 "Confirmation", 
                 JOptionPane.YES_NO_OPTION ) == JOptionPane.OK_OPTION ) {
             System.exit( 0 );
@@ -587,6 +586,7 @@ public class MainWindow extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater( new Runnable() {
             public void run() {
                 FlatDarculaLaf.setup();
+                Utils.updateSplashScreen( 6000 );
                 new MainWindow().setVisible( true );
             }
         });

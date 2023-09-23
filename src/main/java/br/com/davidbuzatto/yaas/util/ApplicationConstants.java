@@ -23,10 +23,9 @@ package br.com.davidbuzatto.yaas.util;
  */
 public interface ApplicationConstants {
     
-    public static final String APP_NAME =  Utils.getMavenModel().getArtifactId();
+    public static final String APP_NAME =  Utils.getMavenModel().getName();
     public static final String APP_VERSION = Utils.getMavenModel().getVersion();
-    public static final boolean IN_PRODUCTION = Boolean.valueOf( 
+    public static final boolean IN_PRODUCTION = Boolean.parseBoolean( 
             Utils.getMavenModel().getProperties().getProperty( "production" ) );
-    
     
 }

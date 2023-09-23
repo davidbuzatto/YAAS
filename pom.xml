@@ -5,12 +5,14 @@
     <artifactId>YAAS</artifactId>
     <version>0.7.0</version>
     <packaging>jar</packaging>
+    <name>YAAS</name>
+    <description>Yet Another Automaton Simulator (YAAS) is a prototype tool for simulating the execution of Finite Automatas, Pushdown Automatas and Turing Machines.</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>18</maven.compiler.source>
+        <maven.compiler.target>18</maven.compiler.target>
         <exec.mainClass>br.com.davidbuzatto.yaas.YAAS</exec.mainClass>
-        <production>false</production>
+        <production>true</production>
     </properties>
     <dependencies>
         <dependency>
@@ -33,6 +35,9 @@
                         <manifest>
                             <mainClass>br.com.davidbuzatto.yaas.gui.MainWindow</mainClass>
                         </manifest>
+                        <manifestEntries>
+                            <SplashScreen-Image>splash.png</SplashScreen-Image>
+                        </manifestEntries>
                     </archive>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>

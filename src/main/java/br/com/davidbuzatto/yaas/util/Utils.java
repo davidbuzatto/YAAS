@@ -20,10 +20,13 @@ import br.com.davidbuzatto.yaas.gui.fa.FA;
 import br.com.davidbuzatto.yaas.gui.fa.FAState;
 import br.com.davidbuzatto.yaas.gui.fa.FAType;
 import br.com.davidbuzatto.yaas.gui.fa.table.FATransitionFunctionTableModel;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.SplashScreen;
 import java.awt.font.LineMetrics;
 import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Point2D;
@@ -524,6 +527,48 @@ public class Utils {
      */
     public static void showNotImplementedYetMessage() {
         JOptionPane.showMessageDialog( null, "Not implemented yet!" );
+    }
+    
+    /**
+     * Update the Splash Screen with version number.
+     * 
+     * @param millisecondsToWait How many milliseconds to wait with the splash
+     * screen active.
+     */
+    public static void updateSplashScreen( int millisecondsToWait ) {
+        
+        SplashScreen sp = SplashScreen.getSplashScreen();
+        
+        if ( sp != null ) {
+            
+            Graphics2D g2d = (Graphics2D) sp.createGraphics();
+            g2d.setRenderingHint( 
+                    RenderingHints.KEY_ANTIALIASING, 
+                    RenderingHints.VALUE_ANTIALIAS_ON );
+            g2d.setColor( new Color( 51, 0, 102 ) );
+            
+            Font f = new Font( "Century Gothic", Font.BOLD, 30 ) ;
+            if ( f.getFamily().equals( Font.DIALOG ) ) {
+                f = new Font( Font.MONOSPACED, Font.BOLD, 30 ) ;
+            }
+            g2d.setFont( f );
+            
+            FontMetrics fm = g2d.getFontMetrics();
+            String v = "v" + ApplicationConstants.APP_VERSION;
+            int vWidth = fm.stringWidth( v );
+            
+            g2d.drawString( v, 280 - vWidth, 160 );
+            g2d.dispose();
+            
+            sp.update();
+            
+            try {
+                Thread.sleep( millisecondsToWait );
+            } catch ( InterruptedException exc ) {
+            }
+            
+        }
+        
     }
     
 }
