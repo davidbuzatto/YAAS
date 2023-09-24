@@ -459,6 +459,12 @@ public class FATransition extends AbstractGeometricForm {
     @Override
     public boolean intersects( int x, int y ) {
         
+        labelDragging = false;
+        targetCPDragging = false;
+        centralCPDragging = false;
+        leftCPDragging = false;
+        rightCPDragging = false;
+            
         prevCentralCPX = centralCP.getX1();
         prevCentralCPY = centralCP.getY1();
         prevLeftCPX = leftCP.getX1();
@@ -485,11 +491,11 @@ public class FATransition extends AbstractGeometricForm {
         }
         
         return 
+                labelDragging ||
                 targetCPDragging || 
                 centralCPDragging || 
                 leftCPDragging || 
-                rightCPDragging || 
-                labelDragging;
+                rightCPDragging;
         
     }
 

@@ -283,9 +283,11 @@ public class FATransitionPropertiesPanel extends javax.swing.JPanel {
     private void btnResetTransformationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetTransformationsActionPerformed
         
         if ( transition != null ) {
+            
             transition.resetTransformations();
             faIFrame.setCurrentFileSaved( false );
             faIFrame.repaintDrawPanel();
+            
         } else {
             
             JOptionPane.showMessageDialog( faIFrame,

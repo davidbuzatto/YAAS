@@ -60,6 +60,7 @@ import javax.swing.ActionMap;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import javax.swing.InputMap;
+import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -89,6 +90,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     
     private FA fa;
     private MainWindow mainWindow;
+    
+    private boolean canDrag;
     
     private int xPressed;
     private int yPressed;
@@ -227,6 +230,21 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         popItemRectangular = new javax.swing.JMenuItem();
         popItemCircular = new javax.swing.JMenuItem();
         popItemByLevel = new javax.swing.JMenuItem();
+        popupMenuStateProperties = new javax.swing.JPopupMenu();
+        popItemStateCustomLabel = new javax.swing.JMenuItem();
+        spPopupState01 = new javax.swing.JPopupMenu.Separator();
+        checkInitialState = new javax.swing.JCheckBoxMenuItem();
+        checkAcceptingState = new javax.swing.JCheckBoxMenuItem();
+        spPopupState = new javax.swing.JPopupMenu.Separator();
+        popItemStateColor = new javax.swing.JMenuItem();
+        popItemRemoveState = new javax.swing.JMenuItem();
+        popupMenuTransitionProperties = new javax.swing.JPopupMenu();
+        popItemTransitionSymbols = new javax.swing.JMenuItem();
+        spPopupTransition01 = new javax.swing.JPopupMenu.Separator();
+        popItemTransitionColor = new javax.swing.JMenuItem();
+        spPopupTransition02 = new javax.swing.JPopupMenu.Separator();
+        popItemResetTransitionTransformations = new javax.swing.JMenuItem();
+        popItemRemoveTransition = new javax.swing.JMenuItem();
         toolBar = new javax.swing.JToolBar();
         btnNew = new javax.swing.JButton();
         btnOpen = new javax.swing.JButton();
@@ -328,6 +346,110 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         popupMenuReorganizeStates.add(popItemByLevel);
+
+        popupMenuStateProperties.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+                popupMenuStatePropertiesPopupMenuCanceled(evt);
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+        });
+
+        popItemStateCustomLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pencil.png"))); // NOI18N
+        popItemStateCustomLabel.setText("Custom Label");
+        popItemStateCustomLabel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popItemStateCustomLabelActionPerformed(evt);
+            }
+        });
+        popupMenuStateProperties.add(popItemStateCustomLabel);
+        popupMenuStateProperties.add(spPopupState01);
+
+        checkInitialState.setText("Initial");
+        checkInitialState.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkInitialStateActionPerformed(evt);
+            }
+        });
+        popupMenuStateProperties.add(checkInitialState);
+
+        checkAcceptingState.setSelected(true);
+        checkAcceptingState.setText("Accepting");
+        checkAcceptingState.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkAcceptingStateActionPerformed(evt);
+            }
+        });
+        popupMenuStateProperties.add(checkAcceptingState);
+        popupMenuStateProperties.add(spPopupState);
+
+        popItemStateColor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/palette.png"))); // NOI18N
+        popItemStateColor.setText("Color");
+        popItemStateColor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popItemStateColorActionPerformed(evt);
+            }
+        });
+        popupMenuStateProperties.add(popItemStateColor);
+
+        popItemRemoveState.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete.png"))); // NOI18N
+        popItemRemoveState.setText("Remove");
+        popItemRemoveState.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popItemRemoveStateActionPerformed(evt);
+            }
+        });
+        popupMenuStateProperties.add(popItemRemoveState);
+
+        popupMenuTransitionProperties.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+                popupMenuTransitionPropertiesPopupMenuCanceled(evt);
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+        });
+
+        popItemTransitionSymbols.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pencil.png"))); // NOI18N
+        popItemTransitionSymbols.setText("Symbols");
+        popItemTransitionSymbols.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popItemTransitionSymbolsActionPerformed(evt);
+            }
+        });
+        popupMenuTransitionProperties.add(popItemTransitionSymbols);
+        popupMenuTransitionProperties.add(spPopupTransition01);
+
+        popItemTransitionColor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/palette.png"))); // NOI18N
+        popItemTransitionColor.setText("Color");
+        popItemTransitionColor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popItemTransitionColorActionPerformed(evt);
+            }
+        });
+        popupMenuTransitionProperties.add(popItemTransitionColor);
+        popupMenuTransitionProperties.add(spPopupTransition02);
+
+        popItemResetTransitionTransformations.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cancel.png"))); // NOI18N
+        popItemResetTransitionTransformations.setText("Reset Transformations");
+        popItemResetTransitionTransformations.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popItemResetTransitionTransformationsActionPerformed(evt);
+            }
+        });
+        popupMenuTransitionProperties.add(popItemResetTransitionTransformations);
+
+        popItemRemoveTransition.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete.png"))); // NOI18N
+        popItemRemoveTransition.setText("Remove");
+        popItemRemoveTransition.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popItemRemoveTransitionActionPerformed(evt);
+            }
+        });
+        popupMenuTransitionProperties.add(popItemRemoveTransition);
 
         setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -931,113 +1053,118 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         xPrev = xPressed;
         yPrev = yPressed;
         
-        if ( btnSelectMultipleStates.isSelected() ) {
+        if ( evt.getButton() == MouseEvent.BUTTON1 ) {
             
-            if ( !evt.isShiftDown() ) {
-                selectedStates.clear();
-            }
+            canDrag = true;
             
-            for ( FAState s : fa.getStates() ) {
-                if ( !selectedStates.contains( s ) ) {
-                    s.setSelected( false );
-                }
-                s.setMouseHover( false );
-            }
-            
-            repaintDrawPanel();
-            
-        } else if ( btnMove.isSelected() ) {
-            
-            boolean defaultMove = false;
-            
-            if ( !selectedStates.isEmpty() ) {
-                
-                selectedState = fa.getStateAt( xPressed, yPressed );
-                
-                if ( selectedStates.contains( selectedState ) ) {
-                    
-                    xOffset = xPressed - selectedState.getX1();
-                    yOffset = yPressed - selectedState.getY1();
-                    fa.updateTransitions();
-                    
-                } else {
+            if ( btnSelectMultipleStates.isSelected() ) {
+
+                if ( !evt.isShiftDown() ) {
                     selectedStates.clear();
+                }
+
+                for ( FAState s : fa.getStates() ) {
+                    if ( !selectedStates.contains( s ) ) {
+                        s.setSelected( false );
+                    }
+                    s.setMouseHover( false );
+                }
+
+            } else if ( btnMove.isSelected() ) {
+
+                boolean defaultMove = false;
+
+                if ( !selectedStates.isEmpty() ) {
+
+                    selectedState = fa.getStateAt( xPressed, yPressed );
+
+                    if ( selectedStates.contains( selectedState ) ) {
+
+                        xOffset = xPressed - selectedState.getX1();
+                        yOffset = yPressed - selectedState.getY1();
+                        fa.updateTransitions();
+
+                    } else {
+                        selectedStates.clear();
+                        defaultMove = true;
+                    }
+
+                } else {
                     defaultMove = true;
                 }
-                
-            } else {
-                defaultMove = true;
-            }
-            
-            if ( defaultMove ) {
-                
-                fa.deselectAll();
-                selectedState = fa.getStateAt( xPressed, yPressed );
 
-                if ( selectedState != null ) {
+                if ( defaultMove ) {
 
-                    xOffset = xPressed - selectedState.getX1();
-                    yOffset = yPressed - selectedState.getY1();
-                    fa.updateTransitions();
+                    fa.deselectAll();
+                    selectedState = fa.getStateAt( xPressed, yPressed );
 
-                    statePPanel.setFa( fa );
-                    statePPanel.setState( selectedState );
-                    statePPanel.readProperties();
-                    cardLayout.show( panelProperties, STATE_PROPERTIES_CARD );
+                    if ( selectedState != null ) {
 
-                } else {
+                        xOffset = xPressed - selectedState.getX1();
+                        yOffset = yPressed - selectedState.getY1();
+                        fa.updateTransitions();
 
-                    selectedTransition = fa.getTransitionAt( xPressed, yPressed );
-
-                    if ( selectedTransition != null ) {
-
-                        transitionPPanel.setFa( fa );
-                        transitionPPanel.setTransition( selectedTransition );
-                        transitionPPanel.readProperties();
-                        cardLayout.show( panelProperties, TRANSITION_PROPERTIES_CARD );
+                        statePPanel.setFa( fa );
+                        statePPanel.setState( selectedState );
+                        statePPanel.readProperties();
+                        cardLayout.show( panelProperties, STATE_PROPERTIES_CARD );
 
                     } else {
 
-                        faPPanel.setFa( fa );
-                        faPPanel.readProperties();
-                        cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
+                        selectedTransition = fa.getTransitionAt( xPressed, yPressed );
+
+                        if ( selectedTransition != null ) {
+
+                            transitionPPanel.setFa( fa );
+                            transitionPPanel.setTransition( selectedTransition );
+                            transitionPPanel.readProperties();
+                            cardLayout.show( panelProperties, TRANSITION_PROPERTIES_CARD );
+
+                        } else {
+
+                            faPPanel.setFa( fa );
+                            faPPanel.readProperties();
+                            cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
+
+                        }
 
                     }
 
                 }
-            
-            }
-            
-        } else if ( btnAddState.isSelected() ) {
-            
-            FAState newState = new FAState();
-            newState.setX1( xPressed );
-            newState.setY1( yPressed );
-            newState.setLabel( "q" + currentState++ );
-            
-            fa.addState( newState );
-            
-            if ( btnSnapToGrid.isSelected() ) {
-                updateSnapPoint( evt );
-                newState.setX1( xSnap );
-                newState.setY1( ySnap );
-            }
-            
-            setCurrentFileSaved( false );
-            
-        } else if ( btnAddTransition.isSelected() ) {
-            
-            if ( originState == null ) {
-                originState = fa.getStateAt( xPressed, yPressed );
-                if ( originState != null ) {
-                    drawPanel.setDrawingTempTransition( true );
-                    drawPanel.setTempTransitionX1( originState.getX1() );
-                    drawPanel.setTempTransitionY1( originState.getY1() );
-                    drawPanel.setTempTransitionX2( originState.getX1() );
-                    drawPanel.setTempTransitionY2( originState.getY1() );
+
+            } else if ( btnAddState.isSelected() ) {
+
+                FAState newState = new FAState();
+                newState.setX1( xPressed );
+                newState.setY1( yPressed );
+                newState.setLabel( "q" + currentState++ );
+
+                fa.addState( newState );
+
+                if ( btnSnapToGrid.isSelected() ) {
+                    updateSnapPoint( evt );
+                    newState.setX1( xSnap );
+                    newState.setY1( ySnap );
                 }
+
+                setCurrentFileSaved( false );
+
+            } else if ( btnAddTransition.isSelected() ) {
+
+                if ( originState == null ) {
+                    originState = fa.getStateAt( xPressed, yPressed );
+                    if ( originState != null ) {
+                        drawPanel.setDrawingTempTransition( true );
+                        drawPanel.setTempTransitionX1( originState.getX1() );
+                        drawPanel.setTempTransitionY1( originState.getY1() );
+                        drawPanel.setTempTransitionX2( originState.getX1() );
+                        drawPanel.setTempTransitionY2( originState.getY1() );
+                    }
+                }
+
             }
             
+        } else if ( evt.getButton() == MouseEvent.BUTTON3 ) {
         }
         
         faPPanel.setFa( fa );
@@ -1048,74 +1175,119 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
     private void drawPanelMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drawPanelMouseReleased
         
-        if ( btnSelectMultipleStates.isSelected() ) {
+        canDrag = false;
+        
+        if ( evt.getButton() == MouseEvent.BUTTON1 ) {
             
-            Rectangle rectangle = new Rectangle( 
-                    xPressed <= evt.getX() ? xPressed : evt.getX(), 
-                    yPressed <= evt.getY() ? yPressed : evt.getY(), 
-                    xPressed <= evt.getX() ? evt.getX() - xPressed : xPressed - evt.getX(), 
-                    yPressed <= evt.getY() ? evt.getY() - yPressed : yPressed - evt.getY() );
-            
-            for ( FAState s : fa.getStates() ) {
-                if ( s.intersects( rectangle ) ) {
-                    s.setSelected( true );
-                    selectedStates.add( s );
-                }
-                s.setMouseHover( false );
-            }
-            
-            drawPanel.setSelectionRectangle( null );
-            repaintDrawPanel();
-            
-        } else if ( btnMove.isSelected() ) {
-            
-            selectedState = null;
+            if ( btnSelectMultipleStates.isSelected() ) {
 
-            if ( selectedTransition != null ) {
-                selectedTransition.mouseReleased( evt );
-                selectedTransition = null;
+                Rectangle rectangle = new Rectangle( 
+                        xPressed <= evt.getX() ? xPressed : evt.getX(), 
+                        yPressed <= evt.getY() ? yPressed : evt.getY(), 
+                        xPressed <= evt.getX() ? evt.getX() - xPressed : xPressed - evt.getX(), 
+                        yPressed <= evt.getY() ? evt.getY() - yPressed : yPressed - evt.getY() );
+
+                for ( FAState s : fa.getStates() ) {
+                    if ( s.intersects( rectangle ) ) {
+                        s.setSelected( true );
+                        selectedStates.add( s );
+                    }
+                    s.setMouseHover( false );
+                }
+
+                drawPanel.setSelectionRectangle( null );
+
+            } else if ( btnMove.isSelected() ) {
+
+                selectedState = null;
+
+                if ( selectedTransition != null ) {
+                    selectedTransition.mouseReleased( evt );
+                    selectedTransition = null;
+                }
+
+            } else if ( btnAddTransition.isSelected() ) {
+
+                if ( originState != null ) {
+
+                    if ( targetState == null ) {
+                        targetState = fa.getStateAt( evt.getX(), evt.getY() );
+                    } 
+
+                    if ( targetState != null ) {
+
+                        String input = Utils.showInputDialogEmptyString( this, 
+                                "Transition symbol(s)", 
+                                "Add Transition Symbol(s)", null );
+                        List<Character> symbols = new ArrayList<>();
+
+                        if ( input != null ) {
+
+                            input = input.trim().replace( " ", "" );
+
+                            if ( !input.isEmpty() ) {
+                                for ( char c : input.toCharArray() ) {
+                                    symbols.add( c );
+                                }
+                                FATransition t = new FATransition( 
+                                        originState, targetState, symbols );
+                                fa.addTransition( t );
+                                setCurrentFileSaved( false );
+                            }
+
+                        }
+
+                    }
+
+                    originState = null;
+                    targetState = null;
+                    drawPanel.setDrawingTempTransition( false );
+
+                }
+
+                fa.deselectAll();
+
             }
             
-        } else if ( btnAddTransition.isSelected() ) {
+        } else if ( evt.getButton() == MouseEvent.BUTTON3 ) {
             
-            if ( originState != null ) {
+            if ( btnMove.isSelected() ) {
                 
-                if ( targetState == null ) {
-                    targetState = fa.getStateAt( evt.getX(), evt.getY() );
-                } 
-            
-                if ( targetState != null ) {
+                fa.deselectAll();
+                selectedStates.clear();
+                selectedState = fa.getStateAt( evt.getX(), evt.getY() );
+                selectedTransition = fa.getTransitionAt( evt.getX(), evt.getY() );
+                
+                if ( selectedState != null ) {
+
+                    statePPanel.setFa( fa );
+                    statePPanel.setState( selectedState );
+                    statePPanel.readProperties();
+                    cardLayout.show( panelProperties, STATE_PROPERTIES_CARD );
                     
-                    String input = Utils.showInputDialogEmptyString( this, 
-                            "Transition symbol(s)", 
-                            "Add Transition Symbol(s)", null );
-                    List<Character> symbols = new ArrayList<>();
+                    checkInitialState.setSelected( selectedState.isInitial() );
+                    checkAcceptingState.setSelected( selectedState.isAccepting() );
                     
-                    if ( input != null ) {
-                        
-                        input = input.trim().replace( " ", "" );
-                        
-                        if ( !input.isEmpty() ) {
-                            for ( char c : input.toCharArray() ) {
-                                symbols.add( c );
-                            }
-                            FATransition t = new FATransition( 
-                                    originState, targetState, symbols );
-                            fa.addTransition( t );
-                            setCurrentFileSaved( false );
-                        }
-                        
-                    }
-                    
+                    popupMenuStateProperties.show( drawPanel, evt.getX(), evt.getY() );
+
+                } else if ( selectedTransition != null ) {
+
+                    transitionPPanel.setFa( fa );
+                    transitionPPanel.setTransition( selectedTransition );
+                    transitionPPanel.readProperties();
+                    cardLayout.show( panelProperties, TRANSITION_PROPERTIES_CARD );
+
+                    popupMenuTransitionProperties.show( drawPanel, evt.getX(), evt.getY() );
+
+                } else {
+
+                    faPPanel.setFa( fa );
+                    faPPanel.readProperties();
+                    cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
+
                 }
                 
-                originState = null;
-                targetState = null;
-                drawPanel.setDrawingTempTransition( false );
-                
             }
-            
-            fa.deselectAll();
             
         }
         
@@ -1127,66 +1299,70 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     
     private void drawPanelMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drawPanelMouseDragged
         
-        if ( btnSelectMultipleStates.isSelected() ) {
+        if ( canDrag ) {
             
-            Rectangle rectangle = new Rectangle( 
-                    xPressed <= evt.getX() ? xPressed : evt.getX(), 
-                    yPressed <= evt.getY() ? yPressed : evt.getY(), 
-                    xPressed <= evt.getX() ? evt.getX() - xPressed : xPressed - evt.getX(), 
-                    yPressed <= evt.getY() ? evt.getY() - yPressed : yPressed - evt.getY() );
-            
-            for ( FAState s : fa.getStates() ) {
-                if ( s.intersects( rectangle ) ) {
-                    s.setMouseHover( true );
-                } else {
-                    s.setMouseHover( false );
+            if ( btnSelectMultipleStates.isSelected() ) {
+
+                Rectangle rectangle = new Rectangle( 
+                        xPressed <= evt.getX() ? xPressed : evt.getX(), 
+                        yPressed <= evt.getY() ? yPressed : evt.getY(), 
+                        xPressed <= evt.getX() ? evt.getX() - xPressed : xPressed - evt.getX(), 
+                        yPressed <= evt.getY() ? evt.getY() - yPressed : yPressed - evt.getY() );
+
+                for ( FAState s : fa.getStates() ) {
+                    if ( s.intersects( rectangle ) ) {
+                        s.setMouseHover( true );
+                    } else {
+                        s.setMouseHover( false );
+                    }
                 }
+
+                drawPanel.setSelectionRectangle( rectangle );
+                repaintDrawPanel();
+
+            } else if ( btnMove.isSelected() ) {
+
+                if ( !selectedStates.isEmpty() ) {
+                    int xAmount = evt.getX() - xPrev;
+                    int yAmount = evt.getY() - yPrev;
+                    xPrev += xAmount;
+                    yPrev += yAmount;
+                    for ( FAState s : selectedStates ) {
+                        s.move( xAmount, yAmount );
+                    }
+                    fa.updateTransitions();
+                    fa.draggTransitions( evt );
+                } else if ( selectedState != null ) {
+                    if ( btnSnapToGrid.isSelected() ) {
+                        updateSnapPoint( evt );
+                        selectedState.setX1( xSnap );
+                        selectedState.setY1( ySnap );
+                    } else {
+                        selectedState.setX1( evt.getX() - xOffset );
+                        selectedState.setY1( evt.getY() - yOffset );
+                    }
+                    fa.updateTransitions();
+                    fa.draggTransitions( evt );
+                } else if ( selectedTransition != null ) {
+                    selectedTransition.mouseDragged( evt );
+                } else {
+                    int xAmount = evt.getX() - xPrev;
+                    int yAmount = evt.getY() - yPrev;
+                    xPrev += xAmount;
+                    yPrev += yAmount;
+                    fa.move( xAmount, yAmount );
+                }
+
+                setCurrentFileSaved( false );
+
+            } else if ( btnAddTransition.isSelected() ) {
+                drawPanel.setTempTransitionX2( evt.getX() );
+                drawPanel.setTempTransitionY2( evt.getY() );
             }
-            
-            drawPanel.setSelectionRectangle( rectangle );
+
             repaintDrawPanel();
-            
-        } else if ( btnMove.isSelected() ) {
-            
-            if ( !selectedStates.isEmpty() ) {
-                int xAmount = evt.getX() - xPrev;
-                int yAmount = evt.getY() - yPrev;
-                xPrev += xAmount;
-                yPrev += yAmount;
-                for ( FAState s : selectedStates ) {
-                    s.move( xAmount, yAmount );
-                }
-                fa.updateTransitions();
-                fa.draggTransitions( evt );
-            } else if ( selectedState != null ) {
-                if ( btnSnapToGrid.isSelected() ) {
-                    updateSnapPoint( evt );
-                    selectedState.setX1( xSnap );
-                    selectedState.setY1( ySnap );
-                } else {
-                    selectedState.setX1( evt.getX() - xOffset );
-                    selectedState.setY1( evt.getY() - yOffset );
-                }
-                fa.updateTransitions();
-                fa.draggTransitions( evt );
-            } else if ( selectedTransition != null ) {
-                selectedTransition.mouseDragged( evt );
-            } else {
-                int xAmount = evt.getX() - xPrev;
-                int yAmount = evt.getY() - yPrev;
-                xPrev += xAmount;
-                yPrev += yAmount;
-                fa.move( xAmount, yAmount );
-            }
-            
-            setCurrentFileSaved( false );
-            
-        } else if ( btnAddTransition.isSelected() ) {
-            drawPanel.setTempTransitionX2( evt.getX() );
-            drawPanel.setTempTransitionY2( evt.getY() );
-        }
         
-        repaintDrawPanel();
+        }
         
     }//GEN-LAST:event_drawPanelMouseDragged
 
@@ -1905,6 +2081,267 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_btnCodeGenActionPerformed
 
+    private void popupMenuStatePropertiesPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_popupMenuStatePropertiesPopupMenuCanceled
+        faPPanel.setFa( fa );
+        faPPanel.readProperties();
+        cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
+    }//GEN-LAST:event_popupMenuStatePropertiesPopupMenuCanceled
+
+    private void popupMenuTransitionPropertiesPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_popupMenuTransitionPropertiesPopupMenuCanceled
+        faPPanel.setFa( fa );
+        faPPanel.readProperties();
+        cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
+    }//GEN-LAST:event_popupMenuTransitionPropertiesPopupMenuCanceled
+
+    private void checkInitialStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkInitialStateActionPerformed
+        
+        if ( selectedState != null ) {
+            
+            if ( checkInitialState.isSelected() ) {
+                selectedState.setInitial( true );
+                fa.setInitialState( selectedState );
+            } else {
+                if ( selectedState.isInitial() ) {
+                    fa.setInitialState( null );
+                }
+                selectedState.setInitial( false );
+            }
+
+            statePPanel.setFa( fa );
+            statePPanel.setState( selectedState );
+            statePPanel.readProperties();
+            cardLayout.show( panelProperties, STATE_PROPERTIES_CARD );
+
+            setCurrentFileSaved( false );
+            repaintDrawPanel();
+        
+        }
+        
+    }//GEN-LAST:event_checkInitialStateActionPerformed
+
+    private void checkAcceptingStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkAcceptingStateActionPerformed
+        
+        if ( selectedState != null ) {
+            
+            selectedState.setAccepting( checkAcceptingState.isSelected() );
+
+            statePPanel.setFa( fa );
+            statePPanel.setState( selectedState );
+            statePPanel.readProperties();
+            cardLayout.show( panelProperties, STATE_PROPERTIES_CARD );
+
+            setCurrentFileSaved( false );
+            repaintDrawPanel();
+        
+        }
+        
+    }//GEN-LAST:event_checkAcceptingStateActionPerformed
+
+    private void popItemStateColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemStateColorActionPerformed
+        
+        if ( selectedState != null ) {
+            
+            Color c = JColorChooser.showDialog( this, "State Color", 
+                    selectedState.getStrokeColor() );
+
+            if ( c != null ) {
+                
+                selectedState.setStrokeColor( c );
+                
+                statePPanel.setFa( fa );
+                statePPanel.setState( selectedState );
+                statePPanel.readProperties();
+                cardLayout.show( panelProperties, STATE_PROPERTIES_CARD );
+        
+                setCurrentFileSaved( false );
+                repaintDrawPanel();
+                
+            }
+        
+        }
+        
+    }//GEN-LAST:event_popItemStateColorActionPerformed
+
+    private void popItemRemoveStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemRemoveStateActionPerformed
+        
+        if ( selectedState != null ) {
+        
+            if ( JOptionPane.showConfirmDialog( 
+                    this, 
+                    "Do you really want to remove the selected state?" , 
+                    "Confirmation",
+                    JOptionPane.YES_NO_OPTION ) == JOptionPane.YES_OPTION ) {
+                fa.removeState( selectedState );
+                setCurrentFileSaved( false );
+                repaintDrawPanel();
+                updateAfterRemotion();
+                selectedState = null;
+            }
+        
+        } else {
+            
+            JOptionPane.showMessageDialog( this,
+                    "There's no selected state!",
+                    "ERROR",
+                    JOptionPane.ERROR_MESSAGE );
+            
+        }
+        
+    }//GEN-LAST:event_popItemRemoveStateActionPerformed
+
+    private void popItemTransitionSymbolsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemTransitionSymbolsActionPerformed
+        
+        if ( selectedTransition != null ) {
+            
+            String s = "";
+            for ( Character c : selectedTransition.getSymbols() ) {
+                s += c.toString() + " ";
+            }
+            s = s.trim();
+            
+            String input = Utils.showInputDialogEmptyString( this, 
+                    "New transition symbol(s)", 
+                    "Edit Transition Symbol(s)", s );
+            List<Character> symbols = new ArrayList<>();
+
+            if ( input != null ) {
+
+                input = input.trim().replace( " ", "" );
+
+                if ( !input.isEmpty() ) {
+                    for ( char c : input.toCharArray() ) {
+                        symbols.add( c );
+                    }
+                    selectedTransition.setSymbols( symbols );
+                    fa.markAllCachesAsObsolete();
+                    transitionPPanel.setFa( fa );
+                    transitionPPanel.setTransition( selectedTransition );
+                    transitionPPanel.readProperties();
+                    cardLayout.show( panelProperties, TRANSITION_PROPERTIES_CARD );
+                    setCurrentFileSaved( false );
+                    repaintDrawPanel();
+                    updateAfterUpdate();
+                }
+
+            }
+            
+        } else {
+            
+            JOptionPane.showMessageDialog( this,
+                    "There's no selected transition!",
+                    "ERROR",
+                    JOptionPane.ERROR_MESSAGE );
+            
+        }
+        
+    }//GEN-LAST:event_popItemTransitionSymbolsActionPerformed
+
+    private void popItemTransitionColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemTransitionColorActionPerformed
+        
+        if ( selectedTransition != null ) {
+            
+            Color c = JColorChooser.showDialog( this, "Transition Color", 
+                    selectedTransition.getStrokeColor() );
+
+            if ( c != null ) {
+                
+                selectedTransition.setStrokeColor( c );
+                
+                transitionPPanel.setFa( fa );
+                transitionPPanel.setTransition( selectedTransition );
+                transitionPPanel.readProperties();
+                cardLayout.show( panelProperties, TRANSITION_PROPERTIES_CARD );
+        
+                setCurrentFileSaved( false );
+                repaintDrawPanel();
+                
+            }
+        
+        }
+        
+    }//GEN-LAST:event_popItemTransitionColorActionPerformed
+
+    private void popItemResetTransitionTransformationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemResetTransitionTransformationsActionPerformed
+        
+        if ( selectedTransition != null ) {
+            
+            selectedTransition.resetTransformations();
+            
+            transitionPPanel.setFa( fa );
+            transitionPPanel.setTransition( selectedTransition );
+            transitionPPanel.readProperties();
+            cardLayout.show( panelProperties, TRANSITION_PROPERTIES_CARD );
+                    
+            setCurrentFileSaved( false );
+            repaintDrawPanel();
+            
+        } else {
+            
+            JOptionPane.showMessageDialog( this,
+                    "There's no selected transition!",
+                    "ERROR",
+                    JOptionPane.ERROR_MESSAGE );
+            
+        }
+        
+    }//GEN-LAST:event_popItemResetTransitionTransformationsActionPerformed
+
+    private void popItemRemoveTransitionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemRemoveTransitionActionPerformed
+        
+        if ( selectedTransition != null ) {
+        
+            if ( JOptionPane.showConfirmDialog( 
+                    this, 
+                    "Do you really want to remove the selected transition?" , 
+                    "Confirmation",
+                    JOptionPane.YES_NO_OPTION ) == JOptionPane.YES_OPTION ) {
+                fa.removeTransition( selectedTransition );
+                setCurrentFileSaved( false );
+                repaintDrawPanel();
+                updateAfterRemotion();
+                selectedTransition = null;
+            }
+        
+        } else {
+            
+            JOptionPane.showMessageDialog( this,
+                    "There's no selected transition!",
+                    "ERROR",
+                    JOptionPane.ERROR_MESSAGE );
+            
+        }
+        
+    }//GEN-LAST:event_popItemRemoveTransitionActionPerformed
+
+    private void popItemStateCustomLabelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemStateCustomLabelActionPerformed
+        
+        if ( selectedState != null ) {
+            
+            String initialValue = selectedState.getCustomLabel();
+            if ( initialValue == null ) {
+                initialValue = "";
+            }
+            
+            String input = JOptionPane.showInputDialog( this, "Custom Label:", initialValue );
+            
+            if ( input != null ) {
+                
+                selectedState.setCustomLabel( input );
+
+                statePPanel.setFa( fa );
+                statePPanel.setState( selectedState );
+                statePPanel.readProperties();
+                cardLayout.show( panelProperties, STATE_PROPERTIES_CARD );
+
+                setCurrentFileSaved( false );
+                repaintDrawPanel();
+                
+            }
+        
+        }
+        
+    }//GEN-LAST:event_popItemStateCustomLabelActionPerformed
+
     public void repaintDrawPanel() {
         drawPanel.repaint();
         drawPanel.setPreferredSize( new Dimension( fa.getWidth(), fa.getHeight() ) );
@@ -2524,6 +2961,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnTest;
     private javax.swing.JButton btnZoomIn;
     private javax.swing.JButton btnZoomOut;
+    private javax.swing.JCheckBoxMenuItem checkAcceptingState;
+    private javax.swing.JCheckBoxMenuItem checkInitialState;
     private br.com.davidbuzatto.yaas.gui.DrawPanel drawPanel;
     private javax.swing.Box.Filler hFiller;
     private javax.swing.JLabel lblTestResult;
@@ -2536,8 +2975,17 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JMenuItem popItemDiagonal;
     private javax.swing.JMenuItem popItemHorizontal;
     private javax.swing.JMenuItem popItemRectangular;
+    private javax.swing.JMenuItem popItemRemoveState;
+    private javax.swing.JMenuItem popItemRemoveTransition;
+    private javax.swing.JMenuItem popItemResetTransitionTransformations;
+    private javax.swing.JMenuItem popItemStateColor;
+    private javax.swing.JMenuItem popItemStateCustomLabel;
+    private javax.swing.JMenuItem popItemTransitionColor;
+    private javax.swing.JMenuItem popItemTransitionSymbols;
     private javax.swing.JMenuItem popItemVertical;
     private javax.swing.JPopupMenu popupMenuReorganizeStates;
+    private javax.swing.JPopupMenu popupMenuStateProperties;
+    private javax.swing.JPopupMenu popupMenuTransitionProperties;
     private javax.swing.JScrollPane scrollPaneModel;
     private javax.swing.JToolBar.Separator sep01;
     private javax.swing.JToolBar.Separator sep02;
@@ -2546,6 +2994,10 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JToolBar.Separator sep05;
     private javax.swing.JToolBar.Separator sepTS01;
     private javax.swing.JToolBar.Separator sepTS02;
+    private javax.swing.JPopupMenu.Separator spPopupState;
+    private javax.swing.JPopupMenu.Separator spPopupState01;
+    private javax.swing.JPopupMenu.Separator spPopupTransition01;
+    private javax.swing.JPopupMenu.Separator spPopupTransition02;
     private javax.swing.JToolBar toolBar;
     private javax.swing.JToolBar toolBarTestsAndSimulation;
     private javax.swing.JTextField txtTestString;

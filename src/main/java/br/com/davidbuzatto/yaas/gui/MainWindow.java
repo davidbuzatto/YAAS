@@ -570,7 +570,9 @@ public class MainWindow extends javax.swing.JFrame {
     @SuppressWarnings( "unchecked" )
     private void close() {
         
-        if ( JOptionPane.showConfirmDialog(this,
+        if ( !ApplicationConstants.IN_PRODUCTION ) {
+            System.exit( 0 );
+        } else if ( JOptionPane.showConfirmDialog( this,
                 """
                 Do you really want to quit?
                 All unsaved data will be lost!""", 

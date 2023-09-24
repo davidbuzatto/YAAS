@@ -132,7 +132,6 @@ public class FA extends AbstractGeometricForm {
     public void draw( Graphics2D g2d ) {
         
         g2d = (Graphics2D) g2d.create();
-        g2d.translate( x1, y1 );
         
         int maxX = 0;
         int maxY = 0;
@@ -151,8 +150,8 @@ public class FA extends AbstractGeometricForm {
             }
         }
         
-        width = x1 + maxX + 100;
-        height = y1 + maxY + 100;
+        width = maxX + 100;
+        height = maxY + 100;
         
         for ( FATransition t : transitions ) {
             t.drawLabel( g2d );
@@ -193,7 +192,7 @@ public class FA extends AbstractGeometricForm {
     public FATransition getTransitionAt( int x, int y ) {
         
         for ( FATransition t : transitions ) {
-            if ( t.intersects( x - x1, y - y1 ) ) {
+            if ( t.intersects( x, y ) ) {
                 t.setSelected( true );
                 return t;
             }
