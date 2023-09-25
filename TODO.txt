@@ -1,7 +1,21 @@
-??? Specialized versions of states (Moore machines);
-??? Specialized versions of transitions (PDAs, Mealy machines and Turing machines);
-??? Zoom-in and zoom-out;
+Regular operations in FA:
+    Complement: ok
+    Concatenation
+    Union
+    Kleene Star
+    Intersection
 
-Minimization:
-    start distinguishable test using accepting state pairs?
-    check if in case of acceptance the accepting state is the same?
+Remove inacessible states
+
+Regular Expressions
+
+Here: https://resources.wolframcloud.com/PacletRepository/resources/KlausSutner/Automata/
+
+Pushdown Automata
+Turing Machines
+
+Moore Machines?
+Mealy Machines?
+
+Zoom-in
+Zoom-out
