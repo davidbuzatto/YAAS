@@ -17,8 +17,8 @@
 package br.com.davidbuzatto.yaas.gui;
 
 import br.com.davidbuzatto.yaas.gui.fa.FA;
-import br.com.davidbuzatto.yaas.gui.fa.FAExamples;
-import br.com.davidbuzatto.yaas.gui.fa.FAExamplesForMinimizationTest;
+import br.com.davidbuzatto.yaas.gui.fa.examples.FAExamples;
+import br.com.davidbuzatto.yaas.gui.fa.examples.FAExamplesForMinimizationTest;
 import br.com.davidbuzatto.yaas.gui.fa.FAInternalFrame;
 import br.com.davidbuzatto.yaas.util.ApplicationConstants;
 import br.com.davidbuzatto.yaas.util.ApplicationPreferences;

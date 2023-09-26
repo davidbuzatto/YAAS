@@ -1,11 +1,15 @@
+****** TAKE CARE OF OBJECTS ID WHEN LOADING FILES!!!!
+
 Regular operations in FA:
-    Complement: ok
+    Complement -> needs to generate a new DFA (only performs in DFA)
+                  needs to implement the clone operation in FA!
+                  null state or new accepting state aligned with initial state (y) and 150 pixels after the last state x
     Concatenation
     Union
     Kleene Star
     Intersection
 
-Remove inacessible states
+Remove inacessible states -> new operation? really needs it?
 
 Regular Expressions
 

@@ -14,38 +14,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.davidbuzatto.yaas.gui.fa;
+package br.com.davidbuzatto.yaas.gui.fa.algorithms;
 
 import br.com.davidbuzatto.yaas.gui.fa.FA;
-import br.com.davidbuzatto.yaas.gui.fa.FAState;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 /**
- * Encapsulates data related to a step in a pertinence simulation.
+ * Performs the UNION operation between two Finite Automata generating a new
+ * one as result.
  * 
  * @author Prof. Dr. David Buzatto
  */
-public class FASimulationStep {
+public class FAUnion {
     
-    private List<FAState> activeStates;
-    private Character processadSymbol;
+    private final FA generatedFA;
     
-    public FASimulationStep( Set<FAState> activeStates, Character processedSymbol ) {
-        this.activeStates = new ArrayList<>();
-        this.activeStates.addAll( activeStates );
-        this.processadSymbol = processedSymbol;
+    public FAUnion( FA fa1, FA fa2 ) throws IllegalArgumentException {
+        generatedFA = processIt( fa1, fa2 );
+    }
+
+    public FA getGeneratedFA() {
+        return generatedFA;
     }
     
-    public void activateInFA( FA fa ) {
-        
-        fa.deactivateAllStatesInSimulation();
-        
-        for ( FAState s : activeStates ) {
-            s.setActiveInSimulation( true );
-        }
-        
+    private static FA processIt( FA fa1, FA fa2 ) {
+        return null;
     }
     
 }

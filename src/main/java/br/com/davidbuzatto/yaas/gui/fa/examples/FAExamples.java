@@ -14,8 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.davidbuzatto.yaas.gui.fa;
+package br.com.davidbuzatto.yaas.gui.fa.examples;
 
+import br.com.davidbuzatto.yaas.gui.fa.FA;
+import br.com.davidbuzatto.yaas.gui.fa.FAState;
+import br.com.davidbuzatto.yaas.gui.fa.FATransition;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
 
 /**

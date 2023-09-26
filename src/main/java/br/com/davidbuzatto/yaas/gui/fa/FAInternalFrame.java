@@ -18,6 +18,11 @@ package br.com.davidbuzatto.yaas.gui.fa;
 
 import br.com.davidbuzatto.yaas.gui.MainWindow;
 import br.com.davidbuzatto.yaas.gui.ZoomFacility;
+import br.com.davidbuzatto.yaas.gui.fa.algorithms.FAArrengement;
+import br.com.davidbuzatto.yaas.gui.fa.algorithms.DFAComplement;
+import br.com.davidbuzatto.yaas.gui.fa.algorithms.FADeterminize;
+import br.com.davidbuzatto.yaas.gui.fa.algorithms.DFAMinimize;
+import br.com.davidbuzatto.yaas.gui.fa.algorithms.DFATotalTransitionFunction;
 import br.com.davidbuzatto.yaas.gui.fa.properties.FAPropertiesPanel;
 import br.com.davidbuzatto.yaas.gui.fa.properties.FAStatePropertiesPanel;
 import br.com.davidbuzatto.yaas.gui.fa.properties.FATransitionPropertiesPanel;
@@ -1611,8 +1616,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             
         } else {
             
-            FA dfa = FAAlgorithms.generateDFARemovingNondeterminisms( fa );
-            FAAlgorithms.arrangeFAInCircle( dfa, 250, 200, 150 );
+            FA dfa = new FADeterminize( fa ).getGeneratedDFA();
+            FAArrengement.arrangeInCircle( dfa, 250, 200, 150 );
             mainWindow.createFAInternalFrame( dfa, false, false );
             
         }
@@ -1625,7 +1630,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         if ( fa.getType() == FAType.DFA ) {
             
-            FA minDFA = FAAlgorithms.generateMinimizedDFA( fa );
+            FA minDFA = new DFAMinimize( fa ).getGeneratedDFA();
             
             if ( minDFA.equals( fa ) ) {
                 JOptionPane.showMessageDialog( 
@@ -1634,7 +1639,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                     "Information", 
                     JOptionPane.INFORMATION_MESSAGE );
             } else {
-                FAAlgorithms.arrangeFAInCircle( minDFA, 250, 200, 150 );
+                FAArrengement.arrangeInCircle( minDFA, 250, 200, 150 );
                 mainWindow.createFAInternalFrame( minDFA, false, false );
             }
             
@@ -1657,7 +1662,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         if ( fa.getType() == FAType.DFA ) {
             
             int currentSize = fa.getStates().size();
-            FAAlgorithms.complementDFA( fa, currentState );
+            DFAComplement.processIt( fa, currentState );
             int newSize = fa.getStates().size();
             
             if ( currentSize != newSize ) {
@@ -1690,7 +1695,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         if ( fa.getType() == FAType.DFA ) {
             
             int currentSize = fa.getStates().size();
-            FAAlgorithms.addAllMissingTransitions( fa, currentState );
+            DFATotalTransitionFunction.processIt( fa, currentState );
             int newSize = fa.getStates().size();
             
             if ( currentSize != newSize ) {
@@ -1725,7 +1730,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                     throw new NumberFormatException();
                 }
                 
-                FAAlgorithms.arrangeFAHorizontally( fa, 100, 100, distance );
+                FAArrengement.arrangeHorizontally( fa, 100, 100, distance );
                 
                 setCurrentFileSaved( false );
                 repaintDrawPanel();
@@ -1755,7 +1760,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                     throw new NumberFormatException();
                 }
                 
-                FAAlgorithms.arrangeFAVertically( fa, 100, 100, distance );
+                FAArrengement.arrangeVertically( fa, 100, 100, distance );
                 
                 setCurrentFileSaved( false );
                 repaintDrawPanel();
@@ -1822,7 +1827,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                     throw new NumberFormatException();
                 }
 
-                FAAlgorithms.arrangeFARectangularly( fa, 100, 100, 
+                FAArrengement.arrangeRectangularly( fa, 100, 100, 
                         Integer.parseInt( spinColumns.getValue().toString() ), 
                         distance );
 
@@ -1854,7 +1859,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                     throw new NumberFormatException();
                 }
                 
-                FAAlgorithms.arrangeFAInCircle( 
+                FAArrengement.arrangeInCircle( 
                         fa, radius + 100, radius + 100, radius );
                 
                 setCurrentFileSaved( false );
@@ -1929,7 +1934,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                         throw new NumberFormatException();
                     }
 
-                    FAAlgorithms.arrangeFAByLevel( 
+                    FAArrengement.arrangeByLevel( 
                             fa, 100, 100, distance, rbVertical.isSelected() );
 
                     setCurrentFileSaved( false );
@@ -1970,7 +1975,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                     throw new NumberFormatException();
                 }
                 
-                FAAlgorithms.arrangeFADiagonally( fa, 100, 100, distance );
+                FAArrengement.arrangeDiagonally( fa, 100, 100, distance );
                 
                 setCurrentFileSaved( false );
                 repaintDrawPanel();

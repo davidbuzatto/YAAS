@@ -14,7 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.davidbuzatto.yaas.gui.fa;
+package br.com.davidbuzatto.yaas.gui.fa.examples;
+
+import br.com.davidbuzatto.yaas.gui.fa.FA;
+import br.com.davidbuzatto.yaas.gui.fa.FAState;
+import br.com.davidbuzatto.yaas.gui.fa.FATransition;
+import br.com.davidbuzatto.yaas.gui.fa.algorithms.FAArrengement;
+import br.com.davidbuzatto.yaas.gui.fa.algorithms.FACommon;
 
 /**
  * A set of methods to construct example DFAs for testing purposes of 
@@ -30,42 +36,42 @@ public class FAExamplesForMinimizationTest {
         int currentState = 0;
         
         FAState q0 = new FAState( currentState, 
-                FAAlgorithms.newCustomLabel( currentState++ ), true, false );
+                FACommon.newCustomLabel( currentState++ ), true, false );
         q0.setX1( 100 );
         q0.setY1( 100 );
         
         FAState q1 = new FAState( currentState, 
-                FAAlgorithms.newCustomLabel( currentState++ ), false, false );
+                FACommon.newCustomLabel( currentState++ ), false, false );
         q1.setX1( 250 );
         q1.setY1( 100 );
         
         FAState q2 = new FAState( currentState, 
-                FAAlgorithms.newCustomLabel( currentState++ ), false, true );
+                FACommon.newCustomLabel( currentState++ ), false, true );
         q2.setX1( 400 );
         q2.setY1( 100 );
         
         FAState q3 = new FAState( currentState, 
-                FAAlgorithms.newCustomLabel( currentState++ ), false, false );
+                FACommon.newCustomLabel( currentState++ ), false, false );
         q3.setX1( 550 );
         q3.setY1( 100 );
         
         FAState q4 = new FAState( currentState, 
-                FAAlgorithms.newCustomLabel( currentState++ ), false, false );
+                FACommon.newCustomLabel( currentState++ ), false, false );
         q4.setX1( 100 );
         q4.setY1( 250 );
         
         FAState q5 = new FAState( currentState, 
-                FAAlgorithms.newCustomLabel( currentState++ ), false, false );
+                FACommon.newCustomLabel( currentState++ ), false, false );
         q5.setX1( 250 );
         q5.setY1( 250 );
         
         FAState q6 = new FAState( currentState, 
-                FAAlgorithms.newCustomLabel( currentState++ ), false, false );
+                FACommon.newCustomLabel( currentState++ ), false, false );
         q6.setX1( 400 );
         q6.setY1( 250 );
         
         FAState q7 = new FAState( currentState, 
-                FAAlgorithms.newCustomLabel( currentState++ ), false, false );
+                FACommon.newCustomLabel( currentState++ ), false, false );
         q7.setX1( 550 );
         q7.setY1( 250 );
         
@@ -102,13 +108,13 @@ public class FAExamplesForMinimizationTest {
         
         // transitivity
         /*FAState q8 = new FAState( currentState, 
-                FAAlgorithms.newCustomLabel( currentState++ )+ "(E)",
+                FACommon.newCustomLabel( currentState++ )+ "(E)",
                 false, false );
         q8.setX1( 100 );
         q8.setY1( 400 );
         
         FAState q9 = new FAState( currentState, 
-                FAAlgorithms.newCustomLabel( currentState++ ) + "(B)",
+                FACommon.newCustomLabel( currentState++ ) + "(B)",
                 false, false );
         q9.setX1( 250 );
         q9.setY1( 400 );
@@ -144,21 +150,21 @@ public class FAExamplesForMinimizationTest {
         int currentState = 0;
         
         FAState a = new FAState( currentState, 
-                FAAlgorithms.newCustomLabel( currentState++ ), true, false );
+                FACommon.newCustomLabel( currentState++ ), true, false );
         FAState b = new FAState( currentState, 
-                FAAlgorithms.newCustomLabel( currentState++ ), false, false );
+                FACommon.newCustomLabel( currentState++ ), false, false );
         FAState c = new FAState( currentState, 
-                FAAlgorithms.newCustomLabel( currentState++ ), false, false );
+                FACommon.newCustomLabel( currentState++ ), false, false );
         FAState d = new FAState( currentState, 
-                FAAlgorithms.newCustomLabel( currentState++ ), false, true );
+                FACommon.newCustomLabel( currentState++ ), false, true );
         FAState e = new FAState( currentState, 
-                FAAlgorithms.newCustomLabel( currentState++ ), false, false );
+                FACommon.newCustomLabel( currentState++ ), false, false );
         FAState f = new FAState( currentState, 
-                FAAlgorithms.newCustomLabel( currentState++ ), false, false );
+                FACommon.newCustomLabel( currentState++ ), false, false );
         FAState g = new FAState( currentState, 
-                FAAlgorithms.newCustomLabel( currentState++ ), false, false );
+                FACommon.newCustomLabel( currentState++ ), false, false );
         FAState h = new FAState( currentState, 
-                FAAlgorithms.newCustomLabel( currentState++ ), false, false );
+                FACommon.newCustomLabel( currentState++ ), false, false );
         
         dfa.addState( a );
         dfa.addState( b );
@@ -186,7 +192,7 @@ public class FAExamplesForMinimizationTest {
         dfa.addTransition( new FATransition( h, g, '0' ) );
         dfa.addTransition( new FATransition( h, d, '1' ) );
         
-        FAAlgorithms.arrangeFARectangularly( dfa, 100, 100, 4, 150 );
+        FACommon.arrangeRectangularly( dfa, 100, 100, 4, 150 );
         
         return dfa;*/
         
@@ -322,23 +328,23 @@ public class FAExamplesForMinimizationTest {
         int currentState = 0;
         
         FAState a = new FAState( currentState, 
-                FAAlgorithms.newCustomLabel( currentState++ ), true, false );
+                FACommon.newCustomLabel( currentState++ ), true, false );
         FAState b = new FAState( currentState, 
-                FAAlgorithms.newCustomLabel( currentState++ ), false, false );
+                FACommon.newCustomLabel( currentState++ ), false, false );
         FAState c = new FAState( currentState, 
-                FAAlgorithms.newCustomLabel( currentState++ ), false, true );
+                FACommon.newCustomLabel( currentState++ ), false, true );
         FAState d = new FAState( currentState, 
-                FAAlgorithms.newCustomLabel( currentState++ ), false, false );
+                FACommon.newCustomLabel( currentState++ ), false, false );
         FAState e = new FAState( currentState, 
-                FAAlgorithms.newCustomLabel( currentState++ ), false, false );
+                FACommon.newCustomLabel( currentState++ ), false, false );
         FAState f = new FAState( currentState, 
-                FAAlgorithms.newCustomLabel( currentState++ ), false, true );
+                FACommon.newCustomLabel( currentState++ ), false, true );
         FAState g = new FAState( currentState, 
-                FAAlgorithms.newCustomLabel( currentState++ ), false, false );
+                FACommon.newCustomLabel( currentState++ ), false, false );
         FAState h = new FAState( currentState, 
-                FAAlgorithms.newCustomLabel( currentState++ ), false, false );
+                FACommon.newCustomLabel( currentState++ ), false, false );
         FAState i = new FAState( currentState, 
-                FAAlgorithms.newCustomLabel( currentState++ ), false, true );
+                FACommon.newCustomLabel( currentState++ ), false, true );
         
         dfa.addState( a );
         dfa.addState( b );
@@ -369,7 +375,7 @@ public class FAExamplesForMinimizationTest {
         dfa.addTransition( new FATransition( i, a, '0' ) );
         dfa.addTransition( new FATransition( i, e, '1' ) );
         
-        FAAlgorithms.arrangeFARectangularly( dfa, 100, 100, 4, 150 );
+        FACommon.arrangeRectangularly( dfa, 100, 100, 4, 150 );
         
         return dfa;*/
 
@@ -517,7 +523,7 @@ public class FAExamplesForMinimizationTest {
         nfa.addState( q2 );
         nfa.addState( q3 );
         
-        FAAlgorithms.arrangeFARectangularly( nfa, 100, 100, 4, 150 );
+        FACommon.arrangeRectangularly( nfa, 100, 100, 4, 150 );
         
         nfa.addTransition( new FATransition( q0, q0, '0', '1' ) );
         nfa.addTransition( new FATransition( q0, q1, '0' ) );
@@ -625,7 +631,7 @@ public class FAExamplesForMinimizationTest {
         enfa.addState( q5 );
         enfa.addState( q6 );
         
-        FAAlgorithms.arrangeFARectangularly( enfa, 100, 100, 4, 150 );
+        FACommon.arrangeRectangularly( enfa, 100, 100, 4, 150 );
         q0.move( 0, 75 );
         q4.move( 150, 0 );
         q5.move( 150, 0 );
@@ -735,7 +741,7 @@ public class FAExamplesForMinimizationTest {
         dfa.addState( q3 );
         dfa.addState( q4 );
         
-        FAAlgorithms.arrangeFARectangularly( dfa, 100, 100, 3, 150 );
+        FAArrengement.arrangeRectangularly( dfa, 100, 100, 3, 150 );
         q0.move( 0, 75 );
         q3.move( 150, 0 );
         q4.move( 150, 0 );
@@ -775,7 +781,7 @@ public class FAExamplesForMinimizationTest {
         dfa.addState( q3 );
         dfa.addState( q4 );
         
-        FAAlgorithms.arrangeFARectangularly( dfa, 100, 100, 3, 150 );
+        FAArrengement.arrangeRectangularly( dfa, 100, 100, 3, 150 );
         q0.move( 0, 75 );
         q3.move( 150, 0 );
         q4.move( 150, 0 );
@@ -799,15 +805,15 @@ public class FAExamplesForMinimizationTest {
         int currentState = 0;
         
         FAState a = new FAState( currentState, 
-                FAAlgorithms.newCustomLabel( currentState++ ), true, false );
+                FACommon.newCustomLabel( currentState++ ), true, false );
         FAState b = new FAState( currentState, 
-                FAAlgorithms.newCustomLabel( currentState++ ), false, false );
+                FACommon.newCustomLabel( currentState++ ), false, false );
         FAState c = new FAState( currentState, 
-                FAAlgorithms.newCustomLabel( currentState++ ), false, false );
+                FACommon.newCustomLabel( currentState++ ), false, false );
         FAState d = new FAState( currentState, 
-                FAAlgorithms.newCustomLabel( currentState++ ), false, false );
+                FACommon.newCustomLabel( currentState++ ), false, false );
         FAState e = new FAState( currentState, 
-                FAAlgorithms.newCustomLabel( currentState++ ), false, true );
+                FACommon.newCustomLabel( currentState++ ), false, true );
         
         dfa.addState( a );
         dfa.addState( b );
@@ -815,7 +821,7 @@ public class FAExamplesForMinimizationTest {
         dfa.addState( d );
         dfa.addState( e );
         
-        FAAlgorithms.arrangeFARectangularly( dfa, 100, 100, 3, 150 );
+        FAArrengement.arrangeRectangularly( dfa, 100, 100, 3, 150 );
         a.move( 0, 75 );
         d.move( 150, 0 );
         e.move( 150, 0 );
