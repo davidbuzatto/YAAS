@@ -22,8 +22,8 @@ import static br.com.davidbuzatto.yaas.gui.fa.algorithms.FACommon.isDistinguisha
 import static br.com.davidbuzatto.yaas.gui.fa.algorithms.FACommon.isInaccessible;
 import br.com.davidbuzatto.yaas.gui.fa.FAState;
 import br.com.davidbuzatto.yaas.gui.fa.FATransition;
-import br.com.davidbuzatto.yaas.gui.fa.FAType;
 import static br.com.davidbuzatto.yaas.gui.fa.algorithms.FAAlgorithmsConstants.DEBUG;
+import static br.com.davidbuzatto.yaas.gui.fa.algorithms.FACommon.isUseless;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -61,9 +61,9 @@ public class DFAMinimize {
      */
     private static FA processIt( FA dfa ) throws IllegalArgumentException {
         
-        if ( dfa.getType() != FAType.DFA ) {
-            throw new IllegalArgumentException( "You must use an DFA!" );
-        }
+        FACommon.validateDFA( dfa );
+        FACommon.validateInitialState( dfa );
+        FACommon.validateAcceptingStates( dfa );
         
         FA minDfa = new FA();
         Map<FAState, Map<Character, List<FAState>>> delta = dfa.getDelta();
@@ -71,19 +71,35 @@ public class DFAMinimize {
         // pre-processing step(s)
         // removing inaccessible states
         if ( DEBUG ) {
-            System.out.println( "Pre-processing - removing inaccessible states:" );
+            System.out.println( "Pre-processing - removing useless and inaccessible states:" );
         }
         List<FAState> states = new ArrayList<>( dfa.getStates() );
+        List<FAState> uselessStates = new ArrayList<>();
         List<FAState> inaccessibleStates = new ArrayList<>();
-        for ( FAState s : states ) {
-            if ( isInaccessible( s, dfa ) ) {
-                inaccessibleStates.add( s );
-                if ( DEBUG ) {
-                    System.out.println( "    Inacessible state: " + s );
+        while ( true ) {
+            int statesQuantity = states.size();
+            for ( FAState s : states ) {
+                if ( isUseless( s, dfa ) ) {
+                    uselessStates.add( s );
+                    if ( DEBUG ) {
+                        System.out.println( "    Useless state: " + s );
+                    }
+                }
+                if ( isInaccessible( s, dfa ) ) {
+                    inaccessibleStates.add( s );
+                    if ( DEBUG ) {
+                        System.out.println( "    Inacessible state: " + s );
+                    }
                 }
             }
+            states.removeAll( uselessStates );
+            states.removeAll( inaccessibleStates );
+            uselessStates.clear();
+            inaccessibleStates.clear();
+            if ( statesQuantity == states.size() ) {
+                break;
+            }
         }
-        states.removeAll( inaccessibleStates );
         
         if ( DEBUG ) {
             System.out.println( "    Remaining states:" );
@@ -351,7 +367,11 @@ public class DFAMinimize {
             for ( Map.Entry<FAState, FAState> e : originalToNew.entrySet() ) {
                 for ( Map.Entry<Character, List<FAState>> tr : delta.get( e.getKey() ).entrySet() ) {
                     for ( FAState target : tr.getValue() ) {
-                        minDfa.addTransition( new FATransition( e.getValue(), originalToNew.get( target ), tr.getKey() ) );
+                        FAState newOrigin = e.getValue();
+                        FAState newTarget = originalToNew.get( target );
+                        if ( newOrigin != null && newTarget != null ) {
+                            minDfa.addTransition( new FATransition( newOrigin, newTarget, tr.getKey() ) );
+                        }
                     }
                 }
             }

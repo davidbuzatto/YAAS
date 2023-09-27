@@ -19,7 +19,6 @@ package br.com.davidbuzatto.yaas.gui.fa.algorithms;
 import br.com.davidbuzatto.yaas.gui.fa.FA;
 import br.com.davidbuzatto.yaas.gui.fa.FAState;
 import br.com.davidbuzatto.yaas.gui.fa.FATransition;
-import br.com.davidbuzatto.yaas.gui.fa.FAType;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import java.awt.Color;
@@ -72,9 +71,9 @@ public class DFATotalTransitionFunction {
             Color nullStateStrokeColor,
             Color nullTransitionStrokeColor ) throws IllegalArgumentException {
         
-        if ( dfa.getType() != FAType.DFA ) {
-            throw new IllegalArgumentException( "You must use an DFA!" );
-        }
+        FACommon.validateDFA( dfa );
+        FACommon.validateInitialState( dfa );
+        FACommon.validateAcceptingStates( dfa );
         
         Map<FAState, Set<Character>> allMissing = new HashMap<>();
         Map<FAState, Map<Character, List<FAState>>> delta = dfa.getDelta();

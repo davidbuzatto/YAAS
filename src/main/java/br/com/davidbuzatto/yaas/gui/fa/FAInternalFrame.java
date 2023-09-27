@@ -2384,7 +2384,6 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         try {
             FA fa1 = FAExamples.createDFAEndsWith00();
-            //FA fa2 = FAExamples.createDFAEndsWith00();
             FA fa2 = FAExamples.createDFA0Even1Odd();
             FA faUnion = new FAUnion( fa1, fa2 ).getGeneratedFA();
             mainWindow.createFAInternalFrame( faUnion, false, false );
@@ -2394,6 +2393,53 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                     "ERROR",
                     JOptionPane.ERROR_MESSAGE );
         }
+        
+        /*try {
+            FA fa1 = FAExamples.createDFAEndsWith00();
+            //FA fa2 = FAExamples.createDFAEndsWith00();
+            FA fa2 = FAExamples.createDFA0Even1Odd();
+            FA faConcatenation = new FAConcatenation( fa1, fa2 ).getGeneratedFA();
+            mainWindow.createFAInternalFrame( faConcatenation, false, false );
+        } catch ( IllegalArgumentException exc ) {
+            JOptionPane.showMessageDialog( this,
+                    exc.getMessage(),
+                    "ERROR",
+                    JOptionPane.ERROR_MESSAGE );
+        }*/
+        
+        /*try {
+            //FA fa = FAExamples.createDFAEndsWith00();
+            FA fa = FAExamples.createDFA0Even1Odd();
+            FA faKleeneStar = new FAKleeneStar( fa ).getGeneratedFA();
+            mainWindow.createFAInternalFrame( faKleeneStar, false, false );
+        } catch ( IllegalArgumentException exc ) {
+            JOptionPane.showMessageDialog( this,
+                    exc.getMessage(),
+                    "ERROR",
+                    JOptionPane.ERROR_MESSAGE );
+        }*/
+        
+        /*try {
+            FA fa1 = FAExamples.createDFAEndsWith00();
+            FA fa2 = FAExamples.createDFA0Even1Odd();
+            FA faIntersection = new FAIntersection( fa1, fa2 ).getGeneratedFA();
+            mainWindow.createFAInternalFrame( faIntersection, false, false );
+        } catch ( IllegalArgumentException exc ) {
+            JOptionPane.showMessageDialog( this,
+                    exc.getMessage(),
+                    "ERROR",
+                    JOptionPane.ERROR_MESSAGE );
+        }*/
+        
+        /*try {
+            FA faCleaned = new FARemoveUselessAndInaccessibleStates( fa ).getGeneratedFA();
+            mainWindow.createFAInternalFrame( faCleaned, false, false );
+        } catch ( IllegalArgumentException exc ) {
+            JOptionPane.showMessageDialog( this,
+                    exc.getMessage(),
+                    "ERROR",
+                    JOptionPane.ERROR_MESSAGE );
+        }*/
         
     }//GEN-LAST:event_btnTestRegOpActionPerformed
 

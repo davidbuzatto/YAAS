@@ -17,6 +17,7 @@
 package br.com.davidbuzatto.yaas.gui.fa.algorithms;
 
 import br.com.davidbuzatto.yaas.gui.fa.FA;
+import br.com.davidbuzatto.yaas.gui.fa.FAState;
 
 /**
  * Performs the INTERSECTION operation between two Finite Automata generating
@@ -36,8 +37,51 @@ public class FAIntersection {
         return generatedFA;
     }
     
-    private static FA processIt( FA fa1, FA fa2 ) {
+    @SuppressWarnings( "unchecked" )
+    private static FA processIt( FA fa1, FA fa2 )
+            throws IllegalArgumentException {
+        
+        try {
+            
+            int distance = 150;
+            
+            FACommon.validateDFA( fa1, fa2 );
+            FACommon.validateInitialState( fa1, fa2 );
+            FACommon.validateAcceptingStates( fa1, fa2 );
+
+            fa1 = (FA) fa1.clone();
+            fa2 = (FA) fa2.clone();
+            
+            fa1 = new DFAComplement( fa1 ).getGeneratedDFA();
+            fa2 = new DFAComplement( fa2 ).getGeneratedDFA();
+            
+            fa1 = new FAUnion( fa1, fa2 ).getGeneratedFA();
+            fa1 = new FADeterminize( fa1 ).getGeneratedDFA();
+            fa1 = new DFAMinimize( fa1 ).getGeneratedDFA();
+            fa1 = new DFAComplement( fa1 ).getGeneratedDFA();
+            fa1 = new FARemoveUselessAndInaccessibleStates( fa1 ).getGeneratedFA();
+            
+            int currentState = 1;
+            for ( FAState s : fa1.getStates() ) {
+                if ( s.isInitial() ) {
+                    s.setLabel( "q0" );
+                } else {
+                    s.setLabel( "q" + currentState++ );
+                }
+            }
+            
+            FAArrangement.arrangeByLevel( fa1, 150, 150, distance, false );
+            fa1.resetTransitionsTransformations();
+            
+            return fa1;
+            
+        } catch ( CloneNotSupportedException exc ) {
+            // should never be reached
+            exc.printStackTrace();
+        }
+        
         return null;
+        
     }
     
 }

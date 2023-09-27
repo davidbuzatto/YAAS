@@ -24,9 +24,6 @@ import br.com.davidbuzatto.yaas.util.DrawingConstants;
  * Performs the COMPLEMENT operation in a Deterministic Finite Automaton
  * generating a new one as result.
  * 
- * This class processes a DFA modifying it, making it the complement of what
- * it was.
- * 
  * @author Prof. Dr. David Buzatto
  */
 public class DFAComplement {
@@ -51,6 +48,10 @@ public class DFAComplement {
             throws IllegalArgumentException {
         
         try {
+            
+            FACommon.validateDFA( dfa );
+            FACommon.validateInitialState( dfa );
+            FACommon.validateAcceptingStates( dfa );
             
             FA complement = (FA) dfa.clone();
             

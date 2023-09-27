@@ -68,6 +68,30 @@ public class FACommon {
     }
     
     /**
+     * Verifies if a state is useless.
+     * 
+     * @param state The state to verify.
+     * @param fa The automaton containing the state that will be verified.
+     * @return true if the state is useless, false otherwise.
+     */
+    public static boolean isUseless( FAState state, FA fa ) {
+        
+        if ( state.isInitial() || state.isAccepting() ) {
+            return false;
+        }
+        
+        for ( FATransition t : fa.getTransitions() ) {
+            if ( !t.getOriginState().equals( t.getTargetState() ) && 
+                    state.equals( t.getOriginState() ) ) {
+                return false;
+            }
+        }
+        
+        return true;
+        
+    }
+    
+    /**
      * Verifies if a state is inaccessible.
      * 
      * @param state The state to verify.
@@ -81,7 +105,8 @@ public class FACommon {
         }
         
         for ( FATransition t : fa.getTransitions() ) {
-            if ( state.equals(  t.getTargetState() ) ) {
+            if ( !t.getOriginState().equals( t.getTargetState() ) &&
+                    state.equals( t.getTargetState() ) ) {
                 return false;
             }
         }
@@ -215,6 +240,22 @@ public class FACommon {
     }
     
     /**
+     * Validades if a Finite Automaton have an initial state.
+     * 
+     * @param fa The Finite Automaton
+     * @throws IllegalArgumentException If the Finite Automaton don't have an
+     * initial state.
+     */
+    public static void validateInitialState( FA fa ) throws IllegalArgumentException {
+        
+        if ( fa.getInitialState() == null ) {
+            throw new IllegalArgumentException( 
+                    "The Finite Automaton must have an initial state!" );
+        }
+        
+    }
+    
+    /**
      * Validades if both Finite Automata have an initial state.
      * 
      * @param fa1 One Finite Automaton
@@ -237,6 +278,22 @@ public class FACommon {
     }
     
     /**
+     * Validades if a Finite Automaton have at least one accepting state.
+     * 
+     * @param fa The Finite Automaton
+     * @throws IllegalArgumentException If the Finite Automata don't have at
+     * least one accepting state.
+     */
+    public static void validateAcceptingStates( FA fa ) throws IllegalArgumentException {
+        
+        if ( fa.getAcceptingStates().isEmpty() ) {
+            throw new IllegalArgumentException( 
+                    "The Finite Automaton must have at least one accepting state!" );
+        }
+        
+    }
+    
+    /**
      * Validades if both Finite Automata have at least one accepting state.
      * 
      * @param fa1 One Finite Automaton
@@ -254,6 +311,48 @@ public class FACommon {
         if ( fa2.getAcceptingStates().isEmpty() ) {
             throw new IllegalArgumentException( 
                     "The second Finite Automata must have at least one accepting state!" );
+        }
+        
+    }
+    
+    /**
+     * Validades if a Finite Automaton is a DFA.
+     * 
+     * @param fa The Finite Automaton
+     * @throws IllegalArgumentException If the Finite Automata is not a DFA.
+     */
+    public static void validateDFA( FA fa ) throws IllegalArgumentException {
+        
+        fa.updateType();
+        
+        if ( fa.getType() != FAType.DFA ) {
+            throw new IllegalArgumentException( 
+                    "The Finite Automaton must be a DFA!" );
+        }
+        
+    }
+    
+    /**
+     * Validades if both Finite Automata area a DFA.
+     * 
+     * @param fa1 One Finite Automaton
+     * @param fa2 Another Finite Automaton
+     * @throws IllegalArgumentException If at least one of the Finite Automata
+     * is not a DFA.
+     */
+    public static void validateDFA( FA fa1, FA fa2 ) throws IllegalArgumentException {
+        
+        fa1.updateType();
+        fa2.updateType();
+        
+        if ( fa1.getType() != FAType.DFA ) {
+            throw new IllegalArgumentException( 
+                    "The first Finite Automaton must be a DFA!" );
+        }
+        
+        if ( fa2.getType() != FAType.DFA ) {
+            throw new IllegalArgumentException( 
+                    "The second Finite Automaton must be a DFA!" );
         }
         
     }

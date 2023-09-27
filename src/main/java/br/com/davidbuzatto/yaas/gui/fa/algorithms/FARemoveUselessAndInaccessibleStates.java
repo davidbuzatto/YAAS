@@ -18,21 +18,20 @@ package br.com.davidbuzatto.yaas.gui.fa.algorithms;
 
 import br.com.davidbuzatto.yaas.gui.fa.FA;
 import br.com.davidbuzatto.yaas.gui.fa.FAState;
-import br.com.davidbuzatto.yaas.gui.fa.FATransition;
-import br.com.davidbuzatto.yaas.util.CharacterConstants;
+import static br.com.davidbuzatto.yaas.gui.fa.algorithms.FAAlgorithmsConstants.DEBUG;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Performs the KLEENE STAR operation in a Finite Automaton generating a new
- * one as result.
+ * Creates a new FA without useless and inaccessible states.
  * 
  * @author Prof. Dr. David Buzatto
  */
-public class FAKleeneStar {
+public class FARemoveUselessAndInaccessibleStates {
     
     private final FA generatedFA;
     
-    public FAKleeneStar( FA fa ) throws IllegalArgumentException {
+    public FARemoveUselessAndInaccessibleStates( FA fa ) throws IllegalArgumentException {
         generatedFA = processIt( fa );
     }
 
@@ -46,8 +45,6 @@ public class FAKleeneStar {
         
         try {
             
-            int distance = 150;
-            
             FACommon.validateInitialState( fa );
             FACommon.validateAcceptingStates( fa );
 
@@ -56,22 +53,42 @@ public class FAKleeneStar {
             fa.deactivateAllStatesInSimulation();
             fa.deselectAll();
             
-            FAState fa1Initial = fa.getInitialState();
-            List<FAState> fa1Accepting = fa.getAcceptingStates();
+            List<FAState> uselessStates = new ArrayList<>();
+            List<FAState> inaccessibleStates = new ArrayList<>();
             
-            fa.setInitialState( null );
-            fa1Initial.setInitial( false );
-            
-            FAState newInitial = new FAState( "ini", true, false );
-            
-            fa.addState( newInitial );
-            
-            fa.addTransition( new FATransition( 
-                    newInitial, fa1Initial, CharacterConstants.EMPTY_STRING ) );
-            
-            for ( FAState s : fa1Accepting ) {
-                fa.addTransition( new FATransition( 
-                        s, newInitial, CharacterConstants.EMPTY_STRING ) );
+            while ( true ) {
+                
+                int statesQuantity = fa.getStates().size();
+                
+                for ( FAState s : fa.getStates() ) {
+                    if ( FACommon.isUseless( s, fa ) ) {
+                        uselessStates.add( s );
+                    }
+                    if ( FACommon.isInaccessible( s, fa ) ) {
+                        inaccessibleStates.add( s );
+                    }
+                }
+
+                if ( DEBUG ) {
+                    System.out.println( "    Useless states: " + uselessStates );
+                    System.out.println( "    Inacessible states: " + inaccessibleStates );
+                }
+                
+                for ( FAState s : uselessStates ) {
+                    fa.removeState( s );
+                }
+
+                for ( FAState s : inaccessibleStates ) {
+                    fa.removeState( s );
+                }
+                
+                uselessStates.clear();
+                inaccessibleStates.clear();
+                
+                if ( statesQuantity == fa.getStates().size() ) {
+                    break;
+                }
+                
             }
             
             int currentState = 1;
@@ -83,7 +100,6 @@ public class FAKleeneStar {
                 }
             }
             
-            FAArrangement.arrangeByLevel( fa, 150, 150, distance, false );
             fa.resetTransitionsTransformations();
             
             return fa;

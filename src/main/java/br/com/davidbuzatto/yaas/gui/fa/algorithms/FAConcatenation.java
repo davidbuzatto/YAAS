@@ -17,6 +17,10 @@
 package br.com.davidbuzatto.yaas.gui.fa.algorithms;
 
 import br.com.davidbuzatto.yaas.gui.fa.FA;
+import br.com.davidbuzatto.yaas.gui.fa.FAState;
+import br.com.davidbuzatto.yaas.gui.fa.FATransition;
+import br.com.davidbuzatto.yaas.util.CharacterConstants;
+import java.util.List;
 
 /**
  * Performs the CONCATENATION operation between two Finite Automata generating
@@ -36,8 +40,64 @@ public class FAConcatenation {
         return generatedFA;
     }
     
-    private static FA processIt( FA fa1, FA fa2 ) {
+    @SuppressWarnings( "unchecked" )
+    private static FA processIt( FA fa1, FA fa2 )
+            throws IllegalArgumentException {
+        
+        try {
+            
+            int distance = 150;
+            
+            FACommon.validateInitialState( fa1, fa2 );
+            FACommon.validateAcceptingStates( fa1, fa2 );
+
+            fa1 = (FA) fa1.clone();
+            fa2 = (FA) fa2.clone();
+            
+            fa1.deactivateAllStatesInSimulation();
+            fa1.deselectAll();
+            
+            fa2.deactivateAllStatesInSimulation();
+            fa2.deselectAll();
+            
+            FAState fa2Initial = fa2.getInitialState();
+            List<FAState> fa1Accepting = fa1.getAcceptingStates();
+            
+            fa2.setInitialState( null );
+            fa2Initial.setInitial( false );
+            
+            for ( FAState s : fa1Accepting ) {
+                s.setAccepting( false );
+            }
+            
+            fa1.merge( fa2 );
+            
+            for ( FAState s : fa1Accepting ) {
+                fa1.addTransition( new FATransition( 
+                        s, fa2Initial, CharacterConstants.EMPTY_STRING ) );
+            }
+            
+            int currentState = 1;
+            for ( FAState s : fa1.getStates() ) {
+                if ( s.isInitial() ) {
+                    s.setLabel( "q0" );
+                } else {
+                    s.setLabel( "q" + currentState++ );
+                }
+            }
+            
+            FAArrangement.arrangeByLevel( fa1, 150, 150, distance, false );
+            fa1.resetTransitionsTransformations();
+            
+            return fa1;
+            
+        } catch ( CloneNotSupportedException exc ) {
+            // should never be reached
+            exc.printStackTrace();
+        }
+        
         return null;
+        
     }
     
 }

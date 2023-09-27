@@ -70,35 +70,15 @@ public class FAUnion {
             fa1Initial.setInitial( false );
             fa2Initial.setInitial( false );
             
-            for ( FAState s : fa1Accepting ) {
-                s.setAccepting( false );
-            }
-            
-            for ( FAState s : fa2Accepting ) {
-                s.setAccepting( false );
-            }
-            
             FAState newInitial = new FAState( "ini", true, false );
-            FAState newAccepting = new FAState( "acc", false, true );
             
             fa1.merge( fa2 );
             fa1.addState( newInitial );
-            fa1.addState( newAccepting );
             
             fa1.addTransition( new FATransition( 
                     newInitial, fa1Initial, CharacterConstants.EMPTY_STRING ) );
             fa1.addTransition( new FATransition( 
                     newInitial, fa2Initial, CharacterConstants.EMPTY_STRING ) );
-            
-            for ( FAState s : fa1Accepting ) {
-                fa1.addTransition( new FATransition( 
-                        s, newAccepting, CharacterConstants.EMPTY_STRING ) );
-            }
-            
-            for ( FAState s : fa2Accepting ) {
-                fa1.addTransition( new FATransition( 
-                        s, newAccepting, CharacterConstants.EMPTY_STRING ) );
-            }
             
             int currentState = 1;
             for ( FAState s : fa1.getStates() ) {
