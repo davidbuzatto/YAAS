@@ -8,7 +8,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -212,6 +212,50 @@ public class FACommon {
             return String.valueOf( (char) ('A' + u) );
         }
             
+    }
+    
+    /**
+     * Validades if both Finite Automata have an initial state.
+     * 
+     * @param fa1 One Finite Automaton
+     * @param fa2 Another Finite Automaton
+     * @throws IllegalArgumentException If at least one of the Finite Automata
+     * don't have an initial state.
+     */
+    public static void validateInitialState( FA fa1, FA fa2 ) throws IllegalArgumentException {
+        
+        if ( fa1.getInitialState() == null ) {
+            throw new IllegalArgumentException( 
+                    "The first Finite Automata must have an initial state!" );
+        }
+        
+        if ( fa2.getInitialState() == null ) {
+            throw new IllegalArgumentException( 
+                    "The second Finite Automata must have an initial state!" );
+        }
+        
+    }
+    
+    /**
+     * Validades if both Finite Automata have at least one accepting state.
+     * 
+     * @param fa1 One Finite Automaton
+     * @param fa2 Another Finite Automaton
+     * @throws IllegalArgumentException If at least one of the Finite Automata
+     * don't have at least one accepting state.
+     */
+    public static void validateAcceptingStates( FA fa1, FA fa2 ) throws IllegalArgumentException {
+        
+        if ( fa1.getAcceptingStates().isEmpty() ) {
+            throw new IllegalArgumentException( 
+                    "The first Finite Automata must have at least one accepting state!" );
+        }
+        
+        if ( fa2.getAcceptingStates().isEmpty() ) {
+            throw new IllegalArgumentException( 
+                    "The second Finite Automata must have at least one accepting state!" );
+        }
+        
     }
     
 }

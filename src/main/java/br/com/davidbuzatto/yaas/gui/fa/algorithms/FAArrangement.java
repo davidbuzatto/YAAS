@@ -8,7 +8,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -18,6 +18,7 @@ package br.com.davidbuzatto.yaas.gui.fa.algorithms;
 
 import br.com.davidbuzatto.yaas.gui.fa.FA;
 import br.com.davidbuzatto.yaas.gui.fa.FAState;
+import java.awt.Point;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -293,6 +294,41 @@ public class FAArrangement {
         }
         
         fa.resetTransitionsTransformations();
+        
+    }
+    
+    /**
+     * Get the boundaries of a Finite Automaton.
+     * 
+     * @param fa The Finite Automaton to proccess.
+     * @return An array containing two Points. The first contains the cordinates
+     * of the superior left vertex of the boundary rectangle and the second
+     * contains the cordinates of the inferior right vertex of the boundary
+     * rectangle.
+     */
+    public static Point[] getFABoundaries( FA fa ) {
+        
+        int minX = Integer.MAX_VALUE;
+        int maxX = Integer.MIN_VALUE;
+        int minY = Integer.MAX_VALUE;
+        int maxY = Integer.MIN_VALUE;
+
+        for ( FAState s : fa.getStates() ) {
+            if ( minX > s.getX1() ) {
+                minX = s.getX1();
+            }
+            if ( minY > s.getY1() ) {
+                minY = s.getY1();
+            }
+            if ( maxX < s.getX1() ) {
+                maxX = s.getX1();
+            }
+            if ( maxY < s.getY1() ) {
+                maxY = s.getY1();
+            }
+        }
+        
+        return new Point[]{ new Point( minX, minY ), new Point( maxX, maxY ) };
         
     }
     

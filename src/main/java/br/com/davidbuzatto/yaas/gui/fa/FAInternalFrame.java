@@ -8,7 +8,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -23,6 +23,8 @@ import br.com.davidbuzatto.yaas.gui.fa.algorithms.DFAComplement;
 import br.com.davidbuzatto.yaas.gui.fa.algorithms.FADeterminize;
 import br.com.davidbuzatto.yaas.gui.fa.algorithms.DFAMinimize;
 import br.com.davidbuzatto.yaas.gui.fa.algorithms.DFATotalTransitionFunction;
+import br.com.davidbuzatto.yaas.gui.fa.algorithms.FAUnion;
+import br.com.davidbuzatto.yaas.gui.fa.examples.FAExamples;
 import br.com.davidbuzatto.yaas.gui.fa.properties.FAPropertiesPanel;
 import br.com.davidbuzatto.yaas.gui.fa.properties.FAStatePropertiesPanel;
 import br.com.davidbuzatto.yaas.gui.fa.properties.FATransitionPropertiesPanel;
@@ -216,6 +218,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         setCurrentFileSaved( true );
         
         registerActions();
+        repaintDrawPanel();
         
     }
     
@@ -269,6 +272,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnGenerateEquivalentDFA = new javax.swing.JButton();
         btnGenerateMinimizedDFA = new javax.swing.JButton();
         btnGenerateComplementDFA = new javax.swing.JButton();
+        btnTestRegOp = new javax.swing.JButton();
         hFiller = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         btnShowTransitionControls = new javax.swing.JToggleButton();
         sep03 = new javax.swing.JToolBar.Separator();
@@ -671,6 +675,17 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         toolBar.add(btnGenerateComplementDFA);
+
+        btnTestRegOp.setText("Test");
+        btnTestRegOp.setFocusable(false);
+        btnTestRegOp.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnTestRegOp.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnTestRegOp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTestRegOpActionPerformed(evt);
+            }
+        });
+        toolBar.add(btnTestRegOp);
         toolBar.add(hFiller);
 
         btnShowTransitionControls.setIcon(new javax.swing.ImageIcon(getClass().getResource("/shape_square_edit.png"))); // NOI18N
@@ -2365,6 +2380,23 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_btnCloneActionPerformed
 
+    private void btnTestRegOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTestRegOpActionPerformed
+        
+        try {
+            FA fa1 = FAExamples.createDFAEndsWith00();
+            //FA fa2 = FAExamples.createDFAEndsWith00();
+            FA fa2 = FAExamples.createDFA0Even1Odd();
+            FA faUnion = new FAUnion( fa1, fa2 ).getGeneratedFA();
+            mainWindow.createFAInternalFrame( faUnion, false, false );
+        } catch ( IllegalArgumentException exc ) {
+            JOptionPane.showMessageDialog( this,
+                    exc.getMessage(),
+                    "ERROR",
+                    JOptionPane.ERROR_MESSAGE );
+        }
+        
+    }//GEN-LAST:event_btnTestRegOpActionPerformed
+
     public void repaintDrawPanel() {
         drawPanel.repaint();
         drawPanel.setPreferredSize( new Dimension( fa.getWidth(), fa.getHeight() ) );
@@ -2987,6 +3019,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnStart;
     private javax.swing.JButton btnStop;
     private javax.swing.JButton btnTest;
+    private javax.swing.JButton btnTestRegOp;
     private javax.swing.JButton btnZoomIn;
     private javax.swing.JButton btnZoomOut;
     private javax.swing.JCheckBoxMenuItem checkAcceptingState;

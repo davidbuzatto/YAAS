@@ -8,7 +8,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -17,7 +17,6 @@
 package br.com.davidbuzatto.yaas.gui.fa;
 
 import br.com.davidbuzatto.yaas.gui.model.AbstractGeometricForm;
-import br.com.davidbuzatto.yaas.gui.model.ControlPoint;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
@@ -179,7 +178,8 @@ public class FA extends AbstractGeometricForm implements Cloneable {
     
     public FAState getStateAt( int x, int y ) {
         
-        for ( FAState s : states ) {
+        for ( int i = states.size()-1; i >= 0; i-- ) {
+            FAState s = states.get( i );
             if ( s.intersects( x, y ) ) {
                 s.setSelected( true );
                 return s;
@@ -192,7 +192,8 @@ public class FA extends AbstractGeometricForm implements Cloneable {
     
     public FATransition getTransitionAt( int x, int y ) {
         
-        for ( FATransition t : transitions ) {
+        for ( int i = transitions.size()-1; i >= 0; i-- ) {
+            FATransition t = transitions.get( i );
             if ( t.intersects( x, y ) ) {
                 t.setSelected( true );
                 return t;
@@ -618,6 +619,18 @@ public class FA extends AbstractGeometricForm implements Cloneable {
         alphabetUpToDate = false;
         deltaUpToDate = false;
         eclosesUpToDate = false;
+    }
+    
+    public void merge( FA fa ) {
+        
+        for ( FAState s : fa.getStates() ) {
+            addState( s );
+        }
+        
+        for ( FATransition t : fa.getTransitions() ) {
+            addTransition( t );
+        }
+        
     }
     
     public String generateCode() {

@@ -1,8 +1,8 @@
 Regular operations in FA -> organize in one menu like the rearrange algorithms
-    Complement OK
+    Union - OK
     Concatenation
-    Union
     Kleene Star
+    Complement - OK
     Intersection
 
 Highlight inacessible states
