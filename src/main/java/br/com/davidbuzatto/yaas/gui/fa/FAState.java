@@ -28,7 +28,10 @@ import java.awt.Rectangle;
  * 
  * @author Prof. Dr. David Buzatto
  */
-public class FAState extends AbstractGeometricForm implements Comparable<FAState> {
+public class FAState extends AbstractGeometricForm implements Comparable<FAState>, Cloneable {
+    
+    private static int addedOrderGenerator;
+    private int addedOrder;
     
     protected String label;
     protected String customLabel;
@@ -64,6 +67,7 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
     
     public FAState( String label, String customLabel, boolean initial, boolean accepting ) {
         
+        this.addedOrder = addedOrderGenerator++;
         this.label = label;
         this.customLabel = customLabel;
         this.initial = initial;
@@ -293,7 +297,7 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
 
     @Override
     public int compareTo( FAState o ) {
-        return id - o.id;
+        return addedOrder - o.addedOrder;
     }
     
     public String generateCode( String modelName ) {
@@ -312,6 +316,34 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
         String add = String.format( "\n    %s.addState( %s );", modelName, label );
         
         return def + pos + add;
+        
+    }
+    
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public Object clone() throws CloneNotSupportedException {
+        
+        FAState c = (FAState) super.clone();
+        
+        c.addedOrder = addedOrder;
+    
+        c.label = label;
+        c.customLabel = customLabel;
+
+        c.initial = initial;
+        c.accepting = accepting;
+
+        c.radius = radius;
+        c.radiusSquared = radiusSquared;
+        c.diameter = diameter;
+
+        c.arrow = (Arrow) arrow.clone();
+
+        c.activeInSimulation = false;
+        c.activeInSimulationStrokeColor = activeInSimulationStrokeColor;
+        c.activeInSimulationFillColor = activeInSimulationFillColor;
+        
+        return c;
         
     }
     

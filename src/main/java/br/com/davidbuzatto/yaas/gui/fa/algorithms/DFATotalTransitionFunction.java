@@ -16,7 +16,6 @@
  */
 package br.com.davidbuzatto.yaas.gui.fa.algorithms;
 
-
 import br.com.davidbuzatto.yaas.gui.fa.FA;
 import br.com.davidbuzatto.yaas.gui.fa.FAState;
 import br.com.davidbuzatto.yaas.gui.fa.FATransition;
@@ -80,10 +79,17 @@ public class DFATotalTransitionFunction {
         Map<FAState, Set<Character>> allMissing = new HashMap<>();
         Map<FAState, Map<Character, List<FAState>>> delta = dfa.getDelta();
         List<Character> alphabet = new ArrayList<>( dfa.getAlphabet() );
+        int maxX = Integer.MIN_VALUE;
         
         for ( FAState s : dfa.getStates() ) {
+            
             Set<Character> a = new TreeSet<>( alphabet );
             allMissing.put( s, a );
+            
+            if ( maxX < s.getX1() ) {
+                maxX = s.getX1();
+            }
+            
         }
         
         Set<FAState> toRemove = new HashSet<>();
@@ -112,8 +118,8 @@ public class DFATotalTransitionFunction {
                 nullState.setCustomLabel( CharacterConstants.EMPTY_SET.toString() );
             }
             nullState.setStrokeColor( nullStateStrokeColor );
-            nullState.setX1( 200 );
-            nullState.setY1( 200 );
+            nullState.setX1( maxX + 150 );
+            nullState.setY1( dfa.getInitialState().getY1() );
             dfa.addState( nullState );
             
             FATransition nullTransition = new FATransition( 

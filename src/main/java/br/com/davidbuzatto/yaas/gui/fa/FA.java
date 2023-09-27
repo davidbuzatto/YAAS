@@ -17,6 +17,7 @@
 package br.com.davidbuzatto.yaas.gui.fa;
 
 import br.com.davidbuzatto.yaas.gui.model.AbstractGeometricForm;
+import br.com.davidbuzatto.yaas.gui.model.ControlPoint;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
@@ -36,10 +37,10 @@ import java.util.TreeSet;
  * 
  * @author Prof. Dr. David Buzatto
  */
-public class FA extends AbstractGeometricForm {
+public class FA extends AbstractGeometricForm implements Cloneable {
     
-    private final List<FAState> states;
-    private final List<FATransition> transitions;
+    private List<FAState> states;
+    private List<FATransition> transitions;
     private FAState initialState;
     private FAType type;
     
@@ -713,6 +714,46 @@ public class FA extends AbstractGeometricForm {
             return false;
         }
         return Objects.equals( this.initialState, other.initialState );
+    }
+    
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public Object clone() throws CloneNotSupportedException {
+        
+        FA c = (FA) super.clone();
+        Map<FAState, FAState> ref = new HashMap<>();
+    
+        c.states = new ArrayList<>();
+        for ( FAState s : states ) {
+            FAState n = (FAState) s.clone();
+            c.addState( n );
+            ref.put( s, n );
+        }
+        
+        c.transitions = new ArrayList<>();
+        for ( FATransition t : transitions ) {
+            FATransition n = (FATransition) t.clone();
+            n.setOriginState( ref.get( t.getOriginState() ) );
+            n.setTargetState( ref.get( t.getTargetState() ) );
+            c.addTransition( n );
+        }
+        
+        // c.initialState = null;  <- c.addState() resolves it accordingly
+        // c.type = null;          <- c.updateType() resolves it accordingly
+        
+        c.alphabetUpToDate = false;
+        c.deltaUpToDate = false;
+        c.eclosesUpToDate = false;
+
+        c.alphabet = null;
+        c.delta = null;
+        c.ecloses = null;
+
+        c.transitionControlPointsVisible = false;
+        
+        c.updateType();
+        return c;
+        
     }
     
 }

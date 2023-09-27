@@ -26,7 +26,7 @@ import java.awt.geom.Path2D;
  * 
  * @author Prof. Dr. David Buzatto
  */
-public class Arrow extends AbstractGeometricForm {
+public class Arrow extends AbstractGeometricForm implements Cloneable {
     
     private double angle = 0;
     
@@ -100,6 +100,23 @@ public class Arrow extends AbstractGeometricForm {
 
     public void setActiveInSimulationStrokeColor( Color activeInSimulationStrokeColor ) {
         this.activeInSimulationStrokeColor = activeInSimulationStrokeColor;
+    }
+    
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public Object clone() throws CloneNotSupportedException {
+        
+        Arrow c = (Arrow) super.clone();
+        
+        c.angle = angle;
+        c.arrowLength = arrowLength;
+        c.halfArrowLength = halfArrowLength;
+        c.oneThirdArrowLength = oneThirdArrowLength;
+        c.activeInSimulation = false;
+        c.activeInSimulationStrokeColor = activeInSimulationStrokeColor;
+        
+        return c;
+        
     }
     
 }

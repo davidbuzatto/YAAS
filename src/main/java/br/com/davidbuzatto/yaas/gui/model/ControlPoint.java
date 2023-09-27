@@ -23,7 +23,7 @@ import java.awt.Graphics2D;
  * 
  * @author Prof. Dr. David Buzatto
  */
-public class ControlPoint extends AbstractGeometricForm {
+public class ControlPoint extends AbstractGeometricForm implements Cloneable {
     
     private int radius;
     private int radiusSquared;
@@ -58,6 +58,20 @@ public class ControlPoint extends AbstractGeometricForm {
         this.radius = radius;
         this.radiusSquared = radius * radius;
         this.diameter = radius * 2;
+    }
+    
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public Object clone() throws CloneNotSupportedException {
+        
+        ControlPoint c = (ControlPoint) super.clone();
+        
+        c.radius = radius;
+        c.radiusSquared = radiusSquared;
+        c.diameter = diameter;
+        
+        return c;
+        
     }
     
 }

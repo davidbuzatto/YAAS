@@ -19,7 +19,7 @@ package br.com.davidbuzatto.yaas.gui.fa.examples;
 import br.com.davidbuzatto.yaas.gui.fa.FA;
 import br.com.davidbuzatto.yaas.gui.fa.FAState;
 import br.com.davidbuzatto.yaas.gui.fa.FATransition;
-import br.com.davidbuzatto.yaas.gui.fa.algorithms.FAArrengement;
+import br.com.davidbuzatto.yaas.gui.fa.algorithms.FAArrangement;
 import br.com.davidbuzatto.yaas.gui.fa.algorithms.FACommon;
 
 /**
@@ -741,7 +741,7 @@ public class FAExamplesForMinimizationTest {
         dfa.addState( q3 );
         dfa.addState( q4 );
         
-        FAArrengement.arrangeRectangularly( dfa, 100, 100, 3, 150 );
+        FAArrangement.arrangeRectangularly( dfa, 100, 100, 3, 150 );
         q0.move( 0, 75 );
         q3.move( 150, 0 );
         q4.move( 150, 0 );
@@ -781,7 +781,7 @@ public class FAExamplesForMinimizationTest {
         dfa.addState( q3 );
         dfa.addState( q4 );
         
-        FAArrengement.arrangeRectangularly( dfa, 100, 100, 3, 150 );
+        FAArrangement.arrangeRectangularly( dfa, 100, 100, 3, 150 );
         q0.move( 0, 75 );
         q3.move( 150, 0 );
         q4.move( 150, 0 );
@@ -821,7 +821,7 @@ public class FAExamplesForMinimizationTest {
         dfa.addState( d );
         dfa.addState( e );
         
-        FAArrengement.arrangeRectangularly( dfa, 100, 100, 3, 150 );
+        FAArrangement.arrangeRectangularly( dfa, 100, 100, 3, 150 );
         a.move( 0, 75 );
         d.move( 150, 0 );
         e.move( 150, 0 );

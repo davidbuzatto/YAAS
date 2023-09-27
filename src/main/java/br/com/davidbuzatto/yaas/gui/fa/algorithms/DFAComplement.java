@@ -31,18 +31,14 @@ import br.com.davidbuzatto.yaas.util.DrawingConstants;
  */
 public class DFAComplement {
     
-    private final FA generatedFA;
+    private final FA generatedDFA;
     
     public DFAComplement( FA fa ) throws IllegalArgumentException {
-        generatedFA = processIt( fa );
+        generatedDFA = processIt( fa, fa.getStates().size() );
     }
 
-    public FA getGeneratedFA() {
-        return generatedFA;
-    }
-    
-    private static FA processIt( FA fa ) {
-        return null;
+    public FA getGeneratedDFA() {
+        return generatedDFA;
     }
     
     /**
@@ -51,21 +47,33 @@ public class DFAComplement {
      * @param dfa The dfa to be complemented.
      * @param currentState for state label generation
      */
-    public static void processIt( FA dfa, int currentState )
+    private static FA processIt( FA dfa, int currentState )
             throws IllegalArgumentException {
         
-        // clone first, than totalize
+        try {
+            
+            FA complement = (FA) dfa.clone();
+            
+            DFATotalTransitionFunction.processIt(
+                    complement, 
+                    currentState, 
+                    false,
+                    DrawingConstants.STATE_STROKE_COLOR,
+                    DrawingConstants.TRANSITION_STROKE_COLOR );
+
+            for ( FAState s : complement.getStates() ) {
+                s.setAccepting( !s.isAccepting() );
+            }
+            
+            return complement;
         
-        DFATotalTransitionFunction.processIt(
-                dfa, 
-                currentState, 
-                false,
-                DrawingConstants.STATE_STROKE_COLOR,
-                DrawingConstants.TRANSITION_STROKE_COLOR );
-        
-        for ( FAState s : dfa.getStates() ) {
-            s.setAccepting( !s.isAccepting() );
+        } catch ( CloneNotSupportedException exc ) {
+            // should never be reached
+            exc.printStackTrace();
         }
+        
+        // should never be reached
+        return null;
         
     }
     

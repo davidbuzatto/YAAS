@@ -28,7 +28,7 @@ import java.awt.font.LineMetrics;
  * 
  * @author Prof. Dr. David Buzatto
  */
-public class FATransitionLabel extends AbstractGeometricForm {
+public class FATransitionLabel extends AbstractGeometricForm implements Cloneable {
     
     private String text;
     private int textWidth;
@@ -138,6 +138,24 @@ public class FATransitionLabel extends AbstractGeometricForm {
 
     public void setActiveInSimulationFillColor( Color activeInSimulationFillColor ) {
         this.activeInSimulationFillColor = activeInSimulationFillColor;
+    }
+    
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public Object clone() throws CloneNotSupportedException {
+        
+        FATransitionLabel c = (FATransitionLabel) super.clone();
+        
+        c.text = text;
+        c.textWidth = textWidth;
+        c.textHeight = textHeight;
+
+        c.activeInSimulation = false;
+        c.activeInSimulationStrokeColor = activeInSimulationStrokeColor;
+        c.activeInSimulationFillColor = activeInSimulationFillColor;
+        
+        return c;
+        
     }
     
 }

@@ -16,22 +16,24 @@
  */
 package br.com.davidbuzatto.yaas.gui.model;
 
+import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.io.Serializable;
+import java.math.BigInteger;
+import java.util.Objects;
 
 /**
  * An abstract class with the basic behavior of drawable forms.
  * 
  * @author Prof. Dr. David Buzatto
  */
-public abstract class AbstractGeometricForm implements Serializable {
+public abstract class AbstractGeometricForm implements Serializable, Cloneable {
     
     private static final long serialVersionUID = 1L;
     
-    private static int idGenerator;
-    protected int id;
+    protected BigInteger id;
     
     protected int x1;
     protected int y1;
@@ -55,7 +57,7 @@ public abstract class AbstractGeometricForm implements Serializable {
     protected SerializableBasicStroke stroke;
     
     public AbstractGeometricForm() {
-        id = idGenerator++;
+        id = Utils.generateUUID();
     }
     
     public abstract void draw( Graphics2D g2d );
@@ -66,14 +68,6 @@ public abstract class AbstractGeometricForm implements Serializable {
         y1 += yAmount;
         x2 += xAmount;
         y2 += yAmount;
-    }
-    
-    public static int getIdGenerator() {
-        return idGenerator;
-    }
-
-    public static void setIdGenerator( int idGenerator ) {
-        AbstractGeometricForm.idGenerator = idGenerator;
     }
 
     public int getX1() {
@@ -213,11 +207,11 @@ public abstract class AbstractGeometricForm implements Serializable {
     public void setHeight( int height ) {
         this.height = height;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 79 * hash + this.id;
+        hash = 29 * hash + Objects.hashCode( this.id );
         return hash;
     }
 
@@ -233,7 +227,43 @@ public abstract class AbstractGeometricForm implements Serializable {
             return false;
         }
         final AbstractGeometricForm other = (AbstractGeometricForm) obj;
-        return this.id == other.id;
+        return Objects.equals( this.id, other.id );
+    }
+
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public Object clone() throws CloneNotSupportedException {
+        
+        AbstractGeometricForm c = (AbstractGeometricForm) super.clone();
+        
+        c.id = Utils.generateUUID();
+        
+        c.x1 = x1;
+        c.y1 = y1;
+        c.x2 = x2;
+        c.y2 = y2;
+        c.width = width;
+        c.height = height;
+        c.mouseHover = false;
+        c.selected = false;
+        
+        c.strokeColor = strokeColor;
+        c.fillColor = fillColor;
+        
+        c.mouseHoverStrokeColor = mouseHoverStrokeColor;
+        c.mouseHoverFillColor = mouseHoverFillColor;
+        
+        c.selectedStrokeColor = selectedStrokeColor;
+        c.selectedFillColor = selectedFillColor;
+        
+        c.font = font;
+        
+        if ( stroke != null ) {
+            c.stroke = (SerializableBasicStroke) stroke.clone();
+        }
+        
+        return c;
+        
     }
     
 }

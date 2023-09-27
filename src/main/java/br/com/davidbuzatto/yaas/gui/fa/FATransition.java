@@ -36,7 +36,7 @@ import java.util.List;
  * 
  * @author Prof. Dr. David Buzatto
  */
-public class FATransition extends AbstractGeometricForm {
+public class FATransition extends AbstractGeometricForm implements Cloneable {
 
     private static final double RAD_60 = Math.toRadians( 60 );
     private static final double RAD_90 = Math.toRadians( 90 );
@@ -48,16 +48,16 @@ public class FATransition extends AbstractGeometricForm {
     private List<Character> symbols;
     
     
-    private final FATransitionLabel label;
-    private final CubicCurve2D curve;
-    private final Arrow arrow;
+    private FATransitionLabel label;
+    private CubicCurve2D curve;
+    private Arrow arrow;
     
-    private final ControlPoint targetCP;
-    private final ControlPoint centralCP;
-    private final ControlPoint leftCP;
-    private final ControlPoint rightCP;
+    private ControlPoint targetCP;
+    private ControlPoint centralCP;
+    private ControlPoint leftCP;
+    private ControlPoint rightCP;
     
-    private final SerializableBasicStroke cpStroke;
+    private SerializableBasicStroke cpStroke;
     
     
     private int xOffset;
@@ -879,6 +879,62 @@ public class FATransition extends AbstractGeometricForm {
         String add = String.format( "\n    %s.addTransition( %s );", modelName, tName );
         
         return def + pos + add;
+        
+    }
+    
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public Object clone() throws CloneNotSupportedException {
+        
+        FATransition c = (FATransition) super.clone();
+        
+        /*c.originState = (FAState) originState.clone();
+        c.targetState = (FAState) targetState.clone();*/
+        
+        c.symbols = new ArrayList<>();
+        for ( char ch : symbols ) {
+            c.symbols.add( ch );
+        }
+
+        c.label = (FATransitionLabel) label.clone();
+        c.curve = (CubicCurve2D) curve.clone();
+        c.arrow = (Arrow) arrow.clone();
+
+        c.targetCP = (ControlPoint) targetCP.clone();
+        c.centralCP = (ControlPoint) centralCP.clone();
+        c.leftCP = (ControlPoint) leftCP.clone();
+        c.rightCP = (ControlPoint) rightCP.clone();
+
+        c.cpStroke = (SerializableBasicStroke) cpStroke.clone();
+
+        c.xOffset = xOffset;
+        c.yOffset = yOffset;
+
+        c.labelDragging = false;
+        c.labelMoved = labelMoved;
+
+        c.prevCentralCPX = prevCentralCPX;
+        c.prevCentralCPY = prevCentralCPY;
+        c.prevLeftCPX = prevLeftCPX;
+        c.prevLeftCPY = prevLeftCPY;
+        c.prevRightCPX = prevRightCPX;
+        c.prevRightCPY = prevRightCPY;
+
+        c.targetCPDragging = false;
+        c.centralCPDragging = false;
+        c.leftCPDragging = false;
+        c.rightCPDragging = false;
+
+        c.centralCPMoved = centralCPMoved;
+        c.targetCPMoved = targetCPMoved;
+
+        c.targetCPAngle = targetCPAngle;
+
+        c.controlPointsVisible = false;
+
+        c.activeInSimulationStrokeColor = activeInSimulationStrokeColor;
+        
+        return c;
         
     }
     

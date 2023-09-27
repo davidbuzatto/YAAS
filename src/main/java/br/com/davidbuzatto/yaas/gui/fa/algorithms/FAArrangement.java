@@ -30,11 +30,11 @@ import java.util.Set;
 import java.util.TreeMap;
 
 /**
- * Finite Automata arrengement algorithms.
+ * Finite Automata arrangement algorithms.
  * 
  * @author Prof. Dr. David Buzatto
  */
-public class FAArrengement {
+public class FAArrangement {
     
     /**
      * Reorganize Finite Automata horizontally.

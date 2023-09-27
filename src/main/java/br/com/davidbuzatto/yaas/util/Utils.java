@@ -38,10 +38,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -568,6 +571,24 @@ public class Utils {
             }
             
         }
+        
+    }
+    
+    /**
+     * Generates a random BigInteger based on a random UUID.
+     * 
+     * @return The random BigInteger.
+     */
+    public static BigInteger generateUUID() {
+        
+        UUID uuid = UUID.randomUUID();
+        
+        long hi = uuid.getMostSignificantBits();
+        long lo = uuid.getLeastSignificantBits();
+        byte[] bytes = ByteBuffer.allocate( 16 ).putLong( hi ).putLong( lo ).array();
+        //String numericUuid = big.toString().replace( '-', '1' ); // just in case
+        
+        return new BigInteger( bytes );
         
     }
     

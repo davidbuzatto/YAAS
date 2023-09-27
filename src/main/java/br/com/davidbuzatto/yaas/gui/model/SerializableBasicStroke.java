@@ -24,7 +24,7 @@ import java.io.Serializable;
  *
  * @author Prof. Dr. David Buzatto
  */
-public class SerializableBasicStroke implements Serializable {
+public class SerializableBasicStroke implements Serializable, Cloneable {
 
     private static final long serialVersionUID = 1L;
 
@@ -188,6 +188,27 @@ public class SerializableBasicStroke implements Serializable {
 
         return basicStroke;
 
+    }
+    
+    @Override
+    @SuppressWarnings( "unchecked" )
+    public Object clone() throws CloneNotSupportedException {
+        
+        SerializableBasicStroke c = (SerializableBasicStroke) super.clone();
+        
+        c.width = width;
+        c.cap = cap;
+        c.join = join;
+        c.miterLimit = miterLimit;
+        
+        if ( dash != null ) {
+            c.dash = dash.clone();
+        }
+        
+        c.dashPhase = dashPhase;
+        
+        return c;
+        
     }
 
 }
