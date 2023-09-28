@@ -499,6 +499,8 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddTransitionActionPerformed"/>
           </Events>
         </Component>
+        <Component class="javax.swing.JToolBar$Separator" name="sep02">
+        </Component>
         <Component class="javax.swing.JButton" name="btnAddAllMissingTransitionsDFA">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
@@ -512,8 +514,6 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddAllMissingTransitionsDFAActionPerformed"/>
           </Events>
-        </Component>
-        <Component class="javax.swing.JToolBar$Separator" name="sep02">
         </Component>
         <Component class="javax.swing.JButton" name="btnGenerateEquivalentDFA">
           <Properties>

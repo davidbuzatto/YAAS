@@ -21,8 +21,8 @@ import br.com.davidbuzatto.yaas.gui.ZoomFacility;
 import br.com.davidbuzatto.yaas.gui.fa.algorithms.FAArrangement;
 import br.com.davidbuzatto.yaas.gui.fa.algorithms.DFAComplement;
 import br.com.davidbuzatto.yaas.gui.fa.algorithms.FADeterminize;
-import br.com.davidbuzatto.yaas.gui.fa.algorithms.DFAMinimize;
 import br.com.davidbuzatto.yaas.gui.fa.algorithms.DFATotalTransitionFunction;
+import br.com.davidbuzatto.yaas.gui.fa.algorithms.FAAlgorithms;
 import br.com.davidbuzatto.yaas.gui.fa.algorithms.FAConcatenation;
 import br.com.davidbuzatto.yaas.gui.fa.algorithms.FAIntersection;
 import br.com.davidbuzatto.yaas.gui.fa.algorithms.FAKleeneStar;
@@ -275,8 +275,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnMove = new javax.swing.JToggleButton();
         btnAddState = new javax.swing.JToggleButton();
         btnAddTransition = new javax.swing.JToggleButton();
-        btnAddAllMissingTransitionsDFA = new javax.swing.JButton();
         sep02 = new javax.swing.JToolBar.Separator();
+        btnAddAllMissingTransitionsDFA = new javax.swing.JButton();
         btnGenerateEquivalentDFA = new javax.swing.JButton();
         btnGenerateMinimizedDFA = new javax.swing.JButton();
         btnRegularOperations = new javax.swing.JButton();
@@ -678,6 +678,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         toolBar.add(btnAddTransition);
+        toolBar.add(sep02);
 
         btnAddAllMissingTransitionsDFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pencil_go.png"))); // NOI18N
         btnAddAllMissingTransitionsDFA.setToolTipText("Add All Missing Transitions (Alt+Shift+T)");
@@ -690,7 +691,6 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         toolBar.add(btnAddAllMissingTransitionsDFA);
-        toolBar.add(sep02);
 
         btnGenerateEquivalentDFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dfa.png"))); // NOI18N
         btnGenerateEquivalentDFA.setToolTipText("Generate Equivalent DFA (Alt+Shift+D)");
@@ -1209,10 +1209,9 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
             } else if ( btnAddState.isSelected() ) {
 
-                FAState newState = new FAState();
+                FAState newState = new FAState( currentState++ );
                 newState.setX1( xPressed );
                 newState.setY1( yPressed );
-                newState.setLabel( "q" + currentState++ );
 
                 fa.addState( newState );
 
@@ -1673,22 +1672,34 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog( 
                     this, 
                     "You must define a Finite Automaton First!", 
-                    "ERROR", 
-                    JOptionPane.ERROR_MESSAGE );
+                    "Information", 
+                    JOptionPane.INFORMATION_MESSAGE );
             
         } else if ( fa.getType() == FAType.DFA ) {
             
             JOptionPane.showMessageDialog( 
                     this, 
                     "You already have a DFA!", 
-                    "ERROR", 
-                    JOptionPane.ERROR_MESSAGE );
+                    "Information", 
+                    JOptionPane.INFORMATION_MESSAGE );
             
         } else {
             
-            FA dfa = new FADeterminize( fa ).getGeneratedDFA();
-            FAArrangement.arrangeInCircle( dfa, 250, 200, 150 );
-            mainWindow.createFAInternalFrame( dfa, false, false );
+            try {
+                
+                FA dfa = new FADeterminize( fa ).getGeneratedDFA();
+                FAArrangement.arrangeInCircle( dfa, 250, 200, 150 );
+                mainWindow.createFAInternalFrame( dfa, false, false );
+                
+            } catch ( IllegalArgumentException exc ) {
+                
+                JOptionPane.showMessageDialog( 
+                        this, 
+                        exc.getMessage(), 
+                        "ERROR", 
+                        JOptionPane.ERROR_MESSAGE );
+                
+            }
             
         }
         
@@ -1700,7 +1711,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         if ( fa.getType() == FAType.DFA ) {
             
-            FA minDFA = new DFAMinimize( fa ).getGeneratedDFA();
+            FA minDFA = FAAlgorithms.generateMinimizedDFA( fa );
             
             if ( minDFA.equals( fa ) ) {
                 JOptionPane.showMessageDialog( 
@@ -1722,6 +1733,32 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                     JOptionPane.ERROR_MESSAGE );
             
         }
+        
+        /*try {
+            
+            fa.updateType();
+            FA minDFA = new DFAMinimize( fa ).getGeneratedDFA();
+            
+            if ( minDFA.equals( fa ) ) {
+                JOptionPane.showMessageDialog( 
+                    this, 
+                    "Your DFA is already mimimum!", 
+                    "Information", 
+                    JOptionPane.INFORMATION_MESSAGE );
+            } else {
+                FAArrangement.arrangeInCircle( minDFA, 250, 200, 150 );
+                mainWindow.createFAInternalFrame( minDFA, false, false );
+            }
+            
+        } catch ( IllegalArgumentException exc ) {
+            
+            JOptionPane.showMessageDialog( 
+                    this, 
+                    exc.getMessage(), 
+                    "ERROR", 
+                    JOptionPane.ERROR_MESSAGE );
+            
+        }*/
         
     }//GEN-LAST:event_btnGenerateMinimizedDFAActionPerformed
 

@@ -20,7 +20,6 @@ import br.com.davidbuzatto.yaas.gui.fa.FA;
 import br.com.davidbuzatto.yaas.gui.fa.FAState;
 import br.com.davidbuzatto.yaas.gui.fa.FATransition;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
-import java.util.List;
 
 /**
  * Performs the UNION operation between two Finite Automata generating a new
@@ -68,7 +67,7 @@ public class FAUnion {
             fa1Initial.setInitial( false );
             fa2Initial.setInitial( false );
             
-            FAState newInitial = new FAState( "ini", true, false );
+            FAState newInitial = new FAState( 0, true, false );
             
             fa1.merge( fa2 );
             fa1.addState( newInitial );
@@ -78,15 +77,7 @@ public class FAUnion {
             fa1.addTransition( new FATransition( 
                     newInitial, fa2Initial, CharacterConstants.EMPTY_STRING ) );
             
-            int currentState = 1;
-            for ( FAState s : fa1.getStates() ) {
-                if ( s.isInitial() ) {
-                    s.setLabel( "q0" );
-                } else {
-                    s.setLabel( "q" + currentState++ );
-                }
-            }
-            
+            FACommon.reenumerateStates( fa1 );
             FAArrangement.arrangeByLevel( fa1, 150, 150, distance, false );
             fa1.resetTransitionsTransformations();
             

@@ -30,9 +30,7 @@ import java.awt.Rectangle;
  */
 public class FAState extends AbstractGeometricForm implements Comparable<FAState>, Cloneable {
     
-    private static int addedOrderGenerator;
-    private int addedOrder;
-    
+    protected int number;
     protected String label;
     protected String customLabel;
     
@@ -50,25 +48,21 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
     private Color activeInSimulationFillColor;
     
     public FAState() {
-        this( "", null, false, false );
+        this( 0, null, false, false );
     }
     
-    public FAState( int labelNumber, boolean initial, boolean accepting ) {
-        this( "q" + labelNumber, null, initial, accepting );
+    public FAState( int number ) {
+        this( number, null, false, false );
     }
     
-    public FAState( String label, boolean initial, boolean accepting ) {
-        this( label, null, initial, accepting );
+    public FAState( int number, boolean initial, boolean accepting ) {
+        this( number, null, initial, accepting );
     }
     
-    public FAState( int labelNumber, String customLabel, boolean initial, boolean accepting ) {
-        this( "q" + labelNumber, customLabel, initial, accepting );
-    }
-    
-    public FAState( String label, String customLabel, boolean initial, boolean accepting ) {
+    public FAState( int number, String customLabel, boolean initial, boolean accepting ) {
         
-        this.addedOrder = addedOrderGenerator++;
-        this.label = label;
+        this.number = number;
+        this.label = "q" + number;
         this.customLabel = customLabel;
         this.initial = initial;
         this.accepting = accepting;
@@ -76,8 +70,6 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
         font = DrawingConstants.DEFAULT_FONT;
         stroke = DrawingConstants.STATE_STROKE;
         
-        /*fillColor = DrawingConstants.STATE_FILL_COLOR;
-        strokeColor = DrawingConstants.STATE_STROKE_COLOR;*/
         setStrokeColor( DrawingConstants.STATE_STROKE_COLOR );
         
         mouseHoverFillColor = DrawingConstants.STATE_MOUSE_HOVER_FILL_COLOR;
@@ -200,12 +192,17 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
                 diameter ).intersects( rectangle );
     }
 
-    public String getLabel() {
-        return label;
+    public int getNumber() {
+        return number;
     }
 
-    public void setLabel( String label ) {
-        this.label = label;
+    public void setNumber( int number ) {
+        this.number = number;
+        this.label = "q" + number;
+    }
+    
+    public String getLabel() {
+        return label;
     }
 
     public String getCustomLabel() {
@@ -297,18 +294,18 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
 
     @Override
     public int compareTo( FAState o ) {
-        return addedOrder - o.addedOrder;
+        return number - o.number;
     }
     
     public String generateCode( String modelName ) {
         
         String className = getClass().getSimpleName();
         
-        String def = String.format( "    %s %s = new %s( \"%s\", %s, %b, %b );", 
+        String def = String.format( "    %s %s = new %s( %d, %s, %b, %b );", 
                 className, 
                 label, 
                 className, 
-                label, 
+                number, 
                 customLabel == null ? null : String.format( "\"%s\"", customLabel ), 
                 initial, 
                 accepting );
@@ -325,8 +322,7 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
         
         FAState c = (FAState) super.clone();
         
-        c.addedOrder = addedOrder;
-    
+        c.number = number;
         c.label = label;
         c.customLabel = customLabel;
 

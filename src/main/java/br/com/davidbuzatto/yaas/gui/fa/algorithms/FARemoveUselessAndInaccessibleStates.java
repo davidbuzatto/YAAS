@@ -45,8 +45,8 @@ public class FARemoveUselessAndInaccessibleStates {
         
         try {
             
-            FACommon.validateInitialState( fa );
-            FACommon.validateAcceptingStates( fa );
+            /*FACommon.validateInitialState( fa );
+            FACommon.validateAcceptingStates( fa );*/
 
             fa = (FA) fa.clone();
             
@@ -91,15 +91,7 @@ public class FARemoveUselessAndInaccessibleStates {
                 
             }
             
-            int currentState = 1;
-            for ( FAState s : fa.getStates() ) {
-                if ( s.isInitial() ) {
-                    s.setLabel( "q0" );
-                } else {
-                    s.setLabel( "q" + currentState++ );
-                }
-            }
-            
+            FACommon.reenumerateStates( fa );
             fa.resetTransitionsTransformations();
             
             return fa;

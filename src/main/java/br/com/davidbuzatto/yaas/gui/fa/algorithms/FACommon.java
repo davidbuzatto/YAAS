@@ -357,4 +357,24 @@ public class FACommon {
         
     }
     
+    /**
+     * Set the states number in order. The initial state is the state with
+     * number 0. The other will reenumerate in appearance order inside the state
+     * list.
+     * 
+     * @param fa The Finite Automaon with the states to be processed.
+     */
+    public static void reenumerateStates( FA fa ) {
+        
+        int currentState = 1;
+        for ( FAState s : fa.getStates() ) {
+            if ( s.isInitial() ) {
+                s.setNumber( 0 );
+            } else {
+                s.setNumber( currentState++ );
+            }
+        }
+        
+    }
+    
 }

@@ -111,8 +111,7 @@ public class DFATotalTransitionFunction {
         
         if ( !allMissing.isEmpty() ) {
             
-            FAState nullState = new FAState();
-            nullState.setLabel( "q" + currentState );
+            FAState nullState = new FAState( dfa.getStates().size() );
             if ( useNullCustomLabel ) {
                 nullState.setCustomLabel( CharacterConstants.EMPTY_SET.toString() );
             }

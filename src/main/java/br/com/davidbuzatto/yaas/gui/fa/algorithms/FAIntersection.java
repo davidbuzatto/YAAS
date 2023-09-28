@@ -57,19 +57,11 @@ public class FAIntersection {
             
             fa1 = new FAUnion( fa1, fa2 ).getGeneratedFA();
             fa1 = new FADeterminize( fa1 ).getGeneratedDFA();
-            fa1 = new DFAMinimize( fa1 ).getGeneratedDFA();
             fa1 = new DFAComplement( fa1 ).getGeneratedDFA();
             fa1 = new FARemoveUselessAndInaccessibleStates( fa1 ).getGeneratedFA();
+            //fa1 = new DFAMinimize( fa1 ).getGeneratedDFA();
             
-            int currentState = 1;
-            for ( FAState s : fa1.getStates() ) {
-                if ( s.isInitial() ) {
-                    s.setLabel( "q0" );
-                } else {
-                    s.setLabel( "q" + currentState++ );
-                }
-            }
-            
+            FACommon.reenumerateStates( fa1 );
             FAArrangement.arrangeByLevel( fa1, 150, 150, distance, false );
             fa1.resetTransitionsTransformations();
             

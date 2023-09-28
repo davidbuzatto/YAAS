@@ -77,15 +77,7 @@ public class FAConcatenation {
                         s, fa2Initial, CharacterConstants.EMPTY_STRING ) );
             }
             
-            int currentState = 1;
-            for ( FAState s : fa1.getStates() ) {
-                if ( s.isInitial() ) {
-                    s.setLabel( "q0" );
-                } else {
-                    s.setLabel( "q" + currentState++ );
-                }
-            }
-            
+            FACommon.reenumerateStates( fa1 );
             FAArrangement.arrangeByLevel( fa1, 150, 150, distance, false );
             fa1.resetTransitionsTransformations();
             

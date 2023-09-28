@@ -70,9 +70,8 @@ public class FADeterminize {
         // start the process of generation
         
         // creates the new initial state
-        FAState dfaInitial = new FAState();
+        FAState dfaInitial = new FAState( currentState );
         dfaInitial.setInitial( true );
-        dfaInitial.setLabel( "q" + currentState );
         dfaInitial.setCustomLabel( newCustomLabel( currentState++ ) );
         StateHelper initialSH = new StateHelper( dfaInitial, ecloses.get( initialState ) );
         
@@ -111,8 +110,7 @@ public class FADeterminize {
                     
                     if ( !generatedStates.contains( newSH ) ) {
                         
-                        FAState newState = new FAState();
-                        newState.setLabel( "q" + currentState );
+                        FAState newState = new FAState( currentState );
                         newState.setCustomLabel( newCustomLabel( currentState++ ) );
                         newSH.state = newState;
                         generatedStates.add( newSH );

@@ -62,7 +62,7 @@ public class FAKleeneStar {
             fa.setInitialState( null );
             fa1Initial.setInitial( false );
             
-            FAState newInitial = new FAState( "ini", true, false );
+            FAState newInitial = new FAState( 0, true, false );
             
             fa.addState( newInitial );
             
@@ -74,15 +74,7 @@ public class FAKleeneStar {
                         s, newInitial, CharacterConstants.EMPTY_STRING ) );
             }
             
-            int currentState = 1;
-            for ( FAState s : fa.getStates() ) {
-                if ( s.isInitial() ) {
-                    s.setLabel( "q0" );
-                } else {
-                    s.setLabel( "q" + currentState++ );
-                }
-            }
-            
+            FACommon.reenumerateStates( fa );
             FAArrangement.arrangeByLevel( fa, 150, 150, distance, false );
             fa.resetTransitionsTransformations();
             

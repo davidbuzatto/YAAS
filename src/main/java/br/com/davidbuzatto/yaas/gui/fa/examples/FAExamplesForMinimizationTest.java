@@ -197,36 +197,37 @@ public class FAExamplesForMinimizationTest {
         return dfa;*/
         
         FA dfa = new FA();
-
-        FAState q0 = new FAState( "q0", "A", true, false );
+        int currentState = 0;
+        
+        FAState q0 = new FAState( currentState, "A", true, false );
         q0.setX1Y1( 100, 100 );
         dfa.addState( q0 );
 
-        FAState q1 = new FAState( "q1", "B", false, false );
+        FAState q1 = new FAState( currentState++, "B", false, false );
         q1.setX1Y1( 250, 100 );
         dfa.addState( q1 );
 
-        FAState q2 = new FAState( "q2", "C", false, false );
+        FAState q2 = new FAState( currentState++, "C", false, false );
         q2.setX1Y1( 400, 100 );
         dfa.addState( q2 );
 
-        FAState q3 = new FAState( "q3", "D", false, true );
+        FAState q3 = new FAState( currentState++, "D", false, true );
         q3.setX1Y1( 550, 100 );
         dfa.addState( q3 );
 
-        FAState q4 = new FAState( "q4", "E", false, false );
+        FAState q4 = new FAState( currentState++, "E", false, false );
         q4.setX1Y1( 100, 250 );
         dfa.addState( q4 );
 
-        FAState q5 = new FAState( "q5", "F", false, false );
+        FAState q5 = new FAState( currentState++, "F", false, false );
         q5.setX1Y1( 250, 250 );
         dfa.addState( q5 );
 
-        FAState q6 = new FAState( "q6", "G", false, false );
+        FAState q6 = new FAState( currentState++, "G", false, false );
         q6.setX1Y1( 400, 250 );
         dfa.addState( q6 );
 
-        FAState q7 = new FAState( "q7", "H", false, false );
+        FAState q7 = new FAState( currentState++, "H", false, false );
         q7.setX1Y1( 550, 250 );
         dfa.addState( q7 );
 
@@ -380,41 +381,42 @@ public class FAExamplesForMinimizationTest {
         return dfa;*/
 
         FA dfa = new FA();
+        int currentState = 0;
 
         // states
-        FAState q0 = new FAState( "q0", "A", true, false );
+        FAState q0 = new FAState( currentState++, "A", true, false );
         q0.setX1Y1( 101, 100 );
         dfa.addState( q0 );
 
-        FAState q1 = new FAState( "q1", "B", false, false );
+        FAState q1 = new FAState( currentState++, "B", false, false );
         q1.setX1Y1( 251, 100 );
         dfa.addState( q1 );
 
-        FAState q2 = new FAState( "q2", "C", false, true );
+        FAState q2 = new FAState( currentState++, "C", false, true );
         q2.setX1Y1( 401, 100 );
         dfa.addState( q2 );
 
-        FAState q3 = new FAState( "q3", "D", false, false );
+        FAState q3 = new FAState( currentState++, "D", false, false );
         q3.setX1Y1( 551, 100 );
         dfa.addState( q3 );
 
-        FAState q4 = new FAState( "q4", "E", false, false );
+        FAState q4 = new FAState( currentState++, "E", false, false );
         q4.setX1Y1( 101, 250 );
         dfa.addState( q4 );
 
-        FAState q5 = new FAState( "q5", "F", false, true );
+        FAState q5 = new FAState( currentState++, "F", false, true );
         q5.setX1Y1( 251, 250 );
         dfa.addState( q5 );
 
-        FAState q6 = new FAState( "q6", "G", false, false );
+        FAState q6 = new FAState( currentState++, "G", false, false );
         q6.setX1Y1( 401, 250 );
         dfa.addState( q6 );
 
-        FAState q7 = new FAState( "q7", "H", false, false );
+        FAState q7 = new FAState( currentState++, "H", false, false );
         q7.setX1Y1( 551, 250 );
         dfa.addState( q7 );
 
-        FAState q8 = new FAState( "q8", "I", false, true );
+        FAState q8 = new FAState( currentState++, "I", false, true );
         q8.setX1Y1( 101, 400 );
         dfa.addState( q8 );
 
@@ -537,29 +539,30 @@ public class FAExamplesForMinimizationTest {
         return nfa;*/
 
         FA dfa = new FA();
+        int currentState = 0;
 
         // states
-        FAState q0 = new FAState( "q0", "A", true, false );
+        FAState q0 = new FAState( currentState++, "A", true, false );
         q0.setX1Y1( 75, 150 );
         dfa.addState( q0 );
 
-        FAState q1 = new FAState( "q1", "B", false, false );
+        FAState q1 = new FAState( currentState++, "B", false, false );
         q1.setX1Y1( 175, 150 );
         dfa.addState( q1 );
 
-        FAState q2 = new FAState( "q2", "C", false, false );
+        FAState q2 = new FAState( currentState++, "C", false, false );
         q2.setX1Y1( 275, 50 );
         dfa.addState( q2 );
 
-        FAState q3 = new FAState( "q3", "D", false, false );
+        FAState q3 = new FAState( currentState++, "D", false, false );
         q3.setX1Y1( 275, 250 );
         dfa.addState( q3 );
 
-        FAState q4 = new FAState( "q4", "E", false, true );
+        FAState q4 = new FAState( currentState++, "E", false, true );
         q4.setX1Y1( 375, 150 );
         dfa.addState( q4 );
 
-        FAState q5 = new FAState( "q5", "F", false, true );
+        FAState q5 = new FAState( currentState++, "F", false, true );
         q5.setX1Y1( 525, 150 );
         dfa.addState( q5 );
 
@@ -653,33 +656,34 @@ public class FAExamplesForMinimizationTest {
         return enfa;*/
         
         FA dfa = new FA();
+        int currentState = 0;
 
         // states
-        FAState q0 = new FAState( "q0", "A", true, true );
+        FAState q0 = new FAState( currentState++, "A", true, true );
         q0.setX1Y1( 100, 175 );
         dfa.addState( q0 );
 
-        FAState q1 = new FAState( "q1", "B", false, true );
+        FAState q1 = new FAState( currentState++, "B", false, true );
         q1.setX1Y1( 250, 100 );
         dfa.addState( q1 );
 
-        FAState q2 = new FAState( "q2", "C", false, true );
+        FAState q2 = new FAState( currentState++, "C", false, true );
         q2.setX1Y1( 250, 250 );
         dfa.addState( q2 );
 
-        FAState q3 = new FAState( "q3", "D", false, true );
+        FAState q3 = new FAState( currentState++, "D", false, true );
         q3.setX1Y1( 400, 100 );
         dfa.addState( q3 );
 
-        FAState q4 = new FAState( "q4", "E", false, true );
+        FAState q4 = new FAState( currentState++, "E", false, true );
         q4.setX1Y1( 400, 250 );
         dfa.addState( q4 );
 
-        FAState q5 = new FAState( "q5", "F", false, true );
+        FAState q5 = new FAState( currentState++, "F", false, true );
         q5.setX1Y1( 550, 100 );
         dfa.addState( q5 );
 
-        FAState q6 = new FAState( "q6", "G", false, true );
+        FAState q6 = new FAState( currentState++, "G", false, true );
         q6.setX1Y1( 550, 250 );
         dfa.addState( q6 );
 
@@ -844,29 +848,30 @@ public class FAExamplesForMinimizationTest {
     public static FA createDFAForMinimizationTest09() {
         
         FA dfa = new FA();
+        int currentState = 0;
 
         // states
-        FAState q0 = new FAState( "q0", "A", true, false );
+        FAState q0 = new FAState( currentState++, "A", true, false );
         q0.setX1Y1( 100, 250 );
         dfa.addState( q0 );
 
-        FAState q1 = new FAState( "q1", "B", false, false );
+        FAState q1 = new FAState( currentState++, "B", false, false );
         q1.setX1Y1( 100, 100 );
         dfa.addState( q1 );
 
-        FAState q2 = new FAState( "q2", "C", false, true );
+        FAState q2 = new FAState( currentState++, "C", false, true );
         q2.setX1Y1( 250, 250 );
         dfa.addState( q2 );
 
-        FAState q3 = new FAState( "q3", "D", false, true );
+        FAState q3 = new FAState( currentState++, "D", false, true );
         q3.setX1Y1( 250, 100 );
         dfa.addState( q3 );
 
-        FAState q4 = new FAState( "q4", "E", false, true );
+        FAState q4 = new FAState( currentState++, "E", false, true );
         q4.setX1Y1( 400, 250 );
         dfa.addState( q4 );
 
-        FAState q5 = new FAState( "q5", "F", false, false );
+        FAState q5 = new FAState( currentState++, "F", false, false );
         q5.setX1Y1( 400, 100 );
         dfa.addState( q5 );
 
