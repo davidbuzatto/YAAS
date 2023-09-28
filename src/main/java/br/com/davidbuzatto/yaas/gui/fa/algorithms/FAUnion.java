@@ -62,8 +62,6 @@ public class FAUnion {
             
             FAState fa1Initial = fa1.getInitialState();
             FAState fa2Initial = fa2.getInitialState();
-            List<FAState> fa1Accepting = fa1.getAcceptingStates();
-            List<FAState> fa2Accepting = fa2.getAcceptingStates();
             
             fa1.setInitialState( null );
             fa2.setInitialState( null );

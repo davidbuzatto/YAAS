@@ -1,9 +1,11 @@
 Regular operations in FA -> organize in one menu like the rearrange algorithms
     Union - OK
-    Concatenation
-    Kleene Star
+    Concatenation - OK
+    Kleene Star - OK
     Complement - OK
-    Intersection
+    Intersection - OK, but buggy
+
+Rework state natural order (use label?)
 
 Highlight inacessible states
 Highlight nondeterminisms

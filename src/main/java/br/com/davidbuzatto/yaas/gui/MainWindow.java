@@ -55,7 +55,7 @@ public class MainWindow extends javax.swing.JFrame {
             menuMinimizationTest.setVisible( false );
             setExtendedState( MAXIMIZED_BOTH );
         } else {
-            createFAInternalFrame(FAExamplesForMinimizationTest.createDFAForMinimizationTest05(), true, true );
+            createFAInternalFrame( FAExamples.createDFAEndsWith00(), true, true );
         }
         
     }

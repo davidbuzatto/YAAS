@@ -23,8 +23,10 @@ import br.com.davidbuzatto.yaas.gui.fa.algorithms.DFAComplement;
 import br.com.davidbuzatto.yaas.gui.fa.algorithms.FADeterminize;
 import br.com.davidbuzatto.yaas.gui.fa.algorithms.DFAMinimize;
 import br.com.davidbuzatto.yaas.gui.fa.algorithms.DFATotalTransitionFunction;
+import br.com.davidbuzatto.yaas.gui.fa.algorithms.FAConcatenation;
+import br.com.davidbuzatto.yaas.gui.fa.algorithms.FAIntersection;
+import br.com.davidbuzatto.yaas.gui.fa.algorithms.FAKleeneStar;
 import br.com.davidbuzatto.yaas.gui.fa.algorithms.FAUnion;
-import br.com.davidbuzatto.yaas.gui.fa.examples.FAExamples;
 import br.com.davidbuzatto.yaas.gui.fa.properties.FAPropertiesPanel;
 import br.com.davidbuzatto.yaas.gui.fa.properties.FAStatePropertiesPanel;
 import br.com.davidbuzatto.yaas.gui.fa.properties.FATransitionPropertiesPanel;
@@ -232,6 +234,12 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         btnGroup = new javax.swing.ButtonGroup();
+        popupMenuRegularOperations = new javax.swing.JPopupMenu();
+        popItemUnion = new javax.swing.JMenuItem();
+        popItemConcatenation = new javax.swing.JMenuItem();
+        popItemKleeneStar = new javax.swing.JMenuItem();
+        popItemComplement = new javax.swing.JMenuItem();
+        popItemIntersection = new javax.swing.JMenuItem();
         popupMenuReorganizeStates = new javax.swing.JPopupMenu();
         popItemHorizontal = new javax.swing.JMenuItem();
         popItemVertical = new javax.swing.JMenuItem();
@@ -271,8 +279,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         sep02 = new javax.swing.JToolBar.Separator();
         btnGenerateEquivalentDFA = new javax.swing.JButton();
         btnGenerateMinimizedDFA = new javax.swing.JButton();
-        btnGenerateComplementDFA = new javax.swing.JButton();
-        btnTestRegOp = new javax.swing.JButton();
+        btnRegularOperations = new javax.swing.JButton();
         hFiller = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         btnShowTransitionControls = new javax.swing.JToggleButton();
         sep03 = new javax.swing.JToolBar.Separator();
@@ -303,6 +310,51 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         scrollPaneModel = new javax.swing.JScrollPane();
         drawPanel = new br.com.davidbuzatto.yaas.gui.DrawPanel();
         panelProperties = new javax.swing.JPanel();
+
+        popItemUnion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/union.png"))); // NOI18N
+        popItemUnion.setText("Union");
+        popItemUnion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popItemUnionActionPerformed(evt);
+            }
+        });
+        popupMenuRegularOperations.add(popItemUnion);
+
+        popItemConcatenation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/concatenation.png"))); // NOI18N
+        popItemConcatenation.setText("Concatenation");
+        popItemConcatenation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popItemConcatenationActionPerformed(evt);
+            }
+        });
+        popupMenuRegularOperations.add(popItemConcatenation);
+
+        popItemKleeneStar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/kleeneStar.png"))); // NOI18N
+        popItemKleeneStar.setText("Kleene Star");
+        popItemKleeneStar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popItemKleeneStarActionPerformed(evt);
+            }
+        });
+        popupMenuRegularOperations.add(popItemKleeneStar);
+
+        popItemComplement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/complement.png"))); // NOI18N
+        popItemComplement.setText("Complement");
+        popItemComplement.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popItemComplementActionPerformed(evt);
+            }
+        });
+        popupMenuRegularOperations.add(popItemComplement);
+
+        popItemIntersection.setIcon(new javax.swing.ImageIcon(getClass().getResource("/intersection.png"))); // NOI18N
+        popItemIntersection.setText("Intersection");
+        popItemIntersection.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popItemIntersectionActionPerformed(evt);
+            }
+        });
+        popupMenuRegularOperations.add(popItemIntersection);
 
         popItemHorizontal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rearrangeHorizontal.png"))); // NOI18N
         popItemHorizontal.setText("Horizontal");
@@ -664,28 +716,17 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         });
         toolBar.add(btnGenerateMinimizedDFA);
 
-        btnGenerateComplementDFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/shape_flip_horizontal.png"))); // NOI18N
-        btnGenerateComplementDFA.setToolTipText("Generate Complement DFA (Alt+Shift+C)");
-        btnGenerateComplementDFA.setFocusable(false);
-        btnGenerateComplementDFA.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnGenerateComplementDFA.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnGenerateComplementDFA.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGenerateComplementDFAActionPerformed(evt);
+        btnRegularOperations.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lightning.png"))); // NOI18N
+        btnRegularOperations.setToolTipText("Regular Operations");
+        btnRegularOperations.setFocusable(false);
+        btnRegularOperations.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnRegularOperations.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnRegularOperations.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                btnRegularOperationsMouseReleased(evt);
             }
         });
-        toolBar.add(btnGenerateComplementDFA);
-
-        btnTestRegOp.setText("Test");
-        btnTestRegOp.setFocusable(false);
-        btnTestRegOp.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnTestRegOp.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnTestRegOp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTestRegOpActionPerformed(evt);
-            }
-        });
-        toolBar.add(btnTestRegOp);
+        toolBar.add(btnRegularOperations);
         toolBar.add(hFiller);
 
         btnShowTransitionControls.setIcon(new javax.swing.ImageIcon(getClass().getResource("/shape_square_edit.png"))); // NOI18N
@@ -1684,27 +1725,6 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_btnGenerateMinimizedDFAActionPerformed
 
-    private void btnGenerateComplementDFAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateComplementDFAActionPerformed
-        
-        fa.updateType();
-        
-        if ( fa.getType() == FAType.DFA ) {
-            
-            FA complementedDFA = new DFAComplement( fa ).getGeneratedDFA();
-            mainWindow.createFAInternalFrame( complementedDFA, false, false );
-            
-        } else {
-            
-            JOptionPane.showMessageDialog( 
-                    this, 
-                    "To perform this you must have a DFA!", 
-                    "ERROR", 
-                    JOptionPane.ERROR_MESSAGE );
-            
-        }
-        
-    }//GEN-LAST:event_btnGenerateComplementDFAActionPerformed
-
     private void txtTestStringActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTestStringActionPerformed
         runSingleTest();
     }//GEN-LAST:event_txtTestStringActionPerformed
@@ -2380,13 +2400,14 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_btnCloneActionPerformed
 
-    private void btnTestRegOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTestRegOpActionPerformed
+    private void popItemUnionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemUnionActionPerformed
         
         try {
-            FA fa1 = FAExamples.createDFAEndsWith00();
-            FA fa2 = FAExamples.createDFA0Even1Odd();
-            FA faUnion = new FAUnion( fa1, fa2 ).getGeneratedFA();
-            mainWindow.createFAInternalFrame( faUnion, false, false );
+            FA fa2 = loadFA( "Choose the second Finite Automaton to perform Union" );
+            if ( fa2 != null ) {
+                FA faUnion = new FAUnion( fa, fa2 ).getGeneratedFA();
+                mainWindow.createFAInternalFrame( faUnion, false, false );
+            }
         } catch ( IllegalArgumentException exc ) {
             JOptionPane.showMessageDialog( this,
                     exc.getMessage(),
@@ -2394,54 +2415,73 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                     JOptionPane.ERROR_MESSAGE );
         }
         
-        /*try {
-            FA fa1 = FAExamples.createDFAEndsWith00();
-            //FA fa2 = FAExamples.createDFAEndsWith00();
-            FA fa2 = FAExamples.createDFA0Even1Odd();
-            FA faConcatenation = new FAConcatenation( fa1, fa2 ).getGeneratedFA();
-            mainWindow.createFAInternalFrame( faConcatenation, false, false );
+    }//GEN-LAST:event_popItemUnionActionPerformed
+
+    private void popItemConcatenationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemConcatenationActionPerformed
+        
+        try {
+            FA fa2 = loadFA( "Choose the second Finite Automaton to perform Concatenation" );
+            if ( fa2 != null ) {
+                FA faConcatenation = new FAConcatenation( fa, fa2 ).getGeneratedFA();
+                mainWindow.createFAInternalFrame( faConcatenation, false, false );
+            }
         } catch ( IllegalArgumentException exc ) {
             JOptionPane.showMessageDialog( this,
                     exc.getMessage(),
                     "ERROR",
                     JOptionPane.ERROR_MESSAGE );
-        }*/
+        }
         
-        /*try {
-            //FA fa = FAExamples.createDFAEndsWith00();
-            FA fa = FAExamples.createDFA0Even1Odd();
-            FA faKleeneStar = new FAKleeneStar( fa ).getGeneratedFA();
-            mainWindow.createFAInternalFrame( faKleeneStar, false, false );
+    }//GEN-LAST:event_popItemConcatenationActionPerformed
+
+    private void popItemKleeneStarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemKleeneStarActionPerformed
+        
+        try {
+            FA faStar = new FAKleeneStar( fa ).getGeneratedFA();
+            mainWindow.createFAInternalFrame( faStar, false, false );
         } catch ( IllegalArgumentException exc ) {
             JOptionPane.showMessageDialog( this,
                     exc.getMessage(),
                     "ERROR",
                     JOptionPane.ERROR_MESSAGE );
-        }*/
+        }
         
-        /*try {
-            FA fa1 = FAExamples.createDFAEndsWith00();
-            FA fa2 = FAExamples.createDFA0Even1Odd();
-            FA faIntersection = new FAIntersection( fa1, fa2 ).getGeneratedFA();
-            mainWindow.createFAInternalFrame( faIntersection, false, false );
+    }//GEN-LAST:event_popItemKleeneStarActionPerformed
+
+    private void popItemComplementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemComplementActionPerformed
+        
+        try {
+            FA complementedDFA = new DFAComplement( fa ).getGeneratedDFA();
+            mainWindow.createFAInternalFrame( complementedDFA, false, false );
         } catch ( IllegalArgumentException exc ) {
             JOptionPane.showMessageDialog( this,
                     exc.getMessage(),
                     "ERROR",
                     JOptionPane.ERROR_MESSAGE );
-        }*/
+        }
         
-        /*try {
-            FA faCleaned = new FARemoveUselessAndInaccessibleStates( fa ).getGeneratedFA();
-            mainWindow.createFAInternalFrame( faCleaned, false, false );
+    }//GEN-LAST:event_popItemComplementActionPerformed
+
+    private void popItemIntersectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemIntersectionActionPerformed
+        
+        try {
+            FA fa2 = loadFA( "Choose the second Finite Automaton to perform Intersection" );
+            if ( fa2 != null ) {
+                FA faIntersection = new FAIntersection( fa, fa2 ).getGeneratedFA();
+                mainWindow.createFAInternalFrame( faIntersection, false, false );
+            }
         } catch ( IllegalArgumentException exc ) {
             JOptionPane.showMessageDialog( this,
                     exc.getMessage(),
                     "ERROR",
                     JOptionPane.ERROR_MESSAGE );
-        }*/
+        }
         
-    }//GEN-LAST:event_btnTestRegOpActionPerformed
+    }//GEN-LAST:event_popItemIntersectionActionPerformed
+
+    private void btnRegularOperationsMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegularOperationsMouseReleased
+        popupMenuRegularOperations.show( evt.getComponent(), 0, 0 );
+    }//GEN-LAST:event_btnRegularOperationsMouseReleased
 
     public void repaintDrawPanel() {
         drawPanel.repaint();
@@ -2599,7 +2639,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         btnGenerateEquivalentDFA.setEnabled( false );
         btnGenerateMinimizedDFA.setEnabled( false );
-        btnGenerateComplementDFA.setEnabled( false );
+        btnRegularOperations.setEnabled( false );
         
         btnTest.setEnabled( false );
         btnReset.setEnabled( false );
@@ -2626,7 +2666,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         btnGenerateEquivalentDFA.setEnabled( true );
         btnGenerateMinimizedDFA.setEnabled( true );
-        btnGenerateComplementDFA.setEnabled( true );
+        btnRegularOperations.setEnabled( true );
         
         btnTest.setEnabled( true );
         btnReset.setEnabled( true );
@@ -2815,6 +2855,48 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
     }
     
+    private FA loadFA( String title ) {
+        
+        JFileChooser jfc = new JFileChooser( new File( ApplicationPreferences.getPref( ApplicationPreferences.PREF_DEFAULT_FOLDER_PATH ) ) );
+        jfc.setDialogTitle( title );
+        jfc.setMultiSelectionEnabled( false );
+        jfc.setFileSelectionMode( JFileChooser.FILES_ONLY );
+        jfc.removeChoosableFileFilter( jfc.getFileFilter() );
+        jfc.setFileFilter( new FileNameExtensionFilter( "YAAS Finite Automaton", "yfa" ) );
+        
+        if ( jfc.showSaveDialog( mainWindow ) == JFileChooser.APPROVE_OPTION ) {
+
+            File f = jfc.getSelectedFile();
+
+            if ( f.exists() ) {
+                
+                ApplicationPreferences.setPref( 
+                        ApplicationPreferences.PREF_DEFAULT_FOLDER_PATH, 
+                        f.getParentFile().getAbsolutePath() );
+                
+                try ( FileInputStream fis = new FileInputStream( f );
+                      ObjectInputStream ois = new ObjectInputStream( fis ) ) {
+                    
+                    FA fa = (FA) ois.readObject();
+                    fa = (FA) fa.clone();
+                    fa.deactivateAllStatesInSimulation();
+                    fa.deselectAll();
+                    fa.setTransitionsControlPointsVisible( false );
+                    
+                    return fa;
+                    
+                } catch ( IOException | ClassNotFoundException | CloneNotSupportedException exc ) {
+                    Utils.showException( exc );
+                }
+                
+            }
+            
+        }
+        
+        return null;
+        
+    }
+    
     private void registerActions() {
         
         InputMap im = drawPanel.getInputMap();
@@ -2913,14 +2995,6 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             @Override
             public void actionPerformed( ActionEvent e ) {
                 btnAddAllMissingTransitionsDFA.doClick();
-            }
-        });
-        
-        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_C, KeyEvent.ALT_DOWN_MASK + KeyEvent.SHIFT_DOWN_MASK ), "complementDFA" );
-        am.put( "complementDFA", new AbstractAction() {
-            @Override
-            public void actionPerformed( ActionEvent e ) {
-                btnGenerateComplementDFA.doClick();
             }
         });
         
@@ -3043,7 +3117,6 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnClone;
     private javax.swing.JButton btnCodeGen;
     private javax.swing.JButton btnFirstStep;
-    private javax.swing.JButton btnGenerateComplementDFA;
     private javax.swing.JButton btnGenerateEquivalentDFA;
     private javax.swing.JButton btnGenerateMinimizedDFA;
     private javax.swing.ButtonGroup btnGroup;
@@ -3054,6 +3127,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnOpen;
     private javax.swing.JButton btnPreviousStep;
     private javax.swing.JButton btnRearrangeStates;
+    private javax.swing.JButton btnRegularOperations;
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSaveAs;
@@ -3065,7 +3139,6 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnStart;
     private javax.swing.JButton btnStop;
     private javax.swing.JButton btnTest;
-    private javax.swing.JButton btnTestRegOp;
     private javax.swing.JButton btnZoomIn;
     private javax.swing.JButton btnZoomOut;
     private javax.swing.JCheckBoxMenuItem checkAcceptingState;
@@ -3079,8 +3152,12 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JPanel panelTestsAndSimulation;
     private javax.swing.JMenuItem popItemByLevel;
     private javax.swing.JMenuItem popItemCircular;
+    private javax.swing.JMenuItem popItemComplement;
+    private javax.swing.JMenuItem popItemConcatenation;
     private javax.swing.JMenuItem popItemDiagonal;
     private javax.swing.JMenuItem popItemHorizontal;
+    private javax.swing.JMenuItem popItemIntersection;
+    private javax.swing.JMenuItem popItemKleeneStar;
     private javax.swing.JMenuItem popItemRectangular;
     private javax.swing.JMenuItem popItemRemoveState;
     private javax.swing.JMenuItem popItemRemoveTransition;
@@ -3089,7 +3166,9 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JMenuItem popItemStateCustomLabel;
     private javax.swing.JMenuItem popItemTransitionColor;
     private javax.swing.JMenuItem popItemTransitionSymbols;
+    private javax.swing.JMenuItem popItemUnion;
     private javax.swing.JMenuItem popItemVertical;
+    private javax.swing.JPopupMenu popupMenuRegularOperations;
     private javax.swing.JPopupMenu popupMenuReorganizeStates;
     private javax.swing.JPopupMenu popupMenuStateProperties;
     private javax.swing.JPopupMenu popupMenuTransitionProperties;
