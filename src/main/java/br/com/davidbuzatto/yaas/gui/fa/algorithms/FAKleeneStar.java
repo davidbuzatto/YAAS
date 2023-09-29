@@ -46,8 +46,6 @@ public class FAKleeneStar {
         
         try {
             
-            int distance = 150;
-            
             FACommon.validateInitialState( fa );
             FACommon.validateAcceptingStates( fa );
 
@@ -75,7 +73,6 @@ public class FAKleeneStar {
             }
             
             FACommon.reenumerateStates( fa );
-            FAArrangement.arrangeByLevel( fa, 150, 150, distance, false );
             fa.resetTransitionsTransformations();
             
             return fa;

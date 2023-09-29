@@ -16,6 +16,8 @@
  */
 package br.com.davidbuzatto.yaas.gui.fa.algorithms;
 
+import br.com.davidbuzatto.yaas.util.Utils;
+
 /**
  * Constants for Finite Automata algorithms.
  * 
@@ -24,6 +26,7 @@ package br.com.davidbuzatto.yaas.gui.fa.algorithms;
 public class FAAlgorithmsConstants {
     
     // debug flag for testing algorithms
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = Boolean.parseBoolean( 
+            Utils.getMavenModel().getProperties().getProperty( "debugAlgorithms" ) );
     
 }

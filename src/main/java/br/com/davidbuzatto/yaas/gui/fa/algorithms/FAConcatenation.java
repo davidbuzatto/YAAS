@@ -46,8 +46,6 @@ public class FAConcatenation {
         
         try {
             
-            int distance = 150;
-            
             FACommon.validateInitialState( fa1, fa2 );
             FACommon.validateAcceptingStates( fa1, fa2 );
 
@@ -78,7 +76,6 @@ public class FAConcatenation {
             }
             
             FACommon.reenumerateStates( fa1 );
-            FAArrangement.arrangeByLevel( fa1, 150, 150, distance, false );
             fa1.resetTransitionsTransformations();
             
             return fa1;

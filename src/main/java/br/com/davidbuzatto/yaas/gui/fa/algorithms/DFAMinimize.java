@@ -19,11 +19,9 @@ package br.com.davidbuzatto.yaas.gui.fa.algorithms;
 import br.com.davidbuzatto.yaas.gui.fa.FA;
 import static br.com.davidbuzatto.yaas.gui.fa.algorithms.FACommon.haveSameDeltaWithOneSymbol;
 import static br.com.davidbuzatto.yaas.gui.fa.algorithms.FACommon.isDistinguishable;
-import static br.com.davidbuzatto.yaas.gui.fa.algorithms.FACommon.isInaccessible;
 import br.com.davidbuzatto.yaas.gui.fa.FAState;
 import br.com.davidbuzatto.yaas.gui.fa.FATransition;
 import static br.com.davidbuzatto.yaas.gui.fa.algorithms.FAAlgorithmsConstants.DEBUG;
-import static br.com.davidbuzatto.yaas.gui.fa.algorithms.FACommon.isUseless;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -43,8 +41,10 @@ public class DFAMinimize {
     
     private final FA generatedDFA;
     
-    public DFAMinimize( FA fa ) throws IllegalArgumentException {
-        generatedDFA = processIt( fa );
+    public DFAMinimize( FA fa, 
+            boolean removeUselessAndInaccessibleStates ) 
+            throws IllegalArgumentException {
+        generatedDFA = processIt( fa, removeUselessAndInaccessibleStates );
     }
 
     public FA getGeneratedDFA() {
@@ -59,54 +59,42 @@ public class DFAMinimize {
      * @return An equivalent DFA, but minimized. If the processed DFA is already
      * mimimum, it will be returned instead of a new DFA.
      */
-    private static FA processIt( FA dfa ) throws IllegalArgumentException {
+    private static FA processIt( FA dfa, boolean removeUselessAndInaccessibleStates ) throws IllegalArgumentException {
         
         FACommon.validateDFA( dfa );
         FACommon.validateInitialState( dfa );
         FACommon.validateAcceptingStates( dfa );
         
-        FA minDfa = new FA();
-        Map<FAState, Map<Character, List<FAState>>> delta = dfa.getDelta();
-        
-        // pre-processing step(s)
+        // pre-processing step
         // removing inaccessible states
-        if ( DEBUG ) {
-            System.out.println( "Pre-processing - removing useless and inaccessible states:" );
-        }
-        List<FAState> states = new ArrayList<>( dfa.getStates() );
-        List<FAState> uselessStates = new ArrayList<>();
-        List<FAState> inaccessibleStates = new ArrayList<>();
-        while ( true ) {
-            int statesQuantity = states.size();
-            for ( FAState s : states ) {
-                if ( isUseless( s, dfa ) ) {
-                    uselessStates.add( s );
-                    if ( DEBUG ) {
-                        System.out.println( "    Useless state: " + s );
-                    }
-                }
-                if ( isInaccessible( s, dfa ) ) {
-                    inaccessibleStates.add( s );
-                    if ( DEBUG ) {
-                        System.out.println( "    Inacessible state: " + s );
-                    }
+        if ( removeUselessAndInaccessibleStates ) {
+            
+            if ( DEBUG ) {
+                System.out.println( "Pre-processing - removing inaccessible and useless states:" );
+            }
+            
+            FA originalDFA = dfa;
+            int originalStateQuantity = originalDFA.getStates().size();
+            
+            dfa = new FARemoveInaccessibleAndUselessStates( dfa, true ).getGeneratedFA();
+            
+            // no states removed
+            if ( dfa.getStates().size() == originalStateQuantity ) {
+                dfa = originalDFA;
+            }
+            
+            if ( DEBUG ) {
+                System.out.println( "    Remaining states:" );
+                for ( FAState s : dfa.getStates() ) {
+                    System.out.println( "        " + s );
                 }
             }
-            states.removeAll( uselessStates );
-            states.removeAll( inaccessibleStates );
-            uselessStates.clear();
-            inaccessibleStates.clear();
-            if ( statesQuantity == states.size() ) {
-                break;
-            }
+        
         }
         
-        if ( DEBUG ) {
-            System.out.println( "    Remaining states:" );
-            for ( FAState s : states ) {
-                System.out.println( "        " + s );
-            }
-        }
+        FA minDfa = new FA();
+        List<FAState> states = new ArrayList<>( dfa.getStates() );
+        Map<FAState, Map<Character, List<FAState>>> delta = dfa.getDelta();
         
         /* Myhill-Nerode Theorem:
          *

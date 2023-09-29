@@ -1,14 +1,5 @@
-Regular operations in FA -> organize in one menu like the rearrange algorithms
-    Union - OK
-    Concatenation - OK
-    Kleene Star - OK
-    Complement - OK
-    Intersection - OK, but buggy
-
-Rework state natural order (use label?)
-
-Highlight inacessible states
-Highlight nondeterminisms
+Highlight inacessible states (properties panel)
+Highlight nondeterminisms    (properties panel)
 
 Regular Expressions
 

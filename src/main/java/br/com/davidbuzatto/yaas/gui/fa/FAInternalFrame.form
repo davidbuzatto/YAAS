@@ -504,7 +504,7 @@
         <Component class="javax.swing.JButton" name="btnAddAllMissingTransitionsDFA">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/pencil_go.png"/>
+              <Image iconType="3" name="/transitionAddAll.png"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Add All Missing Transitions (Alt+Shift+T)"/>
             <Property name="focusable" type="boolean" value="false"/>
@@ -514,6 +514,22 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddAllMissingTransitionsDFAActionPerformed"/>
           </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="btnRemoveInaccessibleAndUselessStates">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/stateRemoveUI.png"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Remove Inaccessible and Useless States (Alt+Shift+DELETE)"/>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="horizontalTextPosition" type="int" value="0"/>
+            <Property name="verticalTextPosition" type="int" value="3"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRemoveInaccessibleAndUselessStatesActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JToolBar$Separator" name="sep03">
         </Component>
         <Component class="javax.swing.JButton" name="btnGenerateEquivalentDFA">
           <Properties>
@@ -581,7 +597,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnShowTransitionControlsActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JToolBar$Separator" name="sep03">
+        <Component class="javax.swing.JToolBar$Separator" name="sep04">
         </Component>
         <Component class="javax.swing.JToggleButton" name="btnShowGrid">
           <Properties>
@@ -608,7 +624,7 @@
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JToolBar$Separator" name="sep04">
+        <Component class="javax.swing.JToolBar$Separator" name="sep05">
         </Component>
         <Component class="javax.swing.JButton" name="btnRearrangeStates">
           <Properties>
@@ -624,7 +640,7 @@
             <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnRearrangeStatesMouseReleased"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JToolBar$Separator" name="sep05">
+        <Component class="javax.swing.JToolBar$Separator" name="sep06">
         </Component>
         <Component class="javax.swing.JButton" name="btnZoomIn">
           <Properties>

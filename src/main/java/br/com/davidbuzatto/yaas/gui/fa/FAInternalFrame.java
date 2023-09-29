@@ -20,12 +20,13 @@ import br.com.davidbuzatto.yaas.gui.MainWindow;
 import br.com.davidbuzatto.yaas.gui.ZoomFacility;
 import br.com.davidbuzatto.yaas.gui.fa.algorithms.FAArrangement;
 import br.com.davidbuzatto.yaas.gui.fa.algorithms.DFAComplement;
+import br.com.davidbuzatto.yaas.gui.fa.algorithms.DFAMinimize;
 import br.com.davidbuzatto.yaas.gui.fa.algorithms.FADeterminize;
 import br.com.davidbuzatto.yaas.gui.fa.algorithms.DFATotalTransitionFunction;
-import br.com.davidbuzatto.yaas.gui.fa.algorithms.FAAlgorithms;
 import br.com.davidbuzatto.yaas.gui.fa.algorithms.FAConcatenation;
 import br.com.davidbuzatto.yaas.gui.fa.algorithms.FAIntersection;
 import br.com.davidbuzatto.yaas.gui.fa.algorithms.FAKleeneStar;
+import br.com.davidbuzatto.yaas.gui.fa.algorithms.FARemoveInaccessibleAndUselessStates;
 import br.com.davidbuzatto.yaas.gui.fa.algorithms.FAUnion;
 import br.com.davidbuzatto.yaas.gui.fa.properties.FAPropertiesPanel;
 import br.com.davidbuzatto.yaas.gui.fa.properties.FAStatePropertiesPanel;
@@ -209,7 +210,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         });
         
         if ( ApplicationConstants.IN_PRODUCTION ) {
-            sep05.setVisible( false );
+            sep06.setVisible( false );
             btnZoomIn.setVisible( false );
             btnZoomOut.setVisible( false );
             btnCodeGen.setVisible( false );
@@ -277,17 +278,19 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnAddTransition = new javax.swing.JToggleButton();
         sep02 = new javax.swing.JToolBar.Separator();
         btnAddAllMissingTransitionsDFA = new javax.swing.JButton();
+        btnRemoveInaccessibleAndUselessStates = new javax.swing.JButton();
+        sep03 = new javax.swing.JToolBar.Separator();
         btnGenerateEquivalentDFA = new javax.swing.JButton();
         btnGenerateMinimizedDFA = new javax.swing.JButton();
         btnRegularOperations = new javax.swing.JButton();
         hFiller = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         btnShowTransitionControls = new javax.swing.JToggleButton();
-        sep03 = new javax.swing.JToolBar.Separator();
+        sep04 = new javax.swing.JToolBar.Separator();
         btnShowGrid = new javax.swing.JToggleButton();
         btnSnapToGrid = new javax.swing.JToggleButton();
-        sep04 = new javax.swing.JToolBar.Separator();
-        btnRearrangeStates = new javax.swing.JButton();
         sep05 = new javax.swing.JToolBar.Separator();
+        btnRearrangeStates = new javax.swing.JButton();
+        sep06 = new javax.swing.JToolBar.Separator();
         btnZoomIn = new javax.swing.JButton();
         btnZoomOut = new javax.swing.JButton();
         panelModel = new javax.swing.JPanel();
@@ -680,7 +683,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         toolBar.add(btnAddTransition);
         toolBar.add(sep02);
 
-        btnAddAllMissingTransitionsDFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pencil_go.png"))); // NOI18N
+        btnAddAllMissingTransitionsDFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/transitionAddAll.png"))); // NOI18N
         btnAddAllMissingTransitionsDFA.setToolTipText("Add All Missing Transitions (Alt+Shift+T)");
         btnAddAllMissingTransitionsDFA.setFocusable(false);
         btnAddAllMissingTransitionsDFA.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -691,6 +694,19 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         toolBar.add(btnAddAllMissingTransitionsDFA);
+
+        btnRemoveInaccessibleAndUselessStates.setIcon(new javax.swing.ImageIcon(getClass().getResource("/stateRemoveUI.png"))); // NOI18N
+        btnRemoveInaccessibleAndUselessStates.setToolTipText("Remove Inaccessible and Useless States (Alt+Shift+DELETE)");
+        btnRemoveInaccessibleAndUselessStates.setFocusable(false);
+        btnRemoveInaccessibleAndUselessStates.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnRemoveInaccessibleAndUselessStates.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnRemoveInaccessibleAndUselessStates.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveInaccessibleAndUselessStatesActionPerformed(evt);
+            }
+        });
+        toolBar.add(btnRemoveInaccessibleAndUselessStates);
+        toolBar.add(sep03);
 
         btnGenerateEquivalentDFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dfa.png"))); // NOI18N
         btnGenerateEquivalentDFA.setToolTipText("Generate Equivalent DFA (Alt+Shift+D)");
@@ -740,7 +756,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         toolBar.add(btnShowTransitionControls);
-        toolBar.add(sep03);
+        toolBar.add(sep04);
 
         btnShowGrid.setIcon(new javax.swing.ImageIcon(getClass().getResource("/note.png"))); // NOI18N
         btnShowGrid.setToolTipText("Show/Hide Grid (Ctrl+Shift+G)");
@@ -760,7 +776,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnSnapToGrid.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSnapToGrid.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         toolBar.add(btnSnapToGrid);
-        toolBar.add(sep04);
+        toolBar.add(sep05);
 
         btnRearrangeStates.setIcon(new javax.swing.ImageIcon(getClass().getResource("/layers.png"))); // NOI18N
         btnRearrangeStates.setToolTipText("Rearrange States");
@@ -773,7 +789,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         toolBar.add(btnRearrangeStates);
-        toolBar.add(sep05);
+        toolBar.add(sep06);
 
         btnZoomIn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/zoom_in.png"))); // NOI18N
         btnZoomIn.setToolTipText("Zoom In");
@@ -1688,7 +1704,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             try {
                 
                 FA dfa = new FADeterminize( fa ).getGeneratedDFA();
-                FAArrangement.arrangeInCircle( dfa, 250, 200, 150 );
+                FAArrangement.arrangeByLevel( dfa, 100, 100, 150, false );
                 mainWindow.createFAInternalFrame( dfa, false, false );
                 
             } catch ( IllegalArgumentException exc ) {
@@ -1707,47 +1723,29 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
     private void btnGenerateMinimizedDFAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateMinimizedDFAActionPerformed
         
-        fa.updateType();
-        
-        if ( fa.getType() == FAType.DFA ) {
-            
-            FA minDFA = FAAlgorithms.generateMinimizedDFA( fa );
-            
-            if ( minDFA.equals( fa ) ) {
-                JOptionPane.showMessageDialog( 
-                    this, 
-                    "Your DFA is already mimimum!", 
-                    "Information", 
-                    JOptionPane.INFORMATION_MESSAGE );
-            } else {
-                FAArrangement.arrangeInCircle( minDFA, 250, 200, 150 );
-                mainWindow.createFAInternalFrame( minDFA, false, false );
-            }
-            
-        } else {
-            
-            JOptionPane.showMessageDialog( 
-                    this, 
-                    "To perform this you must have a DFA!", 
-                    "ERROR", 
-                    JOptionPane.ERROR_MESSAGE );
-            
-        }
-        
-        /*try {
+        try {
             
             fa.updateType();
-            FA minDFA = new DFAMinimize( fa ).getGeneratedDFA();
             
-            if ( minDFA.equals( fa ) ) {
-                JOptionPane.showMessageDialog( 
-                    this, 
-                    "Your DFA is already mimimum!", 
-                    "Information", 
-                    JOptionPane.INFORMATION_MESSAGE );
-            } else {
-                FAArrangement.arrangeInCircle( minDFA, 250, 200, 150 );
-                mainWindow.createFAInternalFrame( minDFA, false, false );
+            int r = JOptionPane.showConfirmDialog( this, 
+                    "Remove inaccessible and useless states before processing?", 
+                    "Remove?", JOptionPane.YES_NO_CANCEL_OPTION );
+            
+            if ( r != JOptionPane.CANCEL_OPTION ) {
+                
+                FA minDFA = new DFAMinimize( fa, r == JOptionPane.YES_OPTION ).getGeneratedDFA();
+
+                if ( minDFA.equals( fa ) ) {
+                    JOptionPane.showMessageDialog( 
+                        this, 
+                        "Your DFA is already mimimum!", 
+                        "Information", 
+                        JOptionPane.INFORMATION_MESSAGE );
+                } else {
+                    FAArrangement.arrangeByLevel( minDFA, 100, 100, 150, false );
+                    mainWindow.createFAInternalFrame( minDFA, false, false );
+                }
+                
             }
             
         } catch ( IllegalArgumentException exc ) {
@@ -1758,7 +1756,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                     "ERROR", 
                     JOptionPane.ERROR_MESSAGE );
             
-        }*/
+        }
         
     }//GEN-LAST:event_btnGenerateMinimizedDFAActionPerformed
 
@@ -2116,24 +2114,30 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
     private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
         
-        if ( !currentFileSaved ) {
-            
-            int r = JOptionPane.showConfirmDialog( 
-                    this, 
-                    "Save modifications before close?", 
-                    "Confirmation", 
-                    JOptionPane.YES_NO_CANCEL_OPTION );
-            
-            if ( r == JOptionPane.YES_OPTION ) {
-                if ( saveFA() ) {
+        if ( !ApplicationConstants.IN_PRODUCTION ) {
+            dispose();
+        } else {
+        
+            if ( !currentFileSaved ) {
+
+                int r = JOptionPane.showConfirmDialog( 
+                        this, 
+                        "Save modifications before close?", 
+                        "Confirmation", 
+                        JOptionPane.YES_NO_CANCEL_OPTION );
+
+                if ( r == JOptionPane.YES_OPTION ) {
+                    if ( saveFA() ) {
+                        dispose();
+                    }
+                } else if ( r == JOptionPane.NO_OPTION ) {
                     dispose();
                 }
-            } else if ( r == JOptionPane.NO_OPTION ) {
+
+            } else {
                 dispose();
             }
-            
-        } else {
-            dispose();
+        
         }
         
     }//GEN-LAST:event_formInternalFrameClosing
@@ -2443,6 +2447,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             FA fa2 = loadFA( "Choose the second Finite Automaton to perform Union" );
             if ( fa2 != null ) {
                 FA faUnion = new FAUnion( fa, fa2 ).getGeneratedFA();
+                FAArrangement.arrangeByLevel( faUnion, 100, 100, 150, false );
                 mainWindow.createFAInternalFrame( faUnion, false, false );
             }
         } catch ( IllegalArgumentException exc ) {
@@ -2460,6 +2465,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             FA fa2 = loadFA( "Choose the second Finite Automaton to perform Concatenation" );
             if ( fa2 != null ) {
                 FA faConcatenation = new FAConcatenation( fa, fa2 ).getGeneratedFA();
+                FAArrangement.arrangeByLevel( faConcatenation, 100, 100, 150, false );
                 mainWindow.createFAInternalFrame( faConcatenation, false, false );
             }
         } catch ( IllegalArgumentException exc ) {
@@ -2475,6 +2481,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         try {
             FA faStar = new FAKleeneStar( fa ).getGeneratedFA();
+            FAArrangement.arrangeByLevel( faStar, 100, 100, 150, false );
             mainWindow.createFAInternalFrame( faStar, false, false );
         } catch ( IllegalArgumentException exc ) {
             JOptionPane.showMessageDialog( this,
@@ -2505,6 +2512,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             FA fa2 = loadFA( "Choose the second Finite Automaton to perform Intersection" );
             if ( fa2 != null ) {
                 FA faIntersection = new FAIntersection( fa, fa2 ).getGeneratedFA();
+                FAArrangement.arrangeByLevel( faIntersection, 100, 100, 150, false );
                 mainWindow.createFAInternalFrame( faIntersection, false, false );
             }
         } catch ( IllegalArgumentException exc ) {
@@ -2519,6 +2527,20 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private void btnRegularOperationsMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegularOperationsMouseReleased
         popupMenuRegularOperations.show( evt.getComponent(), 0, 0 );
     }//GEN-LAST:event_btnRegularOperationsMouseReleased
+
+    private void btnRemoveInaccessibleAndUselessStatesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveInaccessibleAndUselessStatesActionPerformed
+        
+        try {
+            FA faCleaned = new FARemoveInaccessibleAndUselessStates( fa, true ).getGeneratedFA();
+            mainWindow.createFAInternalFrame( faCleaned, false, false );
+        } catch ( IllegalArgumentException exc ) {
+            JOptionPane.showMessageDialog( this,
+                    exc.getMessage(),
+                    "ERROR",
+                    JOptionPane.ERROR_MESSAGE );
+        }
+        
+    }//GEN-LAST:event_btnRemoveInaccessibleAndUselessStatesActionPerformed
 
     public void repaintDrawPanel() {
         drawPanel.repaint();
@@ -2672,7 +2694,9 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnMoveAction();
         btnAddState.setEnabled( false );
         btnAddTransition.setEnabled( false );
+        
         btnAddAllMissingTransitionsDFA.setEnabled( false );
+        btnRemoveInaccessibleAndUselessStates.setEnabled( false );
         
         btnGenerateEquivalentDFA.setEnabled( false );
         btnGenerateMinimizedDFA.setEnabled( false );
@@ -2699,7 +2723,9 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         btnAddState.setEnabled( true );
         btnAddTransition.setEnabled( true );
+        
         btnAddAllMissingTransitionsDFA.setEnabled( true );
+        btnRemoveInaccessibleAndUselessStates.setEnabled( true );
         
         btnGenerateEquivalentDFA.setEnabled( true );
         btnGenerateMinimizedDFA.setEnabled( true );
@@ -3165,6 +3191,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnPreviousStep;
     private javax.swing.JButton btnRearrangeStates;
     private javax.swing.JButton btnRegularOperations;
+    private javax.swing.JButton btnRemoveInaccessibleAndUselessStates;
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSaveAs;
@@ -3215,6 +3242,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JToolBar.Separator sep03;
     private javax.swing.JToolBar.Separator sep04;
     private javax.swing.JToolBar.Separator sep05;
+    private javax.swing.JToolBar.Separator sep06;
     private javax.swing.JToolBar.Separator sepTS01;
     private javax.swing.JToolBar.Separator sepTS02;
     private javax.swing.JPopupMenu.Separator spPopupState;

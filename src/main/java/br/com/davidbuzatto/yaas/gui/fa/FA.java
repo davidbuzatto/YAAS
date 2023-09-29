@@ -448,7 +448,6 @@ public class FA extends AbstractGeometricForm implements Cloneable {
                     }
                     li.add( t.getTargetState() );
                 }
-
             }
             
         }

@@ -20,6 +20,7 @@ import br.com.davidbuzatto.yaas.gui.fa.FA;
 import br.com.davidbuzatto.yaas.gui.fa.examples.FAExamples;
 import br.com.davidbuzatto.yaas.gui.fa.examples.FAExamplesForMinimizationTest;
 import br.com.davidbuzatto.yaas.gui.fa.FAInternalFrame;
+import br.com.davidbuzatto.yaas.gui.fa.examples.FAExamplesForRemoveUselessAndInaccessibleStates;
 import br.com.davidbuzatto.yaas.util.ApplicationConstants;
 import br.com.davidbuzatto.yaas.util.ApplicationPreferences;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
@@ -55,7 +56,7 @@ public class MainWindow extends javax.swing.JFrame {
             menuMinimizationTest.setVisible( false );
             setExtendedState( MAXIMIZED_BOTH );
         } else {
-            createFAInternalFrame( FAExamplesForMinimizationTest.createDFAForMinimizationTest02(), true, true );
+            createFAInternalFrame( FAExamples.createDFAEndsWith00(), true, true );
         }
         
     }

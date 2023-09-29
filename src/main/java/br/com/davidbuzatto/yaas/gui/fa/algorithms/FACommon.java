@@ -68,54 +68,6 @@ public class FACommon {
     }
     
     /**
-     * Verifies if a state is useless.
-     * 
-     * @param state The state to verify.
-     * @param fa The automaton containing the state that will be verified.
-     * @return true if the state is useless, false otherwise.
-     */
-    public static boolean isUseless( FAState state, FA fa ) {
-        
-        if ( state.isInitial() || state.isAccepting() ) {
-            return false;
-        }
-        
-        for ( FATransition t : fa.getTransitions() ) {
-            if ( !t.getOriginState().equals( t.getTargetState() ) && 
-                    state.equals( t.getOriginState() ) ) {
-                return false;
-            }
-        }
-        
-        return true;
-        
-    }
-    
-    /**
-     * Verifies if a state is inaccessible.
-     * 
-     * @param state The state to verify.
-     * @param fa The automaton containing the state that will be verified.
-     * @return true if the state is inaccessible, false otherwise.
-     */
-    public static boolean isInaccessible( FAState state, FA fa ) {
-        
-        if ( state.isInitial() ) {
-            return false;
-        }
-        
-        for ( FATransition t : fa.getTransitions() ) {
-            if ( !t.getOriginState().equals( t.getTargetState() ) &&
-                    state.equals( t.getTargetState() ) ) {
-                return false;
-            }
-        }
-        
-        return true;
-        
-    }
-    
-    /**
      * Verifies if two have the same transition function to a next state
      * with a input of one symbol. It will consider if the states have 
      * different symbols to in their transitions.
@@ -189,24 +141,30 @@ public class FACommon {
             }
             
             while ( true ) {
+                
                 String str = ssgs.next();
+                
                 if ( str.length() > maxLength ) {
                     result = false;
                     break;
                 } else {
+                    
+                    boolean accS1 = acceptsDFA( str, dfa, s1 );
+                    boolean accS2 = acceptsDFA( str, dfa, s2 );
+                    
                     if ( DEBUG ) {
-                        System.out.print( "        " + str + ": " );
+                        System.out.println( "        " + s1 + " " + str + ": " + accS1 );
+                        System.out.println( "        " + s2 + " " + str + ": " + accS2 );
+                        System.out.println( "        " + ( accS1 != accS2 ? "don't match" : "match" ) + "\n" );
                     }
-                    if ( acceptsDFA( str, dfa, s1 ) != acceptsDFA( str, dfa, s2 ) ) {
+                    
+                    if ( accS1 != accS2 ) {
                         result = true;
-                        if ( DEBUG ) {
-                            System.out.println( "don't match." );
-                        }
                         break;
-                    } else if ( DEBUG ) {
-                        System.out.println( "match." );
                     }
+                    
                 }
+                
             }
             
         }
