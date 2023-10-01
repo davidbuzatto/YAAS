@@ -1105,19 +1105,11 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnMoveActionPerformed
 
     private void btnAddStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddStateActionPerformed
-        selectedStates.clear();
-        fa.deselectAll();
-        cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
-        repaintDrawPanel();
-        drawPanel.setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR ) );
+        resetGUIToAddStatesAndTransitions();
     }//GEN-LAST:event_btnAddStateActionPerformed
 
     private void btnAddTransitionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddTransitionActionPerformed
-        selectedStates.clear();
-        fa.deselectAll();
-        cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
-        repaintDrawPanel();
-        drawPanel.setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR ) );
+        resetGUIToAddStatesAndTransitions();
     }//GEN-LAST:event_btnAddTransitionActionPerformed
 
     private void btnShowTransitionControlsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowTransitionControlsActionPerformed
@@ -1602,13 +1594,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             drawPanel.requestFocus();
             
         } else {
-            
-            JOptionPane.showMessageDialog( 
-                    this, 
-                    "You must set an initial state!", 
-                    "ERROR", 
-                    JOptionPane.ERROR_MESSAGE );
-            
+            Utils.showErrorMessage( this, "You must set an initial state!" );
         }
         
     }//GEN-LAST:event_btnStartActionPerformed
@@ -1712,13 +1698,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 mainWindow.createFAInternalFrame( dfa, false, false );
                 
             } catch ( IllegalArgumentException exc ) {
-                
-                JOptionPane.showMessageDialog( 
-                        this, 
-                        exc.getMessage(), 
-                        "ERROR", 
-                        JOptionPane.ERROR_MESSAGE );
-                
+                Utils.showErrorMessage( this, exc.getMessage() );
             }
             
         }
@@ -1753,13 +1733,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
             
         } catch ( IllegalArgumentException exc ) {
-            
-            JOptionPane.showMessageDialog( 
-                    this, 
-                    exc.getMessage(), 
-                    "ERROR", 
-                    JOptionPane.ERROR_MESSAGE );
-            
+            Utils.showErrorMessage( this, exc.getMessage() );
         }
         
     }//GEN-LAST:event_btnGenerateMinimizedDFAActionPerformed
@@ -1786,13 +1760,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             repaintDrawPanel();
             
         } else {
-            
-            JOptionPane.showMessageDialog( 
-                    this, 
-                    "To perform this you must have a DFA!", 
-                    "ERROR", 
-                    JOptionPane.ERROR_MESSAGE );
-            
+            Utils.showErrorMessage( this, "To perform this you must have a DFA!" );
         }
         
     }//GEN-LAST:event_btnAddAllMissingTransitionsDFAActionPerformed
@@ -1818,11 +1786,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
             
         } catch ( NumberFormatException exc ) {
-            JOptionPane.showMessageDialog( 
-                    this, 
-                    "Distance must be greater than zero!", 
-                    "ERROR", 
-                    JOptionPane.ERROR_MESSAGE );
+            Utils.showErrorMessage( this, "Distance must be greater than zero!" );
         }
         
     }//GEN-LAST:event_popItemHorizontalActionPerformed
@@ -1848,11 +1812,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
             
         } catch ( NumberFormatException exc ) {
-            JOptionPane.showMessageDialog( 
-                    this, 
-                    "Distance must be greater than zero!", 
-                    "ERROR", 
-                    JOptionPane.ERROR_MESSAGE );
+            Utils.showErrorMessage( this, "Distance must be greater than zero!" );
         }
         
     }//GEN-LAST:event_popItemVerticalActionPerformed
@@ -1915,11 +1875,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 repaintDrawPanel();
                 
             } catch ( NumberFormatException exc ) {
-                JOptionPane.showMessageDialog( 
-                        this, 
-                        "Distance must be greater than zero!", 
-                        "ERROR", 
-                        JOptionPane.ERROR_MESSAGE );
+                Utils.showErrorMessage( this, "Distance must be greater than zero!" );
             }
             
         }
@@ -1948,11 +1904,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
             
         } catch ( NumberFormatException exc ) {
-            JOptionPane.showMessageDialog( 
-                    this, 
-                    "Radius must be greater than zero!", 
-                    "ERROR", 
-                    JOptionPane.ERROR_MESSAGE );
+            Utils.showErrorMessage( this, "Radius must be greater than zero!" );
         }
         
     }//GEN-LAST:event_popItemCircularActionPerformed
@@ -2021,23 +1973,13 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                     repaintDrawPanel();
 
                 } catch ( NumberFormatException exc ) {
-                    JOptionPane.showMessageDialog( 
-                            this, 
-                            "Distance must be greater than zero!", 
-                            "ERROR", 
-                            JOptionPane.ERROR_MESSAGE );
+                    Utils.showErrorMessage( this, "Distance must be greater than zero!" );
                 }
 
             }
         
         } else {
-            
-            JOptionPane.showMessageDialog( 
-                        this, 
-                        "Your Finite Automata must have an initial state!", 
-                        "ERROR", 
-                        JOptionPane.ERROR_MESSAGE );
-            
+            Utils.showErrorMessage( this, "Your Finite Automata must have an initial state!" );
         }
         
     }//GEN-LAST:event_popItemByLevelActionPerformed
@@ -2063,11 +2005,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
             
         } catch ( NumberFormatException exc ) {
-            JOptionPane.showMessageDialog( 
-                    this, 
-                    "Distance must be greater than zero!", 
-                    "ERROR", 
-                    JOptionPane.ERROR_MESSAGE );
+            Utils.showErrorMessage( this, "Distance must be greater than zero!" );
         }
         
     }//GEN-LAST:event_popItemDiagonalActionPerformed
@@ -2077,11 +2015,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnRearrangeStatesMouseReleased
 
     private void btnSelectMultipleStatesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectMultipleStatesActionPerformed
-        selectedStates.clear();
-        fa.deselectAll();
-        cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
-        repaintDrawPanel();
-        drawPanel.setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR ) );
+        resetGUIToAddStatesAndTransitions();
     }//GEN-LAST:event_btnSelectMultipleStatesActionPerformed
 
     private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
@@ -2270,12 +2204,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
         
         } else {
-            
-            JOptionPane.showMessageDialog( this,
-                    "There's no selected state!",
-                    "ERROR",
-                    JOptionPane.ERROR_MESSAGE );
-            
+            Utils.showErrorMessage( this, "There's no selected state!" );
         }
         
     }//GEN-LAST:event_popItemRemoveStateActionPerformed
@@ -2317,12 +2246,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
             
         } else {
-            
-            JOptionPane.showMessageDialog( this,
-                    "There's no selected transition!",
-                    "ERROR",
-                    JOptionPane.ERROR_MESSAGE );
-            
+            Utils.showErrorMessage( this, "There's no selected transition!" );
         }
         
     }//GEN-LAST:event_popItemTransitionSymbolsActionPerformed
@@ -2367,12 +2291,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             repaintDrawPanel();
             
         } else {
-            
-            JOptionPane.showMessageDialog( this,
-                    "There's no selected transition!",
-                    "ERROR",
-                    JOptionPane.ERROR_MESSAGE );
-            
+            Utils.showErrorMessage( this, "There's no selected transition!" );
         }
         
     }//GEN-LAST:event_popItemResetTransitionTransformationsActionPerformed
@@ -2394,12 +2313,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
         
         } else {
-            
-            JOptionPane.showMessageDialog( this,
-                    "There's no selected transition!",
-                    "ERROR",
-                    JOptionPane.ERROR_MESSAGE );
-            
+            Utils.showErrorMessage( this, "There's no selected transition!" );
         }
         
     }//GEN-LAST:event_popItemRemoveTransitionActionPerformed
@@ -2455,10 +2369,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 mainWindow.createFAInternalFrame( faUnion, false, false );
             }
         } catch ( IllegalArgumentException exc ) {
-            JOptionPane.showMessageDialog( this,
-                    exc.getMessage(),
-                    "ERROR",
-                    JOptionPane.ERROR_MESSAGE );
+            Utils.showErrorMessage( this, exc.getMessage() );
         }
         
     }//GEN-LAST:event_popItemUnionActionPerformed
@@ -2473,10 +2384,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 mainWindow.createFAInternalFrame( faConcatenation, false, false );
             }
         } catch ( IllegalArgumentException exc ) {
-            JOptionPane.showMessageDialog( this,
-                    exc.getMessage(),
-                    "ERROR",
-                    JOptionPane.ERROR_MESSAGE );
+            Utils.showErrorMessage( this, exc.getMessage() );
         }
         
     }//GEN-LAST:event_popItemConcatenationActionPerformed
@@ -2488,10 +2396,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             FAArrangement.arrangeByLevel( faStar, 100, 100, 150, false );
             mainWindow.createFAInternalFrame( faStar, false, false );
         } catch ( IllegalArgumentException exc ) {
-            JOptionPane.showMessageDialog( this,
-                    exc.getMessage(),
-                    "ERROR",
-                    JOptionPane.ERROR_MESSAGE );
+            Utils.showErrorMessage( this, exc.getMessage() );
         }
         
     }//GEN-LAST:event_popItemKleeneStarActionPerformed
@@ -2502,10 +2407,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             FA complementedDFA = new DFAComplement( fa ).getGeneratedDFA();
             mainWindow.createFAInternalFrame( complementedDFA, false, false );
         } catch ( IllegalArgumentException exc ) {
-            JOptionPane.showMessageDialog( this,
-                    exc.getMessage(),
-                    "ERROR",
-                    JOptionPane.ERROR_MESSAGE );
+            Utils.showErrorMessage( this, exc.getMessage() );
         }
         
     }//GEN-LAST:event_popItemComplementActionPerformed
@@ -2520,10 +2422,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 mainWindow.createFAInternalFrame( faIntersection, false, false );
             }
         } catch ( IllegalArgumentException exc ) {
-            JOptionPane.showMessageDialog( this,
-                    exc.getMessage(),
-                    "ERROR",
-                    JOptionPane.ERROR_MESSAGE );
+            Utils.showErrorMessage( this, exc.getMessage() );
         }
         
     }//GEN-LAST:event_popItemIntersectionActionPerformed
@@ -2538,10 +2437,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             FA faCleaned = new FARemoveInaccessibleAndUselessStates( fa, true ).getGeneratedFA();
             mainWindow.createFAInternalFrame( faCleaned, false, false );
         } catch ( IllegalArgumentException exc ) {
-            JOptionPane.showMessageDialog( this,
-                    exc.getMessage(),
-                    "ERROR",
-                    JOptionPane.ERROR_MESSAGE );
+            Utils.showErrorMessage( this, exc.getMessage() );
         }
         
     }//GEN-LAST:event_btnRemoveInaccessibleAndUselessStatesActionPerformed
@@ -2606,13 +2502,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
             
         } else {
-            
-            JOptionPane.showMessageDialog(
-                    this,
-                    "You must set an initial state!",
-                    "ERROR",
-                    JOptionPane.ERROR_MESSAGE );
-            
+            Utils.showErrorMessage( this, "You must set an initial state!" );
         }
         
     }
@@ -3174,6 +3064,14 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         
+    }
+    
+    private void resetGUIToAddStatesAndTransitions() {
+        selectedStates.clear();
+        fa.deselectAll();
+        cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
+        repaintDrawPanel();
+        drawPanel.setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR ) );
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

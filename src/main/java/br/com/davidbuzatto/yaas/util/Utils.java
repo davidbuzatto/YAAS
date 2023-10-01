@@ -592,4 +592,18 @@ public class Utils {
         
     }
     
+    /**
+     * Shows a error message.
+     * 
+     * @param parent Parent component.
+     * @param message The message to show.
+     */
+    public static void showErrorMessage( Component parent, String message ) {
+        JOptionPane.showMessageDialog( 
+                    parent, 
+                    message, 
+                    "ERROR", 
+                    JOptionPane.ERROR_MESSAGE );
+    }
+    
 }
