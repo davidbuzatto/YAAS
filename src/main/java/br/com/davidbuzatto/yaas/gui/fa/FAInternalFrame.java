@@ -16,18 +16,22 @@
  */
 package br.com.davidbuzatto.yaas.gui.fa;
 
+import br.com.davidbuzatto.yaas.model.fa.FATransition;
+import br.com.davidbuzatto.yaas.model.fa.FA;
+import br.com.davidbuzatto.yaas.model.fa.FAType;
+import br.com.davidbuzatto.yaas.model.fa.FAState;
 import br.com.davidbuzatto.yaas.gui.MainWindow;
 import br.com.davidbuzatto.yaas.gui.ZoomFacility;
-import br.com.davidbuzatto.yaas.gui.fa.algorithms.FAArrangement;
-import br.com.davidbuzatto.yaas.gui.fa.algorithms.DFAComplement;
-import br.com.davidbuzatto.yaas.gui.fa.algorithms.DFAMinimize;
-import br.com.davidbuzatto.yaas.gui.fa.algorithms.FADeterminize;
-import br.com.davidbuzatto.yaas.gui.fa.algorithms.DFATotalTransitionFunction;
-import br.com.davidbuzatto.yaas.gui.fa.algorithms.FAConcatenation;
-import br.com.davidbuzatto.yaas.gui.fa.algorithms.FAIntersection;
-import br.com.davidbuzatto.yaas.gui.fa.algorithms.FAKleeneStar;
-import br.com.davidbuzatto.yaas.gui.fa.algorithms.FARemoveInaccessibleAndUselessStates;
-import br.com.davidbuzatto.yaas.gui.fa.algorithms.FAUnion;
+import br.com.davidbuzatto.yaas.model.fa.algorithms.FAArrangement;
+import br.com.davidbuzatto.yaas.model.fa.algorithms.DFAComplement;
+import br.com.davidbuzatto.yaas.model.fa.algorithms.DFAMinimize;
+import br.com.davidbuzatto.yaas.model.fa.algorithms.FADeterminize;
+import br.com.davidbuzatto.yaas.model.fa.algorithms.DFATotalTransitionFunction;
+import br.com.davidbuzatto.yaas.model.fa.algorithms.FAConcatenation;
+import br.com.davidbuzatto.yaas.model.fa.algorithms.FAIntersection;
+import br.com.davidbuzatto.yaas.model.fa.algorithms.FAKleeneStar;
+import br.com.davidbuzatto.yaas.model.fa.algorithms.FARemoveInaccessibleAndUselessStates;
+import br.com.davidbuzatto.yaas.model.fa.algorithms.FAUnion;
 import br.com.davidbuzatto.yaas.gui.fa.properties.FAPropertiesPanel;
 import br.com.davidbuzatto.yaas.gui.fa.properties.FAStatePropertiesPanel;
 import br.com.davidbuzatto.yaas.gui.fa.properties.FATransitionPropertiesPanel;

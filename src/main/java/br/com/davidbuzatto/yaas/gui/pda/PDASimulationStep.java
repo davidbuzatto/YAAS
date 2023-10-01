@@ -16,6 +16,8 @@
  */
 package br.com.davidbuzatto.yaas.gui.pda;
 
+import br.com.davidbuzatto.yaas.model.pda.PDA;
+import br.com.davidbuzatto.yaas.model.pda.PDAState;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;

@@ -16,9 +16,9 @@
  */
 package br.com.davidbuzatto.yaas.gui.fa.properties;
 
-import br.com.davidbuzatto.yaas.gui.fa.FA;
+import br.com.davidbuzatto.yaas.model.fa.FA;
 import br.com.davidbuzatto.yaas.gui.fa.FAInternalFrame;
-import br.com.davidbuzatto.yaas.gui.fa.FATransition;
+import br.com.davidbuzatto.yaas.model.fa.FATransition;
 import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.Color;
 import java.util.ArrayList;

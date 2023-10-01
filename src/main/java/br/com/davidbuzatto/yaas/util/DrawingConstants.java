@@ -16,7 +16,7 @@
  */
 package br.com.davidbuzatto.yaas.util;
 
-import br.com.davidbuzatto.yaas.gui.model.SerializableBasicStroke;
+import br.com.davidbuzatto.yaas.model.SerializableBasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 

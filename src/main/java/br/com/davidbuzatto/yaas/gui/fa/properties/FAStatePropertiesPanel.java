@@ -16,9 +16,9 @@
  */
 package br.com.davidbuzatto.yaas.gui.fa.properties;
 
-import br.com.davidbuzatto.yaas.gui.fa.FA;
+import br.com.davidbuzatto.yaas.model.fa.FA;
 import br.com.davidbuzatto.yaas.gui.fa.FAInternalFrame;
-import br.com.davidbuzatto.yaas.gui.fa.FAState;
+import br.com.davidbuzatto.yaas.model.fa.FAState;
 import java.awt.Color;
 import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;

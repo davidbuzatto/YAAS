@@ -16,10 +16,10 @@
  */
 package br.com.davidbuzatto.yaas.gui;
 
-import br.com.davidbuzatto.yaas.gui.model.Arrow;
-import br.com.davidbuzatto.yaas.gui.fa.FA;
+import br.com.davidbuzatto.yaas.model.Arrow;
+import br.com.davidbuzatto.yaas.model.fa.FA;
 import br.com.davidbuzatto.yaas.gui.fa.FASimulationStep;
-import br.com.davidbuzatto.yaas.gui.pda.PDA;
+import br.com.davidbuzatto.yaas.model.pda.PDA;
 import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.Color;

@@ -16,6 +16,8 @@
  */
 package br.com.davidbuzatto.yaas.gui.fa;
 
+import br.com.davidbuzatto.yaas.model.fa.FA;
+import br.com.davidbuzatto.yaas.model.fa.FAState;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;

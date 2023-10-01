@@ -16,9 +16,9 @@
  */
 package br.com.davidbuzatto.yaas.util;
 
-import br.com.davidbuzatto.yaas.gui.fa.FA;
-import br.com.davidbuzatto.yaas.gui.fa.FAState;
-import br.com.davidbuzatto.yaas.gui.fa.FAType;
+import br.com.davidbuzatto.yaas.model.fa.FA;
+import br.com.davidbuzatto.yaas.model.fa.FAState;
+import br.com.davidbuzatto.yaas.model.fa.FAType;
 import br.com.davidbuzatto.yaas.gui.fa.table.FATransitionFunctionTableModel;
 import java.awt.Color;
 import java.awt.Component;

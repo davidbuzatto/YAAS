@@ -16,11 +16,11 @@
  */
 package br.com.davidbuzatto.yaas.gui;
 
-import br.com.davidbuzatto.yaas.gui.fa.FA;
-import br.com.davidbuzatto.yaas.gui.fa.examples.FAExamples;
-import br.com.davidbuzatto.yaas.gui.fa.examples.FAExamplesForMinimizationTest;
+import br.com.davidbuzatto.yaas.model.fa.FA;
+import br.com.davidbuzatto.yaas.model.fa.examples.FAExamples;
+import br.com.davidbuzatto.yaas.model.fa.examples.FAExamplesForMinimizationTest;
 import br.com.davidbuzatto.yaas.gui.fa.FAInternalFrame;
-import br.com.davidbuzatto.yaas.gui.fa.examples.FAExamplesForRemoveUselessAndInaccessibleStates;
+import br.com.davidbuzatto.yaas.model.fa.examples.FAExamplesForRemoveUselessAndInaccessibleStates;
 import br.com.davidbuzatto.yaas.util.ApplicationConstants;
 import br.com.davidbuzatto.yaas.util.ApplicationPreferences;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
