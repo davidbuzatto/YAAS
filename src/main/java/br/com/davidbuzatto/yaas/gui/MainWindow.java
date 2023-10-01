@@ -20,7 +20,9 @@ import br.com.davidbuzatto.yaas.model.fa.FA;
 import br.com.davidbuzatto.yaas.model.fa.examples.FAExamples;
 import br.com.davidbuzatto.yaas.model.fa.examples.FAExamplesForMinimizationTest;
 import br.com.davidbuzatto.yaas.gui.fa.FAInternalFrame;
-import br.com.davidbuzatto.yaas.model.fa.examples.FAExamplesForRemoveUselessAndInaccessibleStates;
+import br.com.davidbuzatto.yaas.gui.pda.PDAInternalFrame;
+import br.com.davidbuzatto.yaas.model.pda.PDA;
+import br.com.davidbuzatto.yaas.model.pda.examples.PDAExamples;
 import br.com.davidbuzatto.yaas.util.ApplicationConstants;
 import br.com.davidbuzatto.yaas.util.ApplicationPreferences;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
@@ -56,7 +58,8 @@ public class MainWindow extends javax.swing.JFrame {
             menuMinimizationTest.setVisible( false );
             setExtendedState( MAXIMIZED_BOTH );
         } else {
-            createFAInternalFrame( FAExamples.createDFAEndsWith00(), true, true );
+            //createFAInternalFrame( FAExamples.createDFAEndsWith00(), true, true );
+            createPDAInternalFrame( PDAExamples.createPDAPalindrome(), true, true );
         }
         
     }
@@ -495,7 +498,7 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void btnPDAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPDAActionPerformed
-        Utils.showNotImplementedYetMessage();
+        createPDAInternalFrame( null, false, true );
     }//GEN-LAST:event_btnPDAActionPerformed
 
     private void btnTMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTMActionPerformed
@@ -555,6 +558,27 @@ public class MainWindow extends javax.swing.JFrame {
         
         FAInternalFrame iFrame = new FAInternalFrame( this, fa );
         iFrame.setCurrentState( fa.getStates().size() );
+        iFrame.setCurrentFileSaved( currentFileSaved );
+        
+        desktopPane.add( iFrame );
+        iFrame.setVisible( true );
+        
+        try {
+            iFrame.setMaximum( maximized );
+        } catch ( PropertyVetoException exc ) {
+            Utils.showException( exc );
+        }
+        
+    }
+    
+    public void createPDAInternalFrame( PDA pda, boolean maximized, boolean currentFileSaved ) {
+        
+        if ( pda == null ) {
+            pda = new PDA();
+        }
+        
+        PDAInternalFrame iFrame = new PDAInternalFrame( this, pda );
+        iFrame.setCurrentState( pda.getStates().size() );
         iFrame.setCurrentFileSaved( currentFileSaved );
         
         desktopPane.add( iFrame );

@@ -56,7 +56,7 @@ public class PDATest {
         
         // tests
         pda.addTransition( new PDATransition( q0, q0, new PDAOperation( '1', '1', PDAOperationType.PUSH, '1', '2', '3' ) ) );
-        pda.addTransition( new PDATransition( q0, q0, new PDAOperation( '1', '1', PDAOperationType.SUBSTITUTE, '2', '3' ) ) );
+        pda.addTransition( new PDATransition( q0, q0, new PDAOperation( '1', '1', PDAOperationType.REPLACE, '2', '3' ) ) );
         
         pda.addTransition( new PDATransition( q0, q1, PDAOperation.getDoNothingOperation( CharacterConstants.EMPTY_STRING, '$' ) ) );
         pda.addTransition( new PDATransition( q0, q1, PDAOperation.getDoNothingOperation( CharacterConstants.EMPTY_STRING, '0' ) ) );

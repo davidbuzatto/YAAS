@@ -25,7 +25,6 @@ import java.util.Set;
 /**
  * Encapsulates data related to a step in a pertinence simulation of a Pushdown
  * Automaton.
- * TODO needs to be refactored with FASimulationStep
  * 
  * @author Prof. Dr. David Buzatto
  */
@@ -40,7 +39,7 @@ public class PDASimulationStep {
         this.processadSymbol = processedSymbol;
     }
     
-    public void activateInFA( PDA pda ) {
+    public void activateInPDA( PDA pda ) {
         
         pda.deactivateAllStatesInSimulation();
         

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.davidbuzatto.yaas.gui.fa.table;
+package br.com.davidbuzatto.yaas.gui.pda.table;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,18 +22,18 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 /**
- * A table model for the transition function table of Finite Automata.
+ * A table model for the transition function table of Pushdown Automata.
  * 
  * @author Prof. Dr. David Buzatto
  */
-public class FATransitionFunctionTableModel implements TableModel {
+public class PDATransitionFunctionTableModel implements TableModel {
 
     private List<String> symbols;
     private List<String> states;
     private List<List<String>> data;
     private boolean partial;
     
-    public FATransitionFunctionTableModel() {
+    public PDATransitionFunctionTableModel() {
         symbols = new ArrayList<>();
         states = new ArrayList<>();
         data = new ArrayList<>();

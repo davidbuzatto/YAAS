@@ -23,7 +23,7 @@ import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
 /**
- * A table cell renderer for the transition function table.
+ * A table cell renderer for the transition function table of Finite Automata.
  * 
  * @author Prof. Dr. David Buzatto
  */

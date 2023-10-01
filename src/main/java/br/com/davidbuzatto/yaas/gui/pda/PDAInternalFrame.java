@@ -14,27 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.davidbuzatto.yaas.gui.fa;
+package br.com.davidbuzatto.yaas.gui.pda;
 
-import br.com.davidbuzatto.yaas.model.fa.FATransition;
-import br.com.davidbuzatto.yaas.model.fa.FA;
-import br.com.davidbuzatto.yaas.model.fa.FAType;
-import br.com.davidbuzatto.yaas.model.fa.FAState;
 import br.com.davidbuzatto.yaas.gui.MainWindow;
 import br.com.davidbuzatto.yaas.gui.ZoomFacility;
-import br.com.davidbuzatto.yaas.model.fa.algorithms.FAArrangement;
-import br.com.davidbuzatto.yaas.model.fa.algorithms.DFAComplement;
-import br.com.davidbuzatto.yaas.model.fa.algorithms.DFAMinimize;
-import br.com.davidbuzatto.yaas.model.fa.algorithms.FADeterminize;
-import br.com.davidbuzatto.yaas.model.fa.algorithms.DFATotalTransitionFunction;
-import br.com.davidbuzatto.yaas.model.fa.algorithms.FAConcatenation;
-import br.com.davidbuzatto.yaas.model.fa.algorithms.FAIntersection;
-import br.com.davidbuzatto.yaas.model.fa.algorithms.FAKleeneStar;
-import br.com.davidbuzatto.yaas.model.fa.algorithms.FARemoveInaccessibleAndUselessStates;
-import br.com.davidbuzatto.yaas.model.fa.algorithms.FAUnion;
-import br.com.davidbuzatto.yaas.gui.fa.properties.FAPropertiesPanel;
-import br.com.davidbuzatto.yaas.gui.fa.properties.FAStatePropertiesPanel;
-import br.com.davidbuzatto.yaas.gui.fa.properties.FATransitionPropertiesPanel;
+import br.com.davidbuzatto.yaas.gui.pda.properties.PDAPropertiesPanel;
+import br.com.davidbuzatto.yaas.gui.pda.properties.PDAStatePropertiesPanel;
+import br.com.davidbuzatto.yaas.gui.pda.properties.PDATransitionPropertiesPanel;
+import br.com.davidbuzatto.yaas.model.pda.PDA;
+import br.com.davidbuzatto.yaas.model.pda.PDAOperation;
+import br.com.davidbuzatto.yaas.model.pda.PDAState;
+import br.com.davidbuzatto.yaas.model.pda.PDATransition;
+import br.com.davidbuzatto.yaas.model.pda.algorithms.PDAArrangement;
 import br.com.davidbuzatto.yaas.util.ApplicationConstants;
 import br.com.davidbuzatto.yaas.util.ApplicationPreferences;
 import br.com.davidbuzatto.yaas.util.DrawingConstants;
@@ -92,17 +83,17 @@ import javax.swing.event.AncestorListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
- * Finite Automaton modelation and simulation.
+ * Pushdown Automaton modelation and simulation.
  * 
  * @author Prof. Dr. David Buzatto
  */
-public class FAInternalFrame extends javax.swing.JInternalFrame {
+public class PDAInternalFrame extends javax.swing.JInternalFrame {
 
     private static final String MODEL_PROPERTIES_CARD = "model";
     private static final String STATE_PROPERTIES_CARD = "state";
     private static final String TRANSITION_PROPERTIES_CARD = "transition";
     
-    private FA fa;
+    private PDA pda;
     private MainWindow mainWindow;
     
     private boolean canDrag;
@@ -121,22 +112,22 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     
     private int currentState;
     
-    private FAState selectedState;
-    private FATransition selectedTransition;
-    private Set<FAState> selectedStates;
+    private PDAState selectedState;
+    private PDATransition selectedTransition;
+    private Set<PDAState> selectedStates;
     
-    private FAState originState;
-    private FAState targetState;
+    private PDAState originState;
+    private PDAState targetState;
     
-    private FAPropertiesPanel faPPanel;
-    private FAStatePropertiesPanel statePPanel;
-    private FATransitionPropertiesPanel transitionPPanel;
+    private PDAPropertiesPanel pdaPPanel;
+    private PDAStatePropertiesPanel statePPanel;
+    private PDATransitionPropertiesPanel transitionPPanel;
     private CardLayout cardLayout;
     
-    private List<FASimulationStep> simulationSteps;
+    private List<PDASimulationStep> simulationSteps;
     private int currentSimulationStep;
     
-    private FABatchTest faBatchTestDialog;
+    private PDABatchTest pdaBatchTestDialog;
     private Color txtTestStringDefaultBC;
     private Color txtTestStringDefaultFC;
     private Color lblTestResultDefaultFC;
@@ -148,21 +139,21 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private String baseTitle;
     
     /**
-     * Creates new form FAInternalFrame
+     * Creates new form PDAInternalFrame
      */
-    public FAInternalFrame( MainWindow mainWindow ) {
-        this( mainWindow, new FA() );
+    public PDAInternalFrame( MainWindow mainWindow ) {
+        this( mainWindow, new PDA() );
     }
     
-    public FAInternalFrame( MainWindow mainWindow, FA fa ) {
+    public PDAInternalFrame( MainWindow mainWindow, PDA pda ) {
         
         this.mainWindow = mainWindow;
         this.simulationSteps = new ArrayList<>();
        
-        if ( fa == null ) {
-            this.fa = new FA();
+        if ( pda == null ) {
+            this.pda = new PDA();
         } else {
-            this.fa = fa;
+            this.pda = pda;
         }
         
         this.selectedStates = new HashSet<>();
@@ -175,19 +166,19 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
     private void customInit() {
         
-        faPPanel = new FAPropertiesPanel( this );
-        statePPanel = new FAStatePropertiesPanel( this );
-        transitionPPanel = new FATransitionPropertiesPanel( this );
+        pdaPPanel = new PDAPropertiesPanel( this );
+        statePPanel = new PDAStatePropertiesPanel( this );
+        transitionPPanel = new PDATransitionPropertiesPanel( this );
         
         cardLayout = (CardLayout) panelProperties.getLayout();
-        panelProperties.add( faPPanel, MODEL_PROPERTIES_CARD );
+        panelProperties.add( pdaPPanel, MODEL_PROPERTIES_CARD );
         panelProperties.add( statePPanel, STATE_PROPERTIES_CARD );
         panelProperties.add( transitionPPanel, TRANSITION_PROPERTIES_CARD );
         
-        drawPanel.setFa( fa );
+        drawPanel.setPda( pda );
         
-        faPPanel.setFa( fa );
-        faPPanel.readProperties();
+        pdaPPanel.setPda( pda );
+        pdaPPanel.readProperties();
         cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
         
         drawPanel.setCursor( Cursor.getPredefinedCursor( Cursor.HAND_CURSOR ) );
@@ -239,12 +230,6 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         btnGroup = new javax.swing.ButtonGroup();
-        popupMenuRegularOperations = new javax.swing.JPopupMenu();
-        popItemUnion = new javax.swing.JMenuItem();
-        popItemConcatenation = new javax.swing.JMenuItem();
-        popItemKleeneStar = new javax.swing.JMenuItem();
-        popItemComplement = new javax.swing.JMenuItem();
-        popItemIntersection = new javax.swing.JMenuItem();
         popupMenuReorganizeStates = new javax.swing.JPopupMenu();
         popItemHorizontal = new javax.swing.JMenuItem();
         popItemVertical = new javax.swing.JMenuItem();
@@ -261,7 +246,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         popItemStateColor = new javax.swing.JMenuItem();
         popItemRemoveState = new javax.swing.JMenuItem();
         popupMenuTransitionProperties = new javax.swing.JPopupMenu();
-        popItemTransitionSymbols = new javax.swing.JMenuItem();
+        popItemTransitionOperations = new javax.swing.JMenuItem();
         spPopupTransition01 = new javax.swing.JPopupMenu.Separator();
         popItemTransitionColor = new javax.swing.JMenuItem();
         spPopupTransition02 = new javax.swing.JPopupMenu.Separator();
@@ -272,7 +257,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnOpen = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
         btnSaveAs = new javax.swing.JButton();
-        btnSaveFAAsImage = new javax.swing.JButton();
+        btnSavePDAAsImage = new javax.swing.JButton();
         btnCodeGen = new javax.swing.JButton();
         btnClone = new javax.swing.JButton();
         sep01 = new javax.swing.JToolBar.Separator();
@@ -281,12 +266,6 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnAddState = new javax.swing.JToggleButton();
         btnAddTransition = new javax.swing.JToggleButton();
         sep02 = new javax.swing.JToolBar.Separator();
-        btnAddAllMissingTransitionsDFA = new javax.swing.JButton();
-        btnRemoveInaccessibleAndUselessStates = new javax.swing.JButton();
-        sep03 = new javax.swing.JToolBar.Separator();
-        btnGenerateEquivalentDFA = new javax.swing.JButton();
-        btnGenerateMinimizedDFA = new javax.swing.JButton();
-        btnRegularOperations = new javax.swing.JButton();
         hFiller = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         btnShowTransitionControls = new javax.swing.JToggleButton();
         sep04 = new javax.swing.JToolBar.Separator();
@@ -317,51 +296,6 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         scrollPaneModel = new javax.swing.JScrollPane();
         drawPanel = new br.com.davidbuzatto.yaas.gui.DrawPanel();
         panelProperties = new javax.swing.JPanel();
-
-        popItemUnion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/union.png"))); // NOI18N
-        popItemUnion.setText("Union");
-        popItemUnion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                popItemUnionActionPerformed(evt);
-            }
-        });
-        popupMenuRegularOperations.add(popItemUnion);
-
-        popItemConcatenation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/concatenation.png"))); // NOI18N
-        popItemConcatenation.setText("Concatenation");
-        popItemConcatenation.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                popItemConcatenationActionPerformed(evt);
-            }
-        });
-        popupMenuRegularOperations.add(popItemConcatenation);
-
-        popItemKleeneStar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/kleeneStar.png"))); // NOI18N
-        popItemKleeneStar.setText("Kleene Star");
-        popItemKleeneStar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                popItemKleeneStarActionPerformed(evt);
-            }
-        });
-        popupMenuRegularOperations.add(popItemKleeneStar);
-
-        popItemComplement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/complement.png"))); // NOI18N
-        popItemComplement.setText("Complement");
-        popItemComplement.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                popItemComplementActionPerformed(evt);
-            }
-        });
-        popupMenuRegularOperations.add(popItemComplement);
-
-        popItemIntersection.setIcon(new javax.swing.ImageIcon(getClass().getResource("/intersection.png"))); // NOI18N
-        popItemIntersection.setText("Intersection");
-        popItemIntersection.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                popItemIntersectionActionPerformed(evt);
-            }
-        });
-        popupMenuRegularOperations.add(popItemIntersection);
 
         popItemHorizontal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/rearrangeHorizontal.png"))); // NOI18N
         popItemHorizontal.setText("Horizontal");
@@ -483,14 +417,14 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
 
-        popItemTransitionSymbols.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pencil.png"))); // NOI18N
-        popItemTransitionSymbols.setText("Symbols");
-        popItemTransitionSymbols.addActionListener(new java.awt.event.ActionListener() {
+        popItemTransitionOperations.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pencil.png"))); // NOI18N
+        popItemTransitionOperations.setText("Operations");
+        popItemTransitionOperations.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                popItemTransitionSymbolsActionPerformed(evt);
+                popItemTransitionOperationsActionPerformed(evt);
             }
         });
-        popupMenuTransitionProperties.add(popItemTransitionSymbols);
+        popupMenuTransitionProperties.add(popItemTransitionOperations);
         popupMenuTransitionProperties.add(spPopupTransition01);
 
         popItemTransitionColor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/palette.png"))); // NOI18N
@@ -526,8 +460,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
-        setTitle("Finite Automata");
-        setFrameIcon(new javax.swing.ImageIcon(getClass().getResource("/fa.png"))); // NOI18N
+        setTitle("Pushown Automata");
+        setFrameIcon(new javax.swing.ImageIcon(getClass().getResource("/pda.png"))); // NOI18N
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
             }
@@ -596,17 +530,17 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         });
         toolBar.add(btnSaveAs);
 
-        btnSaveFAAsImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture.png"))); // NOI18N
-        btnSaveFAAsImage.setToolTipText("Save Finite Automaton as Image (Ctrl+Shift+I)");
-        btnSaveFAAsImage.setFocusable(false);
-        btnSaveFAAsImage.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnSaveFAAsImage.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnSaveFAAsImage.addActionListener(new java.awt.event.ActionListener() {
+        btnSavePDAAsImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture.png"))); // NOI18N
+        btnSavePDAAsImage.setToolTipText("Save Pushdown Automaton as Image (Ctrl+Shift+I)");
+        btnSavePDAAsImage.setFocusable(false);
+        btnSavePDAAsImage.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnSavePDAAsImage.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSavePDAAsImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveFAAsImageActionPerformed(evt);
+                btnSavePDAAsImageActionPerformed(evt);
             }
         });
-        toolBar.add(btnSaveFAAsImage);
+        toolBar.add(btnSavePDAAsImage);
 
         btnCodeGen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/script_gear.png"))); // NOI18N
         btnCodeGen.setToolTipText("Generate Code and Copy to Clipboard");
@@ -621,7 +555,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         toolBar.add(btnCodeGen);
 
         btnClone.setIcon(new javax.swing.ImageIcon(getClass().getResource("/script_go.png"))); // NOI18N
-        btnClone.setToolTipText("Clone Current Finite Automata");
+        btnClone.setToolTipText("Clone Current Pushdown Automata");
         btnClone.setFocusable(false);
         btnClone.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnClone.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -686,67 +620,6 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         });
         toolBar.add(btnAddTransition);
         toolBar.add(sep02);
-
-        btnAddAllMissingTransitionsDFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/transitionAddAll.png"))); // NOI18N
-        btnAddAllMissingTransitionsDFA.setToolTipText("Add All Missing Transitions (Alt+Shift+T)");
-        btnAddAllMissingTransitionsDFA.setFocusable(false);
-        btnAddAllMissingTransitionsDFA.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnAddAllMissingTransitionsDFA.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnAddAllMissingTransitionsDFA.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddAllMissingTransitionsDFAActionPerformed(evt);
-            }
-        });
-        toolBar.add(btnAddAllMissingTransitionsDFA);
-
-        btnRemoveInaccessibleAndUselessStates.setIcon(new javax.swing.ImageIcon(getClass().getResource("/stateRemoveUI.png"))); // NOI18N
-        btnRemoveInaccessibleAndUselessStates.setToolTipText("Remove Inaccessible and Useless States (Alt+Shift+DELETE)");
-        btnRemoveInaccessibleAndUselessStates.setFocusable(false);
-        btnRemoveInaccessibleAndUselessStates.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnRemoveInaccessibleAndUselessStates.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnRemoveInaccessibleAndUselessStates.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRemoveInaccessibleAndUselessStatesActionPerformed(evt);
-            }
-        });
-        toolBar.add(btnRemoveInaccessibleAndUselessStates);
-        toolBar.add(sep03);
-
-        btnGenerateEquivalentDFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dfa.png"))); // NOI18N
-        btnGenerateEquivalentDFA.setToolTipText("Generate Equivalent DFA (Alt+Shift+D)");
-        btnGenerateEquivalentDFA.setFocusable(false);
-        btnGenerateEquivalentDFA.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnGenerateEquivalentDFA.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnGenerateEquivalentDFA.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGenerateEquivalentDFAActionPerformed(evt);
-            }
-        });
-        toolBar.add(btnGenerateEquivalentDFA);
-
-        btnGenerateMinimizedDFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/arrow_in.png"))); // NOI18N
-        btnGenerateMinimizedDFA.setToolTipText("Generate Minimized DFA (Alt+Shift+M)");
-        btnGenerateMinimizedDFA.setFocusable(false);
-        btnGenerateMinimizedDFA.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnGenerateMinimizedDFA.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnGenerateMinimizedDFA.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGenerateMinimizedDFAActionPerformed(evt);
-            }
-        });
-        toolBar.add(btnGenerateMinimizedDFA);
-
-        btnRegularOperations.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lightning.png"))); // NOI18N
-        btnRegularOperations.setToolTipText("Regular Operations");
-        btnRegularOperations.setFocusable(false);
-        btnRegularOperations.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnRegularOperations.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnRegularOperations.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                btnRegularOperationsMouseReleased(evt);
-            }
-        });
-        toolBar.add(btnRegularOperations);
         toolBar.add(hFiller);
 
         btnShowTransitionControls.setIcon(new javax.swing.ImageIcon(getClass().getResource("/shape_square_edit.png"))); // NOI18N
@@ -1077,20 +950,20 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 "New model",
                 JOptionPane.YES_NO_OPTION ) == JOptionPane.YES_OPTION ) {
             
-            fa = new FA();
+            pda = new PDA();
             setCurrentFileSaved( false );
             
-            drawPanel.setFa( fa );
-            faPPanel.setFa( fa );
-            statePPanel.setFa( fa );
-            transitionPPanel.setFa( fa );
+            drawPanel.setPda( pda );
+            pdaPPanel.setPda( pda );
+            statePPanel.setPda( pda );
+            transitionPPanel.setPda( pda );
             
             selectedState = null;
             selectedTransition = null;
             
             currentState = 0;
             
-            faPPanel.readProperties();
+            pdaPPanel.readProperties();
             statePPanel.readProperties();
             transitionPPanel.readProperties();
             
@@ -1113,7 +986,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnAddTransitionActionPerformed
 
     private void btnShowTransitionControlsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowTransitionControlsActionPerformed
-        fa.setTransitionsControlPointsVisible( btnShowTransitionControls.isSelected() );
+        pda.setTransitionsControlPointsVisible( btnShowTransitionControls.isSelected() );
         repaintDrawPanel();
     }//GEN-LAST:event_btnShowTransitionControlsActionPerformed
 
@@ -1150,7 +1023,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                     selectedStates.clear();
                 }
 
-                for ( FAState s : fa.getStates() ) {
+                for ( PDAState s : pda.getStates() ) {
                     if ( !selectedStates.contains( s ) ) {
                         s.setSelected( false );
                     }
@@ -1163,13 +1036,13 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
                 if ( !selectedStates.isEmpty() ) {
 
-                    selectedState = fa.getStateAt( xPressed, yPressed );
+                    selectedState = pda.getStateAt( xPressed, yPressed );
 
                     if ( selectedStates.contains( selectedState ) ) {
 
                         xOffset = xPressed - selectedState.getX1();
                         yOffset = yPressed - selectedState.getY1();
-                        fa.updateTransitions();
+                        pda.updateTransitions();
 
                     } else {
                         selectedStates.clear();
@@ -1182,35 +1055,35 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
                 if ( defaultMove ) {
 
-                    fa.deselectAll();
-                    selectedState = fa.getStateAt( xPressed, yPressed );
+                    pda.deselectAll();
+                    selectedState = pda.getStateAt( xPressed, yPressed );
 
                     if ( selectedState != null ) {
 
                         xOffset = xPressed - selectedState.getX1();
                         yOffset = yPressed - selectedState.getY1();
-                        fa.updateTransitions();
+                        pda.updateTransitions();
 
-                        statePPanel.setFa( fa );
+                        statePPanel.setPda( pda );
                         statePPanel.setState( selectedState );
                         statePPanel.readProperties();
                         cardLayout.show( panelProperties, STATE_PROPERTIES_CARD );
 
                     } else {
 
-                        selectedTransition = fa.getTransitionAt( xPressed, yPressed );
+                        selectedTransition = pda.getTransitionAt( xPressed, yPressed );
 
                         if ( selectedTransition != null ) {
 
-                            transitionPPanel.setFa( fa );
+                            transitionPPanel.setPda( pda );
                             transitionPPanel.setTransition( selectedTransition );
                             transitionPPanel.readProperties();
                             cardLayout.show( panelProperties, TRANSITION_PROPERTIES_CARD );
 
                         } else {
 
-                            faPPanel.setFa( fa );
-                            faPPanel.readProperties();
+                            pdaPPanel.setPda( pda );
+                            pdaPPanel.readProperties();
                             cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
 
                         }
@@ -1221,11 +1094,11 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
             } else if ( btnAddState.isSelected() ) {
 
-                FAState newState = new FAState( currentState++ );
+                PDAState newState = new PDAState( currentState++ );
                 newState.setX1( xPressed );
                 newState.setY1( yPressed );
 
-                fa.addState( newState );
+                pda.addState( newState );
 
                 if ( btnSnapToGrid.isSelected() ) {
                     updateSnapPoint( evt );
@@ -1238,7 +1111,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             } else if ( btnAddTransition.isSelected() ) {
 
                 if ( originState == null ) {
-                    originState = fa.getStateAt( xPressed, yPressed );
+                    originState = pda.getStateAt( xPressed, yPressed );
                     if ( originState != null ) {
                         drawPanel.setDrawingTempTransition( true );
                         drawPanel.setTempTransitionX1( originState.getX1() );
@@ -1253,8 +1126,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         } else if ( evt.getButton() == MouseEvent.BUTTON3 ) {
         }
         
-        faPPanel.setFa( fa );
-        faPPanel.readProperties();
+        pdaPPanel.setPda( pda );
+        pdaPPanel.readProperties();
         repaintDrawPanel();
         
     }//GEN-LAST:event_drawPanelMousePressed
@@ -1273,7 +1146,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                         xPressed <= evt.getX() ? evt.getX() - xPressed : xPressed - evt.getX(), 
                         yPressed <= evt.getY() ? evt.getY() - yPressed : yPressed - evt.getY() );
 
-                for ( FAState s : fa.getStates() ) {
+                for ( PDAState s : pda.getStates() ) {
                     if ( s.intersects( rectangle ) ) {
                         s.setSelected( true );
                         selectedStates.add( s );
@@ -1297,30 +1170,21 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 if ( originState != null ) {
 
                     if ( targetState == null ) {
-                        targetState = fa.getStateAt( evt.getX(), evt.getY() );
+                        targetState = pda.getStateAt( evt.getX(), evt.getY() );
                     } 
 
                     if ( targetState != null ) {
 
-                        String input = Utils.showInputDialogEmptyString( this, 
-                                "Transition symbol(s)", 
-                                "Add Transition Symbol(s)", null );
-                        List<Character> symbols = new ArrayList<>();
-
-                        if ( input != null ) {
-
-                            input = input.trim().replace( " ", "" );
-
-                            if ( !input.isEmpty() ) {
-                                for ( char c : input.toCharArray() ) {
-                                    symbols.add( c );
-                                }
-                                FATransition t = new FATransition( 
-                                        originState, targetState, symbols );
-                                fa.addTransition( t );
-                                setCurrentFileSaved( false );
-                            }
-
+                        // TODO update
+                        
+                        PDAOperation op = Utils.showInputDialogNewPDAOperation( 
+                                this, "New Transition" );
+                        
+                        if ( op != null ) {
+                            PDATransition t = new PDATransition( 
+                                    originState, targetState, op );
+                            pda.addTransition( t );
+                            setCurrentFileSaved( false );
                         }
 
                     }
@@ -1331,7 +1195,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
                 }
 
-                fa.deselectAll();
+                pda.deselectAll();
 
             }
             
@@ -1339,14 +1203,14 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             
             if ( btnMove.isSelected() ) {
                 
-                fa.deselectAll();
+                pda.deselectAll();
                 selectedStates.clear();
-                selectedState = fa.getStateAt( evt.getX(), evt.getY() );
-                selectedTransition = fa.getTransitionAt( evt.getX(), evt.getY() );
+                selectedState = pda.getStateAt( evt.getX(), evt.getY() );
+                selectedTransition = pda.getTransitionAt( evt.getX(), evt.getY() );
                 
                 if ( selectedState != null ) {
 
-                    statePPanel.setFa( fa );
+                    statePPanel.setPda( pda );
                     statePPanel.setState( selectedState );
                     statePPanel.readProperties();
                     cardLayout.show( panelProperties, STATE_PROPERTIES_CARD );
@@ -1358,7 +1222,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
                 } else if ( selectedTransition != null ) {
 
-                    transitionPPanel.setFa( fa );
+                    transitionPPanel.setPda( pda );
                     transitionPPanel.setTransition( selectedTransition );
                     transitionPPanel.readProperties();
                     cardLayout.show( panelProperties, TRANSITION_PROPERTIES_CARD );
@@ -1367,8 +1231,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
                 } else {
 
-                    faPPanel.setFa( fa );
-                    faPPanel.readProperties();
+                    pdaPPanel.setPda( pda );
+                    pdaPPanel.readProperties();
                     cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
 
                 }
@@ -1377,8 +1241,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             
         }
         
-        faPPanel.setFa( fa );
-        faPPanel.readProperties();
+        pdaPPanel.setPda( pda );
+        pdaPPanel.readProperties();
         repaintDrawPanel();
         
     }//GEN-LAST:event_drawPanelMouseReleased
@@ -1395,7 +1259,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                         xPressed <= evt.getX() ? evt.getX() - xPressed : xPressed - evt.getX(), 
                         yPressed <= evt.getY() ? evt.getY() - yPressed : yPressed - evt.getY() );
 
-                for ( FAState s : fa.getStates() ) {
+                for ( PDAState s : pda.getStates() ) {
                     if ( s.intersects( rectangle ) ) {
                         s.setMouseHover( true );
                     } else {
@@ -1413,11 +1277,11 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                     int yAmount = evt.getY() - yPrev;
                     xPrev += xAmount;
                     yPrev += yAmount;
-                    for ( FAState s : selectedStates ) {
+                    for ( PDAState s : selectedStates ) {
                         s.move( xAmount, yAmount );
                     }
-                    fa.updateTransitions();
-                    fa.draggTransitions( evt );
+                    pda.updateTransitions();
+                    pda.draggTransitions( evt );
                 } else if ( selectedState != null ) {
                     if ( btnSnapToGrid.isSelected() ) {
                         updateSnapPoint( evt );
@@ -1427,8 +1291,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                         selectedState.setX1( evt.getX() - xOffset );
                         selectedState.setY1( evt.getY() - yOffset );
                     }
-                    fa.updateTransitions();
-                    fa.draggTransitions( evt );
+                    pda.updateTransitions();
+                    pda.draggTransitions( evt );
                 } else if ( selectedTransition != null ) {
                     selectedTransition.mouseDragged( evt );
                 } else {
@@ -1436,7 +1300,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                     int yAmount = evt.getY() - yPrev;
                     xPrev += xAmount;
                     yPrev += yAmount;
-                    fa.move( xAmount, yAmount );
+                    pda.move( xAmount, yAmount );
                 }
 
                 setCurrentFileSaved( false );
@@ -1455,7 +1319,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private void drawPanelMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drawPanelMouseMoved
         
         if ( btnMove.isSelected() || btnAddTransition.isSelected() ) {
-            fa.mouseHoverStatesAndTransitions( evt.getX(), evt.getY() );
+            pda.mouseHoverStatesAndTransitions( evt.getX(), evt.getY() );
             repaintDrawPanel();
         }
         
@@ -1491,10 +1355,10 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_drawPanelMouseWheelMoved
 
-    private void btnSaveFAAsImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveFAAsImageActionPerformed
+    private void btnSavePDAAsImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSavePDAAsImageActionPerformed
         
         JFileChooser jfc = new JFileChooser( new File( ApplicationPreferences.getPref( ApplicationPreferences.PREF_DEFAULT_FOLDER_PATH ) ) );
-        jfc.setDialogTitle( "Save Finite Automaton as Image" );
+        jfc.setDialogTitle( "Save Pushdown Automaton as Image" );
         jfc.setMultiSelectionEnabled( false );
         jfc.setFileSelectionMode( JFileChooser.FILES_ONLY );
         jfc.removeChoosableFileFilter( jfc.getFileFilter() );
@@ -1547,7 +1411,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                     g2d.fillRect( 0, 0, img.getWidth(), img.getHeight() );
                 }
 
-                fa.draw( g2d );
+                pda.draw( g2d );
 
                 try {
                     ImageIO.write( img, "png", f );
@@ -1559,7 +1423,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             
         }
         
-    }//GEN-LAST:event_btnSaveFAAsImageActionPerformed
+    }//GEN-LAST:event_btnSavePDAAsImageActionPerformed
 
     private void btnTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTestActionPerformed
         runSingleTest();
@@ -1567,23 +1431,23 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
         
-        if ( fa.canExecute() ) {
+        if ( pda.canExecute() ) {
             
             txtTestString.setEditable( false );
             resetTestInGUI();
             disableGUI();
-            fa.deselectAll();
+            pda.deselectAll();
             selectedStates.clear();
             simulationSteps.clear();
             currentSimulationStep = 0;
             
-            boolean accepted = fa.accepts( txtTestString.getText(), simulationSteps );
+            boolean accepted = pda.accepts( txtTestString.getText(), simulationSteps );
             
             btnStart.setEnabled( false );
             btnStop.setEnabled( true );
             
             drawPanel.setSimulationString( txtTestString.getText() );
-            drawPanel.setFASimulationSteps( simulationSteps );
+            drawPanel.setPDASimulationSteps( simulationSteps );
             drawPanel.setCurrentSimulationStep( currentSimulationStep );
             drawPanel.setSimulationAccepted( accepted );
             drawPanel.repaint();
@@ -1636,7 +1500,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private void btnStopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStopActionPerformed
         
         simulationSteps.clear();
-        fa.deactivateAllStatesInSimulation();
+        pda.deactivateAllStatesInSimulation();
         txtTestString.setEditable( true );
         resetTestInGUI();
         enableGUI();
@@ -1657,11 +1521,11 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnStopActionPerformed
 
     private void btnBatchTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatchTestActionPerformed
-        if ( faBatchTestDialog == null ) {
-            faBatchTestDialog = new FABatchTest( mainWindow, this, true );
+        if ( pdaBatchTestDialog == null ) {
+            pdaBatchTestDialog = new PDABatchTest( mainWindow, this, true );
         }
-        faBatchTestDialog.setFa( fa );
-        faBatchTestDialog.setVisible( true );
+        pdaBatchTestDialog.setPda( pda );
+        pdaBatchTestDialog.setVisible( true );
     }//GEN-LAST:event_btnBatchTestActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
@@ -1669,101 +1533,9 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         txtTestString.setText( "" );
     }//GEN-LAST:event_btnResetActionPerformed
 
-    private void btnGenerateEquivalentDFAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateEquivalentDFAActionPerformed
-        
-        fa.updateType();
-        
-        if ( fa.getType() == FAType.EMPTY ) {
-            
-            JOptionPane.showMessageDialog( 
-                    this, 
-                    "You must define a Finite Automaton First!", 
-                    "Information", 
-                    JOptionPane.INFORMATION_MESSAGE );
-            
-        } else if ( fa.getType() == FAType.DFA ) {
-            
-            JOptionPane.showMessageDialog( 
-                    this, 
-                    "You already have a DFA!", 
-                    "Information", 
-                    JOptionPane.INFORMATION_MESSAGE );
-            
-        } else {
-            
-            try {
-                
-                FA dfa = new FADeterminize( fa ).getGeneratedDFA();
-                FAArrangement.arrangeByLevel( dfa, 100, 100, 150, false );
-                mainWindow.createFAInternalFrame( dfa, false, false );
-                
-            } catch ( IllegalArgumentException exc ) {
-                Utils.showErrorMessage( this, exc.getMessage() );
-            }
-            
-        }
-        
-    }//GEN-LAST:event_btnGenerateEquivalentDFAActionPerformed
-
-    private void btnGenerateMinimizedDFAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateMinimizedDFAActionPerformed
-        
-        try {
-            
-            fa.updateType();
-            
-            int r = JOptionPane.showConfirmDialog( this, 
-                    "Remove inaccessible and useless states before processing?", 
-                    "Remove?", JOptionPane.YES_NO_CANCEL_OPTION );
-            
-            if ( r != JOptionPane.CANCEL_OPTION ) {
-                
-                FA minDFA = new DFAMinimize( fa, r == JOptionPane.YES_OPTION ).getGeneratedDFA();
-
-                if ( minDFA.equals( fa ) ) {
-                    JOptionPane.showMessageDialog( 
-                        this, 
-                        "Your DFA is already mimimum!", 
-                        "Information", 
-                        JOptionPane.INFORMATION_MESSAGE );
-                } else {
-                    FAArrangement.arrangeByLevel( minDFA, 100, 100, 150, false );
-                    mainWindow.createFAInternalFrame( minDFA, false, false );
-                }
-                
-            }
-            
-        } catch ( IllegalArgumentException exc ) {
-            Utils.showErrorMessage( this, exc.getMessage() );
-        }
-        
-    }//GEN-LAST:event_btnGenerateMinimizedDFAActionPerformed
-
     private void txtTestStringActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTestStringActionPerformed
         runSingleTest();
     }//GEN-LAST:event_txtTestStringActionPerformed
-
-    private void btnAddAllMissingTransitionsDFAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddAllMissingTransitionsDFAActionPerformed
-        
-        fa.updateType();
-        
-        if ( fa.getType() == FAType.DFA ) {
-            
-            int currentSize = fa.getStates().size();
-            DFATotalTransitionFunction.processIt( fa, currentState );
-            int newSize = fa.getStates().size();
-            
-            if ( currentSize != newSize ) {
-                currentState++;
-            }
-            
-            setCurrentFileSaved( false );
-            repaintDrawPanel();
-            
-        } else {
-            Utils.showErrorMessage( this, "To perform this you must have a DFA!" );
-        }
-        
-    }//GEN-LAST:event_btnAddAllMissingTransitionsDFAActionPerformed
 
     private void popItemHorizontalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemHorizontalActionPerformed
         
@@ -1778,7 +1550,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                     throw new NumberFormatException();
                 }
                 
-                FAArrangement.arrangeHorizontally( fa, 100, 100, distance );
+                PDAArrangement.arrangeHorizontally( pda, 100, 100, distance );
                 
                 setCurrentFileSaved( false );
                 repaintDrawPanel();
@@ -1804,7 +1576,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                     throw new NumberFormatException();
                 }
                 
-                FAArrangement.arrangeVertically( fa, 100, 100, distance );
+                PDAArrangement.arrangeVertically( pda, 100, 100, distance );
                 
                 setCurrentFileSaved( false );
                 repaintDrawPanel();
@@ -1819,7 +1591,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
     private void popItemRectangularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemRectangularActionPerformed
         
-        int size = fa.getStates().size();
+        int size = pda.getStates().size();
         SpinnerNumberModel spinModel = new SpinnerNumberModel( 1, 1, size == 0 ? 1 : size, 1 );
         
         JLabel lblColumns = new JLabel( "How many columns:" );
@@ -1867,7 +1639,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                     throw new NumberFormatException();
                 }
 
-                FAArrangement.arrangeRectangularly( fa, 100, 100, 
+                PDAArrangement.arrangeRectangularly( pda, 100, 100, 
                         Integer.parseInt( spinColumns.getValue().toString() ), 
                         distance );
 
@@ -1895,8 +1667,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                     throw new NumberFormatException();
                 }
                 
-                FAArrangement.arrangeInCircle( 
-                        fa, radius + 100, radius + 100, radius );
+                PDAArrangement.arrangeInCircle( 
+                        pda, radius + 100, radius + 100, radius );
                 
                 setCurrentFileSaved( false );
                 repaintDrawPanel();
@@ -1911,7 +1683,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
     private void popItemByLevelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemByLevelActionPerformed
                 
-        if ( fa.getInitialState() != null ) {
+        if ( pda.getInitialState() != null ) {
         
             JLabel lblAlign = new JLabel( "Align:" );
             JRadioButton rbHorizontal = new JRadioButton( "Horizontal" );
@@ -1966,8 +1738,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                         throw new NumberFormatException();
                     }
 
-                    FAArrangement.arrangeByLevel( 
-                            fa, 100, 100, distance, rbVertical.isSelected() );
+                    PDAArrangement.arrangeByLevel( 
+                            pda, 100, 100, distance, rbVertical.isSelected() );
 
                     setCurrentFileSaved( false );
                     repaintDrawPanel();
@@ -1979,7 +1751,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
         
         } else {
-            Utils.showErrorMessage( this, "Your Finite Automata must have an initial state!" );
+            Utils.showErrorMessage( this, "Your Pushdown Automata must have an initial state!" );
         }
         
     }//GEN-LAST:event_popItemByLevelActionPerformed
@@ -1997,7 +1769,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                     throw new NumberFormatException();
                 }
                 
-                FAArrangement.arrangeDiagonally( fa, 100, 100, distance );
+                PDAArrangement.arrangeDiagonally( pda, 100, 100, distance );
                 
                 setCurrentFileSaved( false );
                 repaintDrawPanel();
@@ -2029,25 +1801,25 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                     JOptionPane.YES_NO_CANCEL_OPTION );
             
             if ( r == JOptionPane.YES_OPTION ) {
-                if ( saveFA() ) {
-                    openFA();
+                if ( savePDA() ) {
+                    openPDA();
                 }
             } else if ( r == JOptionPane.NO_OPTION ) {
-                openFA();
+                openPDA();
             }
             
         } else {
-            openFA();
+            openPDA();
         }
         
     }//GEN-LAST:event_btnOpenActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        saveFA();
+        savePDA();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveAsActionPerformed
-        saveFAAs( "Save Finite Automaton As..." );
+        savePDAAs( "Save Pushdown Automaton As..." );
     }//GEN-LAST:event_btnSaveAsActionPerformed
 
     private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
@@ -2065,7 +1837,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                         JOptionPane.YES_NO_CANCEL_OPTION );
 
                 if ( r == JOptionPane.YES_OPTION ) {
-                    if ( saveFA() ) {
+                    if ( savePDA() ) {
                         dispose();
                     }
                 } else if ( r == JOptionPane.NO_OPTION ) {
@@ -2082,7 +1854,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
     private void btnCodeGenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCodeGenActionPerformed
         
-        String code = fa.generateCode();
+        String code = pda.generateCode();
         StringSelection codeSelection = new StringSelection( code );
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents( codeSelection, null );
@@ -2107,14 +1879,14 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnCodeGenActionPerformed
 
     private void popupMenuStatePropertiesPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_popupMenuStatePropertiesPopupMenuCanceled
-        faPPanel.setFa( fa );
-        faPPanel.readProperties();
+        pdaPPanel.setPda( pda );
+        pdaPPanel.readProperties();
         cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
     }//GEN-LAST:event_popupMenuStatePropertiesPopupMenuCanceled
 
     private void popupMenuTransitionPropertiesPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_popupMenuTransitionPropertiesPopupMenuCanceled
-        faPPanel.setFa( fa );
-        faPPanel.readProperties();
+        pdaPPanel.setPda( pda );
+        pdaPPanel.readProperties();
         cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
     }//GEN-LAST:event_popupMenuTransitionPropertiesPopupMenuCanceled
 
@@ -2124,15 +1896,15 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             
             if ( checkInitialState.isSelected() ) {
                 selectedState.setInitial( true );
-                fa.setInitialState( selectedState );
+                pda.setInitialState( selectedState );
             } else {
                 if ( selectedState.isInitial() ) {
-                    fa.setInitialState( null );
+                    pda.setInitialState( null );
                 }
                 selectedState.setInitial( false );
             }
 
-            statePPanel.setFa( fa );
+            statePPanel.setPda( pda );
             statePPanel.setState( selectedState );
             statePPanel.readProperties();
             cardLayout.show( panelProperties, STATE_PROPERTIES_CARD );
@@ -2150,7 +1922,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             
             selectedState.setAccepting( checkAcceptingState.isSelected() );
 
-            statePPanel.setFa( fa );
+            statePPanel.setPda( pda );
             statePPanel.setState( selectedState );
             statePPanel.readProperties();
             cardLayout.show( panelProperties, STATE_PROPERTIES_CARD );
@@ -2173,7 +1945,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 
                 selectedState.setStrokeColor( c );
                 
-                statePPanel.setFa( fa );
+                statePPanel.setPda( pda );
                 statePPanel.setState( selectedState );
                 statePPanel.readProperties();
                 cardLayout.show( panelProperties, STATE_PROPERTIES_CARD );
@@ -2196,7 +1968,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                     "Do you really want to remove the selected state?" , 
                     "Confirmation",
                     JOptionPane.YES_NO_OPTION ) == JOptionPane.YES_OPTION ) {
-                fa.removeState( selectedState );
+                pda.removeState( selectedState );
                 setCurrentFileSaved( false );
                 repaintDrawPanel();
                 updateAfterRemotion();
@@ -2209,11 +1981,13 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_popItemRemoveStateActionPerformed
 
-    private void popItemTransitionSymbolsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemTransitionSymbolsActionPerformed
+    private void popItemTransitionOperationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemTransitionOperationsActionPerformed
         
         if ( selectedTransition != null ) {
             
-            String s = "";
+            // TODO update
+            
+            /*String s = "";
             for ( Character c : selectedTransition.getSymbols() ) {
                 s += c.toString() + " ";
             }
@@ -2233,8 +2007,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                         symbols.add( c );
                     }
                     selectedTransition.setSymbols( symbols );
-                    fa.markAllCachesAsObsolete();
-                    transitionPPanel.setFa( fa );
+                    pda.markAllCachesAsObsolete();
+                    transitionPPanel.setPda( pda );
                     transitionPPanel.setTransition( selectedTransition );
                     transitionPPanel.readProperties();
                     cardLayout.show( panelProperties, TRANSITION_PROPERTIES_CARD );
@@ -2243,13 +2017,13 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                     updateAfterUpdate();
                 }
 
-            }
+            }*/
             
         } else {
             Utils.showErrorMessage( this, "There's no selected transition!" );
         }
         
-    }//GEN-LAST:event_popItemTransitionSymbolsActionPerformed
+    }//GEN-LAST:event_popItemTransitionOperationsActionPerformed
 
     private void popItemTransitionColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemTransitionColorActionPerformed
         
@@ -2262,7 +2036,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 
                 selectedTransition.setStrokeColor( c );
                 
-                transitionPPanel.setFa( fa );
+                transitionPPanel.setPda( pda );
                 transitionPPanel.setTransition( selectedTransition );
                 transitionPPanel.readProperties();
                 cardLayout.show( panelProperties, TRANSITION_PROPERTIES_CARD );
@@ -2282,7 +2056,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             
             selectedTransition.resetTransformations();
             
-            transitionPPanel.setFa( fa );
+            transitionPPanel.setPda( pda );
             transitionPPanel.setTransition( selectedTransition );
             transitionPPanel.readProperties();
             cardLayout.show( panelProperties, TRANSITION_PROPERTIES_CARD );
@@ -2305,7 +2079,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                     "Do you really want to remove the selected transition?" , 
                     "Confirmation",
                     JOptionPane.YES_NO_OPTION ) == JOptionPane.YES_OPTION ) {
-                fa.removeTransition( selectedTransition );
+                pda.removeTransition( selectedTransition );
                 setCurrentFileSaved( false );
                 repaintDrawPanel();
                 updateAfterRemotion();
@@ -2333,7 +2107,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 
                 selectedState.setCustomLabel( input );
 
-                statePPanel.setFa( fa );
+                statePPanel.setPda( pda );
                 statePPanel.setState( selectedState );
                 statePPanel.readProperties();
                 cardLayout.show( panelProperties, STATE_PROPERTIES_CARD );
@@ -2350,8 +2124,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private void btnCloneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloneActionPerformed
         
         try {
-            FA clone = (FA) fa.clone();
-            mainWindow.createFAInternalFrame( clone, false, false );
+            PDA clone = (PDA) pda.clone();
+            mainWindow.createPDAInternalFrame( clone, false, false );
         } catch ( CloneNotSupportedException exc ) {
             // should never be reached
             exc.printStackTrace();
@@ -2359,106 +2133,22 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_btnCloneActionPerformed
 
-    private void popItemUnionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemUnionActionPerformed
-        
-        try {
-            FA fa2 = loadFA( "Choose the second Finite Automaton to perform Union" );
-            if ( fa2 != null ) {
-                FA faUnion = new FAUnion( fa, fa2 ).getGeneratedFA();
-                FAArrangement.arrangeByLevel( faUnion, 100, 100, 150, false );
-                mainWindow.createFAInternalFrame( faUnion, false, false );
-            }
-        } catch ( IllegalArgumentException exc ) {
-            Utils.showErrorMessage( this, exc.getMessage() );
-        }
-        
-    }//GEN-LAST:event_popItemUnionActionPerformed
-
-    private void popItemConcatenationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemConcatenationActionPerformed
-        
-        try {
-            FA fa2 = loadFA( "Choose the second Finite Automaton to perform Concatenation" );
-            if ( fa2 != null ) {
-                FA faConcatenation = new FAConcatenation( fa, fa2 ).getGeneratedFA();
-                FAArrangement.arrangeByLevel( faConcatenation, 100, 100, 150, false );
-                mainWindow.createFAInternalFrame( faConcatenation, false, false );
-            }
-        } catch ( IllegalArgumentException exc ) {
-            Utils.showErrorMessage( this, exc.getMessage() );
-        }
-        
-    }//GEN-LAST:event_popItemConcatenationActionPerformed
-
-    private void popItemKleeneStarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemKleeneStarActionPerformed
-        
-        try {
-            FA faStar = new FAKleeneStar( fa ).getGeneratedFA();
-            FAArrangement.arrangeByLevel( faStar, 100, 100, 150, false );
-            mainWindow.createFAInternalFrame( faStar, false, false );
-        } catch ( IllegalArgumentException exc ) {
-            Utils.showErrorMessage( this, exc.getMessage() );
-        }
-        
-    }//GEN-LAST:event_popItemKleeneStarActionPerformed
-
-    private void popItemComplementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemComplementActionPerformed
-        
-        try {
-            FA complementedDFA = new DFAComplement( fa ).getGeneratedDFA();
-            mainWindow.createFAInternalFrame( complementedDFA, false, false );
-        } catch ( IllegalArgumentException exc ) {
-            Utils.showErrorMessage( this, exc.getMessage() );
-        }
-        
-    }//GEN-LAST:event_popItemComplementActionPerformed
-
-    private void popItemIntersectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemIntersectionActionPerformed
-        
-        try {
-            FA fa2 = loadFA( "Choose the second Finite Automaton to perform Intersection" );
-            if ( fa2 != null ) {
-                FA faIntersection = new FAIntersection( fa, fa2 ).getGeneratedFA();
-                FAArrangement.arrangeByLevel( faIntersection, 100, 100, 150, false );
-                mainWindow.createFAInternalFrame( faIntersection, false, false );
-            }
-        } catch ( IllegalArgumentException exc ) {
-            Utils.showErrorMessage( this, exc.getMessage() );
-        }
-        
-    }//GEN-LAST:event_popItemIntersectionActionPerformed
-
-    private void btnRegularOperationsMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegularOperationsMouseReleased
-        popupMenuRegularOperations.show( evt.getComponent(), 0, 0 );
-    }//GEN-LAST:event_btnRegularOperationsMouseReleased
-
-    private void btnRemoveInaccessibleAndUselessStatesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveInaccessibleAndUselessStatesActionPerformed
-        
-        try {
-            FA faCleaned = new FARemoveInaccessibleAndUselessStates( fa, true ).getGeneratedFA();
-            mainWindow.createFAInternalFrame( faCleaned, false, false );
-        } catch ( IllegalArgumentException exc ) {
-            Utils.showErrorMessage( this, exc.getMessage() );
-        }
-        
-    }//GEN-LAST:event_btnRemoveInaccessibleAndUselessStatesActionPerformed
-
     public void repaintDrawPanel() {
         drawPanel.repaint();
-        drawPanel.setPreferredSize( new Dimension( fa.getWidth(), fa.getHeight() ) );
+        drawPanel.setPreferredSize( new Dimension( pda.getWidth(), pda.getHeight() ) );
         drawPanel.revalidate();
     }
     
     public void updateAfterRemotion() {
-        faPPanel.setFa( fa );
-        faPPanel.readProperties();
+        pdaPPanel.setPda( pda );
+        pdaPPanel.readProperties();
         cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
         repaintDrawPanel();
     }
     
     public void updateAfterUpdate() {
-        fa.updateType();
-        faPPanel.setFa( fa );
-        faPPanel.readProperties();
+        pdaPPanel.setPda( pda );
+        pdaPPanel.readProperties();
     }
     
     private void zoomIn() {
@@ -2493,9 +2183,9 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     
     private void runSingleTest() throws HeadlessException {
         
-        if ( fa.canExecute() ) {
+        if ( pda.canExecute() ) {
             
-            if ( fa.accepts( txtTestString.getText() ) ) {
+            if ( pda.accepts( txtTestString.getText() ) ) {
                 setTestToAcceptedInGUI( );
             } else {
                 setTestToRejectedInGUI( );
@@ -2563,7 +2253,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private void btnMoveAction() {
         
         if ( selectedStates.isEmpty() ) {
-            fa.deselectAll();
+            pda.deselectAll();
         }
         
         cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
@@ -2578,7 +2268,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnOpen.setEnabled( false );
         btnSave.setEnabled( false );
         btnSaveAs.setEnabled( false );
-        btnSaveFAAsImage.setEnabled( false );
+        btnSavePDAAsImage.setEnabled( false );
         btnCodeGen.setEnabled( false );
         btnClone.setEnabled( false );
         
@@ -2588,13 +2278,6 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnMoveAction();
         btnAddState.setEnabled( false );
         btnAddTransition.setEnabled( false );
-        
-        btnAddAllMissingTransitionsDFA.setEnabled( false );
-        btnRemoveInaccessibleAndUselessStates.setEnabled( false );
-        
-        btnGenerateEquivalentDFA.setEnabled( false );
-        btnGenerateMinimizedDFA.setEnabled( false );
-        btnRegularOperations.setEnabled( false );
         
         btnTest.setEnabled( false );
         btnReset.setEnabled( false );
@@ -2611,19 +2294,12 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnOpen.setEnabled( true );
         btnSave.setEnabled( true );
         btnSaveAs.setEnabled( true );
-        btnSaveFAAsImage.setEnabled( true );
+        btnSavePDAAsImage.setEnabled( true );
         btnCodeGen.setEnabled( true );
         btnClone.setEnabled( true );
         
         btnAddState.setEnabled( true );
         btnAddTransition.setEnabled( true );
-        
-        btnAddAllMissingTransitionsDFA.setEnabled( true );
-        btnRemoveInaccessibleAndUselessStates.setEnabled( true );
-        
-        btnGenerateEquivalentDFA.setEnabled( true );
-        btnGenerateMinimizedDFA.setEnabled( true );
-        btnRegularOperations.setEnabled( true );
         
         btnTest.setEnabled( true );
         btnReset.setEnabled( true );
@@ -2638,8 +2314,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         if ( step >= 0 && step < simulationSteps.size() ) {
             
-            FASimulationStep current = simulationSteps.get( step );
-            current.activateInFA( fa );
+            PDASimulationStep current = simulationSteps.get( step );
+            current.activateInPDA( pda );
             drawPanel.setCurrentSimulationStep( step );
             
             if ( step == simulationSteps.size() - 1 ) {
@@ -2692,12 +2368,12 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
     }
     
-    private void serializeFAToFile( File file ) {
+    private void serializePDAToFile( File file ) {
         
         try ( FileOutputStream fos = new FileOutputStream( file );
                 ObjectOutputStream oos = new ObjectOutputStream( fos ) ) {
 
-            oos.writeObject( fa );
+            oos.writeObject( pda );
             oos.flush();
             currentFile = file;
             setCurrentFileSaved( true );
@@ -2708,25 +2384,25 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
     }
     
-    private boolean saveFA() {
+    private boolean savePDA() {
         
         if ( currentFile == null ) {
-            return saveFAAs( "Save Finite Automaton" );
+            return savePDAAs( "Save Pushdown Automaton" );
         } else {
-            serializeFAToFile( currentFile );
+            serializePDAToFile( currentFile );
             return true;
         }
         
     }
     
-    private boolean saveFAAs( String saveDialogTitle ) {
+    private boolean savePDAAs( String saveDialogTitle ) {
         
         JFileChooser jfc = new JFileChooser( new File( ApplicationPreferences.getPref( ApplicationPreferences.PREF_DEFAULT_FOLDER_PATH ) ) );
         jfc.setDialogTitle( saveDialogTitle );
         jfc.setMultiSelectionEnabled( false );
         jfc.setFileSelectionMode( JFileChooser.FILES_ONLY );
         jfc.removeChoosableFileFilter( jfc.getFileFilter() );
-        jfc.setFileFilter( new FileNameExtensionFilter( "YAAS Finite Automaton", "yfa" ) );
+        jfc.setFileFilter( new FileNameExtensionFilter( "YAAS Pushdown Automaton", "ypda" ) );
 
         if ( jfc.showSaveDialog( mainWindow ) == JFileChooser.APPROVE_OPTION ) {
 
@@ -2754,7 +2430,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                         ApplicationPreferences.PREF_DEFAULT_FOLDER_PATH, 
                         f.getParentFile().getAbsolutePath() );
 
-                serializeFAToFile( f );
+                serializePDAToFile( f );
                 return true;
 
             }
@@ -2765,14 +2441,14 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             
     }
     
-    private void openFA() {
+    private void openPDA() {
         
         JFileChooser jfc = new JFileChooser( new File( ApplicationPreferences.getPref( ApplicationPreferences.PREF_DEFAULT_FOLDER_PATH ) ) );
-        jfc.setDialogTitle( "Open Finite Automaton" );
+        jfc.setDialogTitle( "Open Pushdown Automaton" );
         jfc.setMultiSelectionEnabled( false );
         jfc.setFileSelectionMode( JFileChooser.FILES_ONLY );
         jfc.removeChoosableFileFilter( jfc.getFileFilter() );
-        jfc.setFileFilter( new FileNameExtensionFilter( "YAAS Finite Automaton", "yfa" ) );
+        jfc.setFileFilter( new FileNameExtensionFilter( "YAAS Pushdown Automaton", "ypda" ) );
         
         if ( jfc.showSaveDialog( mainWindow ) == JFileChooser.APPROVE_OPTION ) {
 
@@ -2787,14 +2463,14 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 try ( FileInputStream fis = new FileInputStream( f );
                       ObjectInputStream ois = new ObjectInputStream( fis ) ) {
                     
-                    fa = (FA) ois.readObject();
-                    fa.deactivateAllStatesInSimulation();
-                    fa.deselectAll();
-                    fa.setTransitionsControlPointsVisible( false );
-                    drawPanel.setFa( fa );
+                    pda = (PDA) ois.readObject();
+                    pda.deactivateAllStatesInSimulation();
+                    pda.deselectAll();
+                    pda.setTransitionsControlPointsVisible( false );
+                    drawPanel.setPda( pda );
                     
-                    faPPanel.setFa( fa );
-                    faPPanel.readProperties();
+                    pdaPPanel.setPda( pda );
+                    pdaPPanel.readProperties();
                     cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
         
                     currentFile = f;
@@ -2812,14 +2488,14 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
     }
     
-    private FA loadFA( String title ) {
+    private PDA loadPDA( String title ) {
         
         JFileChooser jfc = new JFileChooser( new File( ApplicationPreferences.getPref( ApplicationPreferences.PREF_DEFAULT_FOLDER_PATH ) ) );
         jfc.setDialogTitle( title );
         jfc.setMultiSelectionEnabled( false );
         jfc.setFileSelectionMode( JFileChooser.FILES_ONLY );
         jfc.removeChoosableFileFilter( jfc.getFileFilter() );
-        jfc.setFileFilter( new FileNameExtensionFilter( "YAAS Finite Automaton", "yfa" ) );
+        jfc.setFileFilter( new FileNameExtensionFilter( "YAAS Pushdown Automaton", "ypda" ) );
         
         if ( jfc.showSaveDialog( mainWindow ) == JFileChooser.APPROVE_OPTION ) {
 
@@ -2834,13 +2510,13 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 try ( FileInputStream fis = new FileInputStream( f );
                       ObjectInputStream ois = new ObjectInputStream( fis ) ) {
                     
-                    FA fa = (FA) ois.readObject();
-                    fa = (FA) fa.clone();
-                    fa.deactivateAllStatesInSimulation();
-                    fa.deselectAll();
-                    fa.setTransitionsControlPointsVisible( false );
+                    PDA pda = (PDA) ois.readObject();
+                    pda = (PDA) pda.clone();
+                    pda.deactivateAllStatesInSimulation();
+                    pda.deselectAll();
+                    pda.setTransitionsControlPointsVisible( false );
                     
-                    return fa;
+                    return pda;
                     
                 } catch ( IOException | ClassNotFoundException | CloneNotSupportedException exc ) {
                     Utils.showException( exc );
@@ -2895,7 +2571,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         am.put( "saveModelAsImage", new AbstractAction() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                btnSaveFAAsImage.doClick();
+                btnSavePDAAsImage.doClick();
             }
         });
         
@@ -2928,30 +2604,6 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             @Override
             public void actionPerformed( ActionEvent e ) {
                 btnAddTransition.doClick();
-            }
-        });
-        
-        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_D, KeyEvent.ALT_DOWN_MASK + KeyEvent.SHIFT_DOWN_MASK ), "toDFA" );
-        am.put( "toDFA", new AbstractAction() {
-            @Override
-            public void actionPerformed( ActionEvent e ) {
-                btnGenerateMinimizedDFA.doClick();
-            }
-        });
-        
-        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_M, KeyEvent.ALT_DOWN_MASK + KeyEvent.SHIFT_DOWN_MASK ), "minimizeDFA" );
-        am.put( "minimizeDFA", new AbstractAction() {
-            @Override
-            public void actionPerformed( ActionEvent e ) {
-                btnGenerateMinimizedDFA.doClick();
-            }
-        });
-        
-        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_T, KeyEvent.ALT_DOWN_MASK + KeyEvent.SHIFT_DOWN_MASK ), "addAllTransitions" );
-        am.put( "addAllTransitions", new AbstractAction() {
-            @Override
-            public void actionPerformed( ActionEvent e ) {
-                btnAddAllMissingTransitionsDFA.doClick();
             }
         });
         
@@ -3068,22 +2720,19 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     
     private void resetGUIToAddStatesAndTransitions() {
         selectedStates.clear();
-        fa.deselectAll();
+        pda.deselectAll();
         cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
         repaintDrawPanel();
         drawPanel.setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR ) );
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAddAllMissingTransitionsDFA;
     private javax.swing.JToggleButton btnAddState;
     private javax.swing.JToggleButton btnAddTransition;
     private javax.swing.JButton btnBatchTest;
     private javax.swing.JButton btnClone;
     private javax.swing.JButton btnCodeGen;
     private javax.swing.JButton btnFirstStep;
-    private javax.swing.JButton btnGenerateEquivalentDFA;
-    private javax.swing.JButton btnGenerateMinimizedDFA;
     private javax.swing.ButtonGroup btnGroup;
     private javax.swing.JButton btnLastStep;
     private javax.swing.JToggleButton btnMove;
@@ -3092,12 +2741,10 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnOpen;
     private javax.swing.JButton btnPreviousStep;
     private javax.swing.JButton btnRearrangeStates;
-    private javax.swing.JButton btnRegularOperations;
-    private javax.swing.JButton btnRemoveInaccessibleAndUselessStates;
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSaveAs;
-    private javax.swing.JButton btnSaveFAAsImage;
+    private javax.swing.JButton btnSavePDAAsImage;
     private javax.swing.JToggleButton btnSelectMultipleStates;
     private javax.swing.JToggleButton btnShowGrid;
     private javax.swing.JToggleButton btnShowTransitionControls;
@@ -3118,12 +2765,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JPanel panelTestsAndSimulation;
     private javax.swing.JMenuItem popItemByLevel;
     private javax.swing.JMenuItem popItemCircular;
-    private javax.swing.JMenuItem popItemComplement;
-    private javax.swing.JMenuItem popItemConcatenation;
     private javax.swing.JMenuItem popItemDiagonal;
     private javax.swing.JMenuItem popItemHorizontal;
-    private javax.swing.JMenuItem popItemIntersection;
-    private javax.swing.JMenuItem popItemKleeneStar;
     private javax.swing.JMenuItem popItemRectangular;
     private javax.swing.JMenuItem popItemRemoveState;
     private javax.swing.JMenuItem popItemRemoveTransition;
@@ -3131,17 +2774,14 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JMenuItem popItemStateColor;
     private javax.swing.JMenuItem popItemStateCustomLabel;
     private javax.swing.JMenuItem popItemTransitionColor;
-    private javax.swing.JMenuItem popItemTransitionSymbols;
-    private javax.swing.JMenuItem popItemUnion;
+    private javax.swing.JMenuItem popItemTransitionOperations;
     private javax.swing.JMenuItem popItemVertical;
-    private javax.swing.JPopupMenu popupMenuRegularOperations;
     private javax.swing.JPopupMenu popupMenuReorganizeStates;
     private javax.swing.JPopupMenu popupMenuStateProperties;
     private javax.swing.JPopupMenu popupMenuTransitionProperties;
     private javax.swing.JScrollPane scrollPaneModel;
     private javax.swing.JToolBar.Separator sep01;
     private javax.swing.JToolBar.Separator sep02;
-    private javax.swing.JToolBar.Separator sep03;
     private javax.swing.JToolBar.Separator sep04;
     private javax.swing.JToolBar.Separator sep05;
     private javax.swing.JToolBar.Separator sep06;

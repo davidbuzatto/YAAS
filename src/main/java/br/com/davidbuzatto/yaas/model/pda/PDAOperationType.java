@@ -26,6 +26,6 @@ public enum PDAOperationType {
     DO_NOTHING,
     POP,
     PUSH,
-    SUBSTITUTE
+    REPLACE
     
 }

@@ -141,7 +141,7 @@ public class PDAOperation {
                 }
                 op += top;
                 break;
-            case SUBSTITUTE:
+            case REPLACE:
                 for ( int i = symbolsToPush.size()-1; i >= 0; i-- ) {
                     op += symbolsToPush.get( i );
                 }

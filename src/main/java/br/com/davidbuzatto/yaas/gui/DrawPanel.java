@@ -19,6 +19,7 @@ package br.com.davidbuzatto.yaas.gui;
 import br.com.davidbuzatto.yaas.model.Arrow;
 import br.com.davidbuzatto.yaas.model.fa.FA;
 import br.com.davidbuzatto.yaas.gui.fa.FASimulationStep;
+import br.com.davidbuzatto.yaas.gui.pda.PDASimulationStep;
 import br.com.davidbuzatto.yaas.model.pda.PDA;
 import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
@@ -54,7 +55,8 @@ public class DrawPanel extends JPanel {
     private Rectangle selectionRectangle;
     
     private String simulationString;
-    private List<FASimulationStep> simulationSteps;
+    private List<FASimulationStep> faSimulationSteps;
+    private List<PDASimulationStep> pdaSimulationSteps;
     private int currentSimulationStep;
     private boolean simulationAccepted;
     
@@ -85,37 +87,39 @@ public class DrawPanel extends JPanel {
             }
         }
         
-        if ( fa != null ) {
-            
-            fa.draw( g2d );
+        boolean containsMachine = false;
         
-            if ( drawingTempTransition ) {
+        if ( fa != null ) {
+            fa.draw( g2d );
+            containsMachine = true;
+        }
+        
+        if ( pda != null ) {
+            pda.draw( g2d );
+            containsMachine = true;
+        }
+        
+        if ( containsMachine && drawingTempTransition ) {
 
-                g2d.setStroke( DrawingConstants.TEMP_TRANSITION_STROKE.getBasicStroke() );
-                g2d.setColor( DrawingConstants.TEMP_TRANSITION_COLOR );
+            g2d.setStroke( DrawingConstants.TEMP_TRANSITION_STROKE.getBasicStroke() );
+            g2d.setColor( DrawingConstants.TEMP_TRANSITION_COLOR );
 
-                g2d.drawLine( 
-                        tempTransitionX1, tempTransitionY1, 
-                        tempTransitionX2, tempTransitionY2 );
+            g2d.drawLine( 
+                    tempTransitionX1, tempTransitionY1, 
+                    tempTransitionX2, tempTransitionY2 );
 
-                tempTransitionArrow.setX1( tempTransitionX2 );
-                tempTransitionArrow.setY1( tempTransitionY2 );
-                tempTransitionArrow.setStrokeColor( DrawingConstants.TEMP_TRANSITION_COLOR );
-                tempTransitionArrow.setAngle( Math.atan2( 
-                        tempTransitionY2 - tempTransitionY1, 
-                        tempTransitionX2 - tempTransitionX1 ) );
-                tempTransitionArrow.draw( g2d );
+            tempTransitionArrow.setX1( tempTransitionX2 );
+            tempTransitionArrow.setY1( tempTransitionY2 );
+            tempTransitionArrow.setStrokeColor( DrawingConstants.TEMP_TRANSITION_COLOR );
+            tempTransitionArrow.setAngle( Math.atan2( 
+                    tempTransitionY2 - tempTransitionY1, 
+                    tempTransitionX2 - tempTransitionX1 ) );
+            tempTransitionArrow.draw( g2d );
 
-            }
-            
         }
         
         // TODO update
-        if ( pda != null ) {
-            pda.draw( g2d );
-        }
-        
-        if ( simulationString != null && simulationSteps != null ) {
+        if ( simulationString != null && faSimulationSteps != null ) {
             
             Rectangle r = getVisibleRect();
             int x1R = (int) r.getX();
@@ -161,7 +165,7 @@ public class DrawPanel extends JPanel {
                 
             }
             
-            if ( currentSimulationStep == simulationSteps.size() - 1 ) {
+            if ( currentSimulationStep == faSimulationSteps.size() - 1 ) {
                 if ( simulationAccepted ) {
                     g2d.setColor( DrawingConstants.ACCEPTED_SIMULATION_RESULT_COLOR );
                     g2d.drawString( " ACCEPTED", start + inc * i, ySimulationString );
@@ -240,8 +244,12 @@ public class DrawPanel extends JPanel {
         this.simulationString = simulationString;
     }
 
-    public void setSimulationSteps( List<FASimulationStep> simulationSteps ) {
-        this.simulationSteps = simulationSteps;
+    public void setFASimulationSteps( List<FASimulationStep> faSimulationSteps ) {
+        this.faSimulationSteps = faSimulationSteps;
+    }
+    
+    public void setPDASimulationSteps( List<PDASimulationStep> pdaSimulationSteps ) {
+        this.pdaSimulationSteps = pdaSimulationSteps;
     }
 
     public void setCurrentSimulationStep( int currentSimulationStep ) {

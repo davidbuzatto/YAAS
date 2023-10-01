@@ -16,10 +16,30 @@
  */
 package br.com.davidbuzatto.yaas.gui.pda.table;
 
+import br.com.davidbuzatto.yaas.util.DrawingConstants;
+import java.awt.Component;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.table.TableCellRenderer;
+
 /**
- *
+ * A table cell renderer for the transition function table of Pushdown Automata.
+ * 
  * @author Prof. Dr. David Buzatto
  */
-public class Dummy {
+public class PDATransitionFunctionTableCellRenderer implements TableCellRenderer {
+    
+    @Override
+    public Component getTableCellRendererComponent( 
+            JTable table, Object value, 
+            boolean isSelected, boolean hasFocus, int row, int column ) {
+        
+        JLabel lbl = new JLabel( value.toString() );
+        lbl.setFont( DrawingConstants.DEFAULT_TABLE_FONT );
+        lbl.setHorizontalAlignment( JLabel.CENTER );
+        
+        return lbl;
+        
+    }
     
 }
