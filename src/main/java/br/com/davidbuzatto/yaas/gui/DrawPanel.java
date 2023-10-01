@@ -19,6 +19,7 @@ package br.com.davidbuzatto.yaas.gui;
 import br.com.davidbuzatto.yaas.gui.model.Arrow;
 import br.com.davidbuzatto.yaas.gui.fa.FA;
 import br.com.davidbuzatto.yaas.gui.fa.FASimulationStep;
+import br.com.davidbuzatto.yaas.gui.pda.PDA;
 import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.Color;
@@ -39,6 +40,7 @@ import javax.swing.JPanel;
 public class DrawPanel extends JPanel {
 
     private FA fa;
+    private PDA pda;
     
     private boolean showGrid;
     private boolean drawingTempTransition;
@@ -106,6 +108,11 @@ public class DrawPanel extends JPanel {
 
             }
             
+        }
+        
+        // TODO update
+        if ( pda != null ) {
+            pda.draw( g2d );
         }
         
         if ( simulationString != null && simulationSteps != null ) {
@@ -191,6 +198,10 @@ public class DrawPanel extends JPanel {
 
     public void setFa( FA fa ) {
         this.fa = fa;
+    }
+
+    public void setPda( PDA pda ) {
+        this.pda = pda;
     }
 
     public boolean isShowGrid() {

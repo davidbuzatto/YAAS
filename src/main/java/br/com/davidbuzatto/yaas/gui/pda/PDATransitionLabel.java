@@ -14,7 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.davidbuzatto.yaas.gui.fa;
+package br.com.davidbuzatto.yaas.gui.pda;
+
 
 import br.com.davidbuzatto.yaas.gui.model.AbstractGeometricForm;
 import br.com.davidbuzatto.yaas.util.Utils;
@@ -22,21 +23,34 @@ import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.font.LineMetrics;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * A graphical representation of a Finite Automaton transition label.
+ * A graphical representation of a Pushdown Automaton transition label.
+ * TODO needs to be refactored with FATransitionLabel
  * 
  * @author Prof. Dr. David Buzatto
  */
-public class FATransitionLabel extends AbstractGeometricForm implements Cloneable {
+public class PDATransitionLabel extends AbstractGeometricForm implements Cloneable {
     
-    private String text;
-    private int textWidth;
-    private int textHeight;
+    private List<String> texts;
+    private List<Integer> textsWidth;
+    private List<Integer> textsHeight;
+    
+    private int totalTextWidth;
+    private int totalTextHeight;
+    private int maxTextHeight;
     
     private boolean activeInSimulation;
     private Color activeInSimulationStrokeColor;
     private Color activeInSimulationFillColor;
+    
+    public PDATransitionLabel() {
+        texts = new ArrayList<>();
+        textsWidth = new ArrayList<>();
+        textsHeight = new ArrayList<>();
+    }
     
     @Override
     public void draw( Graphics2D g2d ) {
@@ -68,19 +82,23 @@ public class FATransitionLabel extends AbstractGeometricForm implements Cloneabl
         
         if ( drawBackground ) {
             g2d.setColor( localFillColor );
-            g2d.fillRoundRect( 
-                    x1 - textWidth/2 - 4, y1 - textHeight / 2 - 6, 
-                    textWidth + 8, textHeight + 8,
+            g2d.fillRoundRect(
+                    x1 - totalTextWidth/2 - 4, y1 - totalTextHeight - 12, 
+                    totalTextWidth + 8, totalTextHeight + 8,
                     10, 10 );
             g2d.setColor( localStrokeColor );
-            g2d.drawRoundRect( 
-                    x1 - textWidth/2 - 4, y1 - textHeight / 2 - 6, 
-                    textWidth + 8, textHeight + 8,
+            g2d.drawRoundRect(
+                    x1 - totalTextWidth/2 - 4, y1 - totalTextHeight - 12, 
+                    totalTextWidth + 8, totalTextHeight + 8,
                     10, 10 );
         }
         
-        if ( text != null ) {
-            g2d.drawString( text, x1 - textWidth/2, y1 + textHeight / 2 );
+        for ( int i = 0; i < texts.size(); i++ ) {
+            String text = texts.get( i );
+            int textWidth = textsWidth.get( i );
+            int textHeight = textsHeight.get( i );
+            g2d.drawString( text, x1 - textWidth/2, 
+                    y1 + textHeight / 2 - ( ( maxTextHeight + 5 ) * ( texts.size() - i ) ) );
         }
         
         g2d.dispose();
@@ -90,30 +108,59 @@ public class FATransitionLabel extends AbstractGeometricForm implements Cloneabl
     @Override
     public boolean intersects( int x, int y ) {
         return 
-                x >= x1 - textWidth/2 - 4 && 
-                x <= x1 + textWidth/2 + 8 &&
-                y >= y1 - textHeight/2 - 4 && 
-                y <= y1 + textHeight/2 + 8;
+                x >= x1 - totalTextWidth/2 - 4 && 
+                x <= x1 + totalTextWidth/2 + 8 &&
+                y >= y1 - totalTextHeight - 12 && 
+                y <= y1 - 4;
     }
     
-    public void setText( String text ) {
-        this.text = text;
+    public void addText( String text ) {
+        texts.add( text );
         LineMetrics lm = Utils.getLineMetrics( text, font );
         FontMetrics fm = Utils.getFontMetrics( font );
-        textWidth = fm.stringWidth( text );
-        textHeight = (int) ( lm.getHeight() / 2 );
+        textsWidth.add( fm.stringWidth( text ) );
+        textsHeight.add( (int) ( lm.getHeight() / 2 ) );
+        updateTotals();
     }
 
-    public String getText() {
-        return text;
+    public void clear() {
+        texts.clear();
+        textsWidth.clear();
+        textsHeight.clear();
+        totalTextWidth = 0;
+        totalTextHeight = 0;
+        maxTextHeight = 0;
+    }
+    
+    private void updateTotals() {
+        
+        int maxWidth = Integer.MIN_VALUE;
+        int maxHeight = Integer.MIN_VALUE;
+        
+        for ( int v : textsWidth ) {
+            if ( maxWidth < v ) {
+                maxWidth = v;
+            }
+        }
+        totalTextWidth = maxWidth;
+        
+        totalTextHeight = 0;
+        for ( int v : textsHeight ) {
+            totalTextHeight += v + 5;
+            if ( maxHeight < v ) {
+                maxHeight = v;
+            }
+        }
+        maxTextHeight = maxHeight;
+        
+    }
+    
+    public int getTotalTextWidth() {
+        return totalTextWidth;
     }
 
-    public int getTextWidth() {
-        return textWidth;
-    }
-
-    public int getTextHeight() {
-        return textHeight;
+    public int getTotalTextHeight() {
+        return totalTextHeight;
     }
 
     public boolean isActiveInSimulation() {
@@ -139,16 +186,23 @@ public class FATransitionLabel extends AbstractGeometricForm implements Cloneabl
     public void setActiveInSimulationFillColor( Color activeInSimulationFillColor ) {
         this.activeInSimulationFillColor = activeInSimulationFillColor;
     }
+
+    @Override
+    public String toString() {
+        return "label string";
+    }
     
     @Override
     @SuppressWarnings( "unchecked" )
     public Object clone() throws CloneNotSupportedException {
         
-        FATransitionLabel c = (FATransitionLabel) super.clone();
+        // TODO update
         
-        c.text = text;
-        c.textWidth = textWidth;
-        c.textHeight = textHeight;
+        PDATransitionLabel c = (PDATransitionLabel) super.clone();
+        
+        //c.text = text;
+        c.totalTextWidth = totalTextWidth;
+        c.totalTextHeight = totalTextHeight;
 
         c.activeInSimulation = false;
         c.activeInSimulationStrokeColor = activeInSimulationStrokeColor;

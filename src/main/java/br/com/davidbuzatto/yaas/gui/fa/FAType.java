@@ -19,7 +19,7 @@ package br.com.davidbuzatto.yaas.gui.fa;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
 
 /**
- * The type a Finite Automaton
+ * The type a Finite Automaton.
  * 
  * @author Prof. Dr. David Buzatto
  */

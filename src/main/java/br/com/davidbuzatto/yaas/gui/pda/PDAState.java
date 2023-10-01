@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.davidbuzatto.yaas.gui.fa;
+package br.com.davidbuzatto.yaas.gui.pda;
 
 import br.com.davidbuzatto.yaas.gui.model.AbstractGeometricForm;
 import br.com.davidbuzatto.yaas.gui.model.Arrow;
@@ -24,11 +24,12 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
 /**
- * A Finite Automaton state.
+ * A Pushdown Automaton state.
+ * TODO needs to be refactored with FAState
  * 
  * @author Prof. Dr. David Buzatto
  */
-public class FAState extends AbstractGeometricForm implements Comparable<FAState>, Cloneable {
+public class PDAState extends AbstractGeometricForm implements Comparable<PDAState>, Cloneable {
     
     protected int number;
     protected String label;
@@ -47,19 +48,19 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
     private Color activeInSimulationStrokeColor;
     private Color activeInSimulationFillColor;
     
-    public FAState() {
+    public PDAState() {
         this( 0, null, false, false );
     }
     
-    public FAState( int number ) {
+    public PDAState( int number ) {
         this( number, null, false, false );
     }
     
-    public FAState( int number, boolean initial, boolean accepting ) {
+    public PDAState( int number, boolean initial, boolean accepting ) {
         this( number, null, initial, accepting );
     }
     
-    public FAState( int number, String customLabel, boolean initial, boolean accepting ) {
+    public PDAState( int number, String customLabel, boolean initial, boolean accepting ) {
         
         this.number = number;
         this.label = "q" + number;
@@ -170,7 +171,7 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
     }
     
     public void mouseHover( int x, int y ) {
-        if ( FAState.this.intersects( x, y ) ) {
+        if ( PDAState.this.intersects( x, y ) ) {
             mouseHover = true;
             return;
         }
@@ -293,7 +294,7 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
     }
 
     @Override
-    public int compareTo( FAState o ) {
+    public int compareTo( PDAState o ) {
         return number - o.number;
     }
     
@@ -320,7 +321,9 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
     @SuppressWarnings( "unchecked" )
     public Object clone() throws CloneNotSupportedException {
         
-        FAState c = (FAState) super.clone();
+        // TODO update
+        
+        PDAState c = (PDAState) super.clone();
         
         c.number = number;
         c.label = label;

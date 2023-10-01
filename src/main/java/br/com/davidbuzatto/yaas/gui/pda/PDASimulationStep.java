@@ -14,34 +14,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.davidbuzatto.yaas.gui.fa;
+package br.com.davidbuzatto.yaas.gui.pda;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 /**
- * Encapsulates data related to a step in a pertinence simulation of a Finite
+ * Encapsulates data related to a step in a pertinence simulation of a Pushdown
  * Automaton.
+ * TODO needs to be refactored with FASimulationStep
  * 
  * @author Prof. Dr. David Buzatto
  */
-public class FASimulationStep {
+public class PDASimulationStep {
     
-    private List<FAState> activeStates;
+    private List<PDAState> activeStates;
     private Character processadSymbol;
     
-    public FASimulationStep( Set<FAState> activeStates, Character processedSymbol ) {
+    public PDASimulationStep( Set<PDAState> activeStates, Character processedSymbol ) {
         this.activeStates = new ArrayList<>();
         this.activeStates.addAll( activeStates );
         this.processadSymbol = processedSymbol;
     }
     
-    public void activateInFA( FA fa ) {
+    public void activateInFA( PDA pda ) {
         
-        fa.deactivateAllStatesInSimulation();
+        pda.deactivateAllStatesInSimulation();
         
-        for ( FAState s : activeStates ) {
+        for ( PDAState s : activeStates ) {
             s.setActiveInSimulation( true );
         }
         

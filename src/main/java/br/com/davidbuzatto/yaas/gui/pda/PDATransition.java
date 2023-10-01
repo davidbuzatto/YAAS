@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.davidbuzatto.yaas.gui.fa;
+package br.com.davidbuzatto.yaas.gui.pda;
 
 import br.com.davidbuzatto.yaas.gui.model.AbstractGeometricForm;
 import br.com.davidbuzatto.yaas.gui.model.Arrow;
@@ -32,23 +32,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A Finite Automaton transition.
+ * A Pushdown Automaton transition.
+ * TODO needs to be refactored with FATransition
  * 
  * @author Prof. Dr. David Buzatto
  */
-public class FATransition extends AbstractGeometricForm implements Cloneable {
+public class PDATransition extends AbstractGeometricForm implements Cloneable {
 
     private static final double RAD_60 = Math.toRadians( 60 );
     private static final double RAD_90 = Math.toRadians( 90 );
     private static final double RAD_95 = Math.toRadians( 95 );
     
     
-    private FAState originState;
-    private FAState targetState;
-    private List<Character> symbols;
+    private PDAState originState;
+    private PDAState targetState;
+    private List<PDAOperation> operations;
     
     
-    private FATransitionLabel label;
+    private PDATransitionLabel label;
     private CubicCurve2D curve;
     private Arrow arrow;
     
@@ -88,11 +89,11 @@ public class FATransition extends AbstractGeometricForm implements Cloneable {
     
     private Color activeInSimulationStrokeColor;
     
-    public FATransition( FAState originState, FAState targetState, List<Character> symbols ) {
+    public PDATransition( PDAState originState, PDAState targetState, List<PDAOperation> operations ) {
         
         this.originState = originState;
         this.targetState = targetState;
-        this.symbols = new ArrayList<>();
+        this.operations = new ArrayList<>();
         
         font = DrawingConstants.DEFAULT_FONT;
         strokeColor = DrawingConstants.TRANSITION_STROKE_COLOR;
@@ -102,7 +103,7 @@ public class FATransition extends AbstractGeometricForm implements Cloneable {
         stroke = DrawingConstants.TRANSITION_STROKE;
         cpStroke = DrawingConstants.TRANSITION_CP_STROKE;
         
-        label = new FATransitionLabel();
+        label = new PDATransitionLabel();
         label.setStroke( stroke );
         label.setFont( font );
         label.setStrokeColor( strokeColor );
@@ -154,26 +155,19 @@ public class FATransition extends AbstractGeometricForm implements Cloneable {
                 rightCP.getX1(), rightCP.getY1(), 
                 x2, y2 );
         
-        addSymbols( symbols );
+        addOperations( operations );
         
     }
     
-    public FATransition( FAState originState, FAState targetState, char symbol ) {
-        this( originState, targetState, new ArrayList<Character>() );
-        addSymbol( symbol );
+    public PDATransition( PDAState originState, PDAState targetState, PDAOperation operation ) {
+        this( originState, targetState, new ArrayList<PDAOperation>() );
+        addOperation( operation );
     }
     
-    public FATransition( FAState originState, FAState targetState, char... symbols ) {
-        this( originState, targetState, new ArrayList<Character>() );
-        for ( char s : symbols ) {
-            addSymbol( s );
-        }
-    }
-    
-    public FATransition( FAState originState, FAState targetState, String symbols ) {
-        this( originState, targetState, new ArrayList<Character>() );
-        for ( char s : symbols.trim().replace( " ", "" ).toCharArray() ) {
-            addSymbol( s );
+    public PDATransition( PDAState originState, PDAState targetState, PDAOperation... operations ) {
+        this( originState, targetState, new ArrayList<PDAOperation>() );
+        for ( PDAOperation o : operations ) {
+            addOperation( o );
         }
     }
     
@@ -339,21 +333,21 @@ public class FATransition extends AbstractGeometricForm implements Cloneable {
         if ( originState == targetState ) {
             if ( !labelMoved ) {
                 label.setX1( x1 + (int) ( Math.cos( targetCPAngle - RAD_90 ) * 
-                        ( targetState.getDiameter() + label.getTextHeight() )));
+                        ( targetState.getDiameter() + label.getTotalTextHeight() )));
                 label.setY1( y1 + (int) ( Math.sin( targetCPAngle - RAD_90 ) * 
-                        ( targetState.getDiameter() + label.getTextHeight() )));
+                        ( targetState.getDiameter() + label.getTotalTextHeight() )));
             }
         } else {
             if ( !labelMoved ) {
                 if ( curve == null ) {
                     label.setX1( x1 + (x2-x1)/2 );
                     label.setY1( y1 + (y2-y1)/2 - 
-                            (int) ( label.getTextHeight() * 1.5 ) );
+                            (int) ( label.getTotalTextHeight() * 1.5 ) );
                 } else {
                     Point2D p = Utils.cubicBezierPoint( curve, 0.5 );
                     label.setX1( (int) p.getX() );
                     label.setY1( (int) p.getY() - 
-                            (int) ( label.getTextHeight() * 1.5 ) );
+                            (int) ( label.getTotalTextHeight() * 1.5 ) );
                 }
             }
         }
@@ -520,85 +514,77 @@ public class FATransition extends AbstractGeometricForm implements Cloneable {
     
     private void updateLabel() {
         
-        boolean first = true;
-        String labelText = "";
+        label.clear();
         
-        if ( symbols.size() <= 4 ) {
-            for ( Character s : symbols ) {
-                if ( !first ) {
-                    labelText += ", ";
-                }
-                labelText += s.toString();
-                first = false;
-            }
-        } else {
-            labelText = String.format( "%c, %c, ..., %c", symbols.get( 0 ), symbols.get( 1 ), symbols.get( symbols.size() - 1 ) );
+        for ( PDAOperation o : operations ) {
+            label.addText( o.toString() );
         }
-        
-        label.setText( labelText );
         
     }
     
-    public void addSymbol( char symbol ) {
+    public void addOperation( PDAOperation operation ) {
         
-        if ( !symbols.contains( symbol ) ) {
-            symbols.add( symbol );
-            Utils.customSymbolsSort( this.symbols );
+        if ( !operations.contains( operation ) ) {
+            operations.add( operation );
+            // TODO update
+            //Utils.customSymbolsSort( this.operations );
             updateLabel();
         }
         
     }
     
-    public void addSymbols( List<Character> symbols ) {
+    public void addOperations( List<PDAOperation> operations ) {
         
-        if ( !symbols.isEmpty() ) {
+        if ( !operations.isEmpty() ) {
             
-            for ( Character s : symbols ) {
-                if ( !this.symbols.contains( s ) ) {
-                    this.symbols.add( s );
+            for ( PDAOperation s : operations ) {
+                if ( !this.operations.contains( s ) ) {
+                    this.operations.add( s );
                 }
             }
 
-            Utils.customSymbolsSort( this.symbols );
+            // TODO update
+            //Utils.customSymbolsSort( this.operations );
             updateLabel();
             
         }
         
     }
     
-    public FAState getOriginState() {
+    public PDAState getOriginState() {
         return originState;
     }
 
-    public void setOriginState( FAState originState ) {
+    public void setOriginState( PDAState originState ) {
         this.originState = originState;
     }
 
-    public FAState getTargetState() {
+    public PDAState getTargetState() {
         return targetState;
     }
 
-    public void setTargetState( FAState targetState ) {
+    public void setTargetState( PDAState targetState ) {
         this.targetState = targetState;
     }
 
-    public List<Character> getSymbols() {
-        return symbols;
+    public List<PDAOperation> getOperations() {
+        return operations;
     }
 
-    public void setSymbols( List<Character> symbols ) {
+    public void setOperations( List<PDAOperation> operations ) {
         
-        this.symbols = new ArrayList<>();
+        this.operations = new ArrayList<>();
         
-        if ( !symbols.isEmpty() ) {
+        if ( !operations.isEmpty() ) {
             
-            for ( Character s : symbols ) {
-                if ( !this.symbols.contains( s ) ) {
-                    this.symbols.add( s );
+            for ( PDAOperation o : operations ) {
+                if ( !this.operations.contains( o ) ) {
+                    this.operations.add( o );
                 }
             }
 
-            Utils.customSymbolsSort( this.symbols );
+            // TODO update
+            //Utils.customSymbolsSort( this.operations );
             updateLabel();
             
         }
@@ -644,7 +630,7 @@ public class FATransition extends AbstractGeometricForm implements Cloneable {
         label.setStrokeColor( strokeColor );
     }
     
-    public FATransition moveCPsTo( 
+    public PDATransition moveCPsTo( 
             int centralCPX1, 
             int centralCPY1, 
             int leftCPX1, 
@@ -680,7 +666,7 @@ public class FATransition extends AbstractGeometricForm implements Cloneable {
         
     }
     
-    private FATransition bend( 
+    private PDATransition bend( 
             int centralCPAmountX, 
             int centralCPAmountY, 
             boolean centralCPMoved,
@@ -721,7 +707,7 @@ public class FATransition extends AbstractGeometricForm implements Cloneable {
         
     }
     
-    public FATransition bend( 
+    public PDATransition bend( 
             int centralCPAmountX, 
             int centralCPAmountY, 
             int leftCPAmountX, 
@@ -735,7 +721,7 @@ public class FATransition extends AbstractGeometricForm implements Cloneable {
               targetCPAmount, true );
     }
     
-    public FATransition bendX( 
+    public PDATransition bendX( 
             int centralCPAmount, 
             int leftCPAmount, 
             int rightCPAmount, 
@@ -746,7 +732,7 @@ public class FATransition extends AbstractGeometricForm implements Cloneable {
               targetCPAmount );
     }
     
-    public FATransition bendY( 
+    public PDATransition bendY( 
             int centralCPAmount, 
             int leftCPAmount, 
             int rightCPAmount, 
@@ -757,75 +743,75 @@ public class FATransition extends AbstractGeometricForm implements Cloneable {
               targetCPAmount );
     }
     
-    public FATransition bendByCenterCP( int xAmount, int yAmount ) {
+    public PDATransition bendByCenterCP( int xAmount, int yAmount ) {
         return bend( xAmount, yAmount, true, 
               xAmount, yAmount,
               xAmount, yAmount,
               0, false );
     }
     
-    public FATransition bendByCenterCPX( int amount ) {
+    public PDATransition bendByCenterCPX( int amount ) {
         return bendByCenterCP( amount, 0 );
     }
     
-    public FATransition bendByCenterCPY( int amount ) {
+    public PDATransition bendByCenterCPY( int amount ) {
         return bendByCenterCP( 0, amount );
     }
     
-    public FATransition bendByLeftCP( int xAmount, int yAmount ) {
+    public PDATransition bendByLeftCP( int xAmount, int yAmount ) {
         return bend( 0, 0, false, xAmount, yAmount, 0, 0, 0, false );
     }
     
-    public FATransition bendByLeftCPX( int amount ) {
+    public PDATransition bendByLeftCPX( int amount ) {
         return bendByLeftCP( amount, 0 );
     }
     
-    public FATransition bendByLeftCPY( int amount ) {
+    public PDATransition bendByLeftCPY( int amount ) {
         return bendByLeftCP( 0, amount );
     }
     
-    public FATransition bendByRightCP( int xAmount, int yAmount ) {
+    public PDATransition bendByRightCP( int xAmount, int yAmount ) {
         return bend( 0, 0, false, 0, 0, xAmount, yAmount, 0, false );
     }
     
-    public FATransition bendByRightCPX( int amount ) {
+    public PDATransition bendByRightCPX( int amount ) {
         return bendByRightCP( amount, 0 );
     }
     
-    public FATransition bendByRightCPY( int amount ) {
+    public PDATransition bendByRightCPY( int amount ) {
         return bendByRightCP( 0, amount );
     }
     
-    public FATransition rotateTargetCP( int angle ) {
+    public PDATransition rotateTargetCP( int angle ) {
         return bend( 0, 0, true, 0, 0, 0, 0, angle, true );
     }
     
-    public FATransition moveLabelTo( int x1, int y1 ) {
+    public PDATransition moveLabelTo( int x1, int y1 ) {
         labelMoved = true;
         label.setX1( x1 );
         label.setY1( y1 );
         return this;
     }
     
-    public FATransition moveLabel( int xAmount, int yAmount ) {
+    public PDATransition moveLabel( int xAmount, int yAmount ) {
         labelMoved = true;
         label.setX1( label.getX1() + xAmount );
         label.setY1( label.getY1() + yAmount );
         return this;
     }
     
-    public FATransition moveLabelX( int amount ) {
+    public PDATransition moveLabelX( int amount ) {
         return moveLabel( amount, 0 );
     }
     
-    public FATransition moveLabelY( int amount ) {
+    public PDATransition moveLabelY( int amount ) {
         return moveLabel( 0, amount );
     }
     
     @Override
     public String toString() {
         return String.format( "(%s) - %s -> (%s)",
-                originState, label.getText(), targetState );
+                originState, label, targetState );
     }
     
     public String generateCode( String modelName ) {
@@ -835,7 +821,8 @@ public class FATransition extends AbstractGeometricForm implements Cloneable {
         
         String sy = "";
         boolean fs = true;
-        for ( char c : symbols ) {
+        // TODO update
+        /*for ( char c : operations ) {
             if ( !fs ) {
                 sy += ", ";
             }
@@ -845,7 +832,7 @@ public class FATransition extends AbstractGeometricForm implements Cloneable {
                 sy += String.format( "'%c'", c );
             }
             fs = false;
-        }
+        }*/
         
         String def = String.format( "    %s %s = new %s( %s, %s, %s );", 
                 className, 
@@ -886,17 +873,20 @@ public class FATransition extends AbstractGeometricForm implements Cloneable {
     @SuppressWarnings( "unchecked" )
     public Object clone() throws CloneNotSupportedException {
         
-        FATransition c = (FATransition) super.clone();
+        // TODO update
         
-        /*c.originState = (FAState) originState.clone();
-        c.targetState = (FAState) targetState.clone();*/
+        PDATransition c = (PDATransition) super.clone();
         
-        c.symbols = new ArrayList<>();
-        for ( char ch : symbols ) {
-            c.symbols.add( ch );
-        }
+        /*c.originState = (PDAState) originState.clone();
+        c.targetState = (PDAState) targetState.clone();*/
+        
+        c.operations = new ArrayList<>();
+        // TODO update
+        /*for ( char ch : operations ) {
+            c.operations.add( ch );
+        }*/
 
-        c.label = (FATransitionLabel) label.clone();
+        c.label = (PDATransitionLabel) label.clone();
         c.curve = (CubicCurve2D) curve.clone();
         c.arrow = (Arrow) arrow.clone();
 
