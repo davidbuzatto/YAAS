@@ -6,7 +6,6 @@ Regular Expressions
 Here: https://resources.wolframcloud.com/PacletRepository/resources/KlausSutner/Automata/
 
 Pushdown Automata
-    verify transition labels position change on y
     change transition operations context menu and properties panel
     level arrangement bug
 

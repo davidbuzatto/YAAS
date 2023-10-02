@@ -28,7 +28,6 @@ import java.util.List;
 
 /**
  * A graphical representation of a Pushdown Automaton transition label.
- * TODO needs to be refactored with FATransitionLabel
  * 
  * @author Prof. Dr. David Buzatto
  */
@@ -40,6 +39,7 @@ public class PDATransitionLabel extends AbstractGeometricForm implements Cloneab
     
     private int totalTextWidth;
     private int totalTextHeight;
+    private int maxTextWidth;
     private int maxTextHeight;
     
     private boolean activeInSimulation;
@@ -83,12 +83,12 @@ public class PDATransitionLabel extends AbstractGeometricForm implements Cloneab
         if ( drawBackground ) {
             g2d.setColor( localFillColor );
             g2d.fillRoundRect(
-                    x1 - totalTextWidth/2 - 4, y1 - totalTextHeight - 12, 
+                    x1 - totalTextWidth/2 - 4, y1 - totalTextHeight - 1, 
                     totalTextWidth + 8, totalTextHeight + 8,
                     10, 10 );
             g2d.setColor( localStrokeColor );
             g2d.drawRoundRect(
-                    x1 - totalTextWidth/2 - 4, y1 - totalTextHeight - 12, 
+                    x1 - totalTextWidth/2 - 4, y1 - totalTextHeight - 1, 
                     totalTextWidth + 8, totalTextHeight + 8,
                     10, 10 );
         }
@@ -98,7 +98,7 @@ public class PDATransitionLabel extends AbstractGeometricForm implements Cloneab
             int textWidth = textsWidth.get( i );
             int textHeight = textsHeight.get( i );
             g2d.drawString( text, x1 - textWidth/2, 
-                    y1 + textHeight / 2 - ( ( maxTextHeight + 5 ) * ( texts.size() - i ) ) );
+                    y1 + textHeight / 2 - ( ( maxTextHeight + 5 ) * ( texts.size() - i ) ) + 11 );
         }
         
         g2d.dispose();
@@ -110,8 +110,8 @@ public class PDATransitionLabel extends AbstractGeometricForm implements Cloneab
         return 
                 x >= x1 - totalTextWidth/2 - 4 && 
                 x <= x1 + totalTextWidth/2 + 8 &&
-                y >= y1 - totalTextHeight - 12 && 
-                y <= y1 - 4;
+                y >= y1 - totalTextHeight - 1 && 
+                y <= y1 + 7;
     }
     
     public void addText( String text ) {
@@ -143,6 +143,7 @@ public class PDATransitionLabel extends AbstractGeometricForm implements Cloneab
             }
         }
         totalTextWidth = maxWidth;
+        maxTextWidth = maxWidth;
         
         totalTextHeight = 0;
         for ( int v : textsHeight ) {
@@ -161,6 +162,14 @@ public class PDATransitionLabel extends AbstractGeometricForm implements Cloneab
 
     public int getTotalTextHeight() {
         return totalTextHeight;
+    }
+
+    public int getMaxTextWidth() {
+        return maxTextWidth;
+    }
+
+    public int getMaxTextHeight() {
+        return maxTextHeight;
     }
 
     public boolean isActiveInSimulation() {
@@ -196,7 +205,7 @@ public class PDATransitionLabel extends AbstractGeometricForm implements Cloneab
     @SuppressWarnings( "unchecked" )
     public Object clone() throws CloneNotSupportedException {
         
-        // TODO update
+        // TODO update CLONE
         
         PDATransitionLabel c = (PDATransitionLabel) super.clone();
         

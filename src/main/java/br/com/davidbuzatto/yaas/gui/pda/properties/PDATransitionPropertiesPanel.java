@@ -229,7 +229,7 @@ public class PDATransitionPropertiesPanel extends javax.swing.JPanel {
         
         if ( transition != null ) {
             
-            // TODO update 
+            // TODO update popup menu
             
             /*String s = "";
             for ( Character c : transition.getSymbols() ) {

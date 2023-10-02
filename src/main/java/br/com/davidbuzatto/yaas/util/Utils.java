@@ -470,7 +470,7 @@ public class Utils {
      */
     public static PDATransitionFunctionTableModel createPDATransitionFunctionTableModel( PDA pda ) {
         
-        // TODO update
+        // TODO update table model
         
         /*FATransitionFunctionTableModel tm = new FATransitionFunctionTableModel();
         List<Character> symbols = new ArrayList<>();

@@ -20,7 +20,6 @@ import br.com.davidbuzatto.yaas.model.AbstractGeometricForm;
 import br.com.davidbuzatto.yaas.model.Arrow;
 import br.com.davidbuzatto.yaas.model.ControlPoint;
 import br.com.davidbuzatto.yaas.model.SerializableBasicStroke;
-import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.Color;
@@ -33,7 +32,6 @@ import java.util.List;
 
 /**
  * A Pushdown Automaton transition.
- * TODO needs to be refactored with FATransition
  * 
  * @author Prof. Dr. David Buzatto
  */
@@ -333,21 +331,21 @@ public class PDATransition extends AbstractGeometricForm implements Cloneable {
         if ( originState == targetState ) {
             if ( !labelMoved ) {
                 label.setX1( x1 + (int) ( Math.cos( targetCPAngle - RAD_90 ) * 
-                        ( targetState.getDiameter() + label.getTotalTextHeight() )));
+                        ( targetState.getDiameter() + label.getMaxTextHeight() ) ) );
                 label.setY1( y1 + (int) ( Math.sin( targetCPAngle - RAD_90 ) * 
-                        ( targetState.getDiameter() + label.getTotalTextHeight() )));
+                        ( targetState.getDiameter() + label.getMaxTextHeight() ) ) );
             }
         } else {
             if ( !labelMoved ) {
                 if ( curve == null ) {
                     label.setX1( x1 + (x2-x1)/2 );
                     label.setY1( y1 + (y2-y1)/2 - 
-                            (int) ( label.getTotalTextHeight() * 1.5 ) );
+                            (int) ( label.getMaxTextHeight() * 1.5 ) );
                 } else {
                     Point2D p = Utils.cubicBezierPoint( curve, 0.5 );
                     label.setX1( (int) p.getX() );
                     label.setY1( (int) p.getY() - 
-                            (int) ( label.getTotalTextHeight() * 1.5 ) );
+                            (int) ( label.getMaxTextHeight() * 1.5 ) );
                 }
             }
         }
@@ -526,7 +524,7 @@ public class PDATransition extends AbstractGeometricForm implements Cloneable {
         
         if ( !operations.contains( operation ) ) {
             operations.add( operation );
-            // TODO update
+            // TODO update custom sort
             //Utils.customSymbolsSort( this.operations );
             updateLabel();
         }
@@ -543,7 +541,7 @@ public class PDATransition extends AbstractGeometricForm implements Cloneable {
                 }
             }
 
-            // TODO update
+            // TODO update custom sort
             //Utils.customSymbolsSort( this.operations );
             updateLabel();
             
@@ -583,7 +581,7 @@ public class PDATransition extends AbstractGeometricForm implements Cloneable {
                 }
             }
 
-            // TODO update
+            // TODO update custom sort
             //Utils.customSymbolsSort( this.operations );
             updateLabel();
             
@@ -821,7 +819,7 @@ public class PDATransition extends AbstractGeometricForm implements Cloneable {
         
         String sy = "";
         boolean fs = true;
-        // TODO update
+        // TODO update code gen
         /*for ( char c : operations ) {
             if ( !fs ) {
                 sy += ", ";
@@ -873,7 +871,7 @@ public class PDATransition extends AbstractGeometricForm implements Cloneable {
     @SuppressWarnings( "unchecked" )
     public Object clone() throws CloneNotSupportedException {
         
-        // TODO update
+        // TODO update CLONE
         
         PDATransition c = (PDATransition) super.clone();
         

@@ -251,6 +251,7 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
             
         }
         
+        updateTransitions();
         markAllCachesAsObsolete();
         
     }
@@ -381,7 +382,7 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
 
             for ( PDATransition t : transitions ) {
                 Map<Character, List<PDAState>> mq = delta.get( t.getOriginState() );
-                // TODO update
+                // TODO update delta for PDAs
                 /*for ( Character sy : t.getSymbols() ) {
                     List<PDAState> li = mq.get( sy );
                     if ( li == null ) {
@@ -658,7 +659,7 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
     @SuppressWarnings( "unchecked" )
     public Object clone() throws CloneNotSupportedException {
         
-        // TODO update
+        // TODO update CLONE
         
         PDA c = (PDA) super.clone();
         Map<PDAState, PDAState> ref = new HashMap<>();

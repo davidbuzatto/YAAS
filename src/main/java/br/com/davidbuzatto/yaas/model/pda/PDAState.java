@@ -25,7 +25,6 @@ import java.awt.Rectangle;
 
 /**
  * A Pushdown Automaton state.
- * TODO needs to be refactored with FAState
  * 
  * @author Prof. Dr. David Buzatto
  */
@@ -321,7 +320,7 @@ public class PDAState extends AbstractGeometricForm implements Comparable<PDASta
     @SuppressWarnings( "unchecked" )
     public Object clone() throws CloneNotSupportedException {
         
-        // TODO update
+        // TODO update CLONE
         
         PDAState c = (PDAState) super.clone();
         

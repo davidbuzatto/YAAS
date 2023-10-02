@@ -1175,10 +1175,8 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
 
                     if ( targetState != null ) {
 
-                        // TODO update
-                        
                         PDAOperation op = Utils.showInputDialogNewPDAOperation( 
-                                this, "New Transition" );
+                                this, "Add Transition Operation(s)" );
                         
                         if ( op != null ) {
                             PDATransition t = new PDATransition( 
@@ -1985,7 +1983,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         
         if ( selectedTransition != null ) {
             
-            // TODO update
+            // TODO update popup menu
             
             /*String s = "";
             for ( Character c : selectedTransition.getSymbols() ) {
