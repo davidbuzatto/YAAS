@@ -28,7 +28,9 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * A Pushdown Automaton transition.
@@ -41,11 +43,9 @@ public class PDATransition extends AbstractGeometricForm implements Cloneable {
     private static final double RAD_90 = Math.toRadians( 90 );
     private static final double RAD_95 = Math.toRadians( 95 );
     
-    
     private PDAState originState;
     private PDAState targetState;
     private List<PDAOperation> operations;
-    
     
     private PDATransitionLabel label;
     private CubicCurve2D curve;
@@ -58,14 +58,12 @@ public class PDATransition extends AbstractGeometricForm implements Cloneable {
     
     private SerializableBasicStroke cpStroke;
     
-    
     private int xOffset;
     private int yOffset;
     
     private boolean labelDragging;
     private boolean labelMoved;
 
-    
     private int prevCentralCPX;
     private int prevCentralCPY;
     private int prevLeftCPX;
@@ -524,8 +522,7 @@ public class PDATransition extends AbstractGeometricForm implements Cloneable {
         
         if ( !operations.contains( operation ) ) {
             operations.add( operation );
-            // TODO update custom sort
-            //Utils.customSymbolsSort( this.operations );
+            Collections.sort( this.operations );
             updateLabel();
         }
         
@@ -541,8 +538,7 @@ public class PDATransition extends AbstractGeometricForm implements Cloneable {
                 }
             }
 
-            // TODO update custom sort
-            //Utils.customSymbolsSort( this.operations );
+            Collections.sort( this.operations );
             updateLabel();
             
         }
@@ -581,8 +577,7 @@ public class PDATransition extends AbstractGeometricForm implements Cloneable {
                 }
             }
 
-            // TODO update custom sort
-            //Utils.customSymbolsSort( this.operations );
+            Collections.sort( this.operations );
             updateLabel();
             
         }
@@ -806,6 +801,17 @@ public class PDATransition extends AbstractGeometricForm implements Cloneable {
         return moveLabel( 0, amount );
     }
     
+    public void replaceAllOperations( Set<PDAOperation> newOperations ) {
+        replaceAllOperations( new ArrayList<>( newOperations ) );
+    }
+    
+    public void replaceAllOperations( List<PDAOperation> newOperations ) {
+        Collections.sort( newOperations );
+        operations.clear();
+        operations.addAll( newOperations );
+        updateLabel();
+    }
+    
     @Override
     public String toString() {
         return String.format( "(%s) - %s -> (%s)",
@@ -817,28 +823,24 @@ public class PDATransition extends AbstractGeometricForm implements Cloneable {
         String className = getClass().getSimpleName();
         String tName = originState.getLabel() + targetState.getLabel();
         
-        String sy = "";
+        String pdaOp = "";
         boolean fs = true;
-        // TODO update code gen
-        /*for ( char c : operations ) {
-            if ( !fs ) {
-                sy += ", ";
-            }
-            if ( c == CharacterConstants.EMPTY_STRING ) {
-                sy += "CharacterConstants.EMPTY_STRING";
-            } else {
-                sy += String.format( "'%c'", c );
-            }
-            fs = false;
-        }*/
         
-        String def = String.format( "    %s %s = new %s( %s, %s, %s );", 
+        for ( PDAOperation o : operations ) {
+            if ( !fs ) {
+                pdaOp += ",\n";
+            }
+            pdaOp += o.generateCode();
+            fs = false;
+        }
+        
+        String def = String.format( "    %s %s = new %s( %s, %s,\n%s );", 
                 className, 
                 tName, 
                 className, 
                 originState.getLabel(), 
                 targetState.getLabel(), 
-                sy );
+                pdaOp );
         
         String pos = "";
         
@@ -871,18 +873,16 @@ public class PDATransition extends AbstractGeometricForm implements Cloneable {
     @SuppressWarnings( "unchecked" )
     public Object clone() throws CloneNotSupportedException {
         
-        // TODO update CLONE
-        
         PDATransition c = (PDATransition) super.clone();
         
+        // will be reconstructed in PDA clone.
         /*c.originState = (PDAState) originState.clone();
         c.targetState = (PDAState) targetState.clone();*/
         
         c.operations = new ArrayList<>();
-        // TODO update
-        /*for ( char ch : operations ) {
-            c.operations.add( ch );
-        }*/
+        for ( PDAOperation o : operations ) {
+            c.operations.add( o );
+        }
 
         c.label = (PDATransitionLabel) label.clone();
         c.curve = (CubicCurve2D) curve.clone();

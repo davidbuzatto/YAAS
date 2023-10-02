@@ -23,6 +23,7 @@ import javax.swing.JOptionPane;
 
 /**
  * Pushdown Automaton properties edit/visualization panel.
+ * TODO: verify and update (formal definition) add symbols to stack option
  * 
  * @author Prof. Dr. David Buzatto
  */

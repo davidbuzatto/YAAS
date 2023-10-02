@@ -270,12 +270,7 @@ public class FATransitionPropertiesPanel extends javax.swing.JPanel {
             }
             
         } else {
-            
-            JOptionPane.showMessageDialog( faIFrame,
-                    "There's no selected transition!",
-                    "ERROR",
-                    JOptionPane.ERROR_MESSAGE );
-            
+            Utils.showErrorMessage( faIFrame, "There's no selected transition!" );
         }
         
     }//GEN-LAST:event_btnEditSymbolsActionPerformed
@@ -289,12 +284,7 @@ public class FATransitionPropertiesPanel extends javax.swing.JPanel {
             faIFrame.repaintDrawPanel();
             
         } else {
-            
-            JOptionPane.showMessageDialog( faIFrame,
-                    "There's no selected transition!",
-                    "ERROR",
-                    JOptionPane.ERROR_MESSAGE );
-            
+            Utils.showErrorMessage( faIFrame, "There's no selected transition!" );
         }
         
     }//GEN-LAST:event_btnResetTransformationsActionPerformed
@@ -317,12 +307,7 @@ public class FATransitionPropertiesPanel extends javax.swing.JPanel {
             }
         
         } else {
-            
-            JOptionPane.showMessageDialog( faIFrame,
-                    "There's no selected transition!",
-                    "ERROR",
-                    JOptionPane.ERROR_MESSAGE );
-            
+            Utils.showErrorMessage( faIFrame, "There's no selected transition!" );
         }
         
     }//GEN-LAST:event_btnRemoveActionPerformed

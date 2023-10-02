@@ -19,6 +19,7 @@ package br.com.davidbuzatto.yaas.gui.fa.properties;
 import br.com.davidbuzatto.yaas.model.fa.FA;
 import br.com.davidbuzatto.yaas.gui.fa.FAInternalFrame;
 import br.com.davidbuzatto.yaas.model.fa.FAState;
+import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.Color;
 import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
@@ -273,12 +274,7 @@ public class FAStatePropertiesPanel extends javax.swing.JPanel {
             }
         
         } else {
-            
-            JOptionPane.showMessageDialog( faIFrame,
-                    "There's no selected state!",
-                    "ERROR",
-                    JOptionPane.ERROR_MESSAGE );
-            
+            Utils.showErrorMessage( faIFrame, "There's no selected state!" );
         }
         
     }//GEN-LAST:event_btnRemoveActionPerformed

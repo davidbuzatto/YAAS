@@ -484,7 +484,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         });
 
         popItemTransitionSymbols.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pencil.png"))); // NOI18N
-        popItemTransitionSymbols.setText("Symbols");
+        popItemTransitionSymbols.setText("Symbol(s)");
         popItemTransitionSymbols.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 popItemTransitionSymbolsActionPerformed(evt);

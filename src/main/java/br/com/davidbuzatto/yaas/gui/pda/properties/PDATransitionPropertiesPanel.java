@@ -16,9 +16,11 @@
  */
 package br.com.davidbuzatto.yaas.gui.pda.properties;
 
+import br.com.davidbuzatto.yaas.gui.pda.PDAEditOperationsDialog;
 import br.com.davidbuzatto.yaas.gui.pda.PDAInternalFrame;
 import br.com.davidbuzatto.yaas.model.pda.PDA;
 import br.com.davidbuzatto.yaas.model.pda.PDATransition;
+import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.Color;
 import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
@@ -229,44 +231,25 @@ public class PDATransitionPropertiesPanel extends javax.swing.JPanel {
         
         if ( transition != null ) {
             
-            // TODO update popup menu
+            PDAEditOperationsDialog d = new PDAEditOperationsDialog( 
+                    null, 
+                    pdaIFrame, 
+                    pda,
+                    transition, 
+                    true );
+            d.setVisible( true );
             
-            /*String s = "";
-            for ( Character c : transition.getSymbols() ) {
-                s += c.toString() + " ";
+            if ( d.isTransitionRemoved() ) {
+                pdaIFrame.updateAfterRemotion();
+            } else {
+                readProperties();
             }
-            s = s.trim();
             
-            String input = Utils.showInputDialogEmptyString( pdaIFrame, 
-                    "New transition symbol(s)", 
-                    "Edit Transition Symbol(s)", s );
-            List<Character> symbols = new ArrayList<>();
-
-            if ( input != null ) {
-
-                input = input.trim().replace( " ", "" );
-
-                if ( !input.isEmpty() ) {
-                    for ( char c : input.toCharArray() ) {
-                        symbols.add( c );
-                    }
-                    transition.setSymbols( symbols );
-                    pda.markAllCachesAsObsolete();
-                    readProperties();
-                    pdaIFrame.setCurrentFileSaved( false );
-                    pdaIFrame.repaintDrawPanel();
-                    pdaIFrame.updateAfterUpdate();
-                }
-
-            }*/
+            pdaIFrame.setCurrentFileSaved( false );
+            pdaIFrame.repaintDrawPanel();
             
         } else {
-            
-            JOptionPane.showMessageDialog( pdaIFrame,
-                    "There's no selected transition!",
-                    "ERROR",
-                    JOptionPane.ERROR_MESSAGE );
-            
+            Utils.showErrorMessage( pdaIFrame, "There's no selected transition!" );
         }
         
     }//GEN-LAST:event_btnEditOperationsActionPerformed
@@ -280,12 +263,7 @@ public class PDATransitionPropertiesPanel extends javax.swing.JPanel {
             pdaIFrame.repaintDrawPanel();
             
         } else {
-            
-            JOptionPane.showMessageDialog( pdaIFrame,
-                    "There's no selected transition!",
-                    "ERROR",
-                    JOptionPane.ERROR_MESSAGE );
-            
+            Utils.showErrorMessage( pdaIFrame, "There's no selected transition!" );
         }
         
     }//GEN-LAST:event_btnResetTransformationsActionPerformed
@@ -308,12 +286,7 @@ public class PDATransitionPropertiesPanel extends javax.swing.JPanel {
             }
         
         } else {
-            
-            JOptionPane.showMessageDialog( pdaIFrame,
-                    "There's no selected transition!",
-                    "ERROR",
-                    JOptionPane.ERROR_MESSAGE );
-            
+            Utils.showErrorMessage( pdaIFrame, "There's no selected transition!" );
         }
         
     }//GEN-LAST:event_btnRemoveActionPerformed

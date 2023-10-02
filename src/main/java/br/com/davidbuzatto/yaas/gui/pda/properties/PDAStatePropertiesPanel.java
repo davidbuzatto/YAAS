@@ -19,6 +19,7 @@ package br.com.davidbuzatto.yaas.gui.pda.properties;
 import br.com.davidbuzatto.yaas.gui.pda.PDAInternalFrame;
 import br.com.davidbuzatto.yaas.model.pda.PDA;
 import br.com.davidbuzatto.yaas.model.pda.PDAState;
+import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.Color;
 import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
@@ -273,12 +274,7 @@ public class PDAStatePropertiesPanel extends javax.swing.JPanel {
             }
         
         } else {
-            
-            JOptionPane.showMessageDialog( pdaIFrame,
-                    "There's no selected state!",
-                    "ERROR",
-                    JOptionPane.ERROR_MESSAGE );
-            
+            Utils.showErrorMessage( pdaIFrame, "There's no selected state!" );
         }
         
     }//GEN-LAST:event_btnRemoveActionPerformed

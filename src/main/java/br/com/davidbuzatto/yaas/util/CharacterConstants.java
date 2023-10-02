@@ -54,6 +54,6 @@ public interface CharacterConstants {
     public static final Character SUPER_M = '\u1d50';
     public static final Character SUPER_N = '\u207f';
     
-    public static final Character STARTING_SYMBOL = '$';
+    public static final Character STACK_STARTING_SYMBOL = '$';
     
 }

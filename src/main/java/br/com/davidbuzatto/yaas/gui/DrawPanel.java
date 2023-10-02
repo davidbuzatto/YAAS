@@ -118,7 +118,7 @@ public class DrawPanel extends JPanel {
 
         }
         
-        // TODO update for PDA simulation
+        // TODO update for PDA simulation (depends on accepts and instantaneous description)
         if ( simulationString != null && faSimulationSteps != null ) {
             
             Rectangle r = getVisibleRect();

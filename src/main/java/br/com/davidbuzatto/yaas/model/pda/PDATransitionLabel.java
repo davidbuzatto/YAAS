@@ -205,14 +205,28 @@ public class PDATransitionLabel extends AbstractGeometricForm implements Cloneab
     @SuppressWarnings( "unchecked" )
     public Object clone() throws CloneNotSupportedException {
         
-        // TODO update CLONE
-        
         PDATransitionLabel c = (PDATransitionLabel) super.clone();
         
-        //c.text = text;
+        c.texts = new ArrayList<>();
+        for ( String t : texts ) {
+            c.texts.add( t );
+        }
+        
+        c.textsWidth = new ArrayList<>();
+        for ( Integer v : textsWidth ) {
+            c.textsWidth.add( v );
+        }
+        
+        c.textsHeight = new ArrayList<>();
+        for ( Integer v : textsHeight ) {
+            c.textsHeight.add( v );
+        }
+        
         c.totalTextWidth = totalTextWidth;
         c.totalTextHeight = totalTextHeight;
-
+        c.maxTextWidth = maxTextWidth;
+        c.maxTextHeight = maxTextHeight;
+    
         c.activeInSimulation = false;
         c.activeInSimulationStrokeColor = activeInSimulationStrokeColor;
         c.activeInSimulationFillColor = activeInSimulationFillColor;

@@ -320,8 +320,6 @@ public class PDAState extends AbstractGeometricForm implements Comparable<PDASta
     @SuppressWarnings( "unchecked" )
     public Object clone() throws CloneNotSupportedException {
         
-        // TODO update CLONE
-        
         PDAState c = (PDAState) super.clone();
         
         c.number = number;

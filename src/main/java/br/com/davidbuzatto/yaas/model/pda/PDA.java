@@ -45,12 +45,12 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
     
     // cache control
     private boolean alphabetUpToDate;
+    private boolean stackAlphabetUpToDate;
     private boolean deltaUpToDate;
-    private boolean eclosesUpToDate;
     
     private Set<Character> alphabet;
+    private Set<Character> stackAlphabet;
     private Map<PDAState, Map<Character, List<PDAState>>> delta;
-    private Map<PDAState, Set<PDAState>> ecloses;
     
     private boolean transitionControlPointsVisible;
     
@@ -63,59 +63,12 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
         return accepts( str, null );
     }
     
+    // TODO implement accepts  (depends on delta update)
     public boolean accepts( String str, List<PDASimulationStep> simulationSteps ) {
         
         if ( canExecute() ) {
             
-            Map<PDAState, Map<Character, List<PDAState>>> delta = getDelta();
-            Map<PDAState, Set<PDAState>> ecloses = getEcloses( delta );
-            
-            Set<PDAState> currentStates = new HashSet<>();
-            currentStates.addAll( ecloses.get( initialState ) );
-            
-            if ( simulationSteps != null ) {
-                simulationSteps.add( new PDASimulationStep( currentStates, Character.MIN_SURROGATE ) );
-            }
-            
-            for ( char c : str.toCharArray() ) {
-                
-                Set<PDAState> targetStates = new HashSet<>();
-                
-                for ( PDAState s : currentStates ) {
-                    
-                    Map<Character, List<PDAState>> t = delta.get( s );
-                    
-                    if ( t.containsKey( c ) ) {
-                        targetStates.addAll( t.get( c ) );
-                    }
-                    
-                }
-                
-                if ( targetStates.isEmpty() ) {
-                    return false;
-                }
-                
-                Set<PDAState> targetEclose = new HashSet<>();
-                for ( PDAState s : targetStates ) {
-                    targetEclose.addAll( ecloses.get( s ) );
-                }
-                
-                /*System.out.println( currentStates + " " + c + " " + targetEclose );
-                System.out.println();*/
-                
-                currentStates = targetEclose;
-                
-                if ( simulationSteps != null ) {
-                    simulationSteps.add( new PDASimulationStep( currentStates, c ) );
-                }
-                
-            }
-            
-            for ( PDAState s : currentStates ) {
-                if ( s.isAccepting() ) {
-                    return true;
-                }
-            }
+            return false;
             
         }
         
@@ -336,12 +289,14 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
     
     public String getFormalDefinition() {
         
-        String def = String.format( "A = { Q, %c, %c, %s, F }\n",
+        String def = String.format( "A = { Q, %c, %c, %c, %s, F }\n",
                 CharacterConstants.CAPITAL_SIGMA,
+                CharacterConstants.CAPITAL_GAMMA,
                 CharacterConstants.SMALL_DELTA, 
                 initialState.toString() );
         def += getStatesString() + "\n";
         def += getAlphabetString() + "\n";
+        def += getStackAlphabetString() + "\n";
         def += getAcceptingStatesString();
         
         return def;
@@ -366,6 +321,27 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
         }
         
         return alphabet;
+        
+    }
+    
+    public Set<Character> getStackAlphabet() {
+        
+        if ( stackAlphabet == null || !stackAlphabetUpToDate ) {
+            
+            stackAlphabetUpToDate = true;
+            stackAlphabet = new TreeSet<>();
+        
+            for ( PDATransition t : transitions ) {
+                for ( PDAOperation o : t.getOperations() ) {
+                    if ( o.getSymbol() != CharacterConstants.EMPTY_STRING ) {
+                        stackAlphabet.add( o.getSymbol() );
+                    }
+                }
+            }
+        
+        }
+        
+        return stackAlphabet;
         
     }
     
@@ -396,60 +372,6 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
         }
         
         return delta;
-        
-    }
-    
-    public Map<PDAState, Set<PDAState>> getEcloses( 
-            Map<PDAState, Map<Character, List<PDAState>>> delta ) {
-        
-        if ( ecloses == null || !eclosesUpToDate ) {
-            
-            eclosesUpToDate = true;
-            ecloses = new HashMap<>();
-            
-            for ( PDAState e : delta.keySet() ) {
-                ecloses.put( e, discoverEclose( e, delta ) );
-            }
-            
-        }
-        
-        return ecloses;
-        
-    }
-    
-    private Set<PDAState> discoverEclose( 
-            PDAState s, 
-            Map<PDAState, Map<Character, List<PDAState>>> delta ) {
-        
-        Set<PDAState> eclose = new TreeSet<>();
-        Set<PDAState> visited = new HashSet<>();
-        
-        discoverEcloseR( s, eclose, visited, delta );
-        
-        return eclose;
-        
-    }
-    
-    private void discoverEcloseR( 
-            PDAState s, 
-            Set<PDAState> eclose, 
-            Set<PDAState> visited, 
-            Map<PDAState, Map<Character, List<PDAState>>> delta ) {
-        
-        if ( !visited.contains( s ) ) {
-            
-            eclose.add( s );
-            visited.add( s );
-            
-            Map<Character, List<PDAState>> transitions = delta.get( s );
-            
-            if ( transitions.containsKey( CharacterConstants.EMPTY_STRING ) ) {
-                for ( PDAState target : transitions.get( CharacterConstants.EMPTY_STRING ) ) {
-                    discoverEcloseR( target, eclose, visited, delta );
-                }
-            }
-            
-        }
         
     }
     
@@ -542,6 +464,28 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
         return str;
         
     }
+    
+    private String getStackAlphabetString() {
+        
+        String str = "";
+        
+        Set<Character> alf = getStackAlphabet();
+        
+        boolean first = true;
+        
+        str += CharacterConstants.CAPITAL_GAMMA + " = { ";
+        for ( Character c : alf ) {
+            if ( !first ) {
+                str += ", ";
+            }
+            str += c;
+            first = false;
+        }
+        str += " }";
+        
+        return str;
+        
+    }
 
     public List<PDAState> getStates() {
         return states;
@@ -559,8 +503,8 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
     
     public void markAllCachesAsObsolete() {
         alphabetUpToDate = false;
+        stackAlphabetUpToDate = false;
         deltaUpToDate = false;
-        eclosesUpToDate = false;
     }
     
     public void merge( PDA fa ) {
@@ -659,8 +603,6 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
     @SuppressWarnings( "unchecked" )
     public Object clone() throws CloneNotSupportedException {
         
-        // TODO update CLONE
-        
         PDA c = (PDA) super.clone();
         Map<PDAState, PDAState> ref = new HashMap<>();
     
@@ -680,15 +622,14 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
         }
         
         // c.initialState = null;  <- c.addState() resolves it accordingly
-        // c.type = null;          <- c.updateType() resolves it accordingly
         
         c.alphabetUpToDate = false;
+        c.stackAlphabetUpToDate = false;
         c.deltaUpToDate = false;
-        c.eclosesUpToDate = false;
 
         c.alphabet = null;
+        c.stackAlphabet = null;
         c.delta = null;
-        c.ecloses = null;
 
         c.transitionControlPointsVisible = false;
         

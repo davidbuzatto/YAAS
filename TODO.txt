@@ -6,8 +6,8 @@ Regular Expressions
 Here: https://resources.wolframcloud.com/PacletRepository/resources/KlausSutner/Automata/
 
 Pushdown Automata
-    change transition operations context menu and properties panel
-    level arrangement bug
+    test component for transition operation edit
+    level arrangement bug (will be fixed when pda delta is implemented)
 
 
 

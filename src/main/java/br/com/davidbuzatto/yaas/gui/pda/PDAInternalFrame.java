@@ -418,7 +418,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         });
 
         popItemTransitionOperations.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pencil.png"))); // NOI18N
-        popItemTransitionOperations.setText("Operations");
+        popItemTransitionOperations.setText("Operation(s)");
         popItemTransitionOperations.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 popItemTransitionOperationsActionPerformed(evt);
@@ -1176,7 +1176,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                     if ( targetState != null ) {
 
                         PDAOperation op = Utils.showInputDialogNewPDAOperation( 
-                                this, "Add Transition Operation(s)" );
+                                this, "Add Transition Operation", null );
                         
                         if ( op != null ) {
                             PDATransition t = new PDATransition( 
@@ -1983,40 +1983,28 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         
         if ( selectedTransition != null ) {
             
-            // TODO update popup menu
+            PDAEditOperationsDialog d = new PDAEditOperationsDialog( 
+                    null, 
+                    this, 
+                    pda,
+                    selectedTransition, 
+                    true );
+            d.setVisible( true );
             
-            /*String s = "";
-            for ( Character c : selectedTransition.getSymbols() ) {
-                s += c.toString() + " ";
+            if ( d.isTransitionRemoved() ) {
+                pdaPPanel.setPda( pda );
+                pdaPPanel.readProperties();
+                cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
+            } else {
+                transitionPPanel.setPda( pda );
+                transitionPPanel.setTransition( selectedTransition );
+                transitionPPanel.readProperties();
+                cardLayout.show( panelProperties, TRANSITION_PROPERTIES_CARD );
             }
-            s = s.trim();
             
-            String input = Utils.showInputDialogEmptyString( this, 
-                    "New transition symbol(s)", 
-                    "Edit Transition Symbol(s)", s );
-            List<Character> symbols = new ArrayList<>();
-
-            if ( input != null ) {
-
-                input = input.trim().replace( " ", "" );
-
-                if ( !input.isEmpty() ) {
-                    for ( char c : input.toCharArray() ) {
-                        symbols.add( c );
-                    }
-                    selectedTransition.setSymbols( symbols );
-                    pda.markAllCachesAsObsolete();
-                    transitionPPanel.setPda( pda );
-                    transitionPPanel.setTransition( selectedTransition );
-                    transitionPPanel.readProperties();
-                    cardLayout.show( panelProperties, TRANSITION_PROPERTIES_CARD );
-                    setCurrentFileSaved( false );
-                    repaintDrawPanel();
-                    updateAfterUpdate();
-                }
-
-            }*/
-            
+            setCurrentFileSaved( false );
+            repaintDrawPanel();
+                
         } else {
             Utils.showErrorMessage( this, "There's no selected transition!" );
         }
@@ -2406,8 +2394,8 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
 
             File f = jfc.getSelectedFile();
 
-            if ( !f.getName().endsWith( ".yfa" ) ) {
-                f = new File( f.getAbsolutePath() + ".yfa" );
+            if ( !f.getName().endsWith( ".ypda" ) ) {
+                f = new File( f.getAbsolutePath() + ".ypda" );
             }
 
             boolean save = true;

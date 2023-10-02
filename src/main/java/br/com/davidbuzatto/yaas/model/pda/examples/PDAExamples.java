@@ -40,7 +40,7 @@ public class PDAExamples {
         PDAState q1 = new PDAState( 1, false, false );
         q1.setX1Y1( 300, 300 );
         
-        PDAState q2 = new PDAState( 1, false, true );
+        PDAState q2 = new PDAState( 2, false, true );
         q2.setX1Y1( 450, 300 );
         
         pda.addState( q0 );

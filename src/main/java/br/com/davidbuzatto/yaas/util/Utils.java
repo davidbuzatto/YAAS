@@ -41,7 +41,6 @@ import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.QuadCurve2D;
 import java.awt.image.BufferedImage;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -55,7 +54,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import javax.swing.Action;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
@@ -470,7 +468,7 @@ public class Utils {
      */
     public static PDATransitionFunctionTableModel createPDATransitionFunctionTableModel( PDA pda ) {
         
-        // TODO update table model
+        // TODO update table model (depends on delta update)
         
         /*FATransitionFunctionTableModel tm = new FATransitionFunctionTableModel();
         List<Character> symbols = new ArrayList<>();
@@ -625,7 +623,8 @@ public class Utils {
      */
     public static PDAOperation showInputDialogNewPDAOperation( 
             Component parentComponent, 
-            String title ) {
+            String title,
+            PDAOperation op ) {
         
         JPanel panel = new JPanel();
         panel.setLayout( new GridBagLayout() );
@@ -684,24 +683,24 @@ public class Utils {
         gridBagConstraints.insets = new Insets( 5, 5, 5, 5 );
         panel.add( tsPanel, gridBagConstraints );
         
-        JPanel sttPanel = new JPanel();
-        sttPanel.setAlignmentX( JPanel.LEFT_ALIGNMENT );
-        sttPanel.setLayout( new BoxLayout( sttPanel, BoxLayout.X_AXIS ) );
-        JTextField txtSTT = new JTextField( 5 );
+        JPanel stPanel = new JPanel();
+        stPanel.setAlignmentX( JPanel.LEFT_ALIGNMENT );
+        stPanel.setLayout( new BoxLayout( stPanel, BoxLayout.X_AXIS ) );
+        JTextField txtST = new JTextField( 5 );
         JCheckBox checkEmptyST = new JCheckBox( CharacterConstants.EMPTY_STRING + "" );
         checkEmptyST.setToolTipText( "Empty stack" );
-        JCheckBox checkStartingST = new JCheckBox( CharacterConstants.STARTING_SYMBOL + "" );
+        JCheckBox checkStartingST = new JCheckBox( CharacterConstants.STACK_STARTING_SYMBOL + "" );
         checkStartingST.setToolTipText( "Starting symbol" );
-        sttPanel.add( txtSTT );
-        sttPanel.add( checkEmptyST );
-        sttPanel.add( checkStartingST );
+        stPanel.add( txtST );
+        stPanel.add( checkEmptyST );
+        stPanel.add( checkStartingST );
         
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.NONE;
         gridBagConstraints.insets = new Insets( 5, 5, 5, 5 );
-        panel.add( sttPanel, gridBagConstraints );
+        panel.add( stPanel, gridBagConstraints );
         
         JTextField txtSP = new JTextField();
         txtSP.setEnabled( false );
@@ -724,19 +723,19 @@ public class Utils {
         bg.add( rPush );
         bg.add( rReplace );
         
-        JPanel stPanel = new JPanel();
-        stPanel.setLayout( new BoxLayout( stPanel, BoxLayout.PAGE_AXIS ) );
-        stPanel.add( rNothing );
-        stPanel.add( rPop );
-        stPanel.add( rPush );
-        stPanel.add( rReplace );
+        JPanel stOpPanel = new JPanel();
+        stOpPanel.setLayout( new BoxLayout( stOpPanel, BoxLayout.PAGE_AXIS ) );
+        stOpPanel.add( rNothing );
+        stOpPanel.add( rPop );
+        stOpPanel.add( rPush );
+        stOpPanel.add( rReplace );
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panel.add( stPanel, gridBagConstraints );
+        panel.add( stOpPanel, gridBagConstraints );
         
         Component[] components = new Component[]{ panel };
         
@@ -786,11 +785,11 @@ public class Utils {
             @Override
             public void actionPerformed( ActionEvent e ) {
                 if ( checkEmptyST.isSelected() ) {
-                    txtSTT.setEnabled( false );
-                    txtSTT.setText( "" );
+                    txtST.setEnabled( false );
+                    txtST.setText( "" );
                     checkStartingST.setSelected( false );
                 } else {
-                    txtSTT.setEnabled( true );
+                    txtST.setEnabled( true );
                 }
             }
         });
@@ -799,14 +798,55 @@ public class Utils {
             @Override
             public void actionPerformed( ActionEvent e ) {
                 if ( checkStartingST.isSelected() ) {
-                    txtSTT.setEnabled( false );
-                    txtSTT.setText( "" );
+                    txtST.setEnabled( false );
+                    txtST.setText( "" );
                     checkEmptyST.setSelected( false );
                 } else {
-                    txtSTT.setEnabled( true );
+                    txtST.setEnabled( true );
                 }
             }
         });
+        
+        if ( op != null ) {
+            
+            if ( op.getSymbol() == CharacterConstants.EMPTY_STRING ) {
+                checkE.doClick();
+            } else {
+                txtTS.setText( String.valueOf( op.getSymbol() ) );
+            }
+            
+            if ( op.getTop() == CharacterConstants.EMPTY_STRING ) {
+                checkEmptyST.doClick();
+            } else if ( op.getTop() == CharacterConstants.STACK_STARTING_SYMBOL ) {
+                checkStartingST.doClick();
+            } else {
+                txtST.setText( String.valueOf( op.getTop() ) );
+            }
+            
+            switch ( op.getType() ) {
+                case DO_NOTHING:
+                    rNothing.doClick();
+                    break;
+                case POP:
+                    rPop.doClick();
+                    break;
+                case PUSH:
+                    rPush.doClick();
+                    break;
+                case REPLACE:
+                    rReplace.doClick();
+                    break;
+            }
+            
+            if ( op.getType() == PDAOperationType.PUSH || op.getType() == PDAOperationType.REPLACE ) {
+                String s = "";
+                for ( char c : op.getSymbolsToPush() ) {
+                    s += c + " ";
+                }
+                txtSP.setText( s.trim() );
+            }
+            
+        }
         
         if ( JOptionPane.showOptionDialog( 
                 parentComponent, 
@@ -818,21 +858,35 @@ public class Utils {
                 new String[]{ "OK", "Cancel" }, 
                 "OK" ) == JOptionPane.OK_OPTION ) {
             
+            boolean errorTS = false;
+            boolean errorST = false;
+            boolean errorSP = false;
+            
             char symbol = CharacterConstants.EMPTY_STRING;
             if ( !checkE.isSelected() ) {
-                symbol = txtTS.getText().trim().charAt( 0 );
+                String inputTS = txtTS.getText().trim();
+                if ( !inputTS.isEmpty() ) {
+                    symbol = txtTS.getText().trim().charAt( 0 );
+                } else {
+                    errorTS = true;
+                }
             }
             
-            char stackTop;
+            char stackTop = 'v';
             if ( checkEmptyST.isSelected() ) {
                 stackTop = CharacterConstants.EMPTY_STRING;
             } else if ( checkStartingST.isSelected() ) {
-                stackTop = CharacterConstants.STARTING_SYMBOL;
+                stackTop = CharacterConstants.STACK_STARTING_SYMBOL;
             } else {
-                stackTop = txtSTT.getText().trim().charAt( 0 );
+                String inputST = txtST.getText().trim();
+                if ( !inputST.isEmpty() ) {
+                    stackTop = inputST.charAt( 0 );
+                } else {
+                    errorST = true;
+                }
             }
             
-            String sSymbols = txtSP.getText().trim();
+            String pushSymbols = txtSP.getText().replace( " ", "" ).trim();
             PDAOperationType type;
             
             if ( rNothing.isSelected() ) {
@@ -845,11 +899,43 @@ public class Utils {
                 type = PDAOperationType.REPLACE;
             }
             
-            return new PDAOperation( symbol, stackTop, type, sSymbols.toCharArray() );
+            if ( pushSymbols.isEmpty() && ( type == PDAOperationType.PUSH || type == PDAOperationType.REPLACE ) ) {
+                errorSP = true;
+            }
+            
+            String error = "";
+            if ( errorTS ) {
+                error += "You must set a transition symbol!";
+            }
+            if ( errorST ) {
+                error += "\nYou must set a stack top!";
+            }
+            if ( errorSP ) {
+                error += String.format( 
+                        "\nYou must add at least one symbol to %s!", 
+                        type == PDAOperationType.PUSH ? "push" : "replace" );
+            }
+            
+            if ( errorTS || errorST || errorSP ) {
+                showErrorMessage( parentComponent, error.trim() );
+            } else {
+                if ( op != null ) {
+                    op.setSymbol( symbol );
+                    op.setTop( stackTop );
+                    op.setType( type );
+                    List<Character> sp = new ArrayList<>();
+                    for ( char c : pushSymbols.toCharArray() ) {
+                        sp.add( c );
+                    }
+                    op.setSymbolsToPush( sp );
+                } else {
+                    return new PDAOperation( symbol, stackTop, type, pushSymbols.toCharArray() );
+                }
+            }
             
         }
         
-        return null;
+        return op;
         
     }
     

@@ -42,11 +42,9 @@ public class FATransition extends AbstractGeometricForm implements Cloneable {
     private static final double RAD_90 = Math.toRadians( 90 );
     private static final double RAD_95 = Math.toRadians( 95 );
     
-    
     private FAState originState;
     private FAState targetState;
     private List<Character> symbols;
-    
     
     private FATransitionLabel label;
     private CubicCurve2D curve;
@@ -59,13 +57,11 @@ public class FATransition extends AbstractGeometricForm implements Cloneable {
     
     private SerializableBasicStroke cpStroke;
     
-    
     private int xOffset;
     private int yOffset;
     
     private boolean labelDragging;
     private boolean labelMoved;
-
     
     private int prevCentralCPX;
     private int prevCentralCPY;
@@ -888,6 +884,7 @@ public class FATransition extends AbstractGeometricForm implements Cloneable {
         
         FATransition c = (FATransition) super.clone();
         
+        // will be reconstructed in FA clone.
         /*c.originState = (FAState) originState.clone();
         c.targetState = (FAState) targetState.clone();*/
         
