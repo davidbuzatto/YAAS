@@ -198,7 +198,16 @@ public class PDATransitionLabel extends AbstractGeometricForm implements Cloneab
 
     @Override
     public String toString() {
-        return "label string";
+        String str = "";
+        boolean f = true;
+        for ( String s : texts ) {
+            if ( !f ) {
+                str += ", ";
+            }
+            str += s;
+            f = false;
+        }
+        return str;
     }
     
     @Override

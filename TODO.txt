@@ -6,7 +6,7 @@ Finite Automata
     Here: https://resources.wolframcloud.com/PacletRepository/resources/KlausSutner/Automata/
 
 Pushdown Automata
-    Level arrangement bug (will be fixed when pda delta is implemented)
+    
 
 Turing Machines
 

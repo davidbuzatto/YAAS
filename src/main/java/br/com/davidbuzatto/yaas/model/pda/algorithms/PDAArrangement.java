@@ -18,6 +18,7 @@ package br.com.davidbuzatto.yaas.model.pda.algorithms;
 
 import br.com.davidbuzatto.yaas.model.pda.PDA;
 import br.com.davidbuzatto.yaas.model.pda.PDAState;
+import br.com.davidbuzatto.yaas.model.pda.PDATransition;
 import java.awt.Point;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -192,7 +193,7 @@ public class PDAArrangement {
         int currentY;
         
         PDAState initialState = pda.getInitialState();
-        Map<PDAState, Map<Character, List<PDAState>>> delta = pda.getDelta();
+        Map<PDAState, List<PDATransition>> delta = pda.getDelta();
         
         Map<Integer, List<PDAState>> leveledStates = new TreeMap<>();
         List<PDAState> liInitial = new ArrayList<>();
@@ -217,8 +218,8 @@ public class PDAArrangement {
             PDAState current = queue.poll();
             
             Set<PDAState> children = new HashSet<>();
-            for ( Map.Entry<Character, List<PDAState>> e : delta.get( current ).entrySet() ) {
-                children.addAll( e.getValue() );
+            for ( PDATransition t : delta.get( current ) ) {
+                children.add( t.getTargetState() );
             }
             List<PDAState> lChildren = new ArrayList<>( children );
             Collections.sort( lChildren );

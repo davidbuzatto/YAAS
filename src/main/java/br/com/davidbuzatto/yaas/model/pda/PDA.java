@@ -24,7 +24,6 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -43,6 +42,8 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
     private List<PDATransition> transitions;
     private PDAState initialState;
     
+    private List<Character> startingPushSymbols;
+    
     // cache control
     private boolean alphabetUpToDate;
     private boolean stackAlphabetUpToDate;
@@ -50,13 +51,14 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
     
     private Set<Character> alphabet;
     private Set<Character> stackAlphabet;
-    private Map<PDAState, Map<Character, List<PDAState>>> delta;
+    private Map<PDAState, List<PDATransition>> delta;
     
     private boolean transitionControlPointsVisible;
     
     public PDA() {
         states = new ArrayList<>();
         transitions = new ArrayList<>();
+        startingPushSymbols = new ArrayList<>();
     }
     
     public boolean accepts( String str ) {
@@ -330,12 +332,14 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
             
             stackAlphabetUpToDate = true;
             stackAlphabet = new TreeSet<>();
+            
+            stackAlphabet.add( CharacterConstants.STACK_STARTING_SYMBOL );
+            stackAlphabet.addAll( startingPushSymbols );
         
             for ( PDATransition t : transitions ) {
                 for ( PDAOperation o : t.getOperations() ) {
-                    if ( o.getSymbol() != CharacterConstants.EMPTY_STRING ) {
-                        stackAlphabet.add( o.getSymbol() );
-                    }
+                    stackAlphabet.add( o.getTop() );
+                    stackAlphabet.addAll( o.getSymbolsToPush() );
                 }
             }
         
@@ -345,7 +349,7 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
         
     }
     
-    public Map<PDAState, Map<Character, List<PDAState>>> getDelta() {
+    public Map<PDAState, List<PDATransition>> getDelta() {
         
         if ( delta == null || !deltaUpToDate ) {
             
@@ -353,20 +357,12 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
             
             delta = new TreeMap<>();
             for ( PDAState s : states ) {
-                delta.put( s, new TreeMap<>() );
+                delta.put( s, new ArrayList<>() );
             }
 
             for ( PDATransition t : transitions ) {
-                Map<Character, List<PDAState>> mq = delta.get( t.getOriginState() );
-                // TODO update delta for PDAs
-                /*for ( Character sy : t.getSymbols() ) {
-                    List<PDAState> li = mq.get( sy );
-                    if ( li == null ) {
-                        li = new ArrayList<>();
-                        mq.put( sy, li );
-                    }
-                    li.add( t.getTargetState() );
-                }*/
+                List<PDATransition> ts = delta.get( t.getOriginState() );
+                ts.add( t );
             }
             
         }
@@ -493,6 +489,15 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
 
     public List<PDATransition> getTransitions() {
         return transitions;
+    }
+
+    public List<Character> getStartingPushSymbols() {
+        return startingPushSymbols;
+    }
+
+    public void setStartingPushSymbols( List<Character> startingPushSymbols ) {
+        this.startingPushSymbols = startingPushSymbols;
+        markAllCachesAsObsolete();
     }
     
     public void deactivateAllStatesInSimulation() {
@@ -622,6 +627,11 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
         }
         
         // c.initialState = null;  <- c.addState() resolves it accordingly
+        
+        c.startingPushSymbols = new ArrayList<>();
+        for ( char ch : startingPushSymbols ) {
+            c.startingPushSymbols.add( ch );
+        }
         
         c.alphabetUpToDate = false;
         c.stackAlphabetUpToDate = false;
