@@ -35,13 +35,13 @@ public class PDAExamples {
         PDA pda = new PDA();
         
         PDAState q0 = new PDAState( 0, true, false );
-        q0.setX1Y1( 150, 300 );
+        q0.setX1Y1( 100, 200 );
         
         PDAState q1 = new PDAState( 1, false, false );
-        q1.setX1Y1( 300, 300 );
+        q1.setX1Y1( 250, 200 );
         
         PDAState q2 = new PDAState( 2, false, true );
-        q2.setX1Y1( 450, 300 );
+        q2.setX1Y1( 400, 200 );
         
         pda.addState( q0 );
         pda.addState( q1 );
@@ -61,10 +61,10 @@ public class PDAExamples {
                 new PDAOperation( '1', '1', PDAOperationType.PUSH, '1' ) ) );
         
         // tests
-        pda.addTransition( new PDATransition( q0, q0, 
+        /*pda.addTransition( new PDATransition( q0, q0, 
                 new PDAOperation( '1', '1', PDAOperationType.PUSH, '1', '2', '3' ) ) );
         pda.addTransition( new PDATransition( q0, q0, 
-                new PDAOperation( '1', '1', PDAOperationType.REPLACE, '2', '3' ) ) );
+                new PDAOperation( '1', '1', PDAOperationType.REPLACE, '2', '3' ) ) );*/
         
         pda.addTransition( new PDATransition( q0, q1, 
                 PDAOperation.getDoNothingOperation( CharacterConstants.EMPTY_STRING, '$' ) ) );

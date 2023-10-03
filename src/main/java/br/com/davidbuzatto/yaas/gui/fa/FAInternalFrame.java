@@ -1511,11 +1511,10 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             boolean save = true;
 
             if ( f.exists() ) {
-                if ( JOptionPane.showConfirmDialog( 
+                if ( Utils.showConfirmationMessageYesNo(
                         this, 
-                        "The file already exists. Do you want to overwrite it?", 
-                        "Confirmation", 
-                        JOptionPane.YES_NO_OPTION ) == JOptionPane.NO_OPTION ) {
+                        "The file already exists.\nDo you want to overwrite it?" )
+                        == JOptionPane.NO_OPTION ) {
                     save = false;
                 }
             }
@@ -2022,11 +2021,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         if ( !currentFileSaved ) {
             
-            int r = JOptionPane.showConfirmDialog( 
-                    this, 
-                    "Save modifications before oppening?", 
-                    "Confirmation", 
-                    JOptionPane.YES_NO_CANCEL_OPTION );
+            int r = Utils.showConfirmationMessageYesNoCancel( this, 
+                    "Save modifications before oppening?" );
             
             if ( r == JOptionPane.YES_OPTION ) {
                 if ( saveFA() ) {
@@ -2058,11 +2054,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
             if ( !currentFileSaved ) {
 
-                int r = JOptionPane.showConfirmDialog( 
-                        this, 
-                        "Save modifications before close?", 
-                        "Confirmation", 
-                        JOptionPane.YES_NO_CANCEL_OPTION );
+                int r = Utils.showConfirmationMessageYesNoCancel( this, 
+                        "Save modifications before close?" );
 
                 if ( r == JOptionPane.YES_OPTION ) {
                     if ( saveFA() ) {
@@ -2191,11 +2184,10 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         if ( selectedState != null ) {
         
-            if ( JOptionPane.showConfirmDialog( 
+            if ( Utils.showConfirmationMessageYesNo( 
                     this, 
-                    "Do you really want to remove the selected state?" , 
-                    "Confirmation",
-                    JOptionPane.YES_NO_OPTION ) == JOptionPane.YES_OPTION ) {
+                    "Do you really want to remove the selected state?" ) 
+                    == JOptionPane.YES_OPTION ) {
                 fa.removeState( selectedState );
                 setCurrentFileSaved( false );
                 repaintDrawPanel();
@@ -2300,11 +2292,10 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         if ( selectedTransition != null ) {
         
-            if ( JOptionPane.showConfirmDialog( 
+            if ( Utils.showConfirmationMessageYesNo( 
                     this, 
-                    "Do you really want to remove the selected transition?" , 
-                    "Confirmation",
-                    JOptionPane.YES_NO_OPTION ) == JOptionPane.YES_OPTION ) {
+                    "Do you really want to remove the selected transition?" )
+                    == JOptionPane.YES_OPTION ) {
                 fa.removeTransition( selectedTransition );
                 setCurrentFileSaved( false );
                 repaintDrawPanel();
@@ -2739,11 +2730,10 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             boolean save = true;
 
             if ( f.exists() ) {
-                if ( JOptionPane.showConfirmDialog( 
+                if ( Utils.showConfirmationMessageYesNo(
                         this, 
-                        "The file already exists. Do you want to overwrite it?", 
-                        "Confirmation", 
-                        JOptionPane.YES_NO_OPTION ) == JOptionPane.NO_OPTION ) {
+                        "The file already exists.\nDo you want to overwrite it?"  )
+                        == JOptionPane.NO_OPTION ) {
                     save = false;
                 }
             }

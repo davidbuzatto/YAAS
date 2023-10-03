@@ -240,11 +240,12 @@ public class PDAEditOperationsDialog extends javax.swing.JDialog {
         int[] indexes = lstOp.getSelectedIndices();
         
         if ( indexes.length == 0 ) {
-            Utils.showErrorMessage( this, "You must select at least one operation to delete!" );
-        } else if ( JOptionPane.showConfirmDialog( this, 
-                "Do you really want to delete the selected operation(s)?", 
-                "Confirmation", 
-                JOptionPane.YES_NO_OPTION ) == JOptionPane.YES_OPTION ) {
+            Utils.showErrorMessage( this, 
+                    "You must select at least one operation to delete!" );
+        } else if ( Utils.showConfirmationMessageYesNo(
+                this, 
+                "Do you really want to delete the selected operation(s)?" ) 
+                == JOptionPane.YES_OPTION ) {
             for ( int i = indexes.length-1; i >= 0; i-- ) {
                 model.remove( indexes[i] );
             }

@@ -618,8 +618,10 @@ public class Utils {
      * 
      * @param parentComponent The parent component.
      * @param title The title of the dialog.
+     * @param op
      * 
-     * @return The input.
+     * @return The op PDAOperation with it was updated, a new PDAOperation if
+     * a new one was created or null if the dialog was canceled.
      */
     public static PDAOperation showInputDialogNewPDAOperation( 
             Component parentComponent, 
@@ -848,94 +850,101 @@ public class Utils {
             
         }
         
-        if ( JOptionPane.showOptionDialog( 
-                parentComponent, 
-                components, 
-                title, 
-                JOptionPane.OK_CANCEL_OPTION, 
-                JOptionPane.QUESTION_MESSAGE, 
-                null, 
-                new String[]{ "OK", "Cancel" }, 
-                "OK" ) == JOptionPane.OK_OPTION ) {
+        while ( true ) {
             
-            boolean errorTS = false;
-            boolean errorST = false;
-            boolean errorSP = false;
-            
-            char symbol = CharacterConstants.EMPTY_STRING;
-            if ( !checkE.isSelected() ) {
-                String inputTS = txtTS.getText().trim();
-                if ( !inputTS.isEmpty() ) {
-                    symbol = txtTS.getText().trim().charAt( 0 );
-                } else {
-                    errorTS = true;
-                }
-            }
-            
-            char stackTop = 'v';
-            if ( checkEmptyST.isSelected() ) {
-                stackTop = CharacterConstants.EMPTY_STRING;
-            } else if ( checkStartingST.isSelected() ) {
-                stackTop = CharacterConstants.STACK_STARTING_SYMBOL;
-            } else {
-                String inputST = txtST.getText().trim();
-                if ( !inputST.isEmpty() ) {
-                    stackTop = inputST.charAt( 0 );
-                } else {
-                    errorST = true;
-                }
-            }
-            
-            String pushSymbols = txtSP.getText().replace( " ", "" ).trim();
-            PDAOperationType type;
-            
-            if ( rNothing.isSelected() ) {
-                type = PDAOperationType.DO_NOTHING;
-            } else if ( rPop.isSelected() ) {
-                type = PDAOperationType.POP;
-            } else if ( rPush.isSelected() ) {
-                type = PDAOperationType.PUSH;
-            } else {
-                type = PDAOperationType.REPLACE;
-            }
-            
-            if ( pushSymbols.isEmpty() && ( type == PDAOperationType.PUSH || type == PDAOperationType.REPLACE ) ) {
-                errorSP = true;
-            }
-            
-            String error = "";
-            if ( errorTS ) {
-                error += "You must set a transition symbol!";
-            }
-            if ( errorST ) {
-                error += "\nYou must set a stack top!";
-            }
-            if ( errorSP ) {
-                error += String.format( 
-                        "\nYou must add at least one symbol to %s!", 
-                        type == PDAOperationType.PUSH ? "push" : "replace" );
-            }
-            
-            if ( errorTS || errorST || errorSP ) {
-                showErrorMessage( parentComponent, error.trim() );
-            } else {
-                if ( op != null ) {
-                    op.setSymbol( symbol );
-                    op.setTop( stackTop );
-                    op.setType( type );
-                    List<Character> sp = new ArrayList<>();
-                    for ( char c : pushSymbols.toCharArray() ) {
-                        sp.add( c );
+            if ( JOptionPane.showOptionDialog( 
+                    parentComponent, 
+                    components, 
+                    title, 
+                    JOptionPane.OK_CANCEL_OPTION, 
+                    JOptionPane.QUESTION_MESSAGE, 
+                    null, 
+                    new String[]{ "OK", "Cancel" }, 
+                    "OK" ) == JOptionPane.OK_OPTION ) {
+
+                boolean errorTS = false;
+                boolean errorST = false;
+                boolean errorSP = false;
+
+                char symbol = CharacterConstants.EMPTY_STRING;
+                if ( !checkE.isSelected() ) {
+                    String inputTS = txtTS.getText().trim();
+                    if ( !inputTS.isEmpty() ) {
+                        symbol = txtTS.getText().trim().charAt( 0 );
+                    } else {
+                        errorTS = true;
                     }
-                    op.setSymbolsToPush( sp );
-                } else {
-                    return new PDAOperation( symbol, stackTop, type, pushSymbols.toCharArray() );
                 }
+
+                char stackTop = 'v';
+                if ( checkEmptyST.isSelected() ) {
+                    stackTop = CharacterConstants.EMPTY_STRING;
+                } else if ( checkStartingST.isSelected() ) {
+                    stackTop = CharacterConstants.STACK_STARTING_SYMBOL;
+                } else {
+                    String inputST = txtST.getText().trim();
+                    if ( !inputST.isEmpty() ) {
+                        stackTop = inputST.charAt( 0 );
+                    } else {
+                        errorST = true;
+                    }
+                }
+
+                String pushSymbols = txtSP.getText().replace( " ", "" ).trim();
+                PDAOperationType type;
+
+                if ( rNothing.isSelected() ) {
+                    type = PDAOperationType.DO_NOTHING;
+                } else if ( rPop.isSelected() ) {
+                    type = PDAOperationType.POP;
+                } else if ( rPush.isSelected() ) {
+                    type = PDAOperationType.PUSH;
+                } else {
+                    type = PDAOperationType.REPLACE;
+                }
+
+                if ( pushSymbols.isEmpty() && ( type == PDAOperationType.PUSH || type == PDAOperationType.REPLACE ) ) {
+                    errorSP = true;
+                }
+
+                String error = "";
+                if ( errorTS ) {
+                    error += "You must set a transition symbol!";
+                }
+                if ( errorST ) {
+                    error += "\nYou must set a stack top!";
+                }
+                if ( errorSP ) {
+                    error += String.format( 
+                            "\nYou must add at least one symbol to %s!", 
+                            type == PDAOperationType.PUSH ? "push" : "replace" );
+                }
+
+                if ( errorTS || errorST || errorSP ) {
+                    showErrorMessage( parentComponent, error.trim() );
+                } else {
+                    if ( op != null ) {
+                        op.setSymbol( symbol );
+                        op.setTop( stackTop );
+                        op.setType( type );
+                        List<Character> sp = new ArrayList<>();
+                        for ( char c : pushSymbols.toCharArray() ) {
+                            sp.add( c );
+                        }
+                        op.setSymbolsToPush( sp );
+                        return op;
+                    } else {
+                        return new PDAOperation( symbol, stackTop, type, pushSymbols.toCharArray() );
+                    }
+                }
+
+            } else {
+                break;
             }
-            
+        
         }
         
-        return op;
+        return null;
         
     }
     
@@ -1029,6 +1038,52 @@ public class Utils {
                     message, 
                     "ERROR", 
                     JOptionPane.ERROR_MESSAGE );
+    }
+    
+    /**
+     * Shows a warning message.
+     * 
+     * @param parent Parent component.
+     * @param message The message to show.
+     */
+    public static void showWarningMessage( Component parent, String message ) {
+        JOptionPane.showMessageDialog( 
+                    parent, 
+                    message, 
+                    "Warning", 
+                    JOptionPane.WARNING_MESSAGE );
+    }
+    
+    /**
+     * Shows a confirmation message.
+     * 
+     * @param parent Parent component.
+     * @param message The message to show.
+     * @return The selectec option.
+     */
+    public static int showConfirmationMessageYesNo( 
+            Component parent, String message ) {
+        return JOptionPane.showConfirmDialog( 
+                    parent, 
+                    message , 
+                    "Confirmation",
+                    JOptionPane.YES_NO_OPTION );
+    }
+    
+    /**
+     * Shows a confirmation message.
+     * 
+     * @param parent Parent component.
+     * @param message The message to show.
+     * @return The selectec option.
+     */
+    public static int showConfirmationMessageYesNoCancel( 
+            Component parent, String message ) {
+        return JOptionPane.showConfirmDialog( 
+                    parent, 
+                    message , 
+                    "Confirmation",
+                    JOptionPane.YES_NO_CANCEL_OPTION );
     }
     
 }

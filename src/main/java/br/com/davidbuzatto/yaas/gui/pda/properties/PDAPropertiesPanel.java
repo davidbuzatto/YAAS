@@ -19,11 +19,11 @@ package br.com.davidbuzatto.yaas.gui.pda.properties;
 import br.com.davidbuzatto.yaas.gui.pda.PDAFormalDefinitionDialog;
 import br.com.davidbuzatto.yaas.gui.pda.PDAInternalFrame;
 import br.com.davidbuzatto.yaas.model.pda.PDA;
-import javax.swing.JOptionPane;
+import br.com.davidbuzatto.yaas.util.Utils;
 
 /**
  * Pushdown Automaton properties edit/visualization panel.
- * TODO: verify and update (formal definition) add symbols to stack option
+ * TODO: verify and update (formal definition) add symbols to stack option when starting
  * 
  * @author Prof. Dr. David Buzatto
  */
@@ -101,16 +101,9 @@ public class PDAPropertiesPanel extends javax.swing.JPanel {
     private void btnFormalDefinitionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFormalDefinitionActionPerformed
         
         if ( pda.getStates().isEmpty() ) {
-            JOptionPane.showMessageDialog( 
-                    pdaIFrame, 
-                    "First add at least one state!", 
-                    "Warning", 
-                    JOptionPane.WARNING_MESSAGE );
+            Utils.showWarningMessage( pdaIFrame, "First add at least one state!" );
         } else if ( pda.getInitialState() == null ) {
-            JOptionPane.showMessageDialog( 
-                    pdaIFrame, 
-                    "Set the initial state!", 
-                    "Warning", JOptionPane.WARNING_MESSAGE );
+            Utils.showWarningMessage( pdaIFrame, "Set the initial state!" );
         } else {
             PDAFormalDefinitionDialog d = new PDAFormalDefinitionDialog( null, true, pda );
             d.setVisible( true );

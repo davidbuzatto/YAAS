@@ -260,11 +260,10 @@ public class FAStatePropertiesPanel extends javax.swing.JPanel {
         
         if ( state != null ) {
         
-            if ( JOptionPane.showConfirmDialog( 
+            if ( Utils.showConfirmationMessageYesNo( 
                     faIFrame, 
-                    "Do you really want to remove the selected state?" , 
-                    "Confirmation",
-                    JOptionPane.YES_NO_OPTION ) == JOptionPane.YES_OPTION ) {
+                    "Do you really want to remove the selected state?" )
+                    == JOptionPane.YES_OPTION ) {
                 fa.removeState( state );
                 faIFrame.setCurrentFileSaved( false );
                 faIFrame.repaintDrawPanel();

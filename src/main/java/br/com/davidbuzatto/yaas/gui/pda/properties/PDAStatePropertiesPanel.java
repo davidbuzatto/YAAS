@@ -260,11 +260,10 @@ public class PDAStatePropertiesPanel extends javax.swing.JPanel {
         
         if ( state != null ) {
         
-            if ( JOptionPane.showConfirmDialog( 
+            if ( Utils.showConfirmationMessageYesNo(
                     pdaIFrame, 
-                    "Do you really want to remove the selected state?" , 
-                    "Confirmation",
-                    JOptionPane.YES_NO_OPTION ) == JOptionPane.YES_OPTION ) {
+                    "Do you really want to remove the selected state?" )
+                    == JOptionPane.YES_OPTION ) {
                 pda.removeState( state );
                 pdaIFrame.setCurrentFileSaved( false );
                 pdaIFrame.repaintDrawPanel();

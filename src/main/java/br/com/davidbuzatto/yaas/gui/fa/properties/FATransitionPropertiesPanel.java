@@ -293,11 +293,10 @@ public class FATransitionPropertiesPanel extends javax.swing.JPanel {
         
         if ( transition != null ) {
         
-            if ( JOptionPane.showConfirmDialog( 
+            if ( Utils.showConfirmationMessageYesNo(
                     faIFrame, 
-                    "Do you really want to remove the selected transition?" , 
-                    "Confirmation",
-                    JOptionPane.YES_NO_OPTION ) == JOptionPane.YES_OPTION ) {
+                    "Do you really want to remove the selected transition?" )
+                    == JOptionPane.YES_OPTION ) {
                 fa.removeTransition( transition );
                 faIFrame.setCurrentFileSaved( false );
                 faIFrame.repaintDrawPanel();

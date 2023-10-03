@@ -265,7 +265,6 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         btnMove = new javax.swing.JToggleButton();
         btnAddState = new javax.swing.JToggleButton();
         btnAddTransition = new javax.swing.JToggleButton();
-        sep02 = new javax.swing.JToolBar.Separator();
         hFiller = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         btnShowTransitionControls = new javax.swing.JToggleButton();
         sep04 = new javax.swing.JToolBar.Separator();
@@ -619,7 +618,6 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         toolBar.add(btnAddTransition);
-        toolBar.add(sep02);
         toolBar.add(hFiller);
 
         btnShowTransitionControls.setIcon(new javax.swing.ImageIcon(getClass().getResource("/shape_square_edit.png"))); // NOI18N
@@ -1373,11 +1371,10 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             boolean save = true;
 
             if ( f.exists() ) {
-                if ( JOptionPane.showConfirmDialog( 
+                if ( Utils.showConfirmationMessageYesNo(
                         this, 
-                        "The file already exists. Do you want to overwrite it?", 
-                        "Confirmation", 
-                        JOptionPane.YES_NO_OPTION ) == JOptionPane.NO_OPTION ) {
+                        "The file already exists.\nDo you want to overwrite it?" )
+                        == JOptionPane.NO_OPTION ) {
                     save = false;
                 }
             }
@@ -1792,11 +1789,8 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         
         if ( !currentFileSaved ) {
             
-            int r = JOptionPane.showConfirmDialog( 
-                    this, 
-                    "Save modifications before oppening?", 
-                    "Confirmation", 
-                    JOptionPane.YES_NO_CANCEL_OPTION );
+            int r = Utils.showConfirmationMessageYesNoCancel( this, 
+                    "Save modifications before oppening?" );
             
             if ( r == JOptionPane.YES_OPTION ) {
                 if ( savePDA() ) {
@@ -1828,11 +1822,8 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         
             if ( !currentFileSaved ) {
 
-                int r = JOptionPane.showConfirmDialog( 
-                        this, 
-                        "Save modifications before close?", 
-                        "Confirmation", 
-                        JOptionPane.YES_NO_CANCEL_OPTION );
+                int r = Utils.showConfirmationMessageYesNoCancel( this, 
+                        "Save modifications before close?" );
 
                 if ( r == JOptionPane.YES_OPTION ) {
                     if ( savePDA() ) {
@@ -1961,11 +1952,10 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         
         if ( selectedState != null ) {
         
-            if ( JOptionPane.showConfirmDialog( 
+            if ( Utils.showConfirmationMessageYesNo(
                     this, 
-                    "Do you really want to remove the selected state?" , 
-                    "Confirmation",
-                    JOptionPane.YES_NO_OPTION ) == JOptionPane.YES_OPTION ) {
+                    "Do you really want to remove the selected state?" )
+                    == JOptionPane.YES_OPTION ) {
                 pda.removeState( selectedState );
                 setCurrentFileSaved( false );
                 repaintDrawPanel();
@@ -2060,11 +2050,10 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         
         if ( selectedTransition != null ) {
         
-            if ( JOptionPane.showConfirmDialog( 
+            if ( Utils.showConfirmationMessageYesNo(
                     this, 
-                    "Do you really want to remove the selected transition?" , 
-                    "Confirmation",
-                    JOptionPane.YES_NO_OPTION ) == JOptionPane.YES_OPTION ) {
+                    "Do you really want to remove the selected transition?" )
+                    == JOptionPane.YES_OPTION ) {
                 pda.removeTransition( selectedTransition );
                 setCurrentFileSaved( false );
                 repaintDrawPanel();
@@ -2401,11 +2390,10 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             boolean save = true;
 
             if ( f.exists() ) {
-                if ( JOptionPane.showConfirmDialog( 
+                if ( Utils.showConfirmationMessageYesNo(
                         this, 
-                        "The file already exists. Do you want to overwrite it?", 
-                        "Confirmation", 
-                        JOptionPane.YES_NO_OPTION ) == JOptionPane.NO_OPTION ) {
+                        "The file already exists.\nDo you want to overwrite it?" )
+                        == JOptionPane.NO_OPTION ) {
                     save = false;
                 }
             }
@@ -2767,7 +2755,6 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JPopupMenu popupMenuTransitionProperties;
     private javax.swing.JScrollPane scrollPaneModel;
     private javax.swing.JToolBar.Separator sep01;
-    private javax.swing.JToolBar.Separator sep02;
     private javax.swing.JToolBar.Separator sep04;
     private javax.swing.JToolBar.Separator sep05;
     private javax.swing.JToolBar.Separator sep06;

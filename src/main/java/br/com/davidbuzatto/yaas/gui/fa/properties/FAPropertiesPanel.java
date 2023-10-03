@@ -20,6 +20,7 @@ import br.com.davidbuzatto.yaas.model.fa.FA;
 import br.com.davidbuzatto.yaas.gui.fa.FAInternalFrame;
 import br.com.davidbuzatto.yaas.model.fa.FAType;
 import br.com.davidbuzatto.yaas.gui.fa.FAFormalDefinitionDialog;
+import br.com.davidbuzatto.yaas.util.Utils;
 import javax.swing.JOptionPane;
 
 /**
@@ -136,16 +137,9 @@ public class FAPropertiesPanel extends javax.swing.JPanel {
     private void btnFormalDefinitionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFormalDefinitionActionPerformed
         
         if ( fa.getStates().isEmpty() ) {
-            JOptionPane.showMessageDialog( 
-                    faIFrame, 
-                    "First add at least one state!", 
-                    "Warning", 
-                    JOptionPane.WARNING_MESSAGE );
+            Utils.showWarningMessage( faIFrame, "First add at least one state!" );
         } else if ( fa.getInitialState() == null ) {
-            JOptionPane.showMessageDialog( 
-                    faIFrame, 
-                    "Set the initial state!", 
-                    "Warning", JOptionPane.WARNING_MESSAGE );
+            Utils.showWarningMessage( faIFrame, "Set the initial state!" );
         } else {
             FAFormalDefinitionDialog d = new FAFormalDefinitionDialog( null, true, fa );
             d.setVisible( true );

@@ -597,12 +597,10 @@ public class MainWindow extends javax.swing.JFrame {
         
         if ( !ApplicationConstants.IN_PRODUCTION ) {
             System.exit( 0 );
-        } else if ( JOptionPane.showConfirmDialog( this,
+        } else if ( Utils.showConfirmationMessageYesNo( this,
                 """
                 Do you really want to quit?
-                All unsaved data will be lost!""", 
-                "Confirmation", 
-                JOptionPane.YES_NO_OPTION ) == JOptionPane.OK_OPTION ) {
+                All unsaved data will be lost!""" ) == JOptionPane.OK_OPTION ) {
             System.exit( 0 );
         }
         

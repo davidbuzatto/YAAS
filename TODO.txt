@@ -1,20 +1,17 @@
-Highlight inacessible states (properties panel)
-Highlight nondeterminisms    (properties panel)
+Finite Automata
+    Highlight inacessible states (properties panel)
+    Highlight nondeterminisms    (properties panel)
 
-Regular Expressions
-
-Here: https://resources.wolframcloud.com/PacletRepository/resources/KlausSutner/Automata/
+    Regular Expressions
+    Here: https://resources.wolframcloud.com/PacletRepository/resources/KlausSutner/Automata/
 
 Pushdown Automata
-    test component for transition operation edit
-    level arrangement bug (will be fixed when pda delta is implemented)
-
-
+    Level arrangement bug (will be fixed when pda delta is implemented)
 
 Turing Machines
 
-Moore Machines?
-Mealy Machines?
-
-Zoom-in
-Zoom-out
+General
+    Moore Machines?
+    Mealy Machines?
+    Zoom-in
+    Zoom-out
