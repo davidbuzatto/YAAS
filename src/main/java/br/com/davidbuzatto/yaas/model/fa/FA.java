@@ -102,9 +102,6 @@ public class FA extends AbstractGeometricForm implements Cloneable {
                     targetEclose.addAll( ecloses.get( s ) );
                 }
                 
-                /*System.out.println( currentStates + " " + c + " " + targetEclose );
-                System.out.println();*/
-                
                 currentStates = targetEclose;
                 
                 if ( simulationSteps != null ) {

@@ -60,8 +60,10 @@ public class PDAExamples {
         pda.addTransition( new PDATransition( q0, q0, 
                 new PDAOperation( '1', '1', PDAOperationType.PUSH, '1' ) ) );
         
-        // tests
-        /*pda.addTransition( new PDATransition( q0, q0, 
+        // test
+        /*pda.addTransition( new PDATransition( q0, q1, 
+                new PDAOperation( '1', '1', PDAOperationType.PUSH, '1' ) ) );
+        pda.addTransition( new PDATransition( q0, q0, 
                 new PDAOperation( '1', '1', PDAOperationType.PUSH, '1', '2', '3' ) ) );
         pda.addTransition( new PDATransition( q0, q0, 
                 new PDAOperation( '1', '1', PDAOperationType.REPLACE, '2', '3' ) ) );*/

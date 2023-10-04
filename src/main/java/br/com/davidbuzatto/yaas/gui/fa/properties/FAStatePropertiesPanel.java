@@ -118,9 +118,19 @@ public class FAStatePropertiesPanel extends javax.swing.JPanel {
         txtLabel.setText("a");
         txtLabel.setEnabled(false);
 
+        txtCustomLabel.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtCustomLabelFocusLost(evt);
+            }
+        });
         txtCustomLabel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCustomLabelActionPerformed(evt);
+            }
+        });
+        txtCustomLabel.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtCustomLabelKeyReleased(evt);
             }
         });
 
@@ -279,9 +289,7 @@ public class FAStatePropertiesPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnRemoveActionPerformed
 
     private void txtCustomLabelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCustomLabelActionPerformed
-        state.setCustomLabel( txtCustomLabel.getText() );
-        faIFrame.setCurrentFileSaved( false );
-        faIFrame.repaintDrawPanel();
+        updateStateCustomLabel();
     }//GEN-LAST:event_txtCustomLabelActionPerformed
 
     private void ccpColorMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ccpColorMouseReleased
@@ -299,6 +307,14 @@ public class FAStatePropertiesPanel extends javax.swing.JPanel {
         
     }//GEN-LAST:event_ccpColorMouseReleased
 
+    private void txtCustomLabelFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCustomLabelFocusLost
+        updateStateCustomLabel();
+    }//GEN-LAST:event_txtCustomLabelFocusLost
+
+    private void txtCustomLabelKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCustomLabelKeyReleased
+        updateStateCustomLabel();
+    }//GEN-LAST:event_txtCustomLabelKeyReleased
+
     public void disableGUI() {
         checkInitial.setEnabled( false );
         checkAccepting.setEnabled( false );
@@ -309,6 +325,17 @@ public class FAStatePropertiesPanel extends javax.swing.JPanel {
         checkInitial.setEnabled( true );
         checkAccepting.setEnabled( true );
         btnRemove.setEnabled( true );
+    }
+    
+    private void updateStateCustomLabel() {
+        String input = txtCustomLabel.getText().trim();
+        if ( input.isEmpty() ) {
+            state.setCustomLabel( null );
+        } else {
+            state.setCustomLabel( input );
+        }
+        faIFrame.setCurrentFileSaved( false );
+        faIFrame.repaintDrawPanel();
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -115,35 +115,4 @@ public class SigmaStarGeneratorStream {
         
     }
     
-    // test
-    public static void main( String[] args ) {
-        
-        List<Character> alphabet = new ArrayList<>();
-        
-        /*alphabet.add( '0' );
-        alphabet.add( '1' );*/
-        
-        alphabet.add( 'a' );
-        alphabet.add( 'b' );
-        alphabet.add( 'c' );
-        
-        //SigmaStarGeneratorStream ssgs = new SigmaStarGeneratorStream( alphabet );
-        SigmaStarGeneratorStream ssgs = new SigmaStarGeneratorStream( alphabet, 2 );
-        long t = System.currentTimeMillis();
-        for ( int i = 0; i < 100; i++ ) {
-            System.out.println( ssgs.next() );
-        }
-        /*for ( int i = 0; i < 15000000; i++ ) {
-            sgs.next();
-        }*/
-        /*for ( int i = 0; i < 100000000; i++ ) {
-            sgs.next();
-        }
-        for ( int i = 0; i < 100000000; i++ ) {
-            sgs.next();
-        }*/
-        System.out.println( System.currentTimeMillis() - t );
-        
-    }
-    
 }

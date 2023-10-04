@@ -24,6 +24,8 @@ import br.com.davidbuzatto.yaas.gui.pda.table.PDATransitionFunctionTableModel;
 import br.com.davidbuzatto.yaas.model.pda.PDA;
 import br.com.davidbuzatto.yaas.model.pda.PDAOperation;
 import br.com.davidbuzatto.yaas.model.pda.PDAOperationType;
+import br.com.davidbuzatto.yaas.model.pda.PDAState;
+import br.com.davidbuzatto.yaas.model.pda.PDATransition;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -51,6 +53,7 @@ import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -433,7 +436,7 @@ public class Utils {
                     if ( fa.getType() == FAType.DFA ) {
                         targetStr = targetStates.get( 0 ).toString();
                     } else {
-                        targetStr = "{ ";
+                        targetStr = "{";
                         boolean first = true;
                         for ( FAState ee : targetStates ) {
                             if ( !first ) {
@@ -442,7 +445,7 @@ public class Utils {
                             targetStr += ee.toString();
                             first = false;
                         }
-                        targetStr += " }";
+                        targetStr += "}";
                     }
                     
                     data.add( targetStr );
@@ -468,25 +471,28 @@ public class Utils {
      */
     public static PDATransitionFunctionTableModel createPDATransitionFunctionTableModel( PDA pda ) {
         
-        // TODO update table model (depends on delta update)
-        
-        /*FATransitionFunctionTableModel tm = new FATransitionFunctionTableModel();
+        PDATransitionFunctionTableModel tm = new PDATransitionFunctionTableModel();
         List<Character> symbols = new ArrayList<>();
+        Map<String, Integer> operationIndexes = new HashMap<>();
+        String eSet = CharacterConstants.EMPTY_SET.toString();
         
-        if ( fa.getType() == FAType.ENFA ) {
-            symbols.add( CharacterConstants.EMPTY_STRING );
-        }
-        symbols.addAll( fa.getAlphabet() );
+        symbols.add( CharacterConstants.EMPTY_STRING );
+        symbols.addAll( pda.getAlphabet() );
         
+        int index = 1;
         for ( char s : symbols ) {
-            tm.getSymbols().add( String.valueOf( s ) );
+            for ( char ss : pda.getStackAlphabet() ) {
+                String op = s + "," + ss;
+                tm.getOperations().add( op );
+                operationIndexes.put( op, index++ );
+            }
         }
         
-        Map<FAState, Map<Character, List<FAState>>> delta = fa.getDelta();
+        Map<PDAState, List<PDATransition>> delta = pda.getDelta();
         
-        for ( Map.Entry<FAState, Map<Character, List<FAState>>> entry : delta.entrySet() ) {
+        for ( Map.Entry<PDAState, List<PDATransition>> entry : delta.entrySet() ) {
             
-            FAState state = entry.getKey();
+            PDAState state = entry.getKey();
             
             String eStr = "";
             if ( state.isAccepting()) {
@@ -502,45 +508,71 @@ public class Utils {
             List<String> data = new ArrayList<>();
             data.add( eStr );
             
-            for ( char symbol : symbols ) {
+            for ( int i = 0; i < tm.getOperations().size(); i++ ) {
+                data.add( eSet );
+            }
+            
+            for ( PDATransition t : entry.getValue() ) {
                 
-                List<FAState> targetStates = entry.getValue().get( symbol );
-                
-                if ( targetStates == null || targetStates.isEmpty() ) {
-                    data.add( CharacterConstants.EMPTY_SET.toString() );
-                    tm.setPartial( true );
-                } else {
+                for ( PDAOperation o : t.getOperations() ) {
                     
-                    String targetStr;
+                    String op = o.getSymbol() + "," + o.getTop();
+                    int ind = operationIndexes.get( op );
                     
-                    if ( fa.getType() == FAType.DFA ) {
-                        targetStr = targetStates.get( 0 ).toString();
-                    } else {
-                        targetStr = "{ ";
-                        boolean first = true;
-                        for ( FAState ee : targetStates ) {
-                            if ( !first ) {
-                                targetStr += ", ";
-                            }
-                            targetStr += ee.toString();
-                            first = false;
+                    String value = "(";
+                    
+                    value += t.getTargetState().toString() + ",";
+                    
+                    String stackData = "";
+                    if ( o.getType() == PDAOperationType.PUSH || o.getType() == PDAOperationType.REPLACE ) {
+                        for ( int i = o.getSymbolsToPush().size()-1; i >= 0; i-- ) {
+                            stackData += o.getSymbolsToPush().get( i );
                         }
-                        targetStr += " }";
+                        stackData = stackData.trim();
                     }
                     
-                    data.add( targetStr );
+                    switch ( o.getType() ) {
+                        case DO_NOTHING:
+                            value += o.getTop();
+                            break;
+                        case POP:
+                            value += CharacterConstants.EMPTY_STRING.toString();
+                            break;
+                        case PUSH:
+                            value += stackData + o.getTop();
+                            break;
+                        case REPLACE:
+                            value += stackData;
+                            break;
+                    }
+                    
+                    value += ")";
+                    
+                    String cData = data.get( ind );
+                    if ( cData.equals( eSet ) ) {
+                        data.set( ind, value );
+                    } else {
+                        data.set( ind, cData + ", " + value );
+                    }
+                    
                     
                 }
                 
+            }
+            
+            for ( int i = 1; i < data.size(); i++ ) {
+                if ( !data.get( i ).equals( eSet ) ) {
+                    data.set( i, "{" + data.get( i ) + "}" );
+                } else {
+                    tm.setPartial( true );
+                }
             }
             
             tm.getData().add( data );
             
         }
         
-        return tm;*/
-        
-        return null;
+        return tm;
         
     }
     
@@ -671,7 +703,7 @@ public class Utils {
         tsPanel.setLayout( new BoxLayout( tsPanel, BoxLayout.X_AXIS ) );
         JTextField txtTS = new JTextField( 5 );
         txtTS.setAlignmentX( Component.LEFT_ALIGNMENT );
-        JCheckBox checkE = new JCheckBox( CharacterConstants.EMPTY_STRING + "" );
+        JCheckBox checkE = new JCheckBox( CharacterConstants.EMPTY_STRING.toString() );
         checkE.setAlignmentX( Component.LEFT_ALIGNMENT );
         checkE.setToolTipText( CharacterConstants.EMPTY_STRING + "-transition" );
         tsPanel.add( txtTS );
@@ -689,9 +721,9 @@ public class Utils {
         stPanel.setAlignmentX( JPanel.LEFT_ALIGNMENT );
         stPanel.setLayout( new BoxLayout( stPanel, BoxLayout.X_AXIS ) );
         JTextField txtST = new JTextField( 5 );
-        JCheckBox checkEmptyST = new JCheckBox( CharacterConstants.EMPTY_STRING + "" );
+        JCheckBox checkEmptyST = new JCheckBox( CharacterConstants.EMPTY_STRING.toString() );
         checkEmptyST.setToolTipText( "Empty stack" );
-        JCheckBox checkStartingST = new JCheckBox( CharacterConstants.STACK_STARTING_SYMBOL + "" );
+        JCheckBox checkStartingST = new JCheckBox( CharacterConstants.STACK_STARTING_SYMBOL.toString() );
         checkStartingST.setToolTipText( "Starting symbol" );
         stPanel.add( txtST );
         stPanel.add( checkEmptyST );

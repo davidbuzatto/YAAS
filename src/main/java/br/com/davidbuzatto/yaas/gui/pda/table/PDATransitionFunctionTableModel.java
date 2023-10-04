@@ -28,23 +28,23 @@ import javax.swing.table.TableModel;
  */
 public class PDATransitionFunctionTableModel implements TableModel {
 
-    private List<String> symbols;
+    private List<String> operations;
     private List<String> states;
     private List<List<String>> data;
     private boolean partial;
     
     public PDATransitionFunctionTableModel() {
-        symbols = new ArrayList<>();
+        operations = new ArrayList<>();
         states = new ArrayList<>();
         data = new ArrayList<>();
     }
 
-    public List<String> getSymbols() {
-        return symbols;
+    public List<String> getOperations() {
+        return operations;
     }
 
-    public void setSymbols( List<String> symbols ) {
-        this.symbols = symbols;
+    public void setOperations( List<String> operations ) {
+        this.operations = operations;
     }
 
     public List<String> getStates() {
@@ -70,7 +70,7 @@ public class PDATransitionFunctionTableModel implements TableModel {
 
     @Override
     public int getColumnCount() {
-        return symbols.size() + 1;
+        return operations.size() + 1;
     }
 
     @Override
@@ -86,7 +86,7 @@ public class PDATransitionFunctionTableModel implements TableModel {
         if ( columnIndex == 0 ) {
             return "";
         }
-        return symbols.get( columnIndex - 1 );
+        return operations.get( columnIndex - 1 );
     }
 
     @Override

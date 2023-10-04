@@ -105,7 +105,7 @@ public class PDAFormalDefinitionDialog extends javax.swing.JDialog {
             panelFDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelFDLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(scrollFD, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
+                .addComponent(scrollFD, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -135,7 +135,7 @@ public class PDAFormalDefinitionDialog extends javax.swing.JDialog {
             panelDeltaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelDeltaLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(scrollDelta, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE))
+                .addComponent(scrollDelta, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE))
         );
 
         btnClose.setIcon(new javax.swing.ImageIcon(getClass().getResource("/accept.png"))); // NOI18N
@@ -166,7 +166,7 @@ public class PDAFormalDefinitionDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(panelFD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelDelta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(panelDelta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnClose)
                 .addContainerGap())

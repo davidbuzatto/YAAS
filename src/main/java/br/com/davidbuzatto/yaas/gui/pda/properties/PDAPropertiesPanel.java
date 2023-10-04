@@ -16,6 +16,7 @@
  */
 package br.com.davidbuzatto.yaas.gui.pda.properties;
 
+import br.com.davidbuzatto.yaas.gui.pda.PDAFormalDefinitionDialog;
 import br.com.davidbuzatto.yaas.gui.pda.PDAInternalFrame;
 import br.com.davidbuzatto.yaas.model.pda.PDA;
 import br.com.davidbuzatto.yaas.util.Utils;
@@ -24,7 +25,6 @@ import java.util.List;
 
 /**
  * Pushdown Automaton properties edit/visualization panel.
- * TODO verify and update (formal definition)
  * 
  * @author Prof. Dr. David Buzatto
  */
@@ -83,9 +83,19 @@ public class PDAPropertiesPanel extends javax.swing.JPanel {
 
         lblStartingPush.setText("Starting Push:");
 
+        txtStartingPush.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtStartingPushFocusLost(evt);
+            }
+        });
         txtStartingPush.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtStartingPushActionPerformed(evt);
+            }
+        });
+        txtStartingPush.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtStartingPushKeyReleased(evt);
             }
         });
 
@@ -125,14 +135,25 @@ public class PDAPropertiesPanel extends javax.swing.JPanel {
         } else if ( pda.getInitialState() == null ) {
             Utils.showWarningMessage( pdaIFrame, "Set the initial state!" );
         } else {
-            /*PDAFormalDefinitionDialog d = new PDAFormalDefinitionDialog( null, true, pda );
-            d.setVisible( true );*/
-            System.out.println( pda.getDelta() );
+            PDAFormalDefinitionDialog d = new PDAFormalDefinitionDialog( null, true, pda );
+            d.setVisible( true );
         }
         
     }//GEN-LAST:event_btnFormalDefinitionActionPerformed
 
     private void txtStartingPushActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStartingPushActionPerformed
+        updateStartingPushSymbols();
+    }//GEN-LAST:event_txtStartingPushActionPerformed
+
+    private void txtStartingPushFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStartingPushFocusLost
+        updateStartingPushSymbols();
+    }//GEN-LAST:event_txtStartingPushFocusLost
+
+    private void txtStartingPushKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtStartingPushKeyReleased
+        updateStartingPushSymbols();
+    }//GEN-LAST:event_txtStartingPushKeyReleased
+
+    private void updateStartingPushSymbols() {
         
         String input = txtStartingPush.getText().trim().replaceAll( " ", "" );
         
@@ -142,11 +163,12 @@ public class PDAPropertiesPanel extends javax.swing.JPanel {
                 s.add( c );
             }
             pda.setStartingPushSymbols( s );
+        } else {
+            pda.setStartingPushSymbols( new ArrayList<>() );
         }
         
-    }//GEN-LAST:event_txtStartingPushActionPerformed
-
-
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFormalDefinition;
     private javax.swing.JLabel lblStartingPush;

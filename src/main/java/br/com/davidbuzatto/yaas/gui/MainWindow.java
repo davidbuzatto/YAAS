@@ -29,6 +29,10 @@ import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
 import com.formdev.flatlaf.FlatDarculaLaf;
 import java.beans.PropertyVetoException;
+import java.io.FileDescriptor;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import javax.swing.JOptionPane;
 
 /**
@@ -610,12 +614,18 @@ public class MainWindow extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main( String args[] ) {
+        
         java.awt.EventQueue.invokeLater( new Runnable() {
+            
             public void run() {
+                
                 FlatDarculaLaf.setup();
                 Utils.updateSplashScreen( 6000 );
+                
                 new MainWindow().setVisible( true );
+                
             }
+            
         });
     }
 
