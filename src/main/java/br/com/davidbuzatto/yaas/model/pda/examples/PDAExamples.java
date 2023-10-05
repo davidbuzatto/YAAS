@@ -30,59 +30,151 @@ import br.com.davidbuzatto.yaas.util.CharacterConstants;
  */
 public class PDAExamples {
     
-    public static PDA createPDAPalindrome() {
+    public static PDA createPDAEvenPalindromeAS() {
         
         PDA pda = new PDA();
-        
-        PDAState q0 = new PDAState( 0, true, false );
+
+        // states
+        PDAState q0 = new PDAState( 0, null, true, false );
         q0.setX1Y1( 100, 200 );
-        
-        PDAState q1 = new PDAState( 1, false, false );
-        q1.setX1Y1( 250, 200 );
-        
-        PDAState q2 = new PDAState( 2, false, true );
-        q2.setX1Y1( 400, 200 );
-        
         pda.addState( q0 );
+
+        PDAState q1 = new PDAState( 1, null, false, false );
+        q1.setX1Y1( 250, 200 );
         pda.addState( q1 );
+
+        PDAState q2 = new PDAState( 2, null, false, true );
+        q2.setX1Y1( 400, 200 );
         pda.addState( q2 );
+
+        // transitions
+        PDATransition q0q0 = new PDATransition( q0, q0,
+                new PDAOperation( '0', '0', PDAOperationType.PUSH, '0' ),
+                new PDAOperation( '0', '1', PDAOperationType.PUSH, '0' ),
+                new PDAOperation( '0', CharacterConstants.STACK_STARTING_SYMBOL,
+                        PDAOperationType.PUSH, '0' ),
+                new PDAOperation( '1', '0', PDAOperationType.PUSH, '1' ),
+                new PDAOperation( '1', '1', PDAOperationType.PUSH, '1' ),
+                new PDAOperation( '1', CharacterConstants.STACK_STARTING_SYMBOL,
+                        PDAOperationType.PUSH, '1' ) );
+        pda.addTransition( q0q0 );
+
+        PDATransition q0q1 = new PDATransition( q0, q1,
+                PDAOperation.getDoNothingOperation( CharacterConstants.EMPTY_STRING, '0' ),
+                PDAOperation.getDoNothingOperation( CharacterConstants.EMPTY_STRING, '1' ),
+                PDAOperation.getDoNothingOperation( CharacterConstants.EMPTY_STRING,
+                        CharacterConstants.STACK_STARTING_SYMBOL ) );
+        pda.addTransition( q0q1 );
+
+        PDATransition q1q1 = new PDATransition( q1, q1,
+                PDAOperation.getPopOperation( '0', '0' ),
+                PDAOperation.getPopOperation( '1', '1' ) );
+        pda.addTransition( q1q1 );
+
+        PDATransition q1q2 = new PDATransition( q1, q2,
+                PDAOperation.getDoNothingOperation( CharacterConstants.EMPTY_STRING,
+                        CharacterConstants.STACK_STARTING_SYMBOL ) );
+        pda.addTransition( q1q2 );
+
+        return pda;
         
-        pda.addTransition( new PDATransition( q0, q0, 
-                new PDAOperation( '0', '$', PDAOperationType.PUSH, '0' ) ) );
-        pda.addTransition( new PDATransition( q0, q0, 
-                new PDAOperation( '0', '0', PDAOperationType.PUSH, '0' ) ) );
-        pda.addTransition( new PDATransition( q0, q0, 
-                new PDAOperation( '0', '1', PDAOperationType.PUSH, '0' ) ) );
-        pda.addTransition( new PDATransition( q0, q0, 
-                new PDAOperation( '1', '$', PDAOperationType.PUSH, '1' ) ) );
-        pda.addTransition( new PDATransition( q0, q0, 
-                new PDAOperation( '1', '0', PDAOperationType.PUSH, '1' ) ) );
-        pda.addTransition( new PDATransition( q0, q0, 
-                new PDAOperation( '1', '1', PDAOperationType.PUSH, '1' ) ) );
+    }
+    
+    public static PDA createPDAEvenPalindromeES() {
+
+        PDA pda = new PDA();
+
+        // states
+        PDAState q0 = new PDAState( 0, null, true, false );
+        q0.setX1Y1( 100, 200 );
+        pda.addState( q0 );
+
+        PDAState q1 = new PDAState( 1, null, false, false );
+        q1.setX1Y1( 250, 200 );
+        pda.addState( q1 );
+
+        PDAState q2 = new PDAState( 2, null, false, false );
+        q2.setX1Y1( 400, 200 );
+        pda.addState( q2 );
+
+        // transitions
+        PDATransition q0q0 = new PDATransition( q0, q0,
+                new PDAOperation( '0', '0', PDAOperationType.PUSH, '0' ),
+                new PDAOperation( '0', '1', PDAOperationType.PUSH, '0' ),
+                new PDAOperation( '0', CharacterConstants.STACK_STARTING_SYMBOL,
+                        PDAOperationType.PUSH, '0' ),
+                new PDAOperation( '1', '0', PDAOperationType.PUSH, '1' ),
+                new PDAOperation( '1', '1', PDAOperationType.PUSH, '1' ),
+                new PDAOperation( '1', CharacterConstants.STACK_STARTING_SYMBOL,
+                        PDAOperationType.PUSH, '1' ) );
+        pda.addTransition( q0q0 );
+
+        PDATransition q0q1 = new PDATransition( q0, q1,
+                PDAOperation.getDoNothingOperation( CharacterConstants.EMPTY_STRING, '0' ),
+                PDAOperation.getDoNothingOperation( CharacterConstants.EMPTY_STRING, '1' ),
+                PDAOperation.getDoNothingOperation( CharacterConstants.EMPTY_STRING,
+                        CharacterConstants.STACK_STARTING_SYMBOL ) );
+        pda.addTransition( q0q1 );
+
+        PDATransition q1q1 = new PDATransition( q1, q1,
+                PDAOperation.getPopOperation( '0', '0' ),
+                PDAOperation.getPopOperation( '1', '1' ) );
+        pda.addTransition( q1q1 );
+
+        PDATransition q1q2 = new PDATransition( q1, q2,
+                PDAOperation.getPopOperation( CharacterConstants.EMPTY_STRING, CharacterConstants.STACK_STARTING_SYMBOL ) );
+        pda.addTransition( q1q2 );
+
+        return pda;
+
+    }
+    
+    public static PDA createDPDAEvenPalindromeCM() {
         
-        // test
-        /*pda.addTransition( new PDATransition( q0, q1, 
-                new PDAOperation( '1', '1', PDAOperationType.PUSH, '1' ) ) );
-        pda.addTransition( new PDATransition( q0, q0, 
-                new PDAOperation( '1', '1', PDAOperationType.PUSH, '1', '2', '3' ) ) );
-        pda.addTransition( new PDATransition( q0, q0, 
-                new PDAOperation( '1', '1', PDAOperationType.REPLACE, '2', '3' ) ) );*/
-        
-        pda.addTransition( new PDATransition( q0, q1, 
-                PDAOperation.getDoNothingOperation( CharacterConstants.EMPTY_STRING, '$' ) ) );
-        pda.addTransition( new PDATransition( q0, q1, 
-                PDAOperation.getDoNothingOperation( CharacterConstants.EMPTY_STRING, '0' ) ) );
-        pda.addTransition( new PDATransition( q0, q1, 
-                PDAOperation.getDoNothingOperation( CharacterConstants.EMPTY_STRING, '1' ) ) );
-        
-        pda.addTransition( new PDATransition( q1, q1, 
-                PDAOperation.getPopOperation( '0', '0' ) ) );
-        pda.addTransition( new PDATransition( q1, q1, 
-                PDAOperation.getPopOperation( '1', '1' ) ) );
-        
-        pda.addTransition( new PDATransition( q1, q2, 
-                PDAOperation.getDoNothingOperation( CharacterConstants.EMPTY_STRING, '$' ) ) );
-        
+        PDA pda = new PDA();
+
+        // states
+        PDAState q0 = new PDAState( 0, null, true, false );
+        q0.setX1Y1( 100, 200 );
+        pda.addState( q0 );
+
+        PDAState q1 = new PDAState( 1, null, false, false );
+        q1.setX1Y1( 250, 200 );
+        pda.addState( q1 );
+
+        PDAState q2 = new PDAState( 2, null, false, true );
+        q2.setX1Y1( 400, 200 );
+        pda.addState( q2 );
+
+        // transitions
+        PDATransition q0q0 = new PDATransition( q0, q0,
+                new PDAOperation( '0', '0', PDAOperationType.PUSH, '0' ),
+                new PDAOperation( '0', '1', PDAOperationType.PUSH, '0' ),
+                new PDAOperation( '0', CharacterConstants.STACK_STARTING_SYMBOL,
+                        PDAOperationType.PUSH, '0' ),
+                new PDAOperation( '1', '0', PDAOperationType.PUSH, '1' ),
+                new PDAOperation( '1', '1', PDAOperationType.PUSH, '1' ),
+                new PDAOperation( '1', CharacterConstants.STACK_STARTING_SYMBOL,
+                        PDAOperationType.PUSH, '1' ) );
+        pda.addTransition( q0q0 );
+
+        PDATransition q0q1 = new PDATransition( q0, q1,
+                PDAOperation.getDoNothingOperation( 'c', '0' ),
+                PDAOperation.getDoNothingOperation( 'c', '1' ),
+                PDAOperation.getDoNothingOperation( 'c',
+                        CharacterConstants.STACK_STARTING_SYMBOL ) );
+        pda.addTransition( q0q1 );
+
+        PDATransition q1q1 = new PDATransition( q1, q1,
+                PDAOperation.getPopOperation( '0', '0' ),
+                PDAOperation.getPopOperation( '1', '1' ) );
+        pda.addTransition( q1q1 );
+
+        PDATransition q1q2 = new PDATransition( q1, q2,
+                PDAOperation.getDoNothingOperation( CharacterConstants.EMPTY_STRING,
+                        CharacterConstants.STACK_STARTING_SYMBOL ) );
+        pda.addTransition( q1q2 );
+
         return pda;
         
     }

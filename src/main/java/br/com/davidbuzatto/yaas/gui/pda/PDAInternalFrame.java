@@ -2122,6 +2122,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     }
     
     public void updateAfterUpdate() {
+        pda.updateType();
         pdaPPanel.setPda( pda );
         pdaPPanel.readProperties();
     }

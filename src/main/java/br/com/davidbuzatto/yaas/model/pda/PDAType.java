@@ -14,28 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.davidbuzatto.yaas.model.fa;
-
-import br.com.davidbuzatto.yaas.util.CharacterConstants;
+package br.com.davidbuzatto.yaas.model.pda;
 
 /**
- * The type of a Finite Automaton.
+ * The type of a Pushdown Automaton.
  * 
  * @author Prof. Dr. David Buzatto
  */
-public enum FAType {
+public enum PDAType {
     
     EMPTY( "Empty", "Empty" ),
-    DFA( "DFA", "Deterministic Finite Automaton" ),
-    NFA( "NFA", "Nondeterministic Finite Automaton" ),
-    ENFA( CharacterConstants.SMALL_EPSILON + "-NFA", 
-            "Finite Automaton with " + CharacterConstants.SMALL_EPSILON + "-transitions" ),
-    GNFA( "GNFA", "Generalized Nondeterministic Finite Automaton" );
+    PDA( "PDA", "Pushdown Automata" ),
+    DPDA( "DPDA", "Deterministic Pushdown Automata" );
     
     private final String acronym;
     private final String description;
     
-    FAType( String acronym, String description ) {
+    PDAType( String acronym, String description ) {
         this.acronym = acronym;
         this.description = description;
     }

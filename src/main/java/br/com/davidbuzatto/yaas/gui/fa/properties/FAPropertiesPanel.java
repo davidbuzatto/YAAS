@@ -21,7 +21,6 @@ import br.com.davidbuzatto.yaas.gui.fa.FAInternalFrame;
 import br.com.davidbuzatto.yaas.model.fa.FAType;
 import br.com.davidbuzatto.yaas.gui.fa.FAFormalDefinitionDialog;
 import br.com.davidbuzatto.yaas.util.Utils;
-import javax.swing.JOptionPane;
 
 /**
  * Finite Automaton properties edit/visualization panel.
@@ -72,7 +71,7 @@ public class FAPropertiesPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        lblProperties = new javax.swing.JPanel();
+        panelProperties = new javax.swing.JPanel();
         lblFAType = new javax.swing.JLabel();
         txtFAType = new javax.swing.JTextField();
         btnFormalDefinition = new javax.swing.JButton();
@@ -82,22 +81,22 @@ public class FAPropertiesPanel extends javax.swing.JPanel {
         txtFAType.setEnabled(false);
         txtFAType.setFocusable(false);
 
-        javax.swing.GroupLayout lblPropertiesLayout = new javax.swing.GroupLayout(lblProperties);
-        lblProperties.setLayout(lblPropertiesLayout);
-        lblPropertiesLayout.setHorizontalGroup(
-            lblPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(lblPropertiesLayout.createSequentialGroup()
+        javax.swing.GroupLayout panelPropertiesLayout = new javax.swing.GroupLayout(panelProperties);
+        panelProperties.setLayout(panelPropertiesLayout);
+        panelPropertiesLayout.setHorizontalGroup(
+            panelPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelPropertiesLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblFAType)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtFAType, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        lblPropertiesLayout.setVerticalGroup(
-            lblPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(lblPropertiesLayout.createSequentialGroup()
+        panelPropertiesLayout.setVerticalGroup(
+            panelPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelPropertiesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(lblPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(panelPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblFAType)
                     .addComponent(txtFAType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -117,7 +116,7 @@ public class FAPropertiesPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblProperties, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panelProperties, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnFormalDefinition)
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -127,7 +126,7 @@ public class FAPropertiesPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblProperties, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panelProperties, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnFormalDefinition)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -151,7 +150,7 @@ public class FAPropertiesPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFormalDefinition;
     private javax.swing.JLabel lblFAType;
-    private javax.swing.JPanel lblProperties;
+    private javax.swing.JPanel panelProperties;
     private javax.swing.JTextField txtFAType;
     // End of variables declaration//GEN-END:variables
 }

@@ -812,6 +812,10 @@ public class PDATransition extends AbstractGeometricForm implements Cloneable {
         updateLabel();
     }
     
+    public boolean constainsOperation( PDAOperation operation ) {
+        return operations.contains( operation );
+    }
+    
     @Override
     public String toString() {
         return String.format( "(%s) - %s -> (%s)",

@@ -21,8 +21,10 @@ import br.com.davidbuzatto.yaas.model.AbstractGeometricForm;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +43,7 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
     private List<PDAState> states;
     private List<PDATransition> transitions;
     private PDAState initialState;
+    private PDAType type;
     
     private List<Character> startingPushSymbols;
     
@@ -58,7 +61,8 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
     public PDA() {
         states = new ArrayList<>();
         transitions = new ArrayList<>();
-        startingPushSymbols = new ArrayList<>();
+        setStartingPushSymbols( new ArrayList<>() );
+        type = PDAType.EMPTY;
     }
     
     public boolean accepts( String str ) {
@@ -69,6 +73,14 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
     public boolean accepts( String str, List<PDASimulationStep> simulationSteps ) {
         
         if ( canExecute() ) {
+            
+            Deque<Character> stack = new ArrayDeque<>();
+            for ( char c : startingPushSymbols ) {
+                stack.push( c );
+            }
+            PDAID root = new PDAID( initialState, str, stack, null );
+            
+            System.out.println( root );
             
             return false;
             
@@ -180,6 +192,7 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
         }
         
         markAllCachesAsObsolete();
+        updateType();
         
     }
     
@@ -208,6 +221,7 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
         
         updateTransitions();
         markAllCachesAsObsolete();
+        updateType();
         
     }
     
@@ -254,11 +268,16 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
         this.initialState = initialState;
         
         markAllCachesAsObsolete();
+        updateType();
         
     }
 
     public PDAState getInitialState() {
         return initialState;
+    }
+    
+    public PDAType getType() {
+        return type;
     }
     
     public void removeState( PDAState state ) {
@@ -281,12 +300,83 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
         }
         
         markAllCachesAsObsolete();
+        updateType();
         
     }
     
     public void removeTransition( PDATransition transition ) {
         transitions.remove( transition );
         markAllCachesAsObsolete();
+        updateType();
+    }
+    
+    public void updateType() {
+        
+        if ( states.isEmpty() ) {
+            type = PDAType.EMPTY;
+            return;
+        }
+        
+        Map<String, Integer> counts = new HashMap<>();
+        Map<String, String> mirror = new HashMap<>();
+        boolean epsilon = false;
+        boolean nondeterminism = false;
+        
+        String sepLeft = "-<|";
+        String sepRight = "|>-";
+        String lookEp = String.format( "%s%c%s", sepLeft,
+                CharacterConstants.EMPTY_STRING, sepRight );
+        
+        for ( PDATransition t : transitions ) {
+            
+            for ( PDAOperation o : t.getOperations() ) {
+                
+                String k = String.format( "%s-%s%c%s-%c", 
+                        t.getOriginState(), sepLeft, 
+                        o.getSymbol(), sepRight, o.getTop() );
+                String kEp = String.format( "%s-%s%c%s-%c", 
+                        t.getOriginState(), sepLeft, 
+                        CharacterConstants.EMPTY_STRING, sepRight, o.getTop() );
+                
+                Integer v = counts.get( k );
+                counts.put( k, v == null ? 1 : v+1 );
+                
+                if ( !counts.containsKey( kEp ) ) {
+                    counts.put( kEp, 0 );
+                }
+                
+                mirror.put( k, kEp );
+                mirror.put( kEp, k );
+                
+            }
+            
+        }
+        
+        for ( Map.Entry<String, Integer> e : counts.entrySet() ) {
+            
+            if ( e.getValue() > 1 ) {
+                nondeterminism = true;
+                break;
+            }
+            
+            String k1 = e.getKey();
+            String k2 = mirror.get( k1 );
+            
+            if ( !k1.contains( lookEp ) && k2 != null ) {
+                Integer c = counts.get( k2 );
+                if ( c != null && c > 0 ) {
+                    epsilon = true;
+                }
+            }
+            
+        }
+        
+        if ( nondeterminism || epsilon ) {
+            type = PDAType.PDA;
+        } else {
+            type = PDAType.DPDA;
+        }
+        
     }
     
     public String getFormalDefinition() {
@@ -496,7 +586,9 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
     }
 
     public void setStartingPushSymbols( List<Character> startingPushSymbols ) {
-        this.startingPushSymbols = startingPushSymbols;
+        this.startingPushSymbols = new ArrayList<>();
+        this.startingPushSymbols.add( CharacterConstants.STACK_STARTING_SYMBOL );
+        this.startingPushSymbols.addAll( startingPushSymbols );
         markAllCachesAsObsolete();
     }
     
@@ -526,8 +618,21 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
     
     public String generateCode() {
         
+        updateType();
         String className = getClass().getSimpleName();
         String modelName = "pda";
+        
+        switch ( type ) {
+            case EMPTY:
+                modelName = "pda";
+                break;
+            case PDA:
+                modelName = "pda";
+                break;
+            case DPDA:
+                modelName = "dpda";
+                break;
+        }
         
         String template =
                 """
@@ -627,6 +732,7 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
         }
         
         // c.initialState = null;  <- c.addState() resolves it accordingly
+        // c.type = null;          <- c.updateType() resolves it accordingly
         
         c.startingPushSymbols = new ArrayList<>();
         for ( char ch : startingPushSymbols ) {
@@ -643,6 +749,7 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
 
         c.transitionControlPointsVisible = false;
         
+        c.updateType();
         return c;
         
     }

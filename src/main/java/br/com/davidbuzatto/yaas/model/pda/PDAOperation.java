@@ -185,10 +185,8 @@ public class PDAOperation extends AbstractGeometricForm implements Cloneable, Co
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 73 * hash + this.symbol;
-        hash = 73 * hash + this.top;
-        hash = 73 * hash + Objects.hashCode( this.type );
-        hash = 73 * hash + Objects.hashCode( this.symbolsToPush );
+        hash = 19 * hash + this.symbol;
+        hash = 19 * hash + this.top;
         return hash;
     }
 
@@ -207,13 +205,7 @@ public class PDAOperation extends AbstractGeometricForm implements Cloneable, Co
         if ( this.symbol != other.symbol ) {
             return false;
         }
-        if ( this.top != other.top ) {
-            return false;
-        }
-        if ( this.type != other.type ) {
-            return false;
-        }
-        return Objects.equals( this.symbolsToPush, other.symbolsToPush );
+        return this.top == other.top;
     }
     
     @Override

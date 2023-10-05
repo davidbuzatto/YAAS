@@ -268,6 +268,7 @@ public class PDAEditOperationsDialog extends javax.swing.JDialog {
             transition.replaceAllOperations( newOperations );
         }
         
+        pda.updateType();
         dispose();
         
     }//GEN-LAST:event_btnOKActionPerformed

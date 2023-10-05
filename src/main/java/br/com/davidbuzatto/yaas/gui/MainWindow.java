@@ -29,10 +29,6 @@ import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
 import com.formdev.flatlaf.FlatDarculaLaf;
 import java.beans.PropertyVetoException;
-import java.io.FileDescriptor;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
-import java.nio.charset.StandardCharsets;
 import javax.swing.JOptionPane;
 
 /**
@@ -63,7 +59,8 @@ public class MainWindow extends javax.swing.JFrame {
             setExtendedState( MAXIMIZED_BOTH );
         } else {
             //createFAInternalFrame( FAExamples.createDFAEndsWith00(), true, true );
-            createPDAInternalFrame( PDAExamples.createPDAPalindrome(), true, true );
+            //createPDAInternalFrame( PDAExamples.createPDAEvenPalindromeAS(), true, true );
+            createPDAInternalFrame( PDAExamples.createDPDAEvenPalindromeCM(), true, true );
         }
         
     }
@@ -86,6 +83,7 @@ public class MainWindow extends javax.swing.JFrame {
         menuFile = new javax.swing.JMenu();
         menuItemExit = new javax.swing.JMenuItem();
         menuExamples = new javax.swing.JMenu();
+        menuFA = new javax.swing.JMenu();
         menuDFA = new javax.swing.JMenu();
         miDFASubstring01 = new javax.swing.JMenuItem();
         miDFAEndsWith00 = new javax.swing.JMenuItem();
@@ -100,6 +98,14 @@ public class MainWindow extends javax.swing.JFrame {
         miNFAEndsWith11 = new javax.swing.JMenuItem();
         menuENFA = new javax.swing.JMenu();
         miENFADecimalNumber = new javax.swing.JMenuItem();
+        menuPDA = new javax.swing.JMenu();
+        menuPDAAcceptingState = new javax.swing.JMenu();
+        miPDAEvenPalindromeAS = new javax.swing.JMenuItem();
+        menuPDAEmptyStack = new javax.swing.JMenu();
+        miPDAEvenPalindromeES = new javax.swing.JMenuItem();
+        menuDPDA = new javax.swing.JMenu();
+        miDPDAEvenPalindromeCM = new javax.swing.JMenuItem();
+        menuTM = new javax.swing.JMenu();
         menuMinimizationTest = new javax.swing.JMenu();
         miMiniT01 = new javax.swing.JMenuItem();
         miMiniT02 = new javax.swing.JMenuItem();
@@ -194,6 +200,10 @@ public class MainWindow extends javax.swing.JFrame {
         menuExamples.setText("Examples");
         menuExamples.setToolTipText("");
 
+        menuFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fa.png"))); // NOI18N
+        menuFA.setMnemonic('F');
+        menuFA.setText("Finite Automata");
+
         menuDFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dfa.png"))); // NOI18N
         menuDFA.setMnemonic('D');
         menuDFA.setText("DFA");
@@ -253,7 +263,7 @@ public class MainWindow extends javax.swing.JFrame {
         });
         menuDFA.add(miDFA0Even1Odd);
 
-        menuExamples.add(menuDFA);
+        menuFA.add(menuDFA);
 
         menuNFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nfa.png"))); // NOI18N
         menuNFA.setMnemonic('N');
@@ -296,7 +306,7 @@ public class MainWindow extends javax.swing.JFrame {
         });
         menuNFA.add(miNFAEndsWith11);
 
-        menuExamples.add(menuNFA);
+        menuFA.add(menuNFA);
 
         menuENFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/enfa.png"))); // NOI18N
         menuENFA.setMnemonic('F');
@@ -312,7 +322,67 @@ public class MainWindow extends javax.swing.JFrame {
         });
         menuENFA.add(miENFADecimalNumber);
 
-        menuExamples.add(menuENFA);
+        menuFA.add(menuENFA);
+
+        menuExamples.add(menuFA);
+
+        menuPDA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pda.png"))); // NOI18N
+        menuPDA.setMnemonic('P');
+        menuPDA.setText("Pushdown Automata");
+
+        menuPDAAcceptingState.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pda.png"))); // NOI18N
+        menuPDAAcceptingState.setMnemonic('A');
+        menuPDAAcceptingState.setText("Accept by Accepting State");
+
+        miPDAEvenPalindromeAS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pda.png"))); // NOI18N
+        miPDAEvenPalindromeAS.setText("Even Palindrome");
+        miPDAEvenPalindromeAS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miPDAEvenPalindromeASActionPerformed(evt);
+            }
+        });
+        menuPDAAcceptingState.add(miPDAEvenPalindromeAS);
+
+        menuPDA.add(menuPDAAcceptingState);
+
+        menuPDAEmptyStack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pda.png"))); // NOI18N
+        menuPDAEmptyStack.setMnemonic('E');
+        menuPDAEmptyStack.setText("Accept by Empty Stack");
+
+        miPDAEvenPalindromeES.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pda.png"))); // NOI18N
+        miPDAEvenPalindromeES.setText("Even Palindrome");
+        miPDAEvenPalindromeES.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miPDAEvenPalindromeESActionPerformed(evt);
+            }
+        });
+        menuPDAEmptyStack.add(miPDAEvenPalindromeES);
+
+        menuPDA.add(menuPDAEmptyStack);
+
+        menuDPDA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pda.png"))); // NOI18N
+        menuDPDA.setMnemonic('D');
+        menuDPDA.setText("DPDA");
+        menuDPDA.setToolTipText("");
+
+        miDPDAEvenPalindromeCM.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pda.png"))); // NOI18N
+        miDPDAEvenPalindromeCM.setText("Even Palindrome with Center Mark");
+        miDPDAEvenPalindromeCM.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miDPDAEvenPalindromeCMActionPerformed(evt);
+            }
+        });
+        menuDPDA.add(miDPDAEvenPalindromeCM);
+
+        menuPDA.add(menuDPDA);
+
+        menuExamples.add(menuPDA);
+
+        menuTM.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turing.png"))); // NOI18N
+        menuTM.setMnemonic('T');
+        menuTM.setText("Turing Machines");
+        menuTM.setToolTipText("");
+        menuExamples.add(menuTM);
 
         menuBar.add(menuExamples);
 
@@ -554,6 +624,21 @@ public class MainWindow extends javax.swing.JFrame {
                 false, false );
     }//GEN-LAST:event_miMiniT09ActionPerformed
 
+    private void miPDAEvenPalindromeASActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miPDAEvenPalindromeASActionPerformed
+        createPDAInternalFrame( PDAExamples.createPDAEvenPalindromeAS(), 
+                false, false );
+    }//GEN-LAST:event_miPDAEvenPalindromeASActionPerformed
+
+    private void miPDAEvenPalindromeESActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miPDAEvenPalindromeESActionPerformed
+        createPDAInternalFrame( PDAExamples.createPDAEvenPalindromeES(), 
+                false, false );
+    }//GEN-LAST:event_miPDAEvenPalindromeESActionPerformed
+
+    private void miDPDAEvenPalindromeCMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDPDAEvenPalindromeCMActionPerformed
+        createPDAInternalFrame( PDAExamples.createDPDAEvenPalindromeCM(), 
+                false, false );
+    }//GEN-LAST:event_miDPDAEvenPalindromeCMActionPerformed
+
     public void createFAInternalFrame( FA fa, boolean maximized, boolean currentFileSaved ) {
         
         if ( fa == null ) {
@@ -636,20 +721,27 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JDesktopPane desktopPane;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenu menuDFA;
+    private javax.swing.JMenu menuDPDA;
     private javax.swing.JMenu menuENFA;
     private javax.swing.JMenu menuExamples;
+    private javax.swing.JMenu menuFA;
     private javax.swing.JMenu menuFile;
     private javax.swing.JMenu menuHelp;
     private javax.swing.JMenuItem menuItemAbout;
     private javax.swing.JMenuItem menuItemExit;
     private javax.swing.JMenu menuMinimizationTest;
     private javax.swing.JMenu menuNFA;
+    private javax.swing.JMenu menuPDA;
+    private javax.swing.JMenu menuPDAAcceptingState;
+    private javax.swing.JMenu menuPDAEmptyStack;
+    private javax.swing.JMenu menuTM;
     private javax.swing.JMenuItem miDFA0Even1Odd;
     private javax.swing.JMenuItem miDFAEndsWith00;
     private javax.swing.JMenuItem miDFAEndsWith01;
     private javax.swing.JMenuItem miDFAEndsWith10;
     private javax.swing.JMenuItem miDFAEndsWith11;
     private javax.swing.JMenuItem miDFASubstring01;
+    private javax.swing.JMenuItem miDPDAEvenPalindromeCM;
     private javax.swing.JMenuItem miENFADecimalNumber;
     private javax.swing.JMenuItem miMiniT01;
     private javax.swing.JMenuItem miMiniT02;
@@ -664,6 +756,8 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem miNFAEndsWith01;
     private javax.swing.JMenuItem miNFAEndsWith10;
     private javax.swing.JMenuItem miNFAEndsWith11;
+    private javax.swing.JMenuItem miPDAEvenPalindromeAS;
+    private javax.swing.JMenuItem miPDAEvenPalindromeES;
     private javax.swing.JToolBar toolBar;
     // End of variables declaration//GEN-END:variables
 }

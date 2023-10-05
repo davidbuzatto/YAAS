@@ -19,6 +19,7 @@ package br.com.davidbuzatto.yaas.gui.pda.properties;
 import br.com.davidbuzatto.yaas.gui.pda.PDAFormalDefinitionDialog;
 import br.com.davidbuzatto.yaas.gui.pda.PDAInternalFrame;
 import br.com.davidbuzatto.yaas.model.pda.PDA;
+import br.com.davidbuzatto.yaas.model.pda.PDAType;
 import br.com.davidbuzatto.yaas.util.Utils;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,11 +55,25 @@ public class PDAPropertiesPanel extends javax.swing.JPanel {
     }
 
     public void readProperties() {
-        String s = "";
-        for ( char c : pda.getStartingPushSymbols() ) {
-            s += c + " ";
+        
+        if ( pda.getType() == PDAType.EMPTY ) {
+            txtPDAType.setText( "" );
+            txtPDAType.setToolTipText( "" );
+        } else {
+            txtPDAType.setText( pda.getType().getAcronym() );
+            txtPDAType.setToolTipText( pda.getType().getDescription() );
         }
+        
+        String s = "";
+        List<Character> sps = pda.getStartingPushSymbols();
+        
+        // ignores the first
+        for ( int i = 1; i < sps.size(); i++ ) {
+            s += sps.get( i ) + " ";
+        }
+        
         txtStartingPush.setText( s.trim() );
+        
     }
     
     /**
@@ -70,18 +85,19 @@ public class PDAPropertiesPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnFormalDefinition = new javax.swing.JButton();
+        panelProperties = new javax.swing.JPanel();
+        lblPDAType = new javax.swing.JLabel();
         lblStartingPush = new javax.swing.JLabel();
+        txtPDAType = new javax.swing.JTextField();
         txtStartingPush = new javax.swing.JTextField();
+        btnFormalDefinition = new javax.swing.JButton();
 
-        btnFormalDefinition.setText("Formal Definition");
-        btnFormalDefinition.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFormalDefinitionActionPerformed(evt);
-            }
-        });
+        lblPDAType.setText("PDA Type:");
 
         lblStartingPush.setText("Starting Push:");
+
+        txtPDAType.setEnabled(false);
+        txtPDAType.setFocusable(false);
 
         txtStartingPush.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -99,6 +115,42 @@ public class PDAPropertiesPanel extends javax.swing.JPanel {
             }
         });
 
+        javax.swing.GroupLayout panelPropertiesLayout = new javax.swing.GroupLayout(panelProperties);
+        panelProperties.setLayout(panelPropertiesLayout);
+        panelPropertiesLayout.setHorizontalGroup(
+            panelPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelPropertiesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblPDAType, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblStartingPush, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtStartingPush)
+                    .addComponent(txtPDAType))
+                .addContainerGap())
+        );
+        panelPropertiesLayout.setVerticalGroup(
+            panelPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelPropertiesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblPDAType)
+                    .addComponent(txtPDAType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblStartingPush)
+                    .addComponent(txtStartingPush, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        btnFormalDefinition.setText("Formal Definition");
+        btnFormalDefinition.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFormalDefinitionActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -108,23 +160,19 @@ public class PDAPropertiesPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnFormalDefinition)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblStartingPush)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtStartingPush, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(panelProperties, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblStartingPush)
-                    .addComponent(txtStartingPush, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(panelProperties, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnFormalDefinition)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -143,14 +191,17 @@ public class PDAPropertiesPanel extends javax.swing.JPanel {
 
     private void txtStartingPushActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStartingPushActionPerformed
         updateStartingPushSymbols();
+        readProperties();
     }//GEN-LAST:event_txtStartingPushActionPerformed
 
     private void txtStartingPushFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStartingPushFocusLost
         updateStartingPushSymbols();
+        readProperties();
     }//GEN-LAST:event_txtStartingPushFocusLost
 
     private void txtStartingPushKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtStartingPushKeyReleased
         updateStartingPushSymbols();
+        readProperties();
     }//GEN-LAST:event_txtStartingPushKeyReleased
 
     private void updateStartingPushSymbols() {
@@ -171,7 +222,10 @@ public class PDAPropertiesPanel extends javax.swing.JPanel {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFormalDefinition;
+    private javax.swing.JLabel lblPDAType;
     private javax.swing.JLabel lblStartingPush;
+    private javax.swing.JPanel panelProperties;
+    private javax.swing.JTextField txtPDAType;
     private javax.swing.JTextField txtStartingPush;
     // End of variables declaration//GEN-END:variables
 }

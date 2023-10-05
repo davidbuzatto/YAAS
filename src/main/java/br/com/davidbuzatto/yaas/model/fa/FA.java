@@ -341,7 +341,7 @@ public class FA extends AbstractGeometricForm implements Cloneable {
         updateType();
     }
     
-    public final void updateType() {
+    public void updateType() {
         
         if ( states.isEmpty() ) {
             type = FAType.EMPTY;
