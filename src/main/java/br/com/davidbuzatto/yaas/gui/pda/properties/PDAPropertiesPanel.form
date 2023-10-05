@@ -50,16 +50,9 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
+                  <Component id="lblPDAType" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="lblPDAType" alignment="1" min="-2" max="-2" attributes="0"/>
-                      <Component id="lblStartingPush" alignment="1" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="txtStartingPush" max="32767" attributes="0"/>
-                      <Component id="txtPDAType" max="32767" attributes="0"/>
-                  </Group>
+                  <Component id="txtPDAType" pref="89" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -72,11 +65,6 @@
                       <Component id="lblPDAType" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="txtPDAType" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="lblStartingPush" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="txtStartingPush" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -88,23 +76,11 @@
             <Property name="text" type="java.lang.String" value="PDA Type:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="lblStartingPush">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Starting Push:"/>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JTextField" name="txtPDAType">
           <Properties>
             <Property name="enabled" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
           </Properties>
-        </Component>
-        <Component class="javax.swing.JTextField" name="txtStartingPush">
-          <Events>
-            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtStartingPushFocusLost"/>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtStartingPushActionPerformed"/>
-            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtStartingPushKeyReleased"/>
-          </Events>
         </Component>
       </SubComponents>
     </Container>

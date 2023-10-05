@@ -96,23 +96,10 @@ public class PDAOperation extends AbstractGeometricForm implements Cloneable, Co
             return 1;
         } else if ( top != o.top ) {
             
-            int t1 = 0;
-            int t2 = 0;
-            
-            if ( top == CharacterConstants.STACK_STARTING_SYMBOL ) {
-                t1 = 1;
-            } else if ( top == CharacterConstants.EMPTY_STRING ) {
-                t1 = 2;
-            }
-            
-            if ( o.top == CharacterConstants.STACK_STARTING_SYMBOL ) {
-                t2 = 1;
+            if ( top == CharacterConstants.EMPTY_STRING ) {
+                return -1;
             } else if ( o.top == CharacterConstants.EMPTY_STRING ) {
-                t2 = 2;
-            }
-            
-            if ( t1 != t2 ) {
-                return t1 - t2;
+                return 1;
             } else {
                 return top - o.top;
             }
@@ -238,7 +225,7 @@ public class PDAOperation extends AbstractGeometricForm implements Cloneable, Co
         
     }
     
-    public String generateCode() {
+    public String generateCode( PDA pda, String modelName ) {
         
         String op = "            ";
         
@@ -258,8 +245,8 @@ public class PDAOperation extends AbstractGeometricForm implements Cloneable, Co
         
         if ( top == CharacterConstants.EMPTY_STRING ) {
             op += "CharacterConstants.EMPTY_STRING";
-        } else if ( top == CharacterConstants.STACK_STARTING_SYMBOL ) {
-            op += "CharacterConstants.STACK_STARTING_SYMBOL";
+        } else if ( top == pda.getStackStartingSymbol() ) {
+            op += modelName + ".getStackStartingSymbol()";
         } else {
             op += String.format( "'%c'", top );
         }

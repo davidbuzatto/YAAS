@@ -44,8 +44,7 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
     private List<PDATransition> transitions;
     private PDAState initialState;
     private PDAType type;
-    
-    private List<Character> startingPushSymbols;
+    private char stackStartingSymbol;
     
     // cache control
     private boolean alphabetUpToDate;
@@ -59,10 +58,14 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
     private boolean transitionControlPointsVisible;
     
     public PDA() {
-        states = new ArrayList<>();
-        transitions = new ArrayList<>();
-        setStartingPushSymbols( new ArrayList<>() );
-        type = PDAType.EMPTY;
+        this( CharacterConstants.STACK_STARTING_SYMBOL );
+    }
+    
+    public PDA( char startingSymbol ) {
+        this.states = new ArrayList<>();
+        this.transitions = new ArrayList<>();
+        this.stackStartingSymbol = startingSymbol;
+        this.type = PDAType.EMPTY;
     }
     
     public boolean accepts( String str ) {
@@ -75,9 +78,7 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
         if ( canExecute() ) {
             
             Deque<Character> stack = new ArrayDeque<>();
-            for ( char c : startingPushSymbols ) {
-                stack.push( c );
-            }
+            stack.push(stackStartingSymbol );
             PDAID root = new PDAID( initialState, str, stack, null );
             
             System.out.println( root );
@@ -381,11 +382,12 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
     
     public String getFormalDefinition() {
         
-        String def = String.format( "A = { Q, %c, %c, %c, %s, F }\n",
+        String def = String.format("P = { Q, %c, %c, %c, %s, %c, F }\n",
                 CharacterConstants.CAPITAL_SIGMA,
                 CharacterConstants.CAPITAL_GAMMA,
                 CharacterConstants.SMALL_DELTA, 
-                initialState.toString() );
+                initialState.toString(),
+                stackStartingSymbol );
         def += getStatesString() + "\n";
         def += getAlphabetString() + "\n";
         def += getStackAlphabetString() + "\n";
@@ -421,10 +423,9 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
         if ( stackAlphabet == null || !stackAlphabetUpToDate ) {
             
             stackAlphabetUpToDate = true;
-            stackAlphabet = new TreeSet<>();
             
-            stackAlphabet.add( CharacterConstants.STACK_STARTING_SYMBOL );
-            stackAlphabet.addAll( startingPushSymbols );
+            stackAlphabet = new TreeSet<>();
+            stackAlphabet.add( stackStartingSymbol );
         
             for ( PDATransition t : transitions ) {
                 for ( PDAOperation o : t.getOperations() ) {
@@ -581,15 +582,8 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
         return transitions;
     }
 
-    public List<Character> getStartingPushSymbols() {
-        return startingPushSymbols;
-    }
-
-    public void setStartingPushSymbols( List<Character> startingPushSymbols ) {
-        this.startingPushSymbols = new ArrayList<>();
-        this.startingPushSymbols.add( CharacterConstants.STACK_STARTING_SYMBOL );
-        this.startingPushSymbols.addAll( startingPushSymbols );
-        markAllCachesAsObsolete();
+    public char getStackStartingSymbol() {
+        return stackStartingSymbol;
     }
     
     public void deactivateAllStatesInSimulation() {
@@ -666,7 +660,7 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
             if ( !first ) {
                 tBuilder.append( "\n\n" );
             }
-            tBuilder.append( t.generateCode( modelName ) );
+            tBuilder.append( t.generateCode( this, modelName ) );
             first = false;
         }
         
@@ -734,10 +728,7 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
         // c.initialState = null;  <- c.addState() resolves it accordingly
         // c.type = null;          <- c.updateType() resolves it accordingly
         
-        c.startingPushSymbols = new ArrayList<>();
-        for ( char ch : startingPushSymbols ) {
-            c.startingPushSymbols.add( ch );
-        }
+        c.stackStartingSymbol = stackStartingSymbol;
         
         c.alphabetUpToDate = false;
         c.stackAlphabetUpToDate = false;

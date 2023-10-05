@@ -650,6 +650,7 @@ public class Utils {
      * 
      * @param parentComponent The parent component.
      * @param title The title of the dialog.
+     * @param startingSymbol The stack starting symbol of the PDA.
      * @param op
      * 
      * @return The op PDAOperation with it was updated, a new PDAOperation if
@@ -658,6 +659,7 @@ public class Utils {
     public static PDAOperation showInputDialogNewPDAOperation( 
             Component parentComponent, 
             String title,
+            char startingSymbol,
             PDAOperation op ) {
         
         JPanel panel = new JPanel();
@@ -696,7 +698,7 @@ public class Utils {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new Insets( 5, 5, 5, 5 );
         panel.add( lblSP, gridBagConstraints);
 
         JPanel tsPanel = new JPanel();
@@ -723,7 +725,7 @@ public class Utils {
         JTextField txtST = new JTextField( 5 );
         JCheckBox checkEmptyST = new JCheckBox( CharacterConstants.EMPTY_STRING.toString() );
         checkEmptyST.setToolTipText( "Empty stack" );
-        JCheckBox checkStartingST = new JCheckBox( CharacterConstants.STACK_STARTING_SYMBOL.toString() );
+        JCheckBox checkStartingST = new JCheckBox( String.valueOf( startingSymbol ) );
         checkStartingST.setToolTipText( "Starting symbol" );
         stPanel.add( txtST );
         stPanel.add( checkEmptyST );
@@ -851,7 +853,7 @@ public class Utils {
             
             if ( op.getTop() == CharacterConstants.EMPTY_STRING ) {
                 checkEmptyST.doClick();
-            } else if ( op.getTop() == CharacterConstants.STACK_STARTING_SYMBOL ) {
+            } else if ( op.getTop()== startingSymbol ) {
                 checkStartingST.doClick();
             } else {
                 txtST.setText( String.valueOf( op.getTop() ) );
@@ -912,7 +914,7 @@ public class Utils {
                 if ( checkEmptyST.isSelected() ) {
                     stackTop = CharacterConstants.EMPTY_STRING;
                 } else if ( checkStartingST.isSelected() ) {
-                    stackTop = CharacterConstants.STACK_STARTING_SYMBOL;
+                    stackTop = startingSymbol;
                 } else {
                     String inputST = txtST.getText().trim();
                     if ( !inputST.isEmpty() ) {

@@ -212,7 +212,8 @@ public class PDAEditOperationsDialog extends javax.swing.JDialog {
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         
         PDAOperation op = Utils.showInputDialogNewPDAOperation( 
-                this, "Add Transition Operation", null );
+                this, "Add Transition Operation", 
+                pda.getStackStartingSymbol(), null );
 
         if ( op != null ) {
             model.addElement( op );
@@ -228,7 +229,8 @@ public class PDAEditOperationsDialog extends javax.swing.JDialog {
             Utils.showErrorMessage( this, "You must select one operation to edit!" );
         } else {
             Utils.showInputDialogNewPDAOperation( 
-                    this, "Add Transition Operation", model.get( indexes[0] ) );
+                    this, "Add Transition Operation", 
+                    pda.getStackStartingSymbol(), model.get( indexes[0] ) );
         }
         
         lstOp.updateUI();

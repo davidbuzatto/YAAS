@@ -822,7 +822,7 @@ public class PDATransition extends AbstractGeometricForm implements Cloneable {
                 originState, label, targetState );
     }
     
-    public String generateCode( String modelName ) {
+    public String generateCode( PDA pda, String modelName ) {
         
         String className = getClass().getSimpleName();
         String tName = originState.getLabel() + targetState.getLabel();
@@ -834,7 +834,7 @@ public class PDATransition extends AbstractGeometricForm implements Cloneable {
             if ( !fs ) {
                 pdaOp += ",\n";
             }
-            pdaOp += o.generateCode();
+            pdaOp += o.generateCode( pda, modelName );
             fs = false;
         }
         

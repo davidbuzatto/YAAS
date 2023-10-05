@@ -47,10 +47,10 @@ public class PDATest {
         pda.addState( q1 );
         pda.addState( q2 );
         
-        pda.addTransition( new PDATransition( q0, q0, new PDAOperation( '0', CharacterConstants.STACK_STARTING_SYMBOL, PDAOperationType.PUSH, '0' ) ) );
+        pda.addTransition( new PDATransition( q0, q0, new PDAOperation( '0', pda.getStackStartingSymbol(), PDAOperationType.PUSH, '0' ) ) );
         pda.addTransition( new PDATransition( q0, q0, new PDAOperation( '0', '0', PDAOperationType.PUSH, '0' ) ) );
         pda.addTransition( new PDATransition( q0, q0, new PDAOperation( '0', '1', PDAOperationType.PUSH, '0' ) ) );
-        pda.addTransition( new PDATransition( q0, q0, new PDAOperation( '1', CharacterConstants.STACK_STARTING_SYMBOL, PDAOperationType.PUSH, '1' ) ) );
+        pda.addTransition( new PDATransition( q0, q0, new PDAOperation( '1', pda.getStackStartingSymbol(), PDAOperationType.PUSH, '1' ) ) );
         pda.addTransition( new PDATransition( q0, q0, new PDAOperation( '1', '0', PDAOperationType.PUSH, '1' ) ) );
         pda.addTransition( new PDATransition( q0, q0, new PDAOperation( '1', '1', PDAOperationType.PUSH, '1' ) ) );
         
@@ -58,14 +58,14 @@ public class PDATest {
         pda.addTransition( new PDATransition( q0, q0, new PDAOperation( '1', '1', PDAOperationType.PUSH, '1', '2', '3' ) ) );
         pda.addTransition( new PDATransition( q0, q0, new PDAOperation( '1', '1', PDAOperationType.REPLACE, '2', '3' ) ) );
         
-        pda.addTransition( new PDATransition( q0, q1, PDAOperation.getDoNothingOperation( CharacterConstants.EMPTY_STRING, CharacterConstants.STACK_STARTING_SYMBOL ) ) );
+        pda.addTransition( new PDATransition( q0, q1, PDAOperation.getDoNothingOperation( CharacterConstants.EMPTY_STRING, pda.getStackStartingSymbol() ) ) );
         pda.addTransition( new PDATransition( q0, q1, PDAOperation.getDoNothingOperation( CharacterConstants.EMPTY_STRING, '0' ) ) );
         pda.addTransition( new PDATransition( q0, q1, PDAOperation.getDoNothingOperation( CharacterConstants.EMPTY_STRING, '1' ) ) );
         
         pda.addTransition( new PDATransition( q1, q1, PDAOperation.getPopOperation( '0', '0' ) ) );
         pda.addTransition( new PDATransition( q1, q1, PDAOperation.getPopOperation( '1', '1' ) ) );
         
-        pda.addTransition( new PDATransition( q1, q2, PDAOperation.getDoNothingOperation( CharacterConstants.EMPTY_STRING, CharacterConstants.STACK_STARTING_SYMBOL ) ) );
+        pda.addTransition( new PDATransition( q1, q2, PDAOperation.getDoNothingOperation( CharacterConstants.EMPTY_STRING, pda.getStackStartingSymbol() ) ) );
         
         JFrame f = new JFrame( "test" );
         f.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );

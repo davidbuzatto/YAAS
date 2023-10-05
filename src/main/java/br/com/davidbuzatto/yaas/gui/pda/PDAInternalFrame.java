@@ -1174,7 +1174,8 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                     if ( targetState != null ) {
 
                         PDAOperation op = Utils.showInputDialogNewPDAOperation( 
-                                this, "Add Transition Operation", null );
+                                this, "Add Transition Operation", 
+                                pda.getStackStartingSymbol(), null );
                         
                         if ( op != null ) {
                             PDATransition t = new PDATransition( 
