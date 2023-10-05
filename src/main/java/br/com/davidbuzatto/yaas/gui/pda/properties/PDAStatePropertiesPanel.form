@@ -44,7 +44,7 @@
                       <Component id="lblLabel" alignment="1" min="-2" max="-2" attributes="0"/>
                       <Component id="lblCustomLabel" alignment="1" min="-2" max="-2" attributes="0"/>
                       <Component id="lblInitial" alignment="1" min="-2" max="-2" attributes="0"/>
-                      <Component id="lblAccepting" alignment="1" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblFinal" alignment="1" min="-2" max="-2" attributes="0"/>
                       <Component id="lblColor" alignment="1" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -54,7 +54,7 @@
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="checkInitial" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="checkAccepting" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="checkFinal" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="ccpColor" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -88,8 +88,8 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="lblAccepting" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="checkAccepting" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblFinal" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="checkFinal" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="2" attributes="0">
@@ -119,9 +119,9 @@
             <Property name="text" type="java.lang.String" value="Initial:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="lblAccepting">
+        <Component class="javax.swing.JLabel" name="lblFinal">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Accepting:"/>
+            <Property name="text" type="java.lang.String" value="Final:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lblColor">
@@ -147,9 +147,9 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="checkInitialActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JCheckBox" name="checkAccepting">
+        <Component class="javax.swing.JCheckBox" name="checkFinal">
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="checkAcceptingActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="checkFinalActionPerformed"/>
           </Events>
         </Component>
         <Container class="br.com.davidbuzatto.yaas.gui.ColorChooserPanel" name="ccpColor">

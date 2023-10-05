@@ -409,7 +409,7 @@ public class Utils {
             FAState state = entry.getKey();
             
             String eStr = "";
-            if ( state.isAccepting()) {
+            if ( state.isFinal()) {
                 eStr += "*";
             }
             if ( state.isInitial() ) {
@@ -495,7 +495,7 @@ public class Utils {
             PDAState state = entry.getKey();
             
             String eStr = "";
-            if ( state.isAccepting()) {
+            if ( state.isFinal()) {
                 eStr += "*";
             }
             if ( state.isInitial() ) {

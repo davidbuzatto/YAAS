@@ -47,7 +47,7 @@ public class FAKleeneStar {
         try {
             
             FACommon.validateInitialState( fa );
-            FACommon.validateAcceptingStates( fa );
+            FACommon.validateFinalStates( fa );
 
             fa = (FA) fa.clone();
             
@@ -55,7 +55,7 @@ public class FAKleeneStar {
             fa.deselectAll();
             
             FAState fa1Initial = fa.getInitialState();
-            List<FAState> fa1Accepting = fa.getAcceptingStates();
+            List<FAState> fa1Final = fa.getFinalStates();
             
             fa.setInitialState( null );
             fa1Initial.setInitial( false );
@@ -67,7 +67,7 @@ public class FAKleeneStar {
             fa.addTransition( new FATransition( 
                     newInitial, fa1Initial, CharacterConstants.EMPTY_STRING ) );
             
-            for ( FAState s : fa1Accepting ) {
+            for ( FAState s : fa1Final ) {
                 fa.addTransition( new FATransition( 
                         s, newInitial, CharacterConstants.EMPTY_STRING ) );
             }

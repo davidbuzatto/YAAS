@@ -111,7 +111,7 @@ public class FA extends AbstractGeometricForm implements Cloneable {
             }
             
             for ( FAState s : currentStates ) {
-                if ( s.isAccepting() ) {
+                if ( s.isFinal() ) {
                     return true;
                 }
             }
@@ -398,7 +398,7 @@ public class FA extends AbstractGeometricForm implements Cloneable {
                 initialState.toString() );
         def += getStatesString() + "\n";
         def += getAlphabetString() + "\n";
-        def += getAcceptingStatesString();
+        def += getFinalStatesString();
         
         return def;
         
@@ -534,13 +534,13 @@ public class FA extends AbstractGeometricForm implements Cloneable {
         
     }
     
-    private String getAcceptingStatesString() {
+    private String getFinalStatesString() {
         
         String str = "";
         
         List<String> ss = new ArrayList<>();
         for ( FAState s : states ) {
-            if ( s.accepting ) {
+            if ( s._final ) {
                 ss.add( s.toString() );
             }
         }
@@ -562,12 +562,12 @@ public class FA extends AbstractGeometricForm implements Cloneable {
         
     }
     
-    public List<FAState> getAcceptingStates() {
+    public List<FAState> getFinalStates() {
         
         List<FAState> acStates = new ArrayList<>();
         
         for ( FAState s : states ) {
-            if ( s.isAccepting() ) {
+            if ( s.isFinal() ) {
                 acStates.add( s );
             }
         }

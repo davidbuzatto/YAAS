@@ -63,7 +63,7 @@ public class FADeterminize {
         // get data from the original automaton
         Set<Character> alphabet = fa.getAlphabet();
         FAState initialState = fa.getInitialState();
-        List<FAState> acceptinStates = fa.getAcceptingStates();
+        List<FAState> acceptinStates = fa.getFinalStates();
         Map<FAState, Map<Character, List<FAState>>> delta = fa.getDelta();
         Map<FAState, Set<FAState>> ecloses = fa.getEcloses( delta );
         
@@ -138,7 +138,7 @@ public class FADeterminize {
         for ( StateHelper s : generatedStates ) {
             for ( FAState a : acceptinStates ) {
                 if ( s.states.contains( a ) ) {
-                    s.state.setAccepting( true );
+                    s.state.setFinal( true );
                     break;
                 }
             }

@@ -35,7 +35,7 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
     protected String customLabel;
     
     protected boolean initial;
-    protected boolean accepting;
+    protected boolean _final;
     
     protected int radius;
     protected int radiusSquared;
@@ -55,17 +55,17 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
         this( number, null, false, false );
     }
     
-    public FAState( int number, boolean initial, boolean accepting ) {
-        this( number, null, initial, accepting );
+    public FAState( int number, boolean initial, boolean _final ) {
+        this( number, null, initial, _final );
     }
     
-    public FAState( int number, String customLabel, boolean initial, boolean accepting ) {
+    public FAState( int number, String customLabel, boolean initial, boolean _final ) {
         
         this.number = number;
         this.label = "q" + number;
         this.customLabel = customLabel;
         this.initial = initial;
-        this.accepting = accepting;
+        this._final = _final;
         
         font = DrawingConstants.DEFAULT_FONT;
         stroke = DrawingConstants.STATE_STROKE;
@@ -145,7 +145,7 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
         
         g2d.drawOval( x1 - radius, y1 - radius, diameter, diameter );
         
-        if ( accepting ) {
+        if ( _final ) {
             g2d.drawOval(
                 x1 - radius + 5, 
                 y1 - radius + 5, 
@@ -221,12 +221,12 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
         this.initial = initial;
     }
 
-    public boolean isAccepting() {
-        return accepting;
+    public boolean isFinal() {
+        return _final;
     }
 
-    public void setAccepting( boolean accepting ) {
-        this.accepting = accepting;
+    public void setFinal( boolean _final ) {
+        this._final = _final;
     }
 
     public boolean isActiveInSimulation() {
@@ -301,14 +301,14 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
         
         String className = getClass().getSimpleName();
         
-        String def = String.format( "    %s %s = new %s( %d, %s, %b, %b );", 
+        String def = String.format("    %s %s = new %s( %d, %s, %b, %b );", 
                 className, 
                 label, 
                 className, 
                 number, 
                 customLabel == null ? null : String.format( "\"%s\"", customLabel ), 
                 initial, 
-                accepting );
+                _final );
         String pos = String.format( "\n    %s.setX1Y1( %d, %d );", label, x1, y1 );
         String add = String.format( "\n    %s.addState( %s );", modelName, label );
         
@@ -327,7 +327,7 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
         c.customLabel = customLabel;
 
         c.initial = initial;
-        c.accepting = accepting;
+        c._final = _final;
 
         c.radius = radius;
         c.radiusSquared = radiusSquared;

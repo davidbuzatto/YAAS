@@ -66,7 +66,7 @@ public class PDAStatePropertiesPanel extends javax.swing.JPanel {
             txtLabel.setText( state.getLabel() );
             txtCustomLabel.setText( state.getCustomLabel() );
             checkInitial.setSelected( state.isInitial() );
-            checkAccepting.setSelected( state.isAccepting() );
+            checkFinal.setSelected( state.isFinal() );
             ccpColor.setColor( state.getStrokeColor() );
             ccpColor.repaint();
             
@@ -75,7 +75,7 @@ public class PDAStatePropertiesPanel extends javax.swing.JPanel {
             txtLabel.setText( "" );
             txtCustomLabel.setText( "" );
             checkInitial.setSelected( false );
-            checkAccepting.setSelected( false );
+            checkFinal.setSelected( false );
             ccpColor.setColor( Color.BLACK );
             ccpColor.repaint();
             
@@ -96,12 +96,12 @@ public class PDAStatePropertiesPanel extends javax.swing.JPanel {
         lblLabel = new javax.swing.JLabel();
         lblCustomLabel = new javax.swing.JLabel();
         lblInitial = new javax.swing.JLabel();
-        lblAccepting = new javax.swing.JLabel();
+        lblFinal = new javax.swing.JLabel();
         lblColor = new javax.swing.JLabel();
         txtLabel = new javax.swing.JTextField();
         txtCustomLabel = new javax.swing.JTextField();
         checkInitial = new javax.swing.JCheckBox();
-        checkAccepting = new javax.swing.JCheckBox();
+        checkFinal = new javax.swing.JCheckBox();
         ccpColor = new br.com.davidbuzatto.yaas.gui.ColorChooserPanel();
         btnRemove = new javax.swing.JButton();
 
@@ -111,7 +111,7 @@ public class PDAStatePropertiesPanel extends javax.swing.JPanel {
 
         lblInitial.setText("Initial:");
 
-        lblAccepting.setText("Accepting:");
+        lblFinal.setText("Final:");
 
         lblColor.setText("Color:");
 
@@ -140,9 +140,9 @@ public class PDAStatePropertiesPanel extends javax.swing.JPanel {
             }
         });
 
-        checkAccepting.addActionListener(new java.awt.event.ActionListener() {
+        checkFinal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                checkAcceptingActionPerformed(evt);
+                checkFinalActionPerformed(evt);
             }
         });
 
@@ -181,7 +181,7 @@ public class PDAStatePropertiesPanel extends javax.swing.JPanel {
                     .addComponent(lblLabel, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblCustomLabel, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblInitial, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblAccepting, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblFinal, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblColor, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -190,7 +190,7 @@ public class PDAStatePropertiesPanel extends javax.swing.JPanel {
                     .addGroup(panelPropertiesLayout.createSequentialGroup()
                         .addGroup(panelPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(checkInitial)
-                            .addComponent(checkAccepting)
+                            .addComponent(checkFinal)
                             .addComponent(ccpColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -215,8 +215,8 @@ public class PDAStatePropertiesPanel extends javax.swing.JPanel {
                     .addComponent(checkInitial))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblAccepting)
-                    .addComponent(checkAccepting))
+                    .addComponent(lblFinal)
+                    .addComponent(checkFinal))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelPropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(ccpColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -260,11 +260,11 @@ public class PDAStatePropertiesPanel extends javax.swing.JPanel {
         
     }//GEN-LAST:event_checkInitialActionPerformed
 
-    private void checkAcceptingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkAcceptingActionPerformed
-        state.setAccepting( checkAccepting.isSelected() );
+    private void checkFinalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkFinalActionPerformed
+        state.setFinal( checkFinal.isSelected() );
         pdaIFrame.setCurrentFileSaved( false );
         pdaIFrame.repaintDrawPanel();
-    }//GEN-LAST:event_checkAcceptingActionPerformed
+    }//GEN-LAST:event_checkFinalActionPerformed
 
     private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
         
@@ -317,13 +317,13 @@ public class PDAStatePropertiesPanel extends javax.swing.JPanel {
 
     public void disableGUI() {
         checkInitial.setEnabled( false );
-        checkAccepting.setEnabled( false );
+        checkFinal.setEnabled( false );
         btnRemove.setEnabled( false );
     }
     
     public void enableGUI() {
         checkInitial.setEnabled( true );
-        checkAccepting.setEnabled( true );
+        checkFinal.setEnabled( true );
         btnRemove.setEnabled( true );
     }
     
@@ -341,11 +341,11 @@ public class PDAStatePropertiesPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRemove;
     private br.com.davidbuzatto.yaas.gui.ColorChooserPanel ccpColor;
-    private javax.swing.JCheckBox checkAccepting;
+    private javax.swing.JCheckBox checkFinal;
     private javax.swing.JCheckBox checkInitial;
-    private javax.swing.JLabel lblAccepting;
     private javax.swing.JLabel lblColor;
     private javax.swing.JLabel lblCustomLabel;
+    private javax.swing.JLabel lblFinal;
     private javax.swing.JLabel lblInitial;
     private javax.swing.JLabel lblLabel;
     private javax.swing.JPanel panelProperties;

@@ -25,7 +25,7 @@ public interface ApplicationConstants {
     
     public static final String APP_NAME =  Utils.getMavenModel().getName();
     public static final String APP_VERSION = Utils.getMavenModel().getVersion();
-    public static final boolean IN_PRODUCTION = Boolean.parseBoolean( 
-            Utils.getMavenModel().getProperties().getProperty( "production" ) );
+    public static final boolean IN_DEVELOPMENT = Boolean.parseBoolean( 
+            Utils.getMavenModel().getProperties().getProperty( "development" ) );
     
 }

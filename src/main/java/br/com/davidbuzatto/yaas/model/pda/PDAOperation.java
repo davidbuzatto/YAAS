@@ -21,7 +21,6 @@ import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Models a transition operation.

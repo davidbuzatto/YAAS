@@ -54,13 +54,13 @@ public class MainWindow extends javax.swing.JFrame {
                 " - v" + 
                 ApplicationConstants.APP_VERSION );
         
-        if ( ApplicationConstants.IN_PRODUCTION ) {
-            menuMinimizationTest.setVisible( false );
-            setExtendedState( MAXIMIZED_BOTH );
-        } else {
+        if ( ApplicationConstants.IN_DEVELOPMENT ) {
             //createFAInternalFrame( FAExamples.createDFAEndsWith00(), true, true );
             //createPDAInternalFrame( PDAExamples.createPDAEvenPalindromeAS(), true, true );
             createPDAInternalFrame( PDAExamples.createDPDAEvenPalindromeCM(), true, true );
+        } else {
+            menuMinimizationTest.setVisible( false );
+            setExtendedState( MAXIMIZED_BOTH );
         }
         
     }
@@ -99,7 +99,7 @@ public class MainWindow extends javax.swing.JFrame {
         menuENFA = new javax.swing.JMenu();
         miENFADecimalNumber = new javax.swing.JMenuItem();
         menuPDA = new javax.swing.JMenu();
-        menuPDAAcceptingState = new javax.swing.JMenu();
+        menuPDAFinalState = new javax.swing.JMenu();
         miPDAEvenPalindromeAS = new javax.swing.JMenuItem();
         menuPDAEmptyStack = new javax.swing.JMenu();
         miPDAEvenPalindromeES = new javax.swing.JMenuItem();
@@ -330,9 +330,9 @@ public class MainWindow extends javax.swing.JFrame {
         menuPDA.setMnemonic('P');
         menuPDA.setText("Pushdown Automata");
 
-        menuPDAAcceptingState.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pda.png"))); // NOI18N
-        menuPDAAcceptingState.setMnemonic('A');
-        menuPDAAcceptingState.setText("Accept by Accepting State");
+        menuPDAFinalState.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pda.png"))); // NOI18N
+        menuPDAFinalState.setMnemonic('A');
+        menuPDAFinalState.setText("Accept by Final State");
 
         miPDAEvenPalindromeAS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pda.png"))); // NOI18N
         miPDAEvenPalindromeAS.setText("Even Palindrome");
@@ -341,9 +341,9 @@ public class MainWindow extends javax.swing.JFrame {
                 miPDAEvenPalindromeASActionPerformed(evt);
             }
         });
-        menuPDAAcceptingState.add(miPDAEvenPalindromeAS);
+        menuPDAFinalState.add(miPDAEvenPalindromeAS);
 
-        menuPDA.add(menuPDAAcceptingState);
+        menuPDA.add(menuPDAFinalState);
 
         menuPDAEmptyStack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pda.png"))); // NOI18N
         menuPDAEmptyStack.setMnemonic('E');
@@ -684,7 +684,7 @@ public class MainWindow extends javax.swing.JFrame {
     @SuppressWarnings( "unchecked" )
     private void close() {
         
-        if ( !ApplicationConstants.IN_PRODUCTION ) {
+        if ( ApplicationConstants.IN_DEVELOPMENT ) {
             System.exit( 0 );
         } else if ( Utils.showConfirmationMessageYesNo( this,
                 """
@@ -732,8 +732,8 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JMenu menuMinimizationTest;
     private javax.swing.JMenu menuNFA;
     private javax.swing.JMenu menuPDA;
-    private javax.swing.JMenu menuPDAAcceptingState;
     private javax.swing.JMenu menuPDAEmptyStack;
+    private javax.swing.JMenu menuPDAFinalState;
     private javax.swing.JMenu menuTM;
     private javax.swing.JMenuItem miDFA0Even1Odd;
     private javax.swing.JMenuItem miDFAEndsWith00;

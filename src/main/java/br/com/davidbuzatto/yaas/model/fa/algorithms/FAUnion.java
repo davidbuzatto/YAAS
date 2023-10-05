@@ -46,7 +46,7 @@ public class FAUnion {
         try {
             
             FACommon.validateInitialState( fa1, fa2 );
-            FACommon.validateAcceptingStates( fa1, fa2 );
+            FACommon.validateFinalStates( fa1, fa2 );
 
             fa1 = (FA) fa1.clone();
             fa2 = (FA) fa2.clone();

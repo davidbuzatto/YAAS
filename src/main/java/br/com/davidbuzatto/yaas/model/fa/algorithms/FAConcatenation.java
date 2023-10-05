@@ -47,7 +47,7 @@ public class FAConcatenation {
         try {
             
             FACommon.validateInitialState( fa1, fa2 );
-            FACommon.validateAcceptingStates( fa1, fa2 );
+            FACommon.validateFinalStates( fa1, fa2 );
 
             fa1 = (FA) fa1.clone();
             fa2 = (FA) fa2.clone();
@@ -59,18 +59,18 @@ public class FAConcatenation {
             fa2.deselectAll();
             
             FAState fa2Initial = fa2.getInitialState();
-            List<FAState> fa1Accepting = fa1.getAcceptingStates();
+            List<FAState> fa1Final = fa1.getFinalStates();
             
             fa2.setInitialState( null );
             fa2Initial.setInitial( false );
             
-            for ( FAState s : fa1Accepting ) {
-                s.setAccepting( false );
+            for ( FAState s : fa1Final ) {
+                s.setFinal( false );
             }
             
             fa1.merge( fa2 );
             
-            for ( FAState s : fa1Accepting ) {
+            for ( FAState s : fa1Final ) {
                 fa1.addTransition( new FATransition( 
                         s, fa2Initial, CharacterConstants.EMPTY_STRING ) );
             }

@@ -204,7 +204,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         
-        if ( ApplicationConstants.IN_PRODUCTION ) {
+        if ( !ApplicationConstants.IN_DEVELOPMENT ) {
             sep06.setVisible( false );
             btnZoomIn.setVisible( false );
             btnZoomOut.setVisible( false );
@@ -241,7 +241,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         popItemStateCustomLabel = new javax.swing.JMenuItem();
         spPopupState01 = new javax.swing.JPopupMenu.Separator();
         checkInitialState = new javax.swing.JCheckBoxMenuItem();
-        checkAcceptingState = new javax.swing.JCheckBoxMenuItem();
+        checkFinalState = new javax.swing.JCheckBoxMenuItem();
         spPopupState = new javax.swing.JPopupMenu.Separator();
         popItemStateColor = new javax.swing.JMenuItem();
         popItemRemoveState = new javax.swing.JMenuItem();
@@ -378,14 +378,13 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         });
         popupMenuStateProperties.add(checkInitialState);
 
-        checkAcceptingState.setSelected(true);
-        checkAcceptingState.setText("Accepting");
-        checkAcceptingState.addActionListener(new java.awt.event.ActionListener() {
+        checkFinalState.setText("Final");
+        checkFinalState.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                checkAcceptingStateActionPerformed(evt);
+                checkFinalStateActionPerformed(evt);
             }
         });
-        popupMenuStateProperties.add(checkAcceptingState);
+        popupMenuStateProperties.add(checkFinalState);
         popupMenuStateProperties.add(spPopupState);
 
         popItemStateColor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/palette.png"))); // NOI18N
@@ -1213,7 +1212,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                     cardLayout.show( panelProperties, STATE_PROPERTIES_CARD );
                     
                     checkInitialState.setSelected( selectedState.isInitial() );
-                    checkAcceptingState.setSelected( selectedState.isAccepting() );
+                    checkFinalState.setSelected( selectedState.isFinal() );
                     
                     popupMenuStateProperties.show( drawPanel, evt.getX(), evt.getY() );
 
@@ -1817,7 +1816,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
 
     private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
         
-        if ( !ApplicationConstants.IN_PRODUCTION ) {
+        if ( ApplicationConstants.IN_DEVELOPMENT ) {
             dispose();
         } else {
         
@@ -1906,11 +1905,11 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_checkInitialStateActionPerformed
 
-    private void checkAcceptingStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkAcceptingStateActionPerformed
+    private void checkFinalStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkFinalStateActionPerformed
         
         if ( selectedState != null ) {
             
-            selectedState.setAccepting( checkAcceptingState.isSelected() );
+            selectedState.setFinal( checkFinalState.isSelected() );
 
             statePPanel.setPda( pda );
             statePPanel.setState( selectedState );
@@ -1922,7 +1921,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         
         }
         
-    }//GEN-LAST:event_checkAcceptingStateActionPerformed
+    }//GEN-LAST:event_checkFinalStateActionPerformed
 
     private void popItemStateColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemStateColorActionPerformed
         
@@ -2730,7 +2729,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnTest;
     private javax.swing.JButton btnZoomIn;
     private javax.swing.JButton btnZoomOut;
-    private javax.swing.JCheckBoxMenuItem checkAcceptingState;
+    private javax.swing.JCheckBoxMenuItem checkFinalState;
     private javax.swing.JCheckBoxMenuItem checkInitialState;
     private br.com.davidbuzatto.yaas.gui.DrawPanel drawPanel;
     private javax.swing.Box.Filler hFiller;

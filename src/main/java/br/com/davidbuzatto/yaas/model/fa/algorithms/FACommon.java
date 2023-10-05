@@ -18,10 +18,9 @@ package br.com.davidbuzatto.yaas.model.fa.algorithms;
 
 import br.com.davidbuzatto.yaas.model.fa.FA;
 import br.com.davidbuzatto.yaas.model.fa.FAState;
-import br.com.davidbuzatto.yaas.model.fa.FATransition;
 import br.com.davidbuzatto.yaas.model.fa.FAType;
-import static br.com.davidbuzatto.yaas.model.fa.algorithms.FAAlgorithmsConstants.DEBUG;
 import br.com.davidbuzatto.yaas.util.SigmaStarGeneratorStream;
+import br.com.davidbuzatto.yaas.util.Utils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +33,9 @@ import java.util.TreeSet;
  * @author Prof. Dr. David Buzatto
  */
 public class FACommon {
+    
+    private static final boolean DEBUG = Boolean.parseBoolean( 
+            Utils.getMavenModel().getProperties().getProperty( "debugAlgorithms" ) );
     
     /**
      * Acceptance algorithm for a DFA, using a custom initialState.
@@ -63,7 +65,7 @@ public class FACommon {
             }
         }
         
-        return current.isAccepting();
+        return current.isFinal();
         
     }
     
@@ -93,10 +95,10 @@ public class FACommon {
         
         // assumes DFA
         for ( Map.Entry<Character, List<FAState>> e : delta.get( s1 ).entrySet() ) {
-            t1.put( e.getKey(), e.getValue().get( 0 ).isAccepting() );
+            t1.put( e.getKey(), e.getValue().get( 0 ).isFinal() );
         }
         for ( Map.Entry<Character, List<FAState>> e : delta.get( s2 ).entrySet() ) {
-            t2.put( e.getKey(), e.getValue().get( 0 ).isAccepting() );
+            t2.put( e.getKey(), e.getValue().get( 0 ).isFinal() );
         }
         
         return t1.equals( t2 );
@@ -236,39 +238,39 @@ public class FACommon {
     }
     
     /**
-     * Validades if a Finite Automaton have at least one accepting state.
+     * Validades if a Finite Automaton have at least one final state.
      * 
      * @param fa The Finite Automaton
      * @throws IllegalArgumentException If the Finite Automata don't have at
-     * least one accepting state.
+     * least one final state.
      */
-    public static void validateAcceptingStates( FA fa ) throws IllegalArgumentException {
+    public static void validateFinalStates( FA fa ) throws IllegalArgumentException {
         
-        if ( fa.getAcceptingStates().isEmpty() ) {
+        if ( fa.getFinalStates().isEmpty() ) {
             throw new IllegalArgumentException( 
-                    "The Finite Automaton must have at least one accepting state!" );
+                    "The Finite Automaton must have at least one final state!" );
         }
         
     }
     
     /**
-     * Validades if both Finite Automata have at least one accepting state.
+     * Validades if both Finite Automata have at least one final state.
      * 
      * @param fa1 One Finite Automaton
      * @param fa2 Another Finite Automaton
      * @throws IllegalArgumentException If at least one of the Finite Automata
-     * don't have at least one accepting state.
+     * don't have at least one final state.
      */
-    public static void validateAcceptingStates( FA fa1, FA fa2 ) throws IllegalArgumentException {
+    public static void validateFinalStates( FA fa1, FA fa2 ) throws IllegalArgumentException {
         
-        if ( fa1.getAcceptingStates().isEmpty() ) {
+        if ( fa1.getFinalStates().isEmpty() ) {
             throw new IllegalArgumentException( 
-                    "The first Finite Automata must have at least one accepting state!" );
+                    "The first Finite Automata must have at least one final state!" );
         }
         
-        if ( fa2.getAcceptingStates().isEmpty() ) {
+        if ( fa2.getFinalStates().isEmpty() ) {
             throw new IllegalArgumentException( 
-                    "The second Finite Automata must have at least one accepting state!" );
+                    "The second Finite Automata must have at least one final state!" );
         }
         
     }

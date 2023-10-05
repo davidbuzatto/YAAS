@@ -19,7 +19,7 @@ package br.com.davidbuzatto.yaas.model.fa.algorithms;
 import br.com.davidbuzatto.yaas.model.fa.FA;
 import br.com.davidbuzatto.yaas.model.fa.FAState;
 import br.com.davidbuzatto.yaas.model.fa.FATransition;
-import static br.com.davidbuzatto.yaas.model.fa.algorithms.FAAlgorithmsConstants.DEBUG;
+import br.com.davidbuzatto.yaas.util.Utils;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -31,6 +31,9 @@ import java.util.Set;
  * @author Prof. Dr. David Buzatto
  */
 public class FARemoveInaccessibleAndUselessStates {
+    
+    private static final boolean DEBUG = Boolean.parseBoolean( 
+            Utils.getMavenModel().getProperties().getProperty( "debugAlgorithms" ) );
     
     private final FA generatedFA;
     
@@ -68,12 +71,12 @@ public class FARemoveInaccessibleAndUselessStates {
                 }
             }
             
-            Set<FAState> acceptingStates = new HashSet<>( fa.getAcceptingStates() );
+            Set<FAState> finalStates = new HashSet<>( fa.getFinalStates() );
             Set<FAState> visitedU = new HashSet<>();
             for ( FAState s : fa.getStates() ) {
                 visitedU.clear();
                 dfs( s, fa.getTransitions(), visitedU );
-                if ( !containsAtLeastOne( acceptingStates, visitedU ) ) {
+                if ( !containsAtLeastOne( finalStates, visitedU ) ) {
                     uselessStates.add( s );
                 }
             }

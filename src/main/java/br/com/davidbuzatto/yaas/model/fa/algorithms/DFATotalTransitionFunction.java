@@ -73,7 +73,7 @@ public class DFATotalTransitionFunction {
         
         FACommon.validateDFA( dfa );
         FACommon.validateInitialState( dfa );
-        FACommon.validateAcceptingStates( dfa );
+        FACommon.validateFinalStates( dfa );
         
         Map<FAState, Set<Character>> allMissing = new HashMap<>();
         Map<FAState, Map<Character, List<FAState>>> delta = dfa.getDelta();

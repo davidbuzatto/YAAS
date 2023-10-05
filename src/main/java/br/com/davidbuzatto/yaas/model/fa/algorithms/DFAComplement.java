@@ -51,7 +51,7 @@ public class DFAComplement {
             
             FACommon.validateDFA( dfa );
             FACommon.validateInitialState( dfa );
-            FACommon.validateAcceptingStates( dfa );
+            FACommon.validateFinalStates( dfa );
             
             FA complement = (FA) dfa.clone();
             
@@ -63,7 +63,7 @@ public class DFAComplement {
                     DrawingConstants.TRANSITION_STROKE_COLOR );
 
             for ( FAState s : complement.getStates() ) {
-                s.setAccepting( !s.isAccepting() );
+                s.setFinal( !s.isFinal() );
             }
             
             return complement;

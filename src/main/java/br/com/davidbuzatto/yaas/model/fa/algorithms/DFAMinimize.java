@@ -21,7 +21,7 @@ import static br.com.davidbuzatto.yaas.model.fa.algorithms.FACommon.haveSameDelt
 import static br.com.davidbuzatto.yaas.model.fa.algorithms.FACommon.isDistinguishable;
 import br.com.davidbuzatto.yaas.model.fa.FAState;
 import br.com.davidbuzatto.yaas.model.fa.FATransition;
-import static br.com.davidbuzatto.yaas.model.fa.algorithms.FAAlgorithmsConstants.DEBUG;
+import br.com.davidbuzatto.yaas.util.Utils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -38,6 +38,9 @@ import java.util.TreeSet;
  * @author Prof. Dr. David Buzatto
  */
 public class DFAMinimize {
+    
+    private static final boolean DEBUG = Boolean.parseBoolean( 
+            Utils.getMavenModel().getProperties().getProperty( "debugAlgorithms" ) );
     
     private final FA generatedDFA;
     
@@ -63,7 +66,7 @@ public class DFAMinimize {
         
         FACommon.validateDFA( dfa );
         FACommon.validateInitialState( dfa );
-        FACommon.validateAcceptingStates( dfa );
+        FACommon.validateFinalStates( dfa );
         
         // pre-processing step
         // removing inaccessible states
@@ -99,7 +102,7 @@ public class DFAMinimize {
         /* Myhill-Nerode Theorem:
          *
          * 1) Using all states, create all possible pairs;
-         * 2) Remove all pairs such one element is an accepting state and the
+         * 2) Remove all pairs such one element is a final state and the
          *    other is not;
          * 3) For each remaining pair, verify the transition function
          *    incrementing the input length. If the transition is not equal,
@@ -124,19 +127,19 @@ public class DFAMinimize {
             }
         }
         
-        // 2) Remove all pairs such one element is an accepting state and the
+        // 2) Remove all pairs such one element is a final state and the
         //    other is not;
         if ( DEBUG ) {
             System.out.println( """
 
                     Step 02 - first equivalente class, removing
-                    all pairs such one element is an accepting
+                    all pairs such one element is a final
                     state and the other is not.""" );
         }
         Set<FAStatePairHelper> toRemove = new HashSet<>();
         for ( FAStatePairHelper sp : pairs ) {
-            if ( ( sp.s1.isAccepting() && !sp.s2.isAccepting() ) || 
-                 ( !sp.s1.isAccepting() && sp.s2.isAccepting() ) ) {
+            if ( ( sp.s1.isFinal() && !sp.s2.isFinal() ) || 
+                 ( !sp.s1.isFinal() && sp.s2.isFinal() ) ) {
                 toRemove.add( sp );
                 if ( DEBUG ) {
                     System.out.println( "    Removing: " + sp );
@@ -285,14 +288,14 @@ public class DFAMinimize {
         for ( FAState s : states ) {
 
             if ( s.isInitial() ) {
-                dfaIS.setAccepting( s.isAccepting() );
+                dfaIS.setFinal( s.isFinal() );
                 dfaIS.setNumber( s.getNumber() );
                 dfaIS.setCustomLabel( s.getCustomLabel() );
                 minDfa.addState( dfaIS );
                 originalToNew.put( s, dfaIS );
             } else {
                 FAState newState = new FAState();
-                newState.setAccepting( s.isAccepting() );
+                newState.setFinal( s.isFinal() );
                 newState.setNumber( s.getNumber() );
                 newState.setCustomLabel( s.getCustomLabel() );
                 minDfa.addState( newState );
@@ -304,11 +307,11 @@ public class DFAMinimize {
         for ( Set<FAState> s : newStateSets ) {
 
             String label = "";
-            boolean isAccepting = false;
+            boolean isFinal = false;
 
             for ( FAState ss : s ) {
-                if ( ss.isAccepting() ) {
-                    isAccepting = true;
+                if ( ss.isFinal() ) {
+                    isFinal = true;
                 }
                 if ( ss.getCustomLabel() != null ) {
                     label += ss.getCustomLabel();
@@ -318,13 +321,13 @@ public class DFAMinimize {
             }
 
             if ( s.contains( iS ) ) {
-                dfaIS.setAccepting( isAccepting );
+                dfaIS.setFinal( isFinal );
                 dfaIS.setCustomLabel( label );
                 newToSet.put( dfaIS, s );
                 minDfa.addState( dfaIS );
             } else {
                 FAState newState = new FAState( 0 );
-                newState.setAccepting( isAccepting );
+                newState.setFinal( isFinal );
                 newState.setCustomLabel( label );
                 newToSet.put( newState, s );
                 minDfa.addState( newState );

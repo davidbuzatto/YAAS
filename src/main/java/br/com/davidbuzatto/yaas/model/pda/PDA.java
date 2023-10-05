@@ -391,7 +391,7 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
         def += getStatesString() + "\n";
         def += getAlphabetString() + "\n";
         def += getStackAlphabetString() + "\n";
-        def += getAcceptingStatesString();
+        def += getFinalStatesString();
         
         return def;
         
@@ -488,13 +488,13 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
         
     }
     
-    private String getAcceptingStatesString() {
+    private String getFinalStatesString() {
         
         String str = "";
         
         List<String> ss = new ArrayList<>();
         for ( PDAState s : states ) {
-            if ( s.accepting ) {
+            if ( s._final ) {
                 ss.add( s.toString() );
             }
         }
@@ -516,12 +516,12 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
         
     }
     
-    public List<PDAState> getAcceptingStates() {
+    public List<PDAState> getFinalStates() {
         
         List<PDAState> acStates = new ArrayList<>();
         
         for ( PDAState s : states ) {
-            if ( s.isAccepting() ) {
+            if ( s.isFinal() ) {
                 acStates.add( s );
             }
         }

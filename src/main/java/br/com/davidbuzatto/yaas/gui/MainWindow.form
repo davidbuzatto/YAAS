@@ -218,13 +218,13 @@
                 <Property name="text" type="java.lang.String" value="Pushdown Automata"/>
               </Properties>
               <SubComponents>
-                <Menu class="javax.swing.JMenu" name="menuPDAAcceptingState">
+                <Menu class="javax.swing.JMenu" name="menuPDAFinalState">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/pda.png"/>
                     </Property>
                     <Property name="mnemonic" type="int" value="65"/>
-                    <Property name="text" type="java.lang.String" value="Accept by Accepting State"/>
+                    <Property name="text" type="java.lang.String" value="Accept by Final State"/>
                   </Properties>
                   <SubComponents>
                     <MenuItem class="javax.swing.JMenuItem" name="miPDAEvenPalindromeAS">
