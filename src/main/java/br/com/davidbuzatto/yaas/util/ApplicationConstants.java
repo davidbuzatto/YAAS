@@ -28,4 +28,7 @@ public interface ApplicationConstants {
     public static final boolean IN_DEVELOPMENT = Boolean.parseBoolean( 
             Utils.getMavenModel().getProperties().getProperty( "development" ) );
     
+    public static final String LIGHT_THEME = "LIGHT";
+    public static final String DARK_THEME = "DARK";
+    
 }

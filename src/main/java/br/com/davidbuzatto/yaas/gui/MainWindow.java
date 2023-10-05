@@ -28,8 +28,12 @@ import br.com.davidbuzatto.yaas.util.ApplicationPreferences;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
 import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import java.beans.PropertyVetoException;
+import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 /**
  * Main GUI class.
@@ -74,6 +78,7 @@ public class MainWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        bgTheme = new javax.swing.ButtonGroup();
         desktopPane = new javax.swing.JDesktopPane();
         toolBar = new javax.swing.JToolBar();
         btnFA = new javax.swing.JButton();
@@ -116,6 +121,9 @@ public class MainWindow extends javax.swing.JFrame {
         miMiniT07 = new javax.swing.JMenuItem();
         miMiniT08 = new javax.swing.JMenuItem();
         miMiniT09 = new javax.swing.JMenuItem();
+        menuThemes = new javax.swing.JMenu();
+        riLightTheme = new javax.swing.JRadioButtonMenuItem();
+        riDarkTheme = new javax.swing.JRadioButtonMenuItem();
         menuHelp = new javax.swing.JMenu();
         menuItemAbout = new javax.swing.JMenuItem();
 
@@ -462,6 +470,31 @@ public class MainWindow extends javax.swing.JFrame {
 
         menuBar.add(menuMinimizationTest);
 
+        menuThemes.setMnemonic('T');
+        menuThemes.setText("Themes");
+
+        bgTheme.add(riLightTheme);
+        riLightTheme.setMnemonic('L');
+        riLightTheme.setText("Light");
+        riLightTheme.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                riLightThemeActionPerformed(evt);
+            }
+        });
+        menuThemes.add(riLightTheme);
+
+        bgTheme.add(riDarkTheme);
+        riDarkTheme.setMnemonic('D');
+        riDarkTheme.setText("Dark");
+        riDarkTheme.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                riDarkThemeActionPerformed(evt);
+            }
+        });
+        menuThemes.add(riDarkTheme);
+
+        menuBar.add(menuThemes);
+
         menuHelp.setMnemonic('H');
         menuHelp.setText("Help");
 
@@ -639,6 +672,14 @@ public class MainWindow extends javax.swing.JFrame {
                 false, false );
     }//GEN-LAST:event_miDPDAEvenPalindromeCMActionPerformed
 
+    private void riLightThemeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_riLightThemeActionPerformed
+        changeThemeToLight();
+    }//GEN-LAST:event_riLightThemeActionPerformed
+
+    private void riDarkThemeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_riDarkThemeActionPerformed
+        changeThemeToDark();
+    }//GEN-LAST:event_riDarkThemeActionPerformed
+
     public void createFAInternalFrame( FA fa, boolean maximized, boolean currentFileSaved ) {
         
         if ( fa == null ) {
@@ -695,26 +736,66 @@ public class MainWindow extends javax.swing.JFrame {
         
     }
     
-    /**
-     * @param args the command line arguments
-     */
+    private void updateJifsUI() {
+        
+        SwingUtilities.updateComponentTreeUI( this );
+        
+        for ( JInternalFrame jif : desktopPane.getAllFrames() ) {
+            if ( jif instanceof FAInternalFrame faJif ) {
+                faJif.updateUIFlatLaf();
+                faJif.updateUI();
+            }
+            if ( jif instanceof PDAInternalFrame pdaJif ) {
+                pdaJif.updateUIFlatLaf();
+                pdaJif.updateUI();
+            }
+        }
+        
+    }
+    
+    public void changeThemeToLight() {
+        FlatLightLaf.setup();
+        updateJifsUI();
+        riLightTheme.setSelected( true );
+        ApplicationPreferences.setPref( ApplicationPreferences.PREF_THEME, 
+                ApplicationConstants.LIGHT_THEME );
+    }
+    
+    public void changeThemeToDark() {
+        FlatDarculaLaf.setup();
+        updateJifsUI();
+        riDarkTheme.setSelected( true );
+        ApplicationPreferences.setPref( ApplicationPreferences.PREF_THEME, 
+                ApplicationConstants.DARK_THEME );
+    }
+    
     public static void main( String args[] ) {
         
         java.awt.EventQueue.invokeLater( new Runnable() {
             
             public void run() {
                 
-                FlatDarculaLaf.setup();
-                Utils.updateSplashScreen( 6000 );
+                MainWindow mainWindow = new MainWindow();
                 
-                new MainWindow().setVisible( true );
+                switch ( ApplicationPreferences.getPref( ApplicationPreferences.PREF_THEME ) ) {
+                    case ApplicationConstants.LIGHT_THEME:
+                        mainWindow.changeThemeToLight();
+                        break;
+                    case ApplicationConstants.DARK_THEME:
+                        mainWindow.changeThemeToDark();
+                        break;
+                }
+                
+                Utils.updateSplashScreen( 6000 );
+                mainWindow.setVisible( true );
                 
             }
             
         });
     }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup bgTheme;
     private javax.swing.JButton btnFA;
     private javax.swing.JButton btnPDA;
     private javax.swing.JButton btnTM;
@@ -735,6 +816,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JMenu menuPDAEmptyStack;
     private javax.swing.JMenu menuPDAFinalState;
     private javax.swing.JMenu menuTM;
+    private javax.swing.JMenu menuThemes;
     private javax.swing.JMenuItem miDFA0Even1Odd;
     private javax.swing.JMenuItem miDFAEndsWith00;
     private javax.swing.JMenuItem miDFAEndsWith01;
@@ -758,6 +840,8 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem miNFAEndsWith11;
     private javax.swing.JMenuItem miPDAEvenPalindromeAS;
     private javax.swing.JMenuItem miPDAEvenPalindromeES;
+    private javax.swing.JRadioButtonMenuItem riDarkTheme;
+    private javax.swing.JRadioButtonMenuItem riLightTheme;
     private javax.swing.JToolBar toolBar;
     // End of variables declaration//GEN-END:variables
 }

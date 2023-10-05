@@ -30,14 +30,17 @@ public class ApplicationPreferences {
     private static final Preferences PREFS = Preferences.userRoot().node( PREFERENCES_PATH );
     
     public static final String PREF_DEFAULT_FOLDER_PATH = "PREF_DEFAULT_FOLDER_PATH";
+    public static final String PREF_THEME = "PREF_THEME";
     
     public static void preparePreferences( boolean reset ) {
         
         if ( reset ) {
             PREFS.remove( PREF_DEFAULT_FOLDER_PATH );
+            PREFS.remove( PREF_THEME );
         }
         
         PREFS.put( PREF_DEFAULT_FOLDER_PATH, PREFS.get( PREF_DEFAULT_FOLDER_PATH, new File( "" ).getAbsolutePath() ) );
+        PREFS.put( PREF_THEME, PREFS.get( PREF_THEME, ApplicationConstants.DARK_THEME ) );
         
     }
     

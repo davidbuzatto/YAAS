@@ -78,6 +78,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -2699,6 +2700,13 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
         repaintDrawPanel();
         drawPanel.setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR ) );
+    }
+    
+    public void updateUIFlatLaf() {
+        SwingUtilities.updateComponentTreeUI( this );
+        SwingUtilities.updateComponentTreeUI( popupMenuReorganizeStates );
+        SwingUtilities.updateComponentTreeUI( popupMenuStateProperties );
+        SwingUtilities.updateComponentTreeUI( popupMenuTransitionProperties );
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
