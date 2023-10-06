@@ -82,7 +82,7 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
         return accepts( str, null );
     }
     
-    // TODO test
+    // TODO test and return ok
     public boolean accepts( String str, List<PDASimulationStep> simulationSteps ) {
         
         if ( canExecute() ) {

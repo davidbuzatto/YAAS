@@ -105,11 +105,18 @@ public class MainWindow extends javax.swing.JFrame {
         miENFADecimalNumber = new javax.swing.JMenuItem();
         menuPDA = new javax.swing.JMenu();
         menuPDAFinalState = new javax.swing.JMenu();
-        miPDAEvenPalindromeAS = new javax.swing.JMenuItem();
+        miPDAEvenPalindromeFinalState = new javax.swing.JMenuItem();
+        miPDA0n1nFinalState = new javax.swing.JMenuItem();
+        miPDA01SameFinalState = new javax.swing.JMenuItem();
+        miPDAPDAAiBjCkFinalState = new javax.swing.JMenuItem();
         menuPDAEmptyStack = new javax.swing.JMenu();
-        miPDAEvenPalindromeES = new javax.swing.JMenuItem();
+        miPDAEvenPalindromeEmptyStack = new javax.swing.JMenuItem();
+        miPDA0n1nEmptyStack = new javax.swing.JMenuItem();
+        miPDA01SameEmptyStack = new javax.swing.JMenuItem();
         menuDPDA = new javax.swing.JMenu();
-        miDPDAEvenPalindromeCM = new javax.swing.JMenuItem();
+        miDPDAEvenPalindromeCenterMark = new javax.swing.JMenuItem();
+        miDPDA0n1n = new javax.swing.JMenuItem();
+        miDPDA01Same = new javax.swing.JMenuItem();
         menuTM = new javax.swing.JMenu();
         menuMinimizationTest = new javax.swing.JMenu();
         miMiniT01 = new javax.swing.JMenuItem();
@@ -263,7 +270,7 @@ public class MainWindow extends javax.swing.JFrame {
         menuDFA.add(miDFAEndsWith11);
 
         miDFA0Even1Odd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dfa.png"))); // NOI18N
-        miDFA0Even1Odd.setText(FAExamples.REG_LANG_0_EVEN_1_ODD);
+        miDFA0Even1Odd.setText(FAExamples.REGULAR_LANGUAGE_0_EVEN_1_ODD);
         miDFA0Even1Odd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 miDFA0Even1OddActionPerformed(evt);
@@ -342,14 +349,41 @@ public class MainWindow extends javax.swing.JFrame {
         menuPDAFinalState.setMnemonic('A');
         menuPDAFinalState.setText("Accept by Final State");
 
-        miPDAEvenPalindromeAS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pda.png"))); // NOI18N
-        miPDAEvenPalindromeAS.setText("Even Palindrome");
-        miPDAEvenPalindromeAS.addActionListener(new java.awt.event.ActionListener() {
+        miPDAEvenPalindromeFinalState.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pda.png"))); // NOI18N
+        miPDAEvenPalindromeFinalState.setText("Even Palindrome");
+        miPDAEvenPalindromeFinalState.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miPDAEvenPalindromeASActionPerformed(evt);
+                miPDAEvenPalindromeFinalStateActionPerformed(evt);
             }
         });
-        menuPDAFinalState.add(miPDAEvenPalindromeAS);
+        menuPDAFinalState.add(miPDAEvenPalindromeFinalState);
+
+        miPDA0n1nFinalState.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pda.png"))); // NOI18N
+        miPDA0n1nFinalState.setText(PDAExamples.CONTEXT_FREE_LANGUAGE_0N_1N);
+        miPDA0n1nFinalState.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miPDA0n1nFinalStateActionPerformed(evt);
+            }
+        });
+        menuPDAFinalState.add(miPDA0n1nFinalState);
+
+        miPDA01SameFinalState.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pda.png"))); // NOI18N
+        miPDA01SameFinalState.setText("L = { w | w contains the same amount of 0's and 1's }");
+        miPDA01SameFinalState.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miPDA01SameFinalStateActionPerformed(evt);
+            }
+        });
+        menuPDAFinalState.add(miPDA01SameFinalState);
+
+        miPDAPDAAiBjCkFinalState.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pda.png"))); // NOI18N
+        miPDAPDAAiBjCkFinalState.setText(PDAExamples.CONTEXT_FREE_LANGUAGE_AI_BJ_CK);
+        miPDAPDAAiBjCkFinalState.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miPDAPDAAiBjCkFinalStateActionPerformed(evt);
+            }
+        });
+        menuPDAFinalState.add(miPDAPDAAiBjCkFinalState);
 
         menuPDA.add(menuPDAFinalState);
 
@@ -357,14 +391,32 @@ public class MainWindow extends javax.swing.JFrame {
         menuPDAEmptyStack.setMnemonic('E');
         menuPDAEmptyStack.setText("Accept by Empty Stack");
 
-        miPDAEvenPalindromeES.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pda.png"))); // NOI18N
-        miPDAEvenPalindromeES.setText("Even Palindrome");
-        miPDAEvenPalindromeES.addActionListener(new java.awt.event.ActionListener() {
+        miPDAEvenPalindromeEmptyStack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pda.png"))); // NOI18N
+        miPDAEvenPalindromeEmptyStack.setText("Even Palindrome");
+        miPDAEvenPalindromeEmptyStack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miPDAEvenPalindromeESActionPerformed(evt);
+                miPDAEvenPalindromeEmptyStackActionPerformed(evt);
             }
         });
-        menuPDAEmptyStack.add(miPDAEvenPalindromeES);
+        menuPDAEmptyStack.add(miPDAEvenPalindromeEmptyStack);
+
+        miPDA0n1nEmptyStack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pda.png"))); // NOI18N
+        miPDA0n1nEmptyStack.setText(PDAExamples.CONTEXT_FREE_LANGUAGE_0N_1N);
+        miPDA0n1nEmptyStack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miPDA0n1nEmptyStackActionPerformed(evt);
+            }
+        });
+        menuPDAEmptyStack.add(miPDA0n1nEmptyStack);
+
+        miPDA01SameEmptyStack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pda.png"))); // NOI18N
+        miPDA01SameEmptyStack.setText("L = { w | w contains the same amount of 0's and 1's }");
+        miPDA01SameEmptyStack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miPDA01SameEmptyStackActionPerformed(evt);
+            }
+        });
+        menuPDAEmptyStack.add(miPDA01SameEmptyStack);
 
         menuPDA.add(menuPDAEmptyStack);
 
@@ -373,14 +425,32 @@ public class MainWindow extends javax.swing.JFrame {
         menuDPDA.setText("DPDA");
         menuDPDA.setToolTipText("");
 
-        miDPDAEvenPalindromeCM.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pda.png"))); // NOI18N
-        miDPDAEvenPalindromeCM.setText("Even Palindrome with Center Mark");
-        miDPDAEvenPalindromeCM.addActionListener(new java.awt.event.ActionListener() {
+        miDPDAEvenPalindromeCenterMark.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pda.png"))); // NOI18N
+        miDPDAEvenPalindromeCenterMark.setText("Even Palindrome with Center Mark");
+        miDPDAEvenPalindromeCenterMark.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miDPDAEvenPalindromeCMActionPerformed(evt);
+                miDPDAEvenPalindromeCenterMarkActionPerformed(evt);
             }
         });
-        menuDPDA.add(miDPDAEvenPalindromeCM);
+        menuDPDA.add(miDPDAEvenPalindromeCenterMark);
+
+        miDPDA0n1n.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pda.png"))); // NOI18N
+        miDPDA0n1n.setText(PDAExamples.CONTEXT_FREE_LANGUAGE_0N_1N);
+        miDPDA0n1n.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miDPDA0n1nActionPerformed(evt);
+            }
+        });
+        menuDPDA.add(miDPDA0n1n);
+
+        miDPDA01Same.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pda.png"))); // NOI18N
+        miDPDA01Same.setText("L = { w | w contains the same amount of 0's and 1's }");
+        miDPDA01Same.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miDPDA01SameActionPerformed(evt);
+            }
+        });
+        menuDPDA.add(miDPDA01Same);
 
         menuPDA.add(menuDPDA);
 
@@ -657,20 +727,20 @@ public class MainWindow extends javax.swing.JFrame {
                 false, false );
     }//GEN-LAST:event_miMiniT09ActionPerformed
 
-    private void miPDAEvenPalindromeASActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miPDAEvenPalindromeASActionPerformed
+    private void miPDAEvenPalindromeFinalStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miPDAEvenPalindromeFinalStateActionPerformed
         createPDAInternalFrame( PDAExamples.createPDAEvenPalindromeFinalState(), 
                 false, false );
-    }//GEN-LAST:event_miPDAEvenPalindromeASActionPerformed
+    }//GEN-LAST:event_miPDAEvenPalindromeFinalStateActionPerformed
 
-    private void miPDAEvenPalindromeESActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miPDAEvenPalindromeESActionPerformed
+    private void miPDAEvenPalindromeEmptyStackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miPDAEvenPalindromeEmptyStackActionPerformed
         createPDAInternalFrame( PDAExamples.createPDAEvenPalindromeEmptyStack(), 
                 false, false );
-    }//GEN-LAST:event_miPDAEvenPalindromeESActionPerformed
+    }//GEN-LAST:event_miPDAEvenPalindromeEmptyStackActionPerformed
 
-    private void miDPDAEvenPalindromeCMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDPDAEvenPalindromeCMActionPerformed
+    private void miDPDAEvenPalindromeCenterMarkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDPDAEvenPalindromeCenterMarkActionPerformed
         createPDAInternalFrame( PDAExamples.createDPDAEvenPalindromeCenterMark(), 
                 false, false );
-    }//GEN-LAST:event_miDPDAEvenPalindromeCMActionPerformed
+    }//GEN-LAST:event_miDPDAEvenPalindromeCenterMarkActionPerformed
 
     private void riLightThemeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_riLightThemeActionPerformed
         changeThemeToLight();
@@ -679,6 +749,41 @@ public class MainWindow extends javax.swing.JFrame {
     private void riDarkThemeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_riDarkThemeActionPerformed
         changeThemeToDark();
     }//GEN-LAST:event_riDarkThemeActionPerformed
+
+    private void miPDA0n1nFinalStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miPDA0n1nFinalStateActionPerformed
+        createPDAInternalFrame( PDAExamples.createPDA0n1nFinalState(), 
+                false, false );
+    }//GEN-LAST:event_miPDA0n1nFinalStateActionPerformed
+
+    private void miPDA01SameFinalStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miPDA01SameFinalStateActionPerformed
+        createPDAInternalFrame( PDAExamples.createPDA01SameFinalState(), 
+                false, false );
+    }//GEN-LAST:event_miPDA01SameFinalStateActionPerformed
+
+    private void miPDAPDAAiBjCkFinalStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miPDAPDAAiBjCkFinalStateActionPerformed
+        createPDAInternalFrame( PDAExamples.createPDAAiBjCkFinalState(), 
+                false, false );
+    }//GEN-LAST:event_miPDAPDAAiBjCkFinalStateActionPerformed
+
+    private void miPDA0n1nEmptyStackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miPDA0n1nEmptyStackActionPerformed
+        createPDAInternalFrame( PDAExamples.createPDA0n1nEmptyStack(), 
+                false, false );
+    }//GEN-LAST:event_miPDA0n1nEmptyStackActionPerformed
+
+    private void miPDA01SameEmptyStackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miPDA01SameEmptyStackActionPerformed
+        createPDAInternalFrame( PDAExamples.createPDA01SameEmptyStack(), 
+                false, false );
+    }//GEN-LAST:event_miPDA01SameEmptyStackActionPerformed
+
+    private void miDPDA0n1nActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDPDA0n1nActionPerformed
+        createPDAInternalFrame( PDAExamples.createDPDA0n1n(), 
+                false, false );
+    }//GEN-LAST:event_miDPDA0n1nActionPerformed
+
+    private void miDPDA01SameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDPDA01SameActionPerformed
+        createPDAInternalFrame( PDAExamples.createDPDA01Same(), 
+                false, false );
+    }//GEN-LAST:event_miDPDA01SameActionPerformed
 
     public void createFAInternalFrame( FA fa, boolean maximized, boolean currentFileSaved ) {
         
@@ -823,7 +928,9 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem miDFAEndsWith10;
     private javax.swing.JMenuItem miDFAEndsWith11;
     private javax.swing.JMenuItem miDFASubstring01;
-    private javax.swing.JMenuItem miDPDAEvenPalindromeCM;
+    private javax.swing.JMenuItem miDPDA01Same;
+    private javax.swing.JMenuItem miDPDA0n1n;
+    private javax.swing.JMenuItem miDPDAEvenPalindromeCenterMark;
     private javax.swing.JMenuItem miENFADecimalNumber;
     private javax.swing.JMenuItem miMiniT01;
     private javax.swing.JMenuItem miMiniT02;
@@ -838,8 +945,13 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem miNFAEndsWith01;
     private javax.swing.JMenuItem miNFAEndsWith10;
     private javax.swing.JMenuItem miNFAEndsWith11;
-    private javax.swing.JMenuItem miPDAEvenPalindromeAS;
-    private javax.swing.JMenuItem miPDAEvenPalindromeES;
+    private javax.swing.JMenuItem miPDA01SameEmptyStack;
+    private javax.swing.JMenuItem miPDA01SameFinalState;
+    private javax.swing.JMenuItem miPDA0n1nEmptyStack;
+    private javax.swing.JMenuItem miPDA0n1nFinalState;
+    private javax.swing.JMenuItem miPDAEvenPalindromeEmptyStack;
+    private javax.swing.JMenuItem miPDAEvenPalindromeFinalState;
+    private javax.swing.JMenuItem miPDAPDAAiBjCkFinalState;
     private javax.swing.JRadioButtonMenuItem riDarkTheme;
     private javax.swing.JRadioButtonMenuItem riLightTheme;
     private javax.swing.JToolBar toolBar;

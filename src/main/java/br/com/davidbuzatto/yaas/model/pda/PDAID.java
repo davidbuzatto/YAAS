@@ -182,8 +182,8 @@ public class PDAID extends AbstractGeometricForm implements Comparable<PDAID> {
             sStr += c;
         }
         return String.format( "(%s, %s, %s)", state, 
-                string.isEmpty() ? CharacterConstants.EMPTY_STRING.toString() : string , 
-                sStr );
+                string.isEmpty() ? CharacterConstants.EMPTY_STRING.toString() : string, 
+                sStr.isEmpty() ? CharacterConstants.EMPTY_STRING.toString() : sStr );
     }
     
 }

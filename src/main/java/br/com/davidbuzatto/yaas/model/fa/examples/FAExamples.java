@@ -28,7 +28,7 @@ import br.com.davidbuzatto.yaas.util.CharacterConstants;
  */
 public class FAExamples {
     
-    public static final String REG_LANG_0_EVEN_1_ODD = 
+    public static final String REGULAR_LANGUAGE_0_EVEN_1_ODD = 
             String.format( "L = { 0%c %c 1%c | i > 0 and even, and j > 0 and odd }", 
             CharacterConstants.SUPER_I, 
             CharacterConstants.OR, 

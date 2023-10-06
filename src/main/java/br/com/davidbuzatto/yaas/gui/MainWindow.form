@@ -117,7 +117,7 @@
                           <Image iconType="3" name="/dfa.png"/>
                         </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="FAExamples.REG_LANG_0_EVEN_1_ODD" type="code"/>
+                          <Connection code="FAExamples.REGULAR_LANGUAGE_0_EVEN_1_ODD" type="code"/>
                         </Property>
                       </Properties>
                       <Events>
@@ -229,7 +229,7 @@
                     <Property name="text" type="java.lang.String" value="Accept by Final State"/>
                   </Properties>
                   <SubComponents>
-                    <MenuItem class="javax.swing.JMenuItem" name="miPDAEvenPalindromeAS">
+                    <MenuItem class="javax.swing.JMenuItem" name="miPDAEvenPalindromeFinalState">
                       <Properties>
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                           <Image iconType="3" name="/pda.png"/>
@@ -237,7 +237,44 @@
                         <Property name="text" type="java.lang.String" value="Even Palindrome"/>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miPDAEvenPalindromeASActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miPDAEvenPalindromeFinalStateActionPerformed"/>
+                      </Events>
+                    </MenuItem>
+                    <MenuItem class="javax.swing.JMenuItem" name="miPDA0n1nFinalState">
+                      <Properties>
+                        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                          <Image iconType="3" name="/pda.png"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                          <Connection code="PDAExamples.CONTEXT_FREE_LANGUAGE_0N_1N" type="code"/>
+                        </Property>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miPDA0n1nFinalStateActionPerformed"/>
+                      </Events>
+                    </MenuItem>
+                    <MenuItem class="javax.swing.JMenuItem" name="miPDA01SameFinalState">
+                      <Properties>
+                        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                          <Image iconType="3" name="/pda.png"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" value="L = { w | w contains the same amount of 0&apos;s and 1&apos;s }"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miPDA01SameFinalStateActionPerformed"/>
+                      </Events>
+                    </MenuItem>
+                    <MenuItem class="javax.swing.JMenuItem" name="miPDAPDAAiBjCkFinalState">
+                      <Properties>
+                        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                          <Image iconType="3" name="/pda.png"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                          <Connection code="PDAExamples.CONTEXT_FREE_LANGUAGE_AI_BJ_CK" type="code"/>
+                        </Property>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miPDAPDAAiBjCkFinalStateActionPerformed"/>
                       </Events>
                     </MenuItem>
                   </SubComponents>
@@ -251,7 +288,7 @@
                     <Property name="text" type="java.lang.String" value="Accept by Empty Stack"/>
                   </Properties>
                   <SubComponents>
-                    <MenuItem class="javax.swing.JMenuItem" name="miPDAEvenPalindromeES">
+                    <MenuItem class="javax.swing.JMenuItem" name="miPDAEvenPalindromeEmptyStack">
                       <Properties>
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                           <Image iconType="3" name="/pda.png"/>
@@ -259,7 +296,31 @@
                         <Property name="text" type="java.lang.String" value="Even Palindrome"/>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miPDAEvenPalindromeESActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miPDAEvenPalindromeEmptyStackActionPerformed"/>
+                      </Events>
+                    </MenuItem>
+                    <MenuItem class="javax.swing.JMenuItem" name="miPDA0n1nEmptyStack">
+                      <Properties>
+                        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                          <Image iconType="3" name="/pda.png"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                          <Connection code="PDAExamples.CONTEXT_FREE_LANGUAGE_0N_1N" type="code"/>
+                        </Property>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miPDA0n1nEmptyStackActionPerformed"/>
+                      </Events>
+                    </MenuItem>
+                    <MenuItem class="javax.swing.JMenuItem" name="miPDA01SameEmptyStack">
+                      <Properties>
+                        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                          <Image iconType="3" name="/pda.png"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" value="L = { w | w contains the same amount of 0&apos;s and 1&apos;s }"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miPDA01SameEmptyStackActionPerformed"/>
                       </Events>
                     </MenuItem>
                   </SubComponents>
@@ -274,7 +335,7 @@
                     <Property name="toolTipText" type="java.lang.String" value=""/>
                   </Properties>
                   <SubComponents>
-                    <MenuItem class="javax.swing.JMenuItem" name="miDPDAEvenPalindromeCM">
+                    <MenuItem class="javax.swing.JMenuItem" name="miDPDAEvenPalindromeCenterMark">
                       <Properties>
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                           <Image iconType="3" name="/pda.png"/>
@@ -282,7 +343,31 @@
                         <Property name="text" type="java.lang.String" value="Even Palindrome with Center Mark"/>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miDPDAEvenPalindromeCMActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miDPDAEvenPalindromeCenterMarkActionPerformed"/>
+                      </Events>
+                    </MenuItem>
+                    <MenuItem class="javax.swing.JMenuItem" name="miDPDA0n1n">
+                      <Properties>
+                        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                          <Image iconType="3" name="/pda.png"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                          <Connection code="PDAExamples.CONTEXT_FREE_LANGUAGE_0N_1N" type="code"/>
+                        </Property>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miDPDA0n1nActionPerformed"/>
+                      </Events>
+                    </MenuItem>
+                    <MenuItem class="javax.swing.JMenuItem" name="miDPDA01Same">
+                      <Properties>
+                        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                          <Image iconType="3" name="/pda.png"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" value="L = { w | w contains the same amount of 0&apos;s and 1&apos;s }"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miDPDA01SameActionPerformed"/>
                       </Events>
                     </MenuItem>
                   </SubComponents>

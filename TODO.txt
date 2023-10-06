@@ -6,7 +6,6 @@ Finite Automata
     Here: https://resources.wolframcloud.com/PacletRepository/resources/KlausSutner/Automata/
 
 Pushdown Automata
-    Implement examples to test.
 
 Turing Machines
 

@@ -41,6 +41,8 @@ public interface CharacterConstants {
     public static final Character NOT_ELEMENT_OF = '\u2209';
     public static final Character EXISTS = '\u2203';
     public static final Character NOT_EXISTS = '\u2204';
+    public static final Character LESS_THAN_OR_EQUAL_TO = '\u2264';
+    public static final Character GREATER_THAN_OR_EQUAL_TO = '\u2265';
     
     public static final Character EMPTY_STRING = SMALL_EPSILON;
     
