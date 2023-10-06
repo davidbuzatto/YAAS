@@ -696,6 +696,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
 
         lblTestString.setText("String:");
 
+        txtTestString.setText("1111");
         txtTestString.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtTestStringActionPerformed(evt);
@@ -2167,6 +2168,10 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             } else {
                 setTestToRejectedInGUI( );
             }
+            
+            PDAIDViewerDialog pViewer = new PDAIDViewerDialog( 
+                    mainWindow, this, pda, true );
+            pViewer.setVisible( true );
             
         } else {
             Utils.showErrorMessage( this, "You must set an initial state!" );

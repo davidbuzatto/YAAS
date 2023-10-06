@@ -310,9 +310,14 @@ public class PDAState extends AbstractGeometricForm implements Comparable<PDASta
                 initial, 
                 _final );
         String pos = String.format( "\n    %s.setX1Y1( %d, %d );", label, x1, y1 );
+        String color = String.format( "\n    %s.setStrokeColor( new Color( %d, %d, %d, %d ) );", label, 
+                getStrokeColor().getRed(), 
+                getStrokeColor().getGreen(), 
+                getStrokeColor().getBlue(),
+                getStrokeColor().getAlpha() );
         String add = String.format( "\n    %s.addState( %s );", modelName, label );
         
-        return def + pos + add;
+        return def + pos + color + add;
         
     }
     

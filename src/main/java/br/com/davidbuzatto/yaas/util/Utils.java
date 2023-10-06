@@ -51,9 +51,12 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -980,6 +983,21 @@ public class Utils {
         
         return null;
         
+    }
+    
+    /**
+     * Clones a character stack.
+     * 
+     * @param stack The stack to be cloned.
+     * @return The cloned stack.
+     */
+    public static Deque<Character> cloneCharacterStack( Deque<Character> stack ) {
+        Deque<Character> newStack = new ArrayDeque<>();
+        Iterator<Character> it = stack.descendingIterator();
+        while ( it.hasNext() ) {
+            newStack.push( it.next() );
+        }
+        return newStack;
     }
     
     /**

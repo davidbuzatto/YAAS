@@ -28,7 +28,6 @@ import br.com.davidbuzatto.yaas.util.ApplicationPreferences;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
 import com.formdev.flatlaf.FlatDarculaLaf;
-import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import java.beans.PropertyVetoException;
 import javax.swing.JInternalFrame;
@@ -60,8 +59,8 @@ public class MainWindow extends javax.swing.JFrame {
         
         if ( ApplicationConstants.IN_DEVELOPMENT ) {
             //createFAInternalFrame( FAExamples.createDFAEndsWith00(), true, true );
-            //createPDAInternalFrame( PDAExamples.createPDAEvenPalindromeAS(), true, true );
-            createPDAInternalFrame( PDAExamples.createDPDAEvenPalindromeCM(), true, true );
+            createPDAInternalFrame( PDAExamples.createPDAEvenPalindromeAS(), true, true );
+            //createPDAInternalFrame( PDAExamples.createDPDAEvenPalindromeCM(), true, true );
         } else {
             menuMinimizationTest.setVisible( false );
             setExtendedState( MAXIMIZED_BOTH );

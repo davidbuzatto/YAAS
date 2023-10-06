@@ -19,6 +19,8 @@ package br.com.davidbuzatto.yaas.model.pda;
 import br.com.davidbuzatto.yaas.gui.pda.PDASimulationStep;
 import br.com.davidbuzatto.yaas.model.AbstractGeometricForm;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
+import br.com.davidbuzatto.yaas.util.Utils;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.util.ArrayDeque;
@@ -45,6 +47,9 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
     private PDAState initialState;
     private PDAType type;
     private char stackStartingSymbol;
+    
+    private transient PDAID rootId;
+    private transient List<PDAID> ids;
     
     // cache control
     private boolean alphabetUpToDate;
@@ -77,17 +82,122 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
         
         if ( canExecute() ) {
             
+            Map<PDAState, List<PDATransition>> delta = getDelta();
             Deque<Character> stack = new ArrayDeque<>();
-            stack.push(stackStartingSymbol );
-            PDAID root = new PDAID( initialState, str, stack, null );
+            stack.push( stackStartingSymbol );
             
-            System.out.println( root );
+            rootId = new PDAID( initialState, str, stack, Color.BLACK );
+            
+            level = 0;
+            ids = new ArrayList<>();
+            buildIDTree( rootId, delta );
             
             return false;
             
         }
         
         return false;
+        
+    }
+    
+    // TODO remove
+    private static int level;
+    
+    // TODO continue implementation...
+    private void buildIDTree( PDAID node, Map<PDAState, List<PDATransition>> delta ) {
+        
+        ids.add( node );
+        //System.out.println( " ".repeat( level ) + node );
+        level++;
+        
+        /*if ( node.getString().isEmpty() ) {
+            level--;
+            return;
+        }*/
+        
+        PDAState state = node.getState();
+        String string = node.getString();
+        
+        char symbol = 'd'; // dummy value
+        if ( !string.isEmpty() ) {
+            symbol = string.charAt( 0 );
+        }
+        
+        for ( PDATransition t : delta.get( state ) ) {
+            for ( PDAOperation o : t.getOperations() ) {
+                
+                if ( !string.isEmpty() && o.getSymbol() == symbol ) { // matches symbol
+                    
+                    Deque<Character> stack = Utils.cloneCharacterStack( node.getStack() );
+                    
+                    // matches stack top
+                    // TODO take care of empty stack?
+                    if ( o.getTop() == stack.peek() ) {
+                    
+                        // consumes the input symbol
+                        String newString = string.substring( 1 );
+                        
+                        // updates the stack
+                        processStack( o, stack );
+
+                        PDAID newId = new PDAID( t.getTargetState(), newString, stack , t.getStrokeColor() );
+                        node.addChild( newId );
+                        //System.out.println( newId );
+                        
+                        buildIDTree( newId, delta );
+                        
+                    }
+                    
+                    // empty transition 
+                } else if ( o.getSymbol() == CharacterConstants.EMPTY_STRING ) {
+                    
+                    Deque<Character> stack = Utils.cloneCharacterStack( node.getStack() );
+                    
+                    // matches stack top
+                    // TODO take care of empty stack?
+                    if ( o.getTop() == stack.peek() ) {
+                        
+                        // updates the stack
+                        processStack( o, stack );
+
+                        PDAID newId = new PDAID( t.getTargetState(), string, stack, t.getStrokeColor() );
+                        node.addChild( newId );
+                        //System.out.println( newId );
+                        
+                        buildIDTree( newId, delta );
+                        
+                    }
+                    
+                }
+                
+            }
+            
+        }
+        
+        level--;
+        
+    }
+    
+    private void processStack( PDAOperation op, Deque<Character> stack ) {
+        
+        switch ( op.getType() ) {
+            case DO_NOTHING:
+                break;
+            case POP:
+                stack.pop();
+                break;
+            case PUSH:
+                for ( Character s : op.getSymbolsToPush() ) {
+                    stack.push( s );
+                }
+                break;
+            case REPLACE:
+                stack.pop();
+                for ( Character s : op.getSymbolsToPush() ) {
+                    stack.push( s );
+                }
+                break;
+        }
         
     }
 
@@ -584,6 +694,14 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
 
     public char getStackStartingSymbol() {
         return stackStartingSymbol;
+    }
+
+    public PDAID getRootId() {
+        return rootId;
+    }
+
+    public List<PDAID> getIds() {
+        return ids;
     }
     
     public void deactivateAllStatesInSimulation() {

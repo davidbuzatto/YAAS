@@ -22,6 +22,7 @@ import br.com.davidbuzatto.yaas.model.pda.PDAOperationType;
 import br.com.davidbuzatto.yaas.model.pda.PDAState;
 import br.com.davidbuzatto.yaas.model.pda.PDATransition;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
+import java.awt.Color;
 
 /**
  * A set of methods to construct example FAs for testing purposes.
@@ -76,6 +77,11 @@ public class PDAExamples {
                         pda.getStackStartingSymbol() ) );
         pda.addTransition( q1q2 );
 
+        q0q0.setStrokeColor( new Color( 112, 48, 160 ) );
+        q0q1.setStrokeColor( new Color( 0, 176, 80 ) );
+        q1q1.setStrokeColor( new Color( 255, 153, 51 ) );
+        q1q2.setStrokeColor( new Color( 0, 112, 192 ) );
+        
         return pda;
         
     }

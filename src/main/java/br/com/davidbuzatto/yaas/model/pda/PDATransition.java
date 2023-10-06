@@ -867,9 +867,15 @@ public class PDATransition extends AbstractGeometricForm implements Cloneable {
                     rightCP.getX1(), rightCP.getY1() );
         }
         
+        String color = String.format( "\n    %s.setStrokeColor( new Color( %d, %d, %d, %d ) );", tName, 
+                getStrokeColor().getRed(), 
+                getStrokeColor().getGreen(), 
+                getStrokeColor().getBlue(),
+                getStrokeColor().getAlpha() );
+        
         String add = String.format( "\n    %s.addTransition( %s );", modelName, tName );
         
-        return def + pos + add;
+        return def + pos + color + add;
         
     }
     
