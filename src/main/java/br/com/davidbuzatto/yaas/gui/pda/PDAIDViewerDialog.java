@@ -22,8 +22,6 @@ import java.awt.Frame;
 /**
  * A viewer of a ID tree.
  * 
- * TODO update scroll (panel size recalculation!)
- * 
  * @author Prof. Dr. David Buzatto
  */
 public class PDAIDViewerDialog extends javax.swing.JDialog {
@@ -45,8 +43,9 @@ public class PDAIDViewerDialog extends javax.swing.JDialog {
         setLocationRelativeTo( pdaIFrame );
         
         drawPanel.setPda( pda );
-        drawPanel.organizeAndCollect();
+        drawPanel.arrangeAndProccessIds();
         drawPanel.repaint();
+        drawPanel.revalidate();
         
         customInit();
         
@@ -87,7 +86,7 @@ public class PDAIDViewerDialog extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrollDrawPanel)
+            .addComponent(scrollDrawPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

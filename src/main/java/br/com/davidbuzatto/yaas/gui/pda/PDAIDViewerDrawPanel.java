@@ -22,6 +22,7 @@ import br.com.davidbuzatto.yaas.model.pda.PDA;
 import br.com.davidbuzatto.yaas.model.pda.PDAID;
 import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -39,9 +40,6 @@ import javax.swing.JPanel;
 
 /**
  * Drawing panel for IDs of PDAs view.
- * 
- * TODO highligh acceptance path!
- * TODO recalculate panel size based on contents.
  * 
  * @author Prof. Dr. David Buzatto
  */
@@ -97,6 +95,9 @@ public class PDAIDViewerDrawPanel extends JPanel {
                 RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON );
         
+        int maxX = 0;
+        int maxY = 0;
+        
         g2d.setColor( Color.WHITE );
         g2d.fillRect( 0, 0, getWidth(), getHeight() );
         
@@ -110,12 +111,20 @@ public class PDAIDViewerDrawPanel extends JPanel {
         if ( ids != null ) {
             for ( PDAID id : ids ) {
                 id.draw( g2d );
+                if ( maxX < id.getX1() + id.getTextWidth() / 2 ) {
+                    maxX = id.getX1() + id.getTextWidth() / 2;
+                }
+                if ( maxY < id.getY1() + id.getTextHeight() ) {
+                    maxY = id.getY1() + id.getTextHeight();
+                }
             }
         }
         
         g2d.setStroke( DrawingConstants.DRAW_PANEL_STROKE.getBasicStroke() );
         g2d.setColor( Color.BLACK );
         g2d.drawRect( 0, 0, getWidth(), getHeight() );
+        
+        setPreferredSize( new Dimension( maxX + 50, maxY + 50 ) );
         
         g2d.dispose();
         
@@ -125,7 +134,7 @@ public class PDAIDViewerDrawPanel extends JPanel {
         this.pda = pda;
     }
     
-    public void organizeAndCollect() {
+    public void arrangeAndProccessIds() {
         
         // TODO improve starting coordinate and distance
         int xCenter = 100;
@@ -209,6 +218,14 @@ public class PDAIDViewerDrawPanel extends JPanel {
                         cId.getX1(),
                         cId.getY1() - 20, 
                         cId.getStrokeColor() ) );
+            }
+            if ( id.isAcceptedByFinalState() || id.isAcceptedByEmptyStack() ) {
+                PDAID current = id.getParent();
+                while ( current != null ) {
+                    current.setAcceptedByFinalState( id.isAcceptedByFinalState() );
+                    current.setAcceptedByEmptyStack( id.isAcceptedByEmptyStack() );
+                    current = current.getParent();
+                }
             }
         }
         

@@ -42,6 +42,16 @@ public class PDAID extends AbstractGeometricForm implements Comparable<PDAID> {
     private PDAID parent;
     private List<PDAID> children;
     
+    private boolean acceptedByFinalState;
+    private boolean acceptedByEmptyStack;
+    private Color acceptedStrokeColor;
+    private Color acceptedFillColor;
+    
+    private String text;
+    private int textWidth;
+    private int textHeight;
+    private Color textColor;
+    
     public PDAID( PDAState state, String string, Deque<Character> stack, Color strokeColor ) {
         
         this.state = state;
@@ -50,7 +60,11 @@ public class PDAID extends AbstractGeometricForm implements Comparable<PDAID> {
         this.stack = Utils.cloneCharacterStack( stack );
         
         this.font = DrawingConstants.DEFAULT_FONT;
-        this.strokeColor = strokeColor;
+        setStrokeColor( strokeColor );
+        setAcceptedStrokeColor( DrawingConstants.PDAID_DEFAULT_ACCEPTED_COLOR );
+        this.textColor = DrawingConstants.PDAID_DEFAULT_TEXT_COLOR;
+        
+        setText( toString() );
         
     }
     
@@ -59,20 +73,37 @@ public class PDAID extends AbstractGeometricForm implements Comparable<PDAID> {
         child.parent = this;
     }
 
+    public void setText( String text ) {
+        this.text = text;
+        LineMetrics lm = Utils.getLineMetrics( text, font );
+        FontMetrics fm = Utils.getFontMetrics( font );
+        textWidth = fm.stringWidth( text );
+        textHeight = (int) ( lm.getHeight() / 2 );
+    }
+    
     @Override
     public void draw( Graphics2D g2d ) {
         
         g2d = (Graphics2D) g2d.create();
         
         g2d.setFont( font );
-        g2d.setColor( Color.BLACK );
         
-        String text = toString();
-        LineMetrics lm = Utils.getLineMetrics( text, font );
-        FontMetrics fm = Utils.getFontMetrics( font );
-        int textWidth = fm.stringWidth( text );
-        int textHeight = (int) ( lm.getHeight() / 2 );
+        if ( acceptedByFinalState || acceptedByEmptyStack ) {
+            g2d.setColor( acceptedFillColor );
+            g2d.fillRoundRect( 
+                    x1 - textWidth / 2 - 5,
+                    y1 - textHeight / 2 - 8,
+                    textWidth + 10,
+                    textHeight + 15, 5, 5 );
+            g2d.setColor( acceptedStrokeColor );
+            g2d.drawRoundRect( 
+                    x1 - textWidth / 2 - 5,
+                    y1 - textHeight / 2 - 8,
+                    textWidth + 10,
+                    textHeight + 15, 5, 5 );
+        }
         
+        g2d.setColor( textColor );
         g2d.drawString( text, x1 - textWidth / 2, y1 + textHeight / 2 );
         
         g2d.dispose();
@@ -104,6 +135,41 @@ public class PDAID extends AbstractGeometricForm implements Comparable<PDAID> {
         return children;
     }
 
+    public boolean isAcceptedByFinalState() {
+        return acceptedByFinalState;
+    }
+
+    public void setAcceptedByFinalState( boolean acceptedByFinalState ) {
+        this.acceptedByFinalState = acceptedByFinalState;
+    }
+
+    public boolean isAcceptedByEmptyStack() {
+        return acceptedByEmptyStack;
+    }
+
+    public void setAcceptedByEmptyStack( boolean acceptedByEmptyStack ) {
+        this.acceptedByEmptyStack = acceptedByEmptyStack;
+    }
+
+    @Override
+    public void setStrokeColor( Color strokeColor ) {
+        this.strokeColor = strokeColor;
+        this.fillColor = Utils.lighterColor( strokeColor );
+    }
+    
+    public void setAcceptedStrokeColor( Color acceptedStrokeColor ) {
+        this.acceptedStrokeColor = acceptedStrokeColor;
+        this.acceptedFillColor = Utils.lighterColor( acceptedStrokeColor );
+    }
+
+    public int getTextWidth() {
+        return textWidth;
+    }
+
+    public int getTextHeight() {
+        return textHeight;
+    }
+    
     @Override
     public int compareTo( PDAID o ) {
         return state.compareTo( o.state );

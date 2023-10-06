@@ -31,7 +31,7 @@ import java.awt.Color;
  */
 public class PDAExamples {
     
-    public static PDA createPDAEvenPalindromeAS() {
+    public static PDA createPDAEvenPalindromeFinalState() {
         
         PDA pda = new PDA();
 
@@ -86,7 +86,46 @@ public class PDAExamples {
         
     }
     
-    public static PDA createPDAEvenPalindromeES() {
+    public static PDA createPDA01FinalState() {
+
+        PDA pda = new PDA();
+
+        // states
+        PDAState q0 = new PDAState( 0, null, true, false );
+        q0.setX1Y1( 100, 200 );
+        q0.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        pda.addState( q0 );
+
+        PDAState q1 = new PDAState( 1, null, false, true );
+        q1.setX1Y1( 250, 200 );
+        q1.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        pda.addState( q1 );
+
+        // transitions
+        PDATransition q0q0 = new PDATransition( q0, q0,
+                new PDAOperation( '0', 'X', PDAOperationType.PUSH, 'X' ),
+                new PDAOperation( '0', pda.getStackStartingSymbol(), PDAOperationType.PUSH, 'X' ),
+                PDAOperation.getDoNothingOperation( '1', 'X' ) );
+        q0q0.setStrokeColor( new Color( 153, 0, 153, 255 ) );
+        pda.addTransition( q0q0 );
+
+        PDATransition q0q1 = new PDATransition( q0, q1,
+                PDAOperation.getPopOperation( CharacterConstants.EMPTY_STRING, 'X' ) );
+        q0q1.setStrokeColor( new Color( 0, 153, 0, 255 ) );
+        pda.addTransition( q0q1 );
+
+        PDATransition q1q1 = new PDATransition( q1, q1,
+                PDAOperation.getPopOperation( CharacterConstants.EMPTY_STRING, 'X' ),
+                new PDAOperation( '1', 'X', PDAOperationType.PUSH, 'X' ),
+                PDAOperation.getPopOperation( '1', pda.getStackStartingSymbol() ) );
+        q1q1.setStrokeColor( new Color( 0, 102, 204, 255 ) );
+        pda.addTransition( q1q1 );
+
+        return pda;
+
+    }
+    
+    public static PDA createPDAEvenPalindromeEmptyStack() {
 
         PDA pda = new PDA();
 
@@ -135,7 +174,7 @@ public class PDAExamples {
 
     }
     
-    public static PDA createDPDAEvenPalindromeCM() {
+    public static PDA createDPDAEvenPalindromeCenterMark() {
         
         PDA dpda = new PDA();
 

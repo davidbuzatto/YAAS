@@ -19,6 +19,7 @@ package br.com.davidbuzatto.yaas.model.pda;
 import br.com.davidbuzatto.yaas.model.AbstractGeometricForm;
 import br.com.davidbuzatto.yaas.model.Arrow;
 import br.com.davidbuzatto.yaas.util.DrawingConstants;
+import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -269,22 +270,8 @@ public class PDAState extends AbstractGeometricForm implements Comparable<PDASta
 
     @Override
     public void setStrokeColor( Color strokeColor ) {
-        
         this.strokeColor = strokeColor;
-        
-        float[] hsb = Color.RGBtoHSB( strokeColor.getRed(), strokeColor.getGreen(), strokeColor.getBlue(), null );
-        
-        // grayscale
-        if ( strokeColor.getRed() == strokeColor.getGreen() && strokeColor.getGreen() == strokeColor.getBlue() ) {
-            hsb[2] = 0.95f;
-        } else {
-            hsb[1] = 0.1f;
-            hsb[2] = 1;
-        }
-        
-        int rbg = Color.HSBtoRGB( hsb[0], hsb[1], hsb[2] );
-        this.fillColor = new Color( rbg );
-        
+        this.fillColor = Utils.lighterColor( strokeColor );
     }
     
     @Override

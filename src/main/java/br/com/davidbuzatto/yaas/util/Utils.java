@@ -1138,4 +1138,27 @@ public class Utils {
                     JOptionPane.YES_NO_CANCEL_OPTION );
     }
     
+    public static Color lighterColor( Color color ) {
+        
+        float[] hsb = Color.RGBtoHSB( color.getRed(), color.getGreen(), color.getBlue(), null );
+        
+        // grayscale
+        if ( color.getRed() == color.getGreen() && color.getGreen() == color.getBlue() ) {
+            hsb[2] = 0.95f;
+        } else {
+            hsb[1] = 0.1f;
+            hsb[2] = 1;
+        }
+        
+        int rbg = Color.HSBtoRGB( hsb[0], hsb[1], hsb[2] );
+        Color rgbColor = new Color( rbg );
+        
+        return new Color( 
+                rgbColor.getRed(), 
+                rgbColor.getGreen(), 
+                rgbColor.getBlue(), 
+                color.getAlpha() );
+        
+    }
+    
 }

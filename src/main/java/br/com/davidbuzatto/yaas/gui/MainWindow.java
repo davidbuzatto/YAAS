@@ -59,8 +59,9 @@ public class MainWindow extends javax.swing.JFrame {
         
         if ( ApplicationConstants.IN_DEVELOPMENT ) {
             //createFAInternalFrame( FAExamples.createDFAEndsWith00(), true, true );
-            createPDAInternalFrame( PDAExamples.createPDAEvenPalindromeAS(), true, true );
-            //createPDAInternalFrame( PDAExamples.createDPDAEvenPalindromeCM(), true, true );
+            //createPDAInternalFrame( PDAExamples.createPDAEvenPalindromeFinalState(), true, true );
+            createPDAInternalFrame( PDAExamples.createPDA01FinalState(), true, true );
+            //createPDAInternalFrame( PDAExamples.createDPDAEvenPalindromeCenterMark(), true, true );
         } else {
             menuMinimizationTest.setVisible( false );
             setExtendedState( MAXIMIZED_BOTH );
@@ -657,17 +658,17 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_miMiniT09ActionPerformed
 
     private void miPDAEvenPalindromeASActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miPDAEvenPalindromeASActionPerformed
-        createPDAInternalFrame( PDAExamples.createPDAEvenPalindromeAS(), 
+        createPDAInternalFrame( PDAExamples.createPDAEvenPalindromeFinalState(), 
                 false, false );
     }//GEN-LAST:event_miPDAEvenPalindromeASActionPerformed
 
     private void miPDAEvenPalindromeESActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miPDAEvenPalindromeESActionPerformed
-        createPDAInternalFrame( PDAExamples.createPDAEvenPalindromeES(), 
+        createPDAInternalFrame( PDAExamples.createPDAEvenPalindromeEmptyStack(), 
                 false, false );
     }//GEN-LAST:event_miPDAEvenPalindromeESActionPerformed
 
     private void miDPDAEvenPalindromeCMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDPDAEvenPalindromeCMActionPerformed
-        createPDAInternalFrame( PDAExamples.createDPDAEvenPalindromeCM(), 
+        createPDAInternalFrame( PDAExamples.createDPDAEvenPalindromeCenterMark(), 
                 false, false );
     }//GEN-LAST:event_miDPDAEvenPalindromeCMActionPerformed
 
