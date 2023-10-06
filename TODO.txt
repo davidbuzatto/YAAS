@@ -6,7 +6,6 @@ Finite Automata
     Here: https://resources.wolframcloud.com/PacletRepository/resources/KlausSutner/Automata/
 
 Pushdown Automata
-    ID Tree Presentation
     Simulation
     Final State to Empty Stack and vice-versa
 

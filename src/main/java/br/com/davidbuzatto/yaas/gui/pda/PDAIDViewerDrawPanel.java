@@ -22,21 +22,20 @@ import br.com.davidbuzatto.yaas.model.pda.PDA;
 import br.com.davidbuzatto.yaas.model.pda.PDAID;
 import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.util.ArrayDeque;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
 import javax.swing.JPanel;
+import org.abego.treelayout.TreeLayout;
+import org.abego.treelayout.util.DefaultConfiguration;
+import org.abego.treelayout.util.DefaultTreeForTreeLayout;
 
 /**
  * Drawing panel for IDs of PDAs view.
@@ -49,6 +48,70 @@ public class PDAIDViewerDrawPanel extends JPanel {
     private PDAID root;
     private List<PDAID> ids;
     private List<Line> lines;
+    
+    private int xPrev;
+    private int yPrev;
+    
+    private int xAmount;
+    private int yAmount;
+    private int totalXAmount;
+    private int totalYAmount;
+    
+    private Dimension size;
+    
+    public PDAIDViewerDrawPanel() {
+        
+        setCursor( Cursor.getPredefinedCursor( Cursor.HAND_CURSOR ));
+        
+        addMouseListener( new MouseAdapter() {
+            
+            @Override
+            public void mousePressed( MouseEvent evt ) {
+                xPrev = evt.getX();
+                yPrev = evt.getY();
+            }
+
+            @Override
+            public void mouseReleased( MouseEvent e ) {
+                
+                totalXAmount += xAmount;
+                totalYAmount += yAmount;
+                
+                Dimension s = getPreferredSize();
+                size = new Dimension( s.width + totalXAmount, s.height + totalYAmount );
+                setPreferredSize( size );
+                repaint();
+                revalidate();
+                
+            }
+            
+        });
+        
+        addMouseMotionListener( new MouseAdapter() {
+            @Override
+            public void mouseDragged( MouseEvent evt ) {
+                
+                xAmount = evt.getX() - xPrev;
+                yAmount = evt.getY() - yPrev;
+                
+                xPrev += xAmount;
+                yPrev += yAmount;
+                
+                for ( Line line : lines ) {
+                    line.move( xAmount, yAmount );
+                }
+                for ( PDAID id : ids ) {
+                    id.move( xAmount, yAmount );
+                }
+                
+                Dimension s = getPreferredSize();
+                setPreferredSize( new Dimension( s.width + xAmount, s.height + yAmount ) );
+                repaint();
+                revalidate();
+                
+            }
+        });
+    }
     
     private class Line extends AbstractGeometricForm {
         
@@ -68,6 +131,12 @@ public class PDAIDViewerDrawPanel extends JPanel {
             arrow.setStrokeColor( strokeColor );
             arrow.setAngle( Math.atan2( y2 - y1, x2 - x1 ) );
             
+        }
+
+        @Override
+        public void move( int xAmount, int yAmount ) {
+            super.move( xAmount, yAmount );
+            arrow.move( xAmount, yAmount );
         }
         
         @Override
@@ -95,9 +164,6 @@ public class PDAIDViewerDrawPanel extends JPanel {
                 RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON );
         
-        int maxX = 0;
-        int maxY = 0;
-        
         g2d.setColor( Color.WHITE );
         g2d.fillRect( 0, 0, getWidth(), getHeight() );
         
@@ -111,20 +177,12 @@ public class PDAIDViewerDrawPanel extends JPanel {
         if ( ids != null ) {
             for ( PDAID id : ids ) {
                 id.draw( g2d );
-                if ( maxX < id.getX1() + id.getTextWidth() / 2 ) {
-                    maxX = id.getX1() + id.getTextWidth() / 2;
-                }
-                if ( maxY < id.getY1() + id.getTextHeight() ) {
-                    maxY = id.getY1() + id.getTextHeight();
-                }
             }
         }
         
         g2d.setStroke( DrawingConstants.DRAW_PANEL_STROKE.getBasicStroke() );
         g2d.setColor( Color.BLACK );
         g2d.drawRect( 0, 0, getWidth(), getHeight() );
-        
-        setPreferredSize( new Dimension( maxX + 50, maxY + 50 ) );
         
         g2d.dispose();
         
@@ -136,78 +194,33 @@ public class PDAIDViewerDrawPanel extends JPanel {
     
     public void arrangeAndProccessIds() {
         
-        // TODO improve starting coordinate and distance
-        int xCenter = 100;
-        int yCenter = 50;
-        int distanceX = 200;
-        int distanceY = 70;
-        int currentX;
-        int currentY;
+        int marginX = 30;
+        int marginY = 40;
+        int levelGap = 60;
+        int nodeGap = 20;
                 
         root = pda.getRootId();
         ids = pda.getIds();
         lines = new ArrayList<>();
         
-        Map<Integer, List<PDAID>> leveledIds = new TreeMap<>();
-        List<PDAID> liRoot = new ArrayList<>();
-        liRoot.add( root );
-        leveledIds.put( 0, liRoot );
-        
-        Map<PDAID, Integer> distanceTo = new HashMap<>();
+        DefaultTreeForTreeLayout<PDAID> tree = new DefaultTreeForTreeLayout<>(root);
         for ( PDAID id : ids ) {
-            distanceTo.put( id, Integer.MAX_VALUE );
-        }
-        distanceTo.put( root, 0 );
-        
-        Set<PDAID> visited = new HashSet<>();
-        visited.add( root );
-        
-        Deque<PDAID> queue = new ArrayDeque<>();
-        queue.add( root );
-        int maxDistance = 0;
-        
-        while ( !queue.isEmpty() ) {
-            
-            PDAID id = queue.pop();
-            
             for ( PDAID cId : id.getChildren() ) {
-                if ( !visited.contains( cId ) ) {
-                    
-                    int d = distanceTo.get( id ) + 1;
-                    if ( maxDistance < d ) {
-                        maxDistance = d;
-                    }
-                    
-                    distanceTo.put( cId, d );
-                    visited.add( cId );
-                    queue.add( cId );
-                    
-                    List<PDAID> lIds = leveledIds.get( d );
-                    if ( lIds == null ) {
-                        lIds = new ArrayList<>();
-                        leveledIds.put( d, lIds );
-                    }
-                    lIds.add( cId );
-                    
-                }
+                tree.addChild( id, cId );
             }
-            
         }
         
-        // improve positioning algorithm (use tree with rank!)
-        for ( Map.Entry<Integer, List<PDAID>> e : leveledIds.entrySet() ) {
-
-            currentX = xCenter;
-            currentY = yCenter + e.getKey() * distanceY;
-
-            Collections.sort( e.getValue() );
-
-            for ( PDAID id : e.getValue() ) {
-                id.setX1( currentX );
-                id.setY1( currentY );
-                currentX += distanceX;
-            }
-
+        DefaultConfiguration<PDAID> configuration = new DefaultConfiguration<>( levelGap, nodeGap );
+        PDAIDNodeExtentProvider nodeExtentProvider = new PDAIDNodeExtentProvider();
+        TreeLayout<PDAID> treeLayout = new TreeLayout<>( tree, nodeExtentProvider, configuration );
+        
+        size = treeLayout.getBounds().getBounds().getSize();
+        setPreferredSize( new Dimension( size.width + 50, size.height + 50 ) );
+        
+        for ( PDAID id : ids ) {
+            Rectangle2D.Double box = treeLayout.getNodeBounds().get( id );
+            id.setX1( (int) ( box.x + box.width/2 ) + marginX );
+            id.setY1( (int) ( box.y + box.height/2 ) + marginY );
         }
         
         for ( PDAID id : ids ) {

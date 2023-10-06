@@ -17,25 +17,21 @@
 package br.com.davidbuzatto.yaas.gui.pda;
 
 import br.com.davidbuzatto.yaas.model.pda.PDA;
-import java.awt.Frame;
-import javax.swing.ImageIcon;
 
 /**
  * A viewer of a ID tree.
  * 
  * @author Prof. Dr. David Buzatto
  */
-public class PDAIDViewerDialog extends javax.swing.JDialog {
+public class PDAIDViewerFrame extends javax.swing.JFrame {
 
     private PDAInternalFrame pdaIFrame;
     private PDA pda;
     
     /**
-     * Creates new form PDAIDViewer
+     * Creates new form PDAIDViewerFrame
      */
-    public PDAIDViewerDialog( Frame parent, PDAInternalFrame pdaIFrame, PDA pda, boolean modal ) {
-        
-        super( parent, modal );
+    public PDAIDViewerFrame( PDAInternalFrame pdaIFrame, PDA pda, boolean modal ) {
         
         this.pdaIFrame = pdaIFrame;
         this.pda = pda;
@@ -48,14 +44,8 @@ public class PDAIDViewerDialog extends javax.swing.JDialog {
         drawPanel.repaint();
         drawPanel.revalidate();
         
-        customInit();
-        
     }
 
-    private void customInit() {
-        setIconImage( new ImageIcon( getClass().getResource( "/arrow_right.png" ) ).getImage() );
-    }
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -70,6 +60,7 @@ public class PDAIDViewerDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Instantaneous Description Viewer");
+        setIconImage(new javax.swing.ImageIcon( getClass().getResource( "/arrow_right.png" ) ).getImage());
 
         javax.swing.GroupLayout drawPanelLayout = new javax.swing.GroupLayout(drawPanel);
         drawPanel.setLayout(drawPanelLayout);
@@ -92,7 +83,7 @@ public class PDAIDViewerDialog extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrollDrawPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+            .addComponent(scrollDrawPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
         );
 
         pack();

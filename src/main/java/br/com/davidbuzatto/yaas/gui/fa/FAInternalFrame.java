@@ -2015,6 +2015,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
     private void btnSelectMultipleStatesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectMultipleStatesActionPerformed
         resetGUIToAddStatesAndTransitions();
+        drawPanel.setCursor( Cursor.getPredefinedCursor( 
+                Cursor.CROSSHAIR_CURSOR ) );
     }//GEN-LAST:event_btnSelectMultipleStatesActionPerformed
 
     private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed

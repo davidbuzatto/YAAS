@@ -1832,6 +1832,8 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
 
     private void btnSelectMultipleStatesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectMultipleStatesActionPerformed
         resetGUIToAddStatesAndTransitions();
+        drawPanel.setCursor( Cursor.getPredefinedCursor( 
+                Cursor.CROSSHAIR_CURSOR ) );
     }//GEN-LAST:event_btnSelectMultipleStatesActionPerformed
 
     private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
@@ -2220,8 +2222,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             }
             
             if ( checkShowIDs.isSelected() ) {
-                PDAIDViewerDialog pViewer = new PDAIDViewerDialog( 
-                        mainWindow, this, pda, false );
+                PDAIDViewerFrame pViewer = new PDAIDViewerFrame( this, pda, false );
                 pViewer.setVisible( true );
             }
             
