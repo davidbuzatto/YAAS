@@ -633,6 +633,10 @@ public class FATransition extends AbstractGeometricForm implements Cloneable {
         
     }
     
+    public void resetStrokeColor() {
+        setStrokeColor( DrawingConstants.TRANSITION_STROKE_COLOR );
+    }
+    
     @Override
     public void setStrokeColor( Color strokeColor ) {
         this.strokeColor = strokeColor;

@@ -18,6 +18,7 @@ package br.com.davidbuzatto.yaas.gui.pda;
 
 import br.com.davidbuzatto.yaas.model.pda.PDA;
 import java.awt.Frame;
+import javax.swing.ImageIcon;
 
 /**
  * A viewer of a ID tree.
@@ -52,6 +53,7 @@ public class PDAIDViewerDialog extends javax.swing.JDialog {
     }
 
     private void customInit() {
+        setIconImage( new ImageIcon( getClass().getResource( "/arrow_right.png" ) ).getImage() );
     }
     
     /**

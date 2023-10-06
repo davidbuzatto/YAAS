@@ -22,6 +22,7 @@ import br.com.davidbuzatto.yaas.gui.fa.table.FATransitionFunctionTableModel;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
+import javax.swing.ImageIcon;
 import javax.swing.border.TitledBorder;
 
 /**
@@ -58,6 +59,7 @@ public class FAFormalDefinitionDialog extends javax.swing.JDialog {
         b.setTitle( b.getTitle() + ( m.isPartial() ? " (partial)" : " (total)" ) );
         
         Utils.resizeColumnWidth( tableDelta, 300 );
+        setIconImage( new ImageIcon( getClass().getResource( "/delta.png" ) ).getImage() );
         
     }
     

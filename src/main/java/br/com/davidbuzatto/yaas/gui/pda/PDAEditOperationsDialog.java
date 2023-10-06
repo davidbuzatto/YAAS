@@ -25,6 +25,7 @@ import java.awt.Frame;
 import java.util.HashSet;
 import java.util.Set;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -73,6 +74,8 @@ public class PDAEditOperationsDialog extends javax.swing.JDialog {
             // should never be reached
             exc.printStackTrace();
         }
+        
+        setIconImage( new ImageIcon( getClass().getResource( "/transition.png" ) ).getImage() );
         
     }
     

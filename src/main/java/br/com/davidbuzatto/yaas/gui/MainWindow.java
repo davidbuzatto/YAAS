@@ -59,8 +59,7 @@ public class MainWindow extends javax.swing.JFrame {
         
         if ( ApplicationConstants.IN_DEVELOPMENT ) {
             //createFAInternalFrame( FAExamples.createDFAEndsWith00(), true, true );
-            //createPDAInternalFrame( PDAExamples.createPDAEvenPalindromeFinalState(), true, true );
-            createPDAInternalFrame( PDAExamples.createPDA01FinalState(), true, true );
+            createPDAInternalFrame( PDAExamples.createPDAEvenPalindromeFinalState(), true, true );
             //createPDAInternalFrame( PDAExamples.createDPDAEvenPalindromeCenterMark(), true, true );
         } else {
             menuMinimizationTest.setVisible( false );

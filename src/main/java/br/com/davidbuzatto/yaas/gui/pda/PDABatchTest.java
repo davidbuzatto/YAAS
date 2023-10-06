@@ -17,8 +17,10 @@
 package br.com.davidbuzatto.yaas.gui.pda;
 
 import br.com.davidbuzatto.yaas.model.pda.PDA;
+import br.com.davidbuzatto.yaas.model.pda.PDAAcceptanceType;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import java.awt.Frame;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -31,19 +33,26 @@ import javax.swing.JTextArea;
 public class PDABatchTest extends javax.swing.JDialog {
 
     private PDAInternalFrame pdaIFrame;
+    private PDAAcceptanceType acceptanceType;
     
     private PDA pda;
     
     /**
      * Creates new form FABatchTest
      */
-    public PDABatchTest( Frame parent, PDAInternalFrame pdaIFrame, boolean modal ) {
+    public PDABatchTest( Frame parent, PDAInternalFrame pdaIFrame, PDAAcceptanceType acceptanceType, boolean modal ) {
         super( parent, modal );
         this.pdaIFrame = pdaIFrame;
+        this.acceptanceType = acceptanceType;
         initComponents();
+        customInit();
         setLocationRelativeTo( pdaIFrame );
     }
 
+    private void customInit() {
+        setIconImage( new ImageIcon( getClass().getResource( "/book.png" ) ).getImage() );
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -142,7 +151,7 @@ public class PDABatchTest extends javax.swing.JDialog {
         
         for ( String str : strings ) {
             
-            boolean accepted = pda.accepts( str );
+            boolean accepted = pda.accepts( str, acceptanceType );
             
             if ( !first ) {
                 sb.append( "\n" );

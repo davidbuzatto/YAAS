@@ -75,6 +75,8 @@ public class FAPropertiesPanel extends javax.swing.JPanel {
         lblFAType = new javax.swing.JLabel();
         txtFAType = new javax.swing.JTextField();
         btnFormalDefinition = new javax.swing.JButton();
+        btnResetStatesColor = new javax.swing.JButton();
+        btnResetTransitionsColor = new javax.swing.JButton();
 
         lblFAType.setText("FA Type:");
 
@@ -89,7 +91,7 @@ public class FAPropertiesPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(lblFAType)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtFAType, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)
+                .addComponent(txtFAType)
                 .addContainerGap())
         );
         panelPropertiesLayout.setVerticalGroup(
@@ -102,10 +104,27 @@ public class FAPropertiesPanel extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        btnFormalDefinition.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delta.png"))); // NOI18N
         btnFormalDefinition.setText("Formal Definition");
         btnFormalDefinition.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFormalDefinitionActionPerformed(evt);
+            }
+        });
+
+        btnResetStatesColor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cancel.png"))); // NOI18N
+        btnResetStatesColor.setText("Reset States Color");
+        btnResetStatesColor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetStatesColorActionPerformed(evt);
+            }
+        });
+
+        btnResetTransitionsColor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cancel.png"))); // NOI18N
+        btnResetTransitionsColor.setText("Reset Transitions Color");
+        btnResetTransitionsColor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetTransitionsColorActionPerformed(evt);
             }
         });
 
@@ -118,7 +137,10 @@ public class FAPropertiesPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelProperties, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnFormalDefinition)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnFormalDefinition)
+                            .addComponent(btnResetStatesColor)
+                            .addComponent(btnResetTransitionsColor))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -129,7 +151,11 @@ public class FAPropertiesPanel extends javax.swing.JPanel {
                 .addComponent(panelProperties, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnFormalDefinition)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnResetStatesColor)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnResetTransitionsColor)
+                .addContainerGap(118, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -146,9 +172,21 @@ public class FAPropertiesPanel extends javax.swing.JPanel {
         
     }//GEN-LAST:event_btnFormalDefinitionActionPerformed
 
+    private void btnResetStatesColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetStatesColorActionPerformed
+        fa.resetStatesColor();
+        faIFrame.repaintDrawPanel();
+    }//GEN-LAST:event_btnResetStatesColorActionPerformed
+
+    private void btnResetTransitionsColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetTransitionsColorActionPerformed
+        fa.resetTransitionsColor();
+        faIFrame.repaintDrawPanel();
+    }//GEN-LAST:event_btnResetTransitionsColorActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFormalDefinition;
+    private javax.swing.JButton btnResetStatesColor;
+    private javax.swing.JButton btnResetTransitionsColor;
     private javax.swing.JLabel lblFAType;
     private javax.swing.JPanel panelProperties;
     private javax.swing.JTextField txtFAType;

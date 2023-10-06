@@ -19,6 +19,7 @@ package br.com.davidbuzatto.yaas.model.pda;
 import br.com.davidbuzatto.yaas.gui.pda.PDASimulationStep;
 import br.com.davidbuzatto.yaas.model.AbstractGeometricForm;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
+import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -55,6 +56,7 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
     private transient List<PDAID> ids;
     private transient static int buildTreeLevel;
     private transient static final String levelString = "  ";
+    private transient boolean accepted;
     
     // cache control
     private boolean alphabetUpToDate;
@@ -78,12 +80,14 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
         this.type = PDAType.EMPTY;
     }
     
-    public boolean accepts( String str ) {
-        return accepts( str, null );
+    public boolean accepts( String str, PDAAcceptanceType acceptanceType ) {
+        return accepts( str, acceptanceType, null );
     }
     
     // TODO test and return ok
-    public boolean accepts( String str, List<PDASimulationStep> simulationSteps ) {
+    public boolean accepts( String str, PDAAcceptanceType acceptanceType, List<PDASimulationStep> simulationSteps ) {
+        
+        accepted = false;
         
         if ( canExecute() ) {
             
@@ -95,24 +99,21 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
             
             buildTreeLevel = 0;
             ids = new ArrayList<>();
-            return buildIDTree( rootId, delta );
+            buildIDTree( rootId, delta, acceptanceType );
             
         }
         
-        return false;
+        return accepted;
         
     }
     
-    private boolean buildIDTree( PDAID node, Map<PDAState, List<PDATransition>> delta ) {
-        
-        // accepted?
-        boolean accepted = false;
+    private void buildIDTree( PDAID node, Map<PDAState, List<PDATransition>> delta, PDAAcceptanceType acceptanceType ) {
         
         if ( node.getString().isEmpty() ) {
-            if ( node.getState().isFinal() ) {
+            if ( acceptanceType == PDAAcceptanceType.FINAL_STATE && node.getState().isFinal() ) {
                 node.setAcceptedByFinalState( true );
                 accepted = true;
-            } else if ( node.getStack().isEmpty() ) {
+            } else if ( acceptanceType == PDAAcceptanceType.EMPTY_STACK && node.getStack().isEmpty() ) {
                 node.setAcceptedByEmptyStack( true );
                 accepted = true;
             }
@@ -164,7 +165,7 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
                         PDAID newId = new PDAID( t.getTargetState(), newString, stack, t.getStrokeColor() );
                         node.addChild( newId );
                         
-                        accepted = buildIDTree( newId, delta );
+                        buildIDTree( newId, delta, acceptanceType );
                         
                         // empty stack?
                     } else if ( o.getTop() == CharacterConstants.EMPTY_STRING && stack.isEmpty() ) {
@@ -179,7 +180,7 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
                         PDAID newId = new PDAID( t.getTargetState(), newString, stack, t.getStrokeColor() );
                         node.addChild( newId );
                         
-                        accepted = buildIDTree( newId, delta );
+                        buildIDTree( newId, delta, acceptanceType );
                         
                     }
                     
@@ -207,7 +208,7 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
                         PDAID newId = new PDAID( t.getTargetState(), string, stack, t.getStrokeColor() );
                         node.addChild( newId );
                         
-                        accepted = buildIDTree( newId, delta );
+                        buildIDTree( newId, delta, acceptanceType );
                         
                         // empty stack?
                     } else if ( o.getTop() == CharacterConstants.EMPTY_STRING && stack.isEmpty() ) {
@@ -222,7 +223,7 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
                         PDAID newId = new PDAID( t.getTargetState(), newString, stack, t.getStrokeColor() );
                         node.addChild( newId );
                         
-                        accepted = buildIDTree( newId, delta );
+                        buildIDTree( newId, delta, acceptanceType );
                         
                     }
                     
@@ -233,7 +234,6 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
         }
         
         buildTreeLevel--;
-        return accepted;
         
     }
     
@@ -429,6 +429,18 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
         }
     }
 
+    public void resetStatesColor() {
+        for ( PDAState s : states ) {
+            s.resetStrokeColor();
+        }
+    }
+    
+    public void resetTransitionsColor() {
+        for ( PDATransition t : transitions ) {
+            t.resetStrokeColor();
+        }
+    }
+    
     public void setInitialState( PDAState initialState ) {
         
         if ( this.initialState != null ) {

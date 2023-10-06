@@ -19,6 +19,7 @@ package br.com.davidbuzatto.yaas.model.fa;
 import br.com.davidbuzatto.yaas.gui.fa.FASimulationStep;
 import br.com.davidbuzatto.yaas.model.AbstractGeometricForm;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
+import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -290,6 +291,18 @@ public class FA extends AbstractGeometricForm implements Cloneable {
         }
     }
 
+    public void resetStatesColor() {
+        for ( FAState s : states ) {
+            s.resetStrokeColor();
+        }
+    }
+    
+    public void resetTransitionsColor() {
+        for ( FATransition t : transitions ) {
+            t.resetStrokeColor();
+        }
+    }
+    
     public void setInitialState( FAState initialState ) {
         
         if ( this.initialState != null ) {

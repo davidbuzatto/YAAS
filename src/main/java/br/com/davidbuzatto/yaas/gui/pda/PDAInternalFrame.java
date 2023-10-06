@@ -22,6 +22,7 @@ import br.com.davidbuzatto.yaas.gui.pda.properties.PDAPropertiesPanel;
 import br.com.davidbuzatto.yaas.gui.pda.properties.PDAStatePropertiesPanel;
 import br.com.davidbuzatto.yaas.gui.pda.properties.PDATransitionPropertiesPanel;
 import br.com.davidbuzatto.yaas.model.pda.PDA;
+import br.com.davidbuzatto.yaas.model.pda.PDAAcceptanceType;
 import br.com.davidbuzatto.yaas.model.pda.PDAOperation;
 import br.com.davidbuzatto.yaas.model.pda.PDAState;
 import br.com.davidbuzatto.yaas.model.pda.PDATransition;
@@ -231,6 +232,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         btnGroup = new javax.swing.ButtonGroup();
+        btnGroupAcceptanceType = new javax.swing.ButtonGroup();
         popupMenuReorganizeStates = new javax.swing.JPopupMenu();
         popItemHorizontal = new javax.swing.JMenuItem();
         popItemVertical = new javax.swing.JMenuItem();
@@ -285,8 +287,14 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         btnTest = new javax.swing.JButton();
         btnReset = new javax.swing.JButton();
         sepTS01 = new javax.swing.JToolBar.Separator();
-        btnBatchTest = new javax.swing.JButton();
+        checkShowIDs = new javax.swing.JCheckBox();
         sepTS02 = new javax.swing.JToolBar.Separator();
+        lblAcceptBy = new javax.swing.JLabel();
+        radioAcceptByFinalState = new javax.swing.JRadioButton();
+        radioAcceptByEmptyStack = new javax.swing.JRadioButton();
+        sepTS03 = new javax.swing.JToolBar.Separator();
+        btnBatchTest = new javax.swing.JButton();
+        sepTS04 = new javax.swing.JToolBar.Separator();
         btnStart = new javax.swing.JButton();
         btnFirstStep = new javax.swing.JButton();
         btnPreviousStep = new javax.swing.JButton();
@@ -734,6 +742,34 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         toolBarTestsAndSimulation.add(btnReset);
         toolBarTestsAndSimulation.add(sepTS01);
 
+        checkShowIDs.setText("Show IDs");
+        checkShowIDs.setFocusable(false);
+        checkShowIDs.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        checkShowIDs.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        toolBarTestsAndSimulation.add(checkShowIDs);
+        toolBarTestsAndSimulation.add(sepTS02);
+
+        lblAcceptBy.setText("Accept by:");
+        toolBarTestsAndSimulation.add(lblAcceptBy);
+
+        btnGroupAcceptanceType.add(radioAcceptByFinalState);
+        radioAcceptByFinalState.setSelected(true);
+        radioAcceptByFinalState.setText("FS");
+        radioAcceptByFinalState.setToolTipText("Final State");
+        radioAcceptByFinalState.setFocusable(false);
+        radioAcceptByFinalState.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        radioAcceptByFinalState.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        toolBarTestsAndSimulation.add(radioAcceptByFinalState);
+
+        btnGroupAcceptanceType.add(radioAcceptByEmptyStack);
+        radioAcceptByEmptyStack.setText("ES");
+        radioAcceptByEmptyStack.setToolTipText("EmptyStack");
+        radioAcceptByEmptyStack.setFocusable(false);
+        radioAcceptByEmptyStack.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        radioAcceptByEmptyStack.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        toolBarTestsAndSimulation.add(radioAcceptByEmptyStack);
+        toolBarTestsAndSimulation.add(sepTS03);
+
         btnBatchTest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/book.png"))); // NOI18N
         btnBatchTest.setToolTipText("Batch Test (Ctrl+Alt+B)");
         btnBatchTest.setFocusable(false);
@@ -745,7 +781,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         toolBarTestsAndSimulation.add(btnBatchTest);
-        toolBarTestsAndSimulation.add(sepTS02);
+        toolBarTestsAndSimulation.add(sepTS04);
 
         btnStart.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_play_blue.png"))); // NOI18N
         btnStart.setToolTipText("Start Simulation (Ctrl+Alt+S)");
@@ -833,7 +869,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                 .addComponent(lblTestString)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelTestsAndSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(toolBarTestsAndSimulation, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                    .addComponent(toolBarTestsAndSimulation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtTestString))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblTestResult, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -916,7 +952,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(toolBar, javax.swing.GroupLayout.DEFAULT_SIZE, 788, Short.MAX_VALUE)
+            .addComponent(toolBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(panelModel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1438,7 +1474,12 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             simulationSteps.clear();
             currentSimulationStep = 0;
             
-            boolean accepted = pda.accepts( txtTestString.getText(), simulationSteps );
+            boolean accepted = pda.accepts( 
+                    txtTestString.getText(), 
+                    radioAcceptByFinalState.isSelected() ? 
+                            PDAAcceptanceType.FINAL_STATE : 
+                            PDAAcceptanceType.EMPTY_STACK,
+                    simulationSteps );
             
             btnStart.setEnabled( false );
             btnStop.setEnabled( true );
@@ -1519,7 +1560,13 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
 
     private void btnBatchTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatchTestActionPerformed
         if ( pdaBatchTestDialog == null ) {
-            pdaBatchTestDialog = new PDABatchTest( mainWindow, this, true );
+            pdaBatchTestDialog = new PDABatchTest( 
+                    mainWindow, 
+                    this, 
+                    radioAcceptByFinalState.isSelected() ? 
+                            PDAAcceptanceType.FINAL_STATE : 
+                            PDAAcceptanceType.EMPTY_STACK,
+                    true );
         }
         pdaBatchTestDialog.setPda( pda );
         pdaBatchTestDialog.setVisible( true );
@@ -2163,15 +2210,20 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         
         if ( pda.canExecute() ) {
             
-            if ( pda.accepts( txtTestString.getText() ) ) {
+            if ( pda.accepts( txtTestString.getText(), 
+                    radioAcceptByFinalState.isSelected() ? 
+                            PDAAcceptanceType.FINAL_STATE : 
+                            PDAAcceptanceType.EMPTY_STACK ) ) {
                 setTestToAcceptedInGUI( );
             } else {
                 setTestToRejectedInGUI( );
             }
             
-            PDAIDViewerDialog pViewer = new PDAIDViewerDialog( 
-                    mainWindow, this, pda, true );
-            pViewer.setVisible( true );
+            if ( checkShowIDs.isSelected() ) {
+                PDAIDViewerDialog pViewer = new PDAIDViewerDialog( 
+                        mainWindow, this, pda, false );
+                pViewer.setVisible( true );
+            }
             
         } else {
             Utils.showErrorMessage( this, "You must set an initial state!" );
@@ -2263,6 +2315,9 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         
         btnTest.setEnabled( false );
         btnReset.setEnabled( false );
+        checkShowIDs.setEnabled( false );
+        radioAcceptByFinalState.setEnabled( false );
+        radioAcceptByEmptyStack.setEnabled( false );
         btnBatchTest.setEnabled( false );
         
         statePPanel.disableGUI();
@@ -2285,6 +2340,9 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         
         btnTest.setEnabled( true );
         btnReset.setEnabled( true );
+        checkShowIDs.setEnabled( true );
+        radioAcceptByFinalState.setEnabled( true );
+        radioAcceptByEmptyStack.setEnabled( true );
         btnBatchTest.setEnabled( true );
         
         statePPanel.enableGUI();
@@ -2722,6 +2780,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnCodeGen;
     private javax.swing.JButton btnFirstStep;
     private javax.swing.ButtonGroup btnGroup;
+    private javax.swing.ButtonGroup btnGroupAcceptanceType;
     private javax.swing.JButton btnLastStep;
     private javax.swing.JToggleButton btnMove;
     private javax.swing.JButton btnNew;
@@ -2744,8 +2803,10 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnZoomOut;
     private javax.swing.JCheckBoxMenuItem checkFinalState;
     private javax.swing.JCheckBoxMenuItem checkInitialState;
+    private javax.swing.JCheckBox checkShowIDs;
     private br.com.davidbuzatto.yaas.gui.DrawPanel drawPanel;
     private javax.swing.Box.Filler hFiller;
+    private javax.swing.JLabel lblAcceptBy;
     private javax.swing.JLabel lblTestResult;
     private javax.swing.JLabel lblTestString;
     private javax.swing.JPanel panelModel;
@@ -2767,6 +2828,8 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JPopupMenu popupMenuReorganizeStates;
     private javax.swing.JPopupMenu popupMenuStateProperties;
     private javax.swing.JPopupMenu popupMenuTransitionProperties;
+    private javax.swing.JRadioButton radioAcceptByEmptyStack;
+    private javax.swing.JRadioButton radioAcceptByFinalState;
     private javax.swing.JScrollPane scrollPaneModel;
     private javax.swing.JToolBar.Separator sep01;
     private javax.swing.JToolBar.Separator sep04;
@@ -2774,6 +2837,8 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JToolBar.Separator sep06;
     private javax.swing.JToolBar.Separator sepTS01;
     private javax.swing.JToolBar.Separator sepTS02;
+    private javax.swing.JToolBar.Separator sepTS03;
+    private javax.swing.JToolBar.Separator sepTS04;
     private javax.swing.JPopupMenu.Separator spPopupState;
     private javax.swing.JPopupMenu.Separator spPopupState01;
     private javax.swing.JPopupMenu.Separator spPopupTransition01;

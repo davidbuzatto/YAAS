@@ -13,7 +13,7 @@
         <maven.compiler.target>18</maven.compiler.target>
         <exec.mainClass>br.com.davidbuzatto.yaas.YAAS</exec.mainClass>
         <development>true</development>
-        <debugAlgorithms>true</debugAlgorithms>
+        <debugAlgorithms>false</debugAlgorithms>
     </properties>
     <dependencies>
         <dependency>

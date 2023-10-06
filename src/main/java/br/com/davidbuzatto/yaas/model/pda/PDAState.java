@@ -268,6 +268,10 @@ public class PDAState extends AbstractGeometricForm implements Comparable<PDASta
         this.diameter = radius * 2;
     }
 
+    public void resetStrokeColor() {
+        setStrokeColor( DrawingConstants.STATE_STROKE_COLOR );
+    }
+    
     @Override
     public void setStrokeColor( Color strokeColor ) {
         this.strokeColor = strokeColor;

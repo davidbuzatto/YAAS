@@ -19,6 +19,7 @@ package br.com.davidbuzatto.yaas.gui.fa;
 import br.com.davidbuzatto.yaas.model.fa.FA;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import java.awt.Frame;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -41,9 +42,14 @@ public class FABatchTest extends javax.swing.JDialog {
         super( parent, modal );
         this.faIFrame = faIFrame;
         initComponents();
+        customInit();
         setLocationRelativeTo( faIFrame );
     }
 
+    private void customInit() {
+        setIconImage( new ImageIcon( getClass().getResource( "/book.png" ) ).getImage() );
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
