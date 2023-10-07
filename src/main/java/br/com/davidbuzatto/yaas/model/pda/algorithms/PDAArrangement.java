@@ -16,10 +16,15 @@
  */
 package br.com.davidbuzatto.yaas.model.pda.algorithms;
 
+import br.com.davidbuzatto.yaas.gui.pda.PDAIDNodeExtentProvider;
 import br.com.davidbuzatto.yaas.model.pda.PDA;
+import br.com.davidbuzatto.yaas.model.pda.PDAID;
+import br.com.davidbuzatto.yaas.model.pda.PDAIDLine;
 import br.com.davidbuzatto.yaas.model.pda.PDAState;
 import br.com.davidbuzatto.yaas.model.pda.PDATransition;
+import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,6 +35,9 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.TreeMap;
+import org.abego.treelayout.TreeLayout;
+import org.abego.treelayout.util.DefaultConfiguration;
+import org.abego.treelayout.util.DefaultTreeForTreeLayout;
 
 /**
  * Pushdown Automata arrangement algorithms.
@@ -330,6 +338,65 @@ public class PDAArrangement {
         }
         
         return new Point[]{ new Point( minX, minY ), new Point( maxX, maxY ) };
+        
+    }
+    
+    /**
+     * Process a PDAID tree and organize it.
+     * 
+     * @param root The root node
+     * @param ids All the ids
+     * @param lines The lines that will connect the ids
+     * @param marginX Margin x
+     * @param marginY Margin y
+     * @param levelGap Level gap
+     * @param nodeGap Node gap
+     * @return The dimension of the tree.
+     */
+    public static Dimension arrangeIDsInTreeFormat( 
+            PDAID root, 
+            List<PDAID> ids,
+            List<PDAIDLine> lines, 
+            int marginX, int marginY,
+            int levelGap, int nodeGap ) {
+        
+        DefaultTreeForTreeLayout<PDAID> tree = new DefaultTreeForTreeLayout<>(root);
+        for ( PDAID id : ids ) {
+            for ( PDAID cId : id.getChildren() ) {
+                tree.addChild( id, cId );
+            }
+        }
+        
+        DefaultConfiguration<PDAID> configuration = new DefaultConfiguration<>( levelGap, nodeGap );
+        PDAIDNodeExtentProvider nodeExtentProvider = new PDAIDNodeExtentProvider();
+        TreeLayout<PDAID> treeLayout = new TreeLayout<>( tree, nodeExtentProvider, configuration );
+        
+        for ( PDAID id : ids ) {
+            Rectangle2D.Double box = treeLayout.getNodeBounds().get( id );
+            id.setX1( (int) ( box.x + box.width/2 ) + marginX );
+            id.setY1( (int) ( box.y + box.height/2 ) + marginY );
+        }
+        
+        for ( PDAID id : ids ) {
+            for ( PDAID cId : id.getChildren() ) {
+                lines.add( new PDAIDLine( 
+                        id.getX1(), 
+                        id.getY1() + 20, 
+                        cId.getX1(),
+                        cId.getY1() - 20, 
+                        cId.getStrokeColor() ) );
+            }
+            if ( id.isAcceptedByFinalState() || id.isAcceptedByEmptyStack() ) {
+                PDAID current = id.getParent();
+                while ( current != null ) {
+                    current.setAcceptedByFinalState( id.isAcceptedByFinalState() );
+                    current.setAcceptedByEmptyStack( id.isAcceptedByEmptyStack() );
+                    current = current.getParent();
+                }
+            }
+        }
+        
+        return treeLayout.getBounds().getBounds().getSize();
         
     }
     

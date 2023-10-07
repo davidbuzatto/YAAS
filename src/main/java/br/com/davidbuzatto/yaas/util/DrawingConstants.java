@@ -33,7 +33,7 @@ public interface DrawingConstants {
     
     public static final SerializableBasicStroke DRAW_PANEL_STROKE = new SerializableBasicStroke( 2 );
     
-    public static final int ARROW_LENGTH = 10; // 15
+    public static final int ARROW_LENGTH = 10;
     
     public static final int STATE_RADIUS = 25;
     public static final int STATE_RADIUS_SQUARED = STATE_RADIUS * STATE_RADIUS;

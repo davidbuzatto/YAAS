@@ -20,6 +20,8 @@ import br.com.davidbuzatto.yaas.model.AbstractGeometricForm;
 import br.com.davidbuzatto.yaas.model.Arrow;
 import br.com.davidbuzatto.yaas.model.pda.PDA;
 import br.com.davidbuzatto.yaas.model.pda.PDAID;
+import br.com.davidbuzatto.yaas.model.pda.PDAIDLine;
+import br.com.davidbuzatto.yaas.model.pda.algorithms.PDAArrangement;
 import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -29,13 +31,9 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
-import org.abego.treelayout.TreeLayout;
-import org.abego.treelayout.util.DefaultConfiguration;
-import org.abego.treelayout.util.DefaultTreeForTreeLayout;
 
 /**
  * Drawing panel for IDs of PDAs view.
@@ -47,7 +45,7 @@ public class PDAIDViewerDrawPanel extends JPanel {
     private PDA pda;
     private PDAID root;
     private List<PDAID> ids;
-    private List<Line> lines;
+    private List<PDAIDLine> lines;
     
     private int xPrev;
     private int yPrev;
@@ -88,6 +86,7 @@ public class PDAIDViewerDrawPanel extends JPanel {
         });
         
         addMouseMotionListener( new MouseAdapter() {
+            
             @Override
             public void mouseDragged( MouseEvent evt ) {
                 
@@ -97,7 +96,7 @@ public class PDAIDViewerDrawPanel extends JPanel {
                 xPrev += xAmount;
                 yPrev += yAmount;
                 
-                for ( Line line : lines ) {
+                for ( PDAIDLine line : lines ) {
                     line.move( xAmount, yAmount );
                 }
                 for ( PDAID id : ids ) {
@@ -110,48 +109,8 @@ public class PDAIDViewerDrawPanel extends JPanel {
                 revalidate();
                 
             }
+            
         });
-    }
-    
-    private class Line extends AbstractGeometricForm {
-        
-        Arrow arrow;
-        
-        Line( int x1, int y1, int x2, int y2, Color strokeColor ) {
-            
-            this.x1 = x1;
-            this.y1 = y1;
-            this.x2 = x2;
-            this.y2 = y2;
-            this.strokeColor = strokeColor;
-            
-            arrow = new Arrow();
-            arrow.setX1( x2 );
-            arrow.setY1( y2 );
-            arrow.setStrokeColor( strokeColor );
-            arrow.setAngle( Math.atan2( y2 - y1, x2 - x1 ) );
-            
-        }
-
-        @Override
-        public void move( int xAmount, int yAmount ) {
-            super.move( xAmount, yAmount );
-            arrow.move( xAmount, yAmount );
-        }
-        
-        @Override
-        public void draw( Graphics2D g2d ) {
-            g2d = (Graphics2D) g2d.create();
-            g2d.setColor( strokeColor );
-            g2d.drawLine( x1, y1, x2, y2 );
-            arrow.draw( g2d );
-            g2d.dispose();
-        }
-
-        @Override
-        public boolean intersects( int x, int y ) {
-            return false;
-        }
         
     }
     
@@ -169,7 +128,7 @@ public class PDAIDViewerDrawPanel extends JPanel {
         
         g2d.setColor( Color.BLACK );
         if ( lines != null ) {
-            for ( Line line : lines ) {
+            for ( PDAIDLine line : lines ) {
                 line.draw( g2d );
             }
         }
@@ -194,7 +153,15 @@ public class PDAIDViewerDrawPanel extends JPanel {
     
     public void arrangeAndProccessIds() {
         
-        int marginX = 30;
+        root = pda.getRootId();
+        ids = pda.getIds();
+        lines = new ArrayList<>();
+        
+        size = PDAArrangement.arrangeIDsInTreeFormat( 
+                root, ids, lines, 30, 40, 60, 20 );
+        setPreferredSize( new Dimension( size.width + 50, size.height + 50 ) );
+        
+        /*int marginX = 30;
         int marginY = 40;
         int levelGap = 60;
         int nodeGap = 20;
@@ -240,7 +207,7 @@ public class PDAIDViewerDrawPanel extends JPanel {
                     current = current.getParent();
                 }
             }
-        }
+        }*/
         
     }
     

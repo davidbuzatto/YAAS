@@ -57,11 +57,7 @@ public class MainWindow extends javax.swing.JFrame {
                 " - v" + 
                 ApplicationConstants.APP_VERSION );
         
-        if ( ApplicationConstants.IN_DEVELOPMENT ) {
-            //createFAInternalFrame( FAExamples.createDFAEndsWith00(), true, true );
-            createPDAInternalFrame( PDAExamples.createPDAEvenPalindromeFinalState(), true, true );
-            //createPDAInternalFrame( PDAExamples.createDPDAEvenPalindromeCenterMark(), true, true );
-        } else {
+        if ( !ApplicationConstants.IN_DEVELOPMENT ) {
             menuMinimizationTest.setVisible( false );
             setExtendedState( MAXIMIZED_BOTH );
         }
@@ -139,6 +135,9 @@ public class MainWindow extends javax.swing.JFrame {
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
+            }
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
             }
         });
 
@@ -783,6 +782,16 @@ public class MainWindow extends javax.swing.JFrame {
         createPDAInternalFrame( PDAExamples.createDPDA01Same(), 
                 false, false );
     }//GEN-LAST:event_miDPDA01SameActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        
+        if ( ApplicationConstants.IN_DEVELOPMENT ) {
+            //createFAInternalFrame( FAExamples.createDFAEndsWith00(), true, true );
+            createPDAInternalFrame( PDAExamples.createPDAEvenPalindromeFinalState(), true, true );
+            //createPDAInternalFrame( PDAExamples.createDPDAEvenPalindromeCenterMark(), true, true );
+        }
+        
+    }//GEN-LAST:event_formWindowOpened
 
     public void createFAInternalFrame( FA fa, boolean maximized, boolean currentFileSaved ) {
         

@@ -6,8 +6,8 @@ Finite Automata
     Here: https://resources.wolframcloud.com/PacletRepository/resources/KlausSutner/Automata/
 
 Pushdown Automata
-    Simulation
     Final State to Empty Stack and vice-versa
+    Simulation
 
 Turing Machines
 

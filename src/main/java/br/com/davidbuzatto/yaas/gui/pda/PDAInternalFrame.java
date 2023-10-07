@@ -80,6 +80,7 @@ import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -186,9 +187,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         drawPanel.setCursor( Cursor.getPredefinedCursor( Cursor.HAND_CURSOR ) );
         repaintDrawPanel();
         
-        txtTestStringDefaultBC = txtTestString.getBackground();
-        txtTestStringDefaultFC = txtTestString.getForeground();
-        lblTestResultDefaultFC = lblTestResult.getForeground();
+        saveDefaultColors();
         
         scrollPaneModel.getHorizontalScrollBar().addAdjustmentListener( 
                 new AdjustmentListener() {
@@ -2771,6 +2770,13 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         SwingUtilities.updateComponentTreeUI( popupMenuReorganizeStates );
         SwingUtilities.updateComponentTreeUI( popupMenuStateProperties );
         SwingUtilities.updateComponentTreeUI( popupMenuTransitionProperties );
+        saveDefaultColors();
+    }
+    
+    private void saveDefaultColors() {
+        txtTestStringDefaultBC = UIManager.getColor( "TextField.background" );
+        txtTestStringDefaultFC = UIManager.getColor( "TextField.foreground" );
+        lblTestResultDefaultFC = UIManager.getColor( "Label.foreground" );
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
