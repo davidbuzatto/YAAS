@@ -29,6 +29,7 @@ import br.com.davidbuzatto.yaas.model.pda.PDATransition;
 import br.com.davidbuzatto.yaas.model.pda.algorithms.PDAArrangement;
 import br.com.davidbuzatto.yaas.util.ApplicationConstants;
 import br.com.davidbuzatto.yaas.util.ApplicationPreferences;
+import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.CardLayout;
@@ -1497,6 +1498,18 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             activateSimulationStep( currentSimulationStep );
             
             drawPanel.requestFocus();
+            
+            if ( simulationSteps.isEmpty() ) {
+                Utils.showWarningMessage( this, String.format(
+                        """
+                        The PDA simulation only works with accepted strings!
+                        Since the input string "%s" is not accepted, the
+                        simulation will terminate.""", 
+                        txtTestString.getText().isEmpty() ? 
+                                CharacterConstants.EMPTY_STRING.toString() : 
+                                txtTestString.getText() ) );
+                btnStop.doClick();
+            }
             
         } else {
             Utils.showErrorMessage( this, "You must set an initial state!" );

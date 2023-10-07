@@ -17,10 +17,7 @@
 package br.com.davidbuzatto.yaas.gui.pda;
 
 import br.com.davidbuzatto.yaas.model.pda.PDA;
-import br.com.davidbuzatto.yaas.model.pda.PDAState;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import br.com.davidbuzatto.yaas.model.pda.PDAID;
 
 /**
  * Encapsulates data related to a step in a pertinence simulation of a Pushdown
@@ -30,23 +27,20 @@ import java.util.Set;
  */
 public class PDASimulationStep {
     
-    private List<PDAState> activeStates;
-    private Character processadSymbol;
+    private PDAID id;
     
-    public PDASimulationStep( Set<PDAState> activeStates, Character processedSymbol ) {
-        this.activeStates = new ArrayList<>();
-        this.activeStates.addAll( activeStates );
-        this.processadSymbol = processedSymbol;
+    public PDASimulationStep( PDAID id ) {
+        this.id = id;
     }
     
     public void activateInPDA( PDA pda ) {
-        
         pda.deactivateAllStatesInSimulation();
-        
-        for ( PDAState s : activeStates ) {
-            s.setActiveInSimulation( true );
-        }
-        
+        id.getState().setActiveInSimulation( true );
+    }
+
+    @Override
+    public String toString() {
+        return id.toString();
     }
     
 }

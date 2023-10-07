@@ -1107,6 +1107,20 @@ public class Utils {
     }
     
     /**
+     * Shows a information message.
+     * 
+     * @param parent Parent component.
+     * @param message The message to show.
+     */
+    public static void showInformationMessage( Component parent, String message ) {
+        JOptionPane.showMessageDialog( 
+                    parent, 
+                    message, 
+                    "Information", 
+                    JOptionPane.INFORMATION_MESSAGE );
+    }
+    
+    /**
      * Shows a confirmation message.
      * 
      * @param parent Parent component.

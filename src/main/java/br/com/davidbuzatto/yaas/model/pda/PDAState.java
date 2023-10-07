@@ -89,7 +89,7 @@ public class PDAState extends AbstractGeometricForm implements Comparable<PDASta
         arrow = new Arrow();
         arrow.setMouseHoverStrokeColor( DrawingConstants.STATE_MOUSE_HOVER_STROKE_COLOR );
         arrow.setSelectedStrokeColor( DrawingConstants.STATE_SELECTED_STROKE_COLOR );
-        arrow.setActiveInSimulationStrokeColor(DrawingConstants.STATE_ACTIVE_IN_SIMULATION_STROKE_COLOR );
+        arrow.setActiveInSimulationStrokeColor( DrawingConstants.STATE_ACTIVE_IN_SIMULATION_STROKE_COLOR );
         
     }
     

@@ -19,7 +19,6 @@ package br.com.davidbuzatto.yaas.model.pda;
 import br.com.davidbuzatto.yaas.gui.pda.PDASimulationStep;
 import br.com.davidbuzatto.yaas.model.AbstractGeometricForm;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
-import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -57,6 +56,8 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
     private transient static int buildTreeLevel;
     private transient static final String levelString = "  ";
     private transient boolean accepted;
+    private transient boolean acceptForSimulation;
+    private transient PDAID firstAcceptedId;
     
     // cache control
     private boolean alphabetUpToDate;
@@ -88,6 +89,12 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
     public boolean accepts( String str, PDAAcceptanceType acceptanceType, List<PDASimulationStep> simulationSteps ) {
         
         accepted = false;
+        acceptForSimulation = false;
+        firstAcceptedId = null;
+        
+        if ( simulationSteps != null ) {
+            acceptForSimulation = true;
+        }
         
         if ( canExecute() ) {
             
@@ -101,6 +108,22 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
             ids = new ArrayList<>();
             buildIDTree( rootId, delta, acceptanceType );
             
+            if ( firstAcceptedId != null ) {
+                
+                List<PDAID> pathIds = new ArrayList<>();
+                
+                PDAID current = firstAcceptedId;
+                while ( current != null ) {
+                    pathIds.add( current );
+                    current = current.getParent();
+                }
+                
+                for ( int i = pathIds.size()-1; i >= 0; i-- ) {
+                    simulationSteps.add( new PDASimulationStep( pathIds.get( i ) ) );
+                }
+                
+            }
+            
         }
         
         return accepted;
@@ -109,132 +132,159 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
     
     private void buildIDTree( PDAID node, Map<PDAState, List<PDATransition>> delta, PDAAcceptanceType acceptanceType ) {
         
+        
+        
         if ( node.getString().isEmpty() ) {
+            
             if ( acceptanceType == PDAAcceptanceType.FINAL_STATE && node.getState().isFinal() ) {
+                
                 node.setAcceptedByFinalState( true );
                 accepted = true;
+                
+                // finds only one solution path
+                if ( acceptForSimulation ) {
+                    firstAcceptedId = node;
+                    ids.add( node );
+                    node.setStrokeColor( Color.BLACK );
+                    return;
+                }
+                
             } else if ( acceptanceType == PDAAcceptanceType.EMPTY_STACK && node.getStack().isEmpty() ) {
+                
                 node.setAcceptedByEmptyStack( true );
                 accepted = true;
+                
+                if ( acceptForSimulation ) {
+                    firstAcceptedId = node;
+                    ids.add( node );
+                    return;
+                }
+                
             }
+            
         }
         
         ids.add( node );
         buildTreeLevel++;
         
+        // found the first leaf when is collecting data for simulation
+        if ( firstAcceptedId != null ) {
+            return;
+        }
+        
         if ( DEBUG ) {
             System.out.println( levelString.repeat( buildTreeLevel ) + "Processing: " + node );
         }
-        
+
         String string = node.getString();
-        
+
         for ( PDATransition t : delta.get( node.getState() ) ) {
-            
+
             if ( DEBUG ) {
                 System.out.println( levelString.repeat( buildTreeLevel ) + "  Transition: " + t );
             }
-            
+
             for ( PDAOperation o : t.getOperations() ) {
-                
+
                 if ( DEBUG ) {
                     System.out.println( levelString.repeat( buildTreeLevel ) + "    Operation: " + o );
                 }
-                
+
                 // matches symbol
                 if ( !string.isEmpty() && o.getSymbol() == string.charAt( 0 ) ) {
-                    
+
                     if ( DEBUG ) {
                         System.out.println( levelString.repeat( buildTreeLevel ) + "      Matches symbol: " + o.getSymbol() );
                     }
-                    
+
                     Deque<Character> stack = Utils.cloneCharacterStack( node.getStack() );
-                    
+
                     // matches stack top
                     if ( !stack.isEmpty() && o.getTop() == stack.peek() ) {
-                    
+
                         if ( DEBUG ) {
                             System.out.println( levelString.repeat( buildTreeLevel ) + "      Matches stack top: " + o.getTop() );
                         }
-                        
+
                         // consumes the input symbol
                         String newString = string.substring( 1 );
-                        
+
                         // updates the stack
                         processStack( o, stack );
 
                         PDAID newId = new PDAID( t.getTargetState(), 
                                 newString, stack, o, t.getStrokeColor() );
                         node.addChild( newId );
-                        
+
                         buildIDTree( newId, delta, acceptanceType );
-                        
+
                         // empty stack?
                     } else if ( o.getTop() == CharacterConstants.EMPTY_STRING && stack.isEmpty() ) {
-                        
+
                         if ( DEBUG ) {
                             System.out.println( levelString.repeat( buildTreeLevel ) + "      Matches empty stack" );
                         }
-                        
+
                         String newString = string.substring( 1 );
                         processStack( o, stack );
-                        
+
                         PDAID newId = new PDAID( t.getTargetState(),
                                 newString, stack, o, t.getStrokeColor() );
                         node.addChild( newId );
-                        
+
                         buildIDTree( newId, delta, acceptanceType );
-                        
+
                     }
-                    
+
                     // empty transition 
                 } else if ( o.getSymbol() == CharacterConstants.EMPTY_STRING ) {
-                    
+
                     if ( DEBUG ) {
                         System.out.println( levelString.repeat( buildTreeLevel ) + "      Empty transition" );
                     }
-                    
+
                     Deque<Character> stack = Utils.cloneCharacterStack( node.getStack() );
-                    
+
                     // matches stack top
                     if ( !stack.isEmpty() && o.getTop() == stack.peek() ) {
-                        
+
                         if ( DEBUG ) {
                             System.out.println( levelString.repeat( buildTreeLevel ) + "      Matches stack top: " + o.getTop() );
                         }
-                        
+
                         // don't consume any symbol
-                        
+
                         // updates the stack
                         processStack( o, stack );
 
                         PDAID newId = new PDAID( t.getTargetState(), 
                                 string, stack, o, t.getStrokeColor() );
                         node.addChild( newId );
-                        
+
                         buildIDTree( newId, delta, acceptanceType );
-                        
+
                         // empty stack?
                     } else if ( o.getTop() == CharacterConstants.EMPTY_STRING && stack.isEmpty() ) {
-                        
+
                         if ( DEBUG ) {
                             System.out.println( levelString.repeat( buildTreeLevel ) + "      Matches empty stack" );
                         }
-                        
+
                         String newString = string.substring( 1 );
                         processStack( o, stack );
-                        
+
                         PDAID newId = new PDAID( t.getTargetState(), 
                                 newString, stack, o, t.getStrokeColor() );
                         node.addChild( newId );
-                        
+
                         buildIDTree( newId, delta, acceptanceType );
-                        
+
                     }
-                    
+
                 }
-                
+
             }
-            
+
         }
         
         buildTreeLevel--;

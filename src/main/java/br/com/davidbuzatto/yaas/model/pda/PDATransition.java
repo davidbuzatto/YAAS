@@ -107,8 +107,8 @@ public class PDATransition extends AbstractGeometricForm implements Cloneable {
         label.setMouseHoverFillColor( DrawingConstants.TRANSITION_MOUSE_HOVER_FILL_COLOR );
         label.setSelectedStrokeColor( DrawingConstants.TRANSITION_SELECTED_STROKE_COLOR );
         label.setSelectedFillColor( DrawingConstants.TRANSITION_SELECTED_FILL_COLOR );
-        label.setActiveInSimulationStrokeColor(DrawingConstants.LABEL_ACTIVE_IN_SIMULATION_STROKE_COLOR );
-        label.setActiveInSimulationFillColor(DrawingConstants.LABEL_ACTIVE_IN_SIMULATION_FILL_COLOR );
+        label.setActiveInSimulationStrokeColor( DrawingConstants.LABEL_ACTIVE_IN_SIMULATION_STROKE_COLOR );
+        label.setActiveInSimulationFillColor( DrawingConstants.LABEL_ACTIVE_IN_SIMULATION_FILL_COLOR );
         updateLabel();
         
         targetCP = new ControlPoint();

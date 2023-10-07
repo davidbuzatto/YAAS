@@ -119,62 +119,12 @@ public class DrawPanel extends JPanel {
         }
         
         // TODO update for PDA simulation (depends on accepts and instantaneous description)
-        if ( simulationString != null && faSimulationSteps != null ) {
-            
-            Rectangle r = getVisibleRect();
-            int x1R = (int) r.getX();
-            int y1R = (int) r.getY();
-            int x2R = (int) ( r.getX() + r.getWidth() );
-            int y2R = (int) ( r.getY() + r.getHeight() );
-            int half = x1R + ( x2R - x1R ) / 2;
-        
-            g2d.setFont( DrawingConstants.SIMULATION_STRING_FONT );
-            
-            FontMetrics fm = g2d.getFontMetrics();
-            LineMetrics lm = Utils.getLineMetrics( simulationString, g2d.getFont() );
-            
-            int start = half - fm.stringWidth( simulationString ) / 2;
-            int inc = fm.stringWidth( "0" );
-            int height = (int) lm.getHeight();
-            int ySimulationString = y2R - height / 2 - 10;
-            char[] cs = simulationString.toCharArray();
-            int i;
-            
-            for ( i = 0; i < cs.length; i++ ) {
-            
-                if ( i == currentSimulationStep ) {
-                    g2d.setColor(DrawingConstants.SYMBOL_ACTIVE_IN_SIMULATION_BACKGROUND_COLOR );
-                    g2d.fillRoundRect( start + inc * i - 2, 
-                            ySimulationString - height / 2 - 4, 
-                            inc + 3, 
-                            height / 2 + 8, 10, 10 );
-                    g2d.setColor(DrawingConstants.SYMBOL_ACTIVE_IN_SIMULATION_COLOR );
-                    g2d.drawRoundRect( start + inc * i - 2, 
-                            ySimulationString - height / 2 - 4, 
-                            inc + 3, 
-                            height / 2 + 8, 10, 10 );
-                } else if ( i < currentSimulationStep ) {
-                    g2d.setColor( DrawingConstants.SIMULATION_STRING_PROCESSED_COLOR );
-                } else {
-                    g2d.setColor( DrawingConstants.SIMULATION_STRING_NON_PROCESSED_COLOR );
-                }
-                
-                g2d.drawString( String.valueOf( cs[i] ), 
-                        start + inc * i, 
-                        ySimulationString );
-                
+        if ( simulationString != null ) {
+            if ( faSimulationSteps != null ) {
+                processFASimulation( g2d );
+            } else if ( pdaSimulationSteps != null ) {
+                processPDASimulation( g2d );
             }
-            
-            if ( currentSimulationStep == faSimulationSteps.size() - 1 ) {
-                if ( simulationAccepted ) {
-                    g2d.setColor( DrawingConstants.ACCEPTED_SIMULATION_RESULT_COLOR );
-                    g2d.drawString( " ACCEPTED", start + inc * i, ySimulationString );
-                } else {
-                    g2d.setColor( DrawingConstants.REJECTED_SIMULATION_RESULT_COLOR );
-                    g2d.drawString( " REJECTED", start + inc * i, ySimulationString );
-                }
-            }
-            
         }
         
         if ( selectionRectangle != null ) {
@@ -200,6 +150,122 @@ public class DrawPanel extends JPanel {
         
     }
 
+    private void processFASimulation( Graphics2D g2d ) {
+        
+        Rectangle r = getVisibleRect();
+        int x1R = (int) r.getX();
+        int y1R = (int) r.getY();
+        int x2R = (int) ( r.getX() + r.getWidth() );
+        int y2R = (int) ( r.getY() + r.getHeight() );
+        int half = x1R + ( x2R - x1R ) / 2;
+
+        g2d.setFont( DrawingConstants.SIMULATION_STRING_FONT );
+
+        FontMetrics fm = g2d.getFontMetrics();
+        LineMetrics lm = Utils.getLineMetrics( simulationString, g2d.getFont() );
+
+        int start = half - fm.stringWidth( simulationString ) / 2;
+        int inc = fm.stringWidth( "0" );
+        int height = (int) lm.getHeight();
+        int ySimulationString = y2R - height / 2 - 10;
+        char[] cs = simulationString.toCharArray();
+        int i;
+
+        for ( i = 0; i < cs.length; i++ ) {
+
+            if ( i == currentSimulationStep ) {
+                g2d.setColor( DrawingConstants.SYMBOL_ACTIVE_IN_SIMULATION_BACKGROUND_COLOR );
+                g2d.fillRoundRect( start + inc * i - 2, 
+                        ySimulationString - height / 2 - 4, 
+                        inc + 3, 
+                        height / 2 + 8, 10, 10 );
+                g2d.setColor( DrawingConstants.SYMBOL_ACTIVE_IN_SIMULATION_COLOR );
+                g2d.drawRoundRect( start + inc * i - 2, 
+                        ySimulationString - height / 2 - 4, 
+                        inc + 3, 
+                        height / 2 + 8, 10, 10 );
+            } else if ( i < currentSimulationStep ) {
+                g2d.setColor( DrawingConstants.SIMULATION_STRING_PROCESSED_COLOR );
+            } else {
+                g2d.setColor( DrawingConstants.SIMULATION_STRING_NON_PROCESSED_COLOR );
+            }
+
+            g2d.drawString( String.valueOf( cs[i] ), 
+                    start + inc * i, 
+                    ySimulationString );
+
+        }
+
+        if ( currentSimulationStep == faSimulationSteps.size() - 1 ) {
+            if ( simulationAccepted ) {
+                g2d.setColor( DrawingConstants.ACCEPTED_SIMULATION_RESULT_COLOR );
+                g2d.drawString( " ACCEPTED", start + inc * i, ySimulationString );
+            } else {
+                g2d.setColor( DrawingConstants.REJECTED_SIMULATION_RESULT_COLOR );
+                g2d.drawString( " REJECTED", start + inc * i, ySimulationString );
+            }
+        }
+        
+    }
+    
+    private void processPDASimulation( Graphics2D g2d ) {
+        
+        Rectangle r = getVisibleRect();
+        int x1R = (int) r.getX();
+        int y1R = (int) r.getY();
+        int x2R = (int) ( r.getX() + r.getWidth() );
+        int y2R = (int) ( r.getY() + r.getHeight() );
+        int half = x1R + ( x2R - x1R ) / 2;
+
+        g2d.setFont( DrawingConstants.SIMULATION_STRING_FONT );
+
+        FontMetrics fm = g2d.getFontMetrics();
+        LineMetrics lm = Utils.getLineMetrics( simulationString, g2d.getFont() );
+
+        int start = half - fm.stringWidth( simulationString ) / 2;
+        int inc = fm.stringWidth( "0" );
+        int height = (int) lm.getHeight();
+        int ySimulationString = y2R - height / 2 - 10;
+        char[] cs = simulationString.toCharArray();
+        int i;
+
+        for ( i = 0; i < cs.length; i++ ) {
+
+            if ( i == currentSimulationStep ) {
+                g2d.setColor( DrawingConstants.SYMBOL_ACTIVE_IN_SIMULATION_BACKGROUND_COLOR );
+                g2d.fillRoundRect( start + inc * i - 2, 
+                        ySimulationString - height / 2 - 4, 
+                        inc + 3, 
+                        height / 2 + 8, 10, 10 );
+                g2d.setColor( DrawingConstants.SYMBOL_ACTIVE_IN_SIMULATION_COLOR );
+                g2d.drawRoundRect( start + inc * i - 2, 
+                        ySimulationString - height / 2 - 4, 
+                        inc + 3, 
+                        height / 2 + 8, 10, 10 );
+            } else if ( i < currentSimulationStep ) {
+                g2d.setColor( DrawingConstants.SIMULATION_STRING_PROCESSED_COLOR );
+            } else {
+                g2d.setColor( DrawingConstants.SIMULATION_STRING_NON_PROCESSED_COLOR );
+            }
+
+            g2d.drawString( String.valueOf( cs[i] ), 
+                    start + inc * i, 
+                    ySimulationString );
+
+        }
+
+        if ( currentSimulationStep == pdaSimulationSteps.size() - 1 ) {
+            if ( simulationAccepted ) {
+                g2d.setColor( DrawingConstants.ACCEPTED_SIMULATION_RESULT_COLOR );
+                g2d.drawString( " ACCEPTED", start + inc * i, ySimulationString );
+            } else {
+                g2d.setColor( DrawingConstants.REJECTED_SIMULATION_RESULT_COLOR );
+                g2d.drawString( " REJECTED", start + inc * i, ySimulationString );
+            }
+        }
+        
+    }
+    
     public void setFa( FA fa ) {
         this.fa = fa;
     }
