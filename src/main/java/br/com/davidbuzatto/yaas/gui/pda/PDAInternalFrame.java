@@ -473,7 +473,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
-        setTitle("Pushown Automata");
+        setTitle("Pushdown Automata");
         setFrameIcon(new javax.swing.ImageIcon(getClass().getResource("/pda.png"))); // NOI18N
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
