@@ -34,7 +34,7 @@ public class PDAPropertiesPanel extends javax.swing.JPanel {
     private PDA pda;
     
     /**
-     * Creates new form FAPropertiesPanel
+     * Creates new form PDAPropertiesPanel
      */
     public PDAPropertiesPanel( PDAInternalFrame pdaIFrame ) {
         
@@ -157,7 +157,7 @@ public class PDAPropertiesPanel extends javax.swing.JPanel {
                 .addComponent(btnResetStatesColor)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnResetTransitionsColor)
-                .addContainerGap(172, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 

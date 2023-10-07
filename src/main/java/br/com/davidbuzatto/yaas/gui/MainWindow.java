@@ -904,13 +904,7 @@ public class MainWindow extends javax.swing.JFrame {
     
     private void openExample() {
         if ( ApplicationConstants.IN_DEVELOPMENT ) {
-            //createFAInternalFrame( FAExamples.createDFAEndsWith00(), true, true );
-            //createPDAInternalFrame( PDAExamples.createPDAEvenPalindromeFinalState(), true, true );
-            //createPDAInternalFrame( PDAExamples.createDPDAEvenPalindromeCenterMark(), true, true );
-            
-            
-            createPDAInternalFrame( PDAExamples.createPDA01FinalState(), true, true );
-            
+            createPDAInternalFrame( PDAExamples.createPDA0n1nFinalState(), true, true );
         }
     }
     

@@ -40,7 +40,7 @@ public class FATransitionPropertiesPanel extends javax.swing.JPanel {
     
     
     /**
-     * Creates new form TransitionPropertiesPanel
+     * Creates new form FATransitionPropertiesPanel
      */
     public FATransitionPropertiesPanel( FAInternalFrame faIFrame ) {
         

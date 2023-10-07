@@ -36,6 +36,11 @@ public class PDASimulationStep {
     public void activateInPDA( PDA pda ) {
         pda.deactivateAllStatesInSimulation();
         id.getState().setActiveInSimulation( true );
+        id.setActiveInSimulation( true );
+    }
+
+    public PDAID getId() {
+        return id;
     }
 
     @Override

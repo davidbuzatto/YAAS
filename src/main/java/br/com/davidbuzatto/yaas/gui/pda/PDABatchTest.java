@@ -38,7 +38,7 @@ public class PDABatchTest extends javax.swing.JDialog {
     private PDA pda;
     
     /**
-     * Creates new form FABatchTest
+     * Creates new form PDABatchTest
      */
     public PDABatchTest( Frame parent, PDAInternalFrame pdaIFrame, PDAAcceptanceType acceptanceType, boolean modal ) {
         super( parent, modal );

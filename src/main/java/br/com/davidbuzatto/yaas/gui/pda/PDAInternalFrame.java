@@ -130,6 +130,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     
     private List<PDASimulationStep> simulationSteps;
     private int currentSimulationStep;
+    private PDAIDSimulationViewerFrame simulationVFrame;
     
     private PDABatchTest pdaBatchTestDialog;
     private Color txtTestStringDefaultBC;
@@ -1509,6 +1510,10 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                                 CharacterConstants.EMPTY_STRING.toString() : 
                                 txtTestString.getText() ) );
                 btnStop.doClick();
+            } else {
+                simulationVFrame = new PDAIDSimulationViewerFrame( 
+                        this, pda, simulationSteps );
+                simulationVFrame.setVisible( true );
             }
             
         } else {
@@ -1571,6 +1576,11 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         drawPanel.setCurrentSimulationStep( 0 );
         drawPanel.setSimulationAccepted( false );
         drawPanel.repaint();
+        
+        if ( simulationVFrame != null ) {
+            simulationVFrame.dispose();
+            simulationVFrame = null;
+        }
         
     }//GEN-LAST:event_btnStopActionPerformed
 
@@ -2238,7 +2248,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             }
             
             if ( checkShowIDs.isSelected() ) {
-                PDAIDViewerFrame pViewer = new PDAIDViewerFrame( this, pda, false );
+                PDAIDViewerFrame pViewer = new PDAIDViewerFrame( this, pda );
                 pViewer.setVisible( true );
             }
             
@@ -2384,6 +2394,10 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             }
             
             drawPanel.repaint();
+            
+            if ( simulationVFrame != null ) {
+                simulationVFrame.setCurrentSimulationStep( step );
+            }
             
         }
         

@@ -85,7 +85,6 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
         return accepts( str, acceptanceType, null );
     }
     
-    // TODO test and return ok
     public boolean accepts( String str, PDAAcceptanceType acceptanceType, List<PDASimulationStep> simulationSteps ) {
         
         accepted = false;
@@ -132,8 +131,6 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
     
     private void buildIDTree( PDAID node, Map<PDAState, List<PDATransition>> delta, PDAAcceptanceType acceptanceType ) {
         
-        
-        
         if ( node.getString().isEmpty() ) {
             
             if ( acceptanceType == PDAAcceptanceType.FINAL_STATE && node.getState().isFinal() ) {
@@ -145,7 +142,6 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
                 if ( acceptForSimulation ) {
                     firstAcceptedId = node;
                     ids.add( node );
-                    node.setStrokeColor( Color.BLACK );
                     return;
                 }
                 

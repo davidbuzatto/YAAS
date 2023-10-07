@@ -53,6 +53,10 @@ public class PDAID extends AbstractGeometricForm implements Comparable<PDAID> {
     private int textHeight;
     private Color textColor;
     
+    private boolean activeInSimulation;
+    private Color activeInSimulationStrokeColor;
+    private Color activeInSimulationFillColor;
+    
     public PDAID( PDAState state, String string, Deque<Character> stack, PDAOperation operation, Color strokeColor ) {
         
         this.state = state;
@@ -63,6 +67,9 @@ public class PDAID extends AbstractGeometricForm implements Comparable<PDAID> {
         
         this.font = DrawingConstants.DEFAULT_FONT;
         this.textColor = DrawingConstants.PDAID_DEFAULT_TEXT_COLOR;
+        
+        activeInSimulationFillColor = DrawingConstants.PDAID_ACTIVE_IN_SIMULATION_FILL_COLOR;
+        activeInSimulationStrokeColor = DrawingConstants.PDAID_ACTIVE_IN_SIMULATION_STROKE_COLOR;
         
         setStrokeColor( strokeColor );
         setAcceptedStrokeColor( DrawingConstants.PDAID_DEFAULT_ACCEPTED_COLOR );
@@ -86,6 +93,10 @@ public class PDAID extends AbstractGeometricForm implements Comparable<PDAID> {
     public PDAOperation getOperation() {
         return operation;
     }
+
+    public void setActiveInSimulation( boolean activeInSimulation ) {
+        this.activeInSimulation = activeInSimulation;
+    }
     
     @Override
     public void draw( Graphics2D g2d ) {
@@ -94,14 +105,27 @@ public class PDAID extends AbstractGeometricForm implements Comparable<PDAID> {
         
         g2d.setFont( font );
         
+        Color hilightStrokeColor = null;
+        Color hilightFillColor = null;
+        
         if ( acceptedByFinalState || acceptedByEmptyStack ) {
-            g2d.setColor( acceptedFillColor );
+            hilightStrokeColor = acceptedStrokeColor;
+            hilightFillColor = acceptedFillColor;
+        }
+        
+        if ( activeInSimulation ) {
+            hilightStrokeColor = activeInSimulationStrokeColor;
+            hilightFillColor = activeInSimulationFillColor;
+        }
+        
+        if ( hilightStrokeColor != null ) {
+            g2d.setColor( hilightFillColor );
             g2d.fillRoundRect( 
                     x1 - textWidth / 2 - 5,
                     y1 - textHeight / 2 - 8,
                     textWidth + 10,
                     textHeight + 15, 5, 5 );
-            g2d.setColor( acceptedStrokeColor );
+            g2d.setColor( hilightStrokeColor );
             g2d.drawRoundRect( 
                     x1 - textWidth / 2 - 5,
                     y1 - textHeight / 2 - 8,

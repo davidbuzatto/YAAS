@@ -187,4 +187,20 @@ public class PDAIDViewerDrawPanel extends JPanel {
         
     }
     
+    public void arrangeAndProccessIdsForSimulation( List<PDASimulationStep> simulationSteps ) {
+        
+        ids = new ArrayList<>();
+        for ( PDASimulationStep step : simulationSteps ) {
+            ids.add( step.getId() );
+        }
+        
+        root = ids.get( 0 );
+        lines = new ArrayList<>();
+        
+        size = PDAArrangement.arrangeIDsInTreeFormatForSimulation( 
+                root, ids, lines, 30, 40, 60, 20 );
+        setPreferredSize( new Dimension( size.width + 60, size.height + 70 ) );
+        
+    }
+    
 }

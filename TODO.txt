@@ -1,13 +1,11 @@
 Finite Automata
     Highlight inacessible states (properties panel)
     Highlight nondeterminisms    (properties panel)
-
     Regular Expressions
-    Here: https://resources.wolframcloud.com/PacletRepository/resources/KlausSutner/Automata/
 
 Pushdown Automata
-    Final State to Empty Stack and vice-versa
-    Simulation
+    Final State to Empty Stack and vice-versa?
+    PDA to CFGs?
 
 Turing Machines
 

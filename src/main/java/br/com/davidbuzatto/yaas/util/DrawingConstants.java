@@ -140,5 +140,7 @@ public interface DrawingConstants {
     
     public static final Color PDAID_DEFAULT_TEXT_COLOR = Color.BLACK;
     public static final Color PDAID_DEFAULT_ACCEPTED_COLOR = new Color( 0, 176, 80 );
+    public static final Color PDAID_ACTIVE_IN_SIMULATION_STROKE_COLOR = new Color( 68, 4, 168 );
+    public static final Color PDAID_ACTIVE_IN_SIMULATION_FILL_COLOR = new Color( 212, 200, 231 );
     
 }

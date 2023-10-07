@@ -403,4 +403,61 @@ public class PDAArrangement {
         
     }
     
+    /**
+     * Process a PDAID tree and organize it.
+     * 
+     * @param root The root node
+     * @param ids All the ids
+     * @param lines The lines that will connect the ids
+     * @param marginX Margin x
+     * @param marginY Margin y
+     * @param levelGap Level gap
+     * @param nodeGap Node gap
+     * @return The dimension of the tree.
+     */
+    public static Dimension arrangeIDsInTreeFormatForSimulation( 
+            PDAID root, 
+            List<PDAID> ids,
+            List<PDAIDLine> lines, 
+            int marginX, int marginY,
+            int levelGap, int nodeGap ) {
+        
+        DefaultTreeForTreeLayout<PDAID> tree = new DefaultTreeForTreeLayout<>(root);
+        for ( int i = 0; i < ids.size() - 1; i++ ) {
+            tree.addChild( ids.get( i ), ids.get( i+1 ) );
+        }
+        
+        boolean acceptedByFinalState = ids.get( ids.size()-1 ).isAcceptedByFinalState();
+        boolean acceptedByEmptyStack = ids.get( ids.size()-1 ).isAcceptedByEmptyStack();
+        
+        DefaultConfiguration<PDAID> configuration = new DefaultConfiguration<>( levelGap, nodeGap );
+        PDAIDNodeExtentProvider nodeExtentProvider = new PDAIDNodeExtentProvider();
+        TreeLayout<PDAID> treeLayout = new TreeLayout<>( tree, nodeExtentProvider, configuration );
+        
+        for ( PDAID id : ids ) {
+            Rectangle2D.Double box = treeLayout.getNodeBounds().get( id );
+            id.setX1( (int) ( box.x + box.width/2 ) + marginX );
+            id.setY1( (int) ( box.y + box.height/2 ) + marginY );
+        }
+        
+        for ( int i = 0; i < ids.size() - 1; i++ ) {
+            PDAID id = ids.get( i );
+            PDAID cId = ids.get( i+1 );
+            lines.add( new PDAIDLine( 
+                    id,
+                    cId,
+                    id.getX1(), 
+                    id.getY1() + 20, 
+                    cId.getX1(),
+                    cId.getY1() - 20, 
+                    cId.getOperation(),
+                    cId.getStrokeColor() ) );
+            id.setAcceptedByFinalState( acceptedByFinalState );
+            id.setAcceptedByEmptyStack( acceptedByEmptyStack );
+        }
+        
+        return treeLayout.getBounds().getBounds().getSize();
+        
+    }
+    
 }

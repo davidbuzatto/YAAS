@@ -17,35 +17,47 @@
 package br.com.davidbuzatto.yaas.gui.pda;
 
 import br.com.davidbuzatto.yaas.model.pda.PDA;
+import br.com.davidbuzatto.yaas.model.pda.PDAID;
+import br.com.davidbuzatto.yaas.util.Utils;
+import java.util.List;
 
 /**
- * A viewer of a ID tree.
+ * A viewer of a ID tree for the simulation proccess.
  * 
  * @author Prof. Dr. David Buzatto
  */
-public class PDAIDViewerFrame extends javax.swing.JFrame {
+public class PDAIDSimulationViewerFrame extends javax.swing.JFrame {
 
+    private int currentSimulationStep;
     private PDAInternalFrame pdaIFrame;
     private PDA pda;
+    List<PDASimulationStep> simulationSteps;
     
     /**
-     * Creates new form PDAIDViewerFrame
+     * Creates new form PDAIDSimulationViewerFrame
      */
-    public PDAIDViewerFrame( PDAInternalFrame pdaIFrame, PDA pda ) {
+    public PDAIDSimulationViewerFrame( 
+            PDAInternalFrame pdaIFrame, 
+            PDA pda,
+            List<PDASimulationStep> simulationSteps ) {
         
         this.pdaIFrame = pdaIFrame;
         this.pda = pda;
+        this.simulationSteps = simulationSteps;
         
         initComponents();
         setLocationRelativeTo( pdaIFrame );
+        setAlwaysOnTop( true );
         
         drawPanel.setPda( pda );
-        drawPanel.arrangeAndProccessIds();
+        drawPanel.arrangeAndProccessIdsForSimulation( simulationSteps );
         drawPanel.repaint();
         drawPanel.revalidate();
         
+        setCurrentSimulationStep( currentSimulationStep );
+        
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -58,9 +70,14 @@ public class PDAIDViewerFrame extends javax.swing.JFrame {
         scrollDrawPanel = new javax.swing.JScrollPane();
         drawPanel = new br.com.davidbuzatto.yaas.gui.pda.PDAIDViewerDrawPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Instantaneous Description Viewer");
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("Simulation ID Viewer");
         setIconImage(new javax.swing.ImageIcon( getClass().getResource( "/arrow_right.png" ) ).getImage());
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         javax.swing.GroupLayout drawPanelLayout = new javax.swing.GroupLayout(drawPanel);
         drawPanel.setLayout(drawPanelLayout);
@@ -79,16 +96,31 @@ public class PDAIDViewerFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrollDrawPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
+            .addComponent(scrollDrawPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrollDrawPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+            .addComponent(scrollDrawPanel, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        Utils.showInformationMessage( this, "This window will close automatically when you stop the simulation." );
+    }//GEN-LAST:event_formWindowClosing
+    
+    public void setCurrentSimulationStep( int currentSimulationStep ) {
+        this.currentSimulationStep = currentSimulationStep;
+        for ( PDASimulationStep step : simulationSteps ) {
+            step.getId().setActiveInSimulation( false );
+        }
+        for ( int i = 0; i <= currentSimulationStep; i++ ) {
+            simulationSteps.get( i ).getId().setActiveInSimulation( true );
+        }
+        drawPanel.repaint();
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private br.com.davidbuzatto.yaas.gui.pda.PDAIDViewerDrawPanel drawPanel;

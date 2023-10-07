@@ -39,7 +39,7 @@ public class PDATransitionPropertiesPanel extends javax.swing.JPanel {
     
     
     /**
-     * Creates new form TransitionPropertiesPanel
+     * Creates new form PDATransitionPropertiesPanel
      */
     public PDATransitionPropertiesPanel( PDAInternalFrame pdaIFrame ) {
         

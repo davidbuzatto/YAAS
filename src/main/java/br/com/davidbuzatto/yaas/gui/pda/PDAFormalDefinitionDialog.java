@@ -35,7 +35,7 @@ public class PDAFormalDefinitionDialog extends javax.swing.JDialog {
     private PDA pda;
     
     /**
-     * Creates new form FAFormalDefinitionDialog
+     * Creates new form PDAFormalDefinitionDialog
      */
     public PDAFormalDefinitionDialog( java.awt.Frame parent, boolean modal, PDA pda ) {
         super( parent, modal );

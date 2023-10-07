@@ -37,7 +37,7 @@ public class FAStatePropertiesPanel extends javax.swing.JPanel {
     private FAState state;
     
     /**
-     * Creates new form StatePropertiesPanel
+     * Creates new form FAStatePropertiesPanel
      */
     public FAStatePropertiesPanel( FAInternalFrame faIFrame ) {
         

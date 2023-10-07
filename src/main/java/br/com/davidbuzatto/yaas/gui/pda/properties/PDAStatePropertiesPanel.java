@@ -37,7 +37,7 @@ public class PDAStatePropertiesPanel extends javax.swing.JPanel {
     private PDAState state;
     
     /**
-     * Creates new form StatePropertiesPanel
+     * Creates new form PDAStatePropertiesPanel
      */
     public PDAStatePropertiesPanel( PDAInternalFrame pdaIFrame ) {
         

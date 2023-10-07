@@ -118,7 +118,6 @@ public class DrawPanel extends JPanel {
 
         }
         
-        // TODO update for PDA simulation (depends on accepts and instantaneous description)
         if ( simulationString != null ) {
             if ( faSimulationSteps != null ) {
                 processFASimulation( g2d );
@@ -228,10 +227,19 @@ public class DrawPanel extends JPanel {
         int ySimulationString = y2R - height / 2 - 10;
         char[] cs = simulationString.toCharArray();
         int i;
-
+        
+        int currentSymbolIndex = 0;
+        for ( int k = 0; k < currentSimulationStep; k++ ) {
+            int str1Length = pdaSimulationSteps.get( k ).getId().getString().length();
+            int str2Length = pdaSimulationSteps.get( k+1 ).getId().getString().length();
+            if ( str1Length != str2Length ) {
+                currentSymbolIndex++;
+            }
+        }
+        
         for ( i = 0; i < cs.length; i++ ) {
 
-            if ( i == currentSimulationStep ) {
+            if ( i == currentSymbolIndex ) {
                 g2d.setColor( DrawingConstants.SYMBOL_ACTIVE_IN_SIMULATION_BACKGROUND_COLOR );
                 g2d.fillRoundRect( start + inc * i - 2, 
                         ySimulationString - height / 2 - 4, 
@@ -242,7 +250,7 @@ public class DrawPanel extends JPanel {
                         ySimulationString - height / 2 - 4, 
                         inc + 3, 
                         height / 2 + 8, 10, 10 );
-            } else if ( i < currentSimulationStep ) {
+            } else if ( i < currentSymbolIndex ) {
                 g2d.setColor( DrawingConstants.SIMULATION_STRING_PROCESSED_COLOR );
             } else {
                 g2d.setColor( DrawingConstants.SIMULATION_STRING_NON_PROCESSED_COLOR );
