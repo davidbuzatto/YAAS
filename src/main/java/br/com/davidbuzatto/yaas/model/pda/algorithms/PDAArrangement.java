@@ -380,10 +380,13 @@ public class PDAArrangement {
         for ( PDAID id : ids ) {
             for ( PDAID cId : id.getChildren() ) {
                 lines.add( new PDAIDLine( 
+                        id,
+                        cId,
                         id.getX1(), 
                         id.getY1() + 20, 
                         cId.getX1(),
                         cId.getY1() - 20, 
+                        cId.getOperation(),
                         cId.getStrokeColor() ) );
             }
             if ( id.isAcceptedByFinalState() || id.isAcceptedByEmptyStack() ) {

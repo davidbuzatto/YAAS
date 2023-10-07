@@ -33,7 +33,11 @@ public interface DrawingConstants {
     
     public static final SerializableBasicStroke DRAW_PANEL_STROKE = new SerializableBasicStroke( 2 );
     
+    public static final SerializableBasicStroke PDAIDLINE_DEFAULT_STROKE = new SerializableBasicStroke( 1 );
+    public static final SerializableBasicStroke PDAIDLINE_MOUSE_OVER_STROKE = new SerializableBasicStroke( 2 );
+    
     public static final int ARROW_LENGTH = 10;
+    public static final int ARROW_MOUSE_OVER_LENGTH = 15;
     
     public static final int STATE_RADIUS = 25;
     public static final int STATE_RADIUS_SQUARED = STATE_RADIUS * STATE_RADIUS;

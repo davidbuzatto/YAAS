@@ -219,6 +219,11 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         registerActions();
         repaintDrawPanel();
         
+        if ( ApplicationConstants.IN_DEVELOPMENT ) {
+            checkShowIDs.setSelected( true );
+            txtTestString.setText( "0011" );
+        }
+        
     }
     
     /**
@@ -703,7 +708,6 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
 
         lblTestString.setText("String:");
 
-        txtTestString.setText("1111");
         txtTestString.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtTestStringActionPerformed(evt);

@@ -95,7 +95,7 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
             Deque<Character> stack = new ArrayDeque<>();
             stack.push( stackStartingSymbol );
             
-            rootId = new PDAID( initialState, str, stack, Color.BLACK );
+            rootId = new PDAID( initialState, str, stack, null, Color.BLACK );
             
             buildTreeLevel = 0;
             ids = new ArrayList<>();
@@ -150,7 +150,7 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
                     Deque<Character> stack = Utils.cloneCharacterStack( node.getStack() );
                     
                     // matches stack top
-                    if ( o.getTop() == stack.peek() ) {
+                    if ( !stack.isEmpty() && o.getTop() == stack.peek() ) {
                     
                         if ( DEBUG ) {
                             System.out.println( levelString.repeat( buildTreeLevel ) + "      Matches stack top: " + o.getTop() );
@@ -162,7 +162,8 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
                         // updates the stack
                         processStack( o, stack );
 
-                        PDAID newId = new PDAID( t.getTargetState(), newString, stack, t.getStrokeColor() );
+                        PDAID newId = new PDAID( t.getTargetState(), 
+                                newString, stack, o, t.getStrokeColor() );
                         node.addChild( newId );
                         
                         buildIDTree( newId, delta, acceptanceType );
@@ -177,7 +178,8 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
                         String newString = string.substring( 1 );
                         processStack( o, stack );
                         
-                        PDAID newId = new PDAID( t.getTargetState(), newString, stack, t.getStrokeColor() );
+                        PDAID newId = new PDAID( t.getTargetState(),
+                                newString, stack, o, t.getStrokeColor() );
                         node.addChild( newId );
                         
                         buildIDTree( newId, delta, acceptanceType );
@@ -194,7 +196,7 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
                     Deque<Character> stack = Utils.cloneCharacterStack( node.getStack() );
                     
                     // matches stack top
-                    if ( o.getTop() == stack.peek() ) {
+                    if ( !stack.isEmpty() && o.getTop() == stack.peek() ) {
                         
                         if ( DEBUG ) {
                             System.out.println( levelString.repeat( buildTreeLevel ) + "      Matches stack top: " + o.getTop() );
@@ -205,7 +207,8 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
                         // updates the stack
                         processStack( o, stack );
 
-                        PDAID newId = new PDAID( t.getTargetState(), string, stack, t.getStrokeColor() );
+                        PDAID newId = new PDAID( t.getTargetState(), 
+                                string, stack, o, t.getStrokeColor() );
                         node.addChild( newId );
                         
                         buildIDTree( newId, delta, acceptanceType );
@@ -220,7 +223,8 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
                         String newString = string.substring( 1 );
                         processStack( o, stack );
                         
-                        PDAID newId = new PDAID( t.getTargetState(), newString, stack, t.getStrokeColor() );
+                        PDAID newId = new PDAID( t.getTargetState(), 
+                                newString, stack, o, t.getStrokeColor() );
                         node.addChild( newId );
                         
                         buildIDTree( newId, delta, acceptanceType );

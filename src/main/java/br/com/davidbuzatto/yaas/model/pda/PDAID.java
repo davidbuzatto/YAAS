@@ -38,6 +38,7 @@ public class PDAID extends AbstractGeometricForm implements Comparable<PDAID> {
     private PDAState state;
     private String string;
     private Deque<Character> stack;
+    private PDAOperation operation;
     
     private PDAID parent;
     private List<PDAID> children;
@@ -52,18 +53,19 @@ public class PDAID extends AbstractGeometricForm implements Comparable<PDAID> {
     private int textHeight;
     private Color textColor;
     
-    public PDAID( PDAState state, String string, Deque<Character> stack, Color strokeColor ) {
+    public PDAID( PDAState state, String string, Deque<Character> stack, PDAOperation operation, Color strokeColor ) {
         
         this.state = state;
         this.string = string;
         this.children = new ArrayList<>();
         this.stack = Utils.cloneCharacterStack( stack );
+        this.operation = operation;
         
         this.font = DrawingConstants.DEFAULT_FONT;
-        setStrokeColor( strokeColor );
-        setAcceptedStrokeColor( DrawingConstants.PDAID_DEFAULT_ACCEPTED_COLOR );
         this.textColor = DrawingConstants.PDAID_DEFAULT_TEXT_COLOR;
         
+        setStrokeColor( strokeColor );
+        setAcceptedStrokeColor( DrawingConstants.PDAID_DEFAULT_ACCEPTED_COLOR );
         setText( toString() );
         
     }
@@ -79,6 +81,10 @@ public class PDAID extends AbstractGeometricForm implements Comparable<PDAID> {
         FontMetrics fm = Utils.getFontMetrics( font );
         textWidth = fm.stringWidth( text );
         textHeight = (int) ( lm.getHeight() / 2 );
+    }
+
+    public PDAOperation getOperation() {
+        return operation;
     }
     
     @Override

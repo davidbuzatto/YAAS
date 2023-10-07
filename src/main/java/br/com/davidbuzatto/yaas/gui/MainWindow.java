@@ -29,6 +29,7 @@ import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import java.awt.EventQueue;
 import java.beans.PropertyVetoException;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
@@ -784,13 +785,7 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_miDPDA01SameActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        
-        if ( ApplicationConstants.IN_DEVELOPMENT ) {
-            //createFAInternalFrame( FAExamples.createDFAEndsWith00(), true, true );
-            createPDAInternalFrame( PDAExamples.createPDAEvenPalindromeFinalState(), true, true );
-            //createPDAInternalFrame( PDAExamples.createDPDAEvenPalindromeCenterMark(), true, true );
-        }
-        
+        openExample();
     }//GEN-LAST:event_formWindowOpened
 
     public void createFAInternalFrame( FA fa, boolean maximized, boolean currentFileSaved ) {
@@ -884,7 +879,7 @@ public class MainWindow extends javax.swing.JFrame {
     
     public static void main( String args[] ) {
         
-        java.awt.EventQueue.invokeLater( new Runnable() {
+        EventQueue.invokeLater( new Runnable() {
             
             public void run() {
                 
@@ -905,6 +900,18 @@ public class MainWindow extends javax.swing.JFrame {
             }
             
         });
+    }
+    
+    private void openExample() {
+        if ( ApplicationConstants.IN_DEVELOPMENT ) {
+            //createFAInternalFrame( FAExamples.createDFAEndsWith00(), true, true );
+            //createPDAInternalFrame( PDAExamples.createPDAEvenPalindromeFinalState(), true, true );
+            //createPDAInternalFrame( PDAExamples.createDPDAEvenPalindromeCenterMark(), true, true );
+            
+            
+            createPDAInternalFrame( PDAExamples.createPDA01FinalState(), true, true );
+            
+        }
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

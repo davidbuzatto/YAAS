@@ -16,8 +16,6 @@
  */
 package br.com.davidbuzatto.yaas.gui.pda;
 
-import br.com.davidbuzatto.yaas.model.AbstractGeometricForm;
-import br.com.davidbuzatto.yaas.model.Arrow;
 import br.com.davidbuzatto.yaas.model.pda.PDA;
 import br.com.davidbuzatto.yaas.model.pda.PDAID;
 import br.com.davidbuzatto.yaas.model.pda.PDAIDLine;
@@ -54,6 +52,7 @@ public class PDAIDViewerDrawPanel extends JPanel {
     private int yAmount;
     private int totalXAmount;
     private int totalYAmount;
+    private PDAIDLine mouseOverLine;
     
     private Dimension size;
     
@@ -86,6 +85,25 @@ public class PDAIDViewerDrawPanel extends JPanel {
         });
         
         addMouseMotionListener( new MouseAdapter() {
+            
+            @Override
+            public void mouseMoved( MouseEvent evt ) {
+                
+                mouseOverLine = null;
+                
+                for ( PDAIDLine line : lines ) {
+                    if ( line.intersects( evt.getX(), evt.getY() ) ) {
+                        line.setMouseHover( true );
+                        line.setMouseXY( evt.getX(), evt.getY() );
+                        mouseOverLine = line;
+                    } else {
+                        line.setMouseHover( false );
+                    }
+                }
+                
+                repaint();
+                
+            }
             
             @Override
             public void mouseDragged( MouseEvent evt ) {
@@ -126,17 +144,23 @@ public class PDAIDViewerDrawPanel extends JPanel {
         g2d.setColor( Color.WHITE );
         g2d.fillRect( 0, 0, getWidth(), getHeight() );
         
-        g2d.setColor( Color.BLACK );
-        if ( lines != null ) {
-            for ( PDAIDLine line : lines ) {
-                line.draw( g2d );
-            }
-        }
-        
         if ( ids != null ) {
             for ( PDAID id : ids ) {
                 id.draw( g2d );
             }
+        }
+        
+        g2d.setColor( Color.BLACK );
+        if ( lines != null ) {
+            for ( PDAIDLine line : lines ) {
+                if ( line != mouseOverLine ) {
+                    line.draw( g2d );
+                }
+            }
+        }
+        
+        if ( mouseOverLine != null ) {
+            mouseOverLine.draw( g2d );
         }
         
         g2d.setStroke( DrawingConstants.DRAW_PANEL_STROKE.getBasicStroke() );
@@ -159,55 +183,7 @@ public class PDAIDViewerDrawPanel extends JPanel {
         
         size = PDAArrangement.arrangeIDsInTreeFormat( 
                 root, ids, lines, 30, 40, 60, 20 );
-        setPreferredSize( new Dimension( size.width + 50, size.height + 50 ) );
-        
-        /*int marginX = 30;
-        int marginY = 40;
-        int levelGap = 60;
-        int nodeGap = 20;
-                
-        root = pda.getRootId();
-        ids = pda.getIds();
-        lines = new ArrayList<>();
-        
-        DefaultTreeForTreeLayout<PDAID> tree = new DefaultTreeForTreeLayout<>(root);
-        for ( PDAID id : ids ) {
-            for ( PDAID cId : id.getChildren() ) {
-                tree.addChild( id, cId );
-            }
-        }
-        
-        DefaultConfiguration<PDAID> configuration = new DefaultConfiguration<>( levelGap, nodeGap );
-        PDAIDNodeExtentProvider nodeExtentProvider = new PDAIDNodeExtentProvider();
-        TreeLayout<PDAID> treeLayout = new TreeLayout<>( tree, nodeExtentProvider, configuration );
-        
-        size = treeLayout.getBounds().getBounds().getSize();
-        setPreferredSize( new Dimension( size.width + 50, size.height + 50 ) );
-        
-        for ( PDAID id : ids ) {
-            Rectangle2D.Double box = treeLayout.getNodeBounds().get( id );
-            id.setX1( (int) ( box.x + box.width/2 ) + marginX );
-            id.setY1( (int) ( box.y + box.height/2 ) + marginY );
-        }
-        
-        for ( PDAID id : ids ) {
-            for ( PDAID cId : id.getChildren() ) {
-                lines.add( new Line( 
-                        id.getX1(), 
-                        id.getY1() + 20, 
-                        cId.getX1(),
-                        cId.getY1() - 20, 
-                        cId.getStrokeColor() ) );
-            }
-            if ( id.isAcceptedByFinalState() || id.isAcceptedByEmptyStack() ) {
-                PDAID current = id.getParent();
-                while ( current != null ) {
-                    current.setAcceptedByFinalState( id.isAcceptedByFinalState() );
-                    current.setAcceptedByEmptyStack( id.isAcceptedByEmptyStack() );
-                    current = current.getParent();
-                }
-            }
-        }*/
+        setPreferredSize( new Dimension( size.width + 60, size.height + 70 ) );
         
     }
     

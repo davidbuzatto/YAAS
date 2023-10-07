@@ -30,18 +30,16 @@ public class Arrow extends AbstractGeometricForm implements Cloneable {
     
     private double angle = 0;
     
-    private int arrowLength;
-    private int halfArrowLength;
-    private int oneThirdArrowLength;
+    private int length;
+    private int halfLength;
+    private int oneThirdLength;
     
     private boolean activeInSimulation;
     private Color activeInSimulationStrokeColor;
     
     public Arrow() {
         stroke = DrawingConstants.DEFAULT_ARROW_STROKE;
-        arrowLength = DrawingConstants.ARROW_LENGTH;
-        halfArrowLength = arrowLength/2;
-        oneThirdArrowLength = arrowLength/3;
+        setLength( DrawingConstants.ARROW_LENGTH );
     }
     
     @Override
@@ -63,8 +61,8 @@ public class Arrow extends AbstractGeometricForm implements Cloneable {
         
         Path2D p = new Path2D.Double();
         p.moveTo( x1, y1 );
-        p.lineTo( x1 - arrowLength, y1 - halfArrowLength );
-        p.quadTo( x1 - oneThirdArrowLength, y1, x1 - arrowLength, y1 + halfArrowLength );
+        p.lineTo( x1 - length, y1 - halfLength );
+        p.quadTo( x1 - oneThirdLength, y1, x1 - length, y1 + halfLength );
         p.closePath();
         g2d.fill( p );
         g2d.draw( p );
@@ -101,6 +99,12 @@ public class Arrow extends AbstractGeometricForm implements Cloneable {
     public void setActiveInSimulationStrokeColor( Color activeInSimulationStrokeColor ) {
         this.activeInSimulationStrokeColor = activeInSimulationStrokeColor;
     }
+
+    public void setLength( int length ) {
+        this.length = length;
+        this.halfLength = length/2;
+        this.oneThirdLength = length/3;
+    }
     
     @Override
     @SuppressWarnings( "unchecked" )
@@ -109,9 +113,9 @@ public class Arrow extends AbstractGeometricForm implements Cloneable {
         Arrow c = (Arrow) super.clone();
         
         c.angle = angle;
-        c.arrowLength = arrowLength;
-        c.halfArrowLength = halfArrowLength;
-        c.oneThirdArrowLength = oneThirdArrowLength;
+        c.length = length;
+        c.halfLength = halfLength;
+        c.oneThirdLength = oneThirdLength;
         c.activeInSimulation = false;
         c.activeInSimulationStrokeColor = activeInSimulationStrokeColor;
         
