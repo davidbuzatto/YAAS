@@ -32,16 +32,19 @@ import javax.swing.border.TitledBorder;
  */
 public class PDAFormalDefinitionDialog extends javax.swing.JDialog {
 
+    private PDAInternalFrame pdaIFrame;
     private PDA pda;
     
     /**
      * Creates new form PDAFormalDefinitionDialog
      */
-    public PDAFormalDefinitionDialog( java.awt.Frame parent, boolean modal, PDA pda ) {
+    public PDAFormalDefinitionDialog( java.awt.Frame parent, PDAInternalFrame pdaIFrame, PDA pda, boolean modal ) {
         super( parent, modal );
+        this.pdaIFrame = pdaIFrame;
         this.pda = pda;
         initComponents();
         customInit();
+        setLocationRelativeTo( pdaIFrame );
     }
     
     private void customInit() {

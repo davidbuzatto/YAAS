@@ -68,6 +68,7 @@ import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import javax.swing.InputMap;
 import javax.swing.JColorChooser;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -1051,7 +1052,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
 
     private void drawPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drawPanelMousePressed
 
-        drawPanel.requestFocus();
+        //drawPanel.requestFocus();
         
         xPressed = evt.getX();
         yPressed = evt.getY();
@@ -1501,14 +1502,14 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             updateSimulationButtons( currentSimulationStep );
             activateSimulationStep( currentSimulationStep );
             
-            drawPanel.requestFocus();
+            //drawPanel.requestFocus();
             
             if ( simulationSteps.isEmpty() ) {
                 Utils.showWarningMessage( this, String.format(
                         """
                         The PDA simulation only works with accepted strings!
                         Since the input string "%s" is not accepted, the
-                        simulation will terminate.""", 
+                        simulation will not start.""", 
                         txtTestString.getText().isEmpty() ? 
                                 CharacterConstants.EMPTY_STRING.toString() : 
                                 txtTestString.getText() ) );
@@ -1595,7 +1596,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                     radioAcceptByFinalState.isSelected() ? 
                             PDAAcceptanceType.FINAL_STATE : 
                             PDAAcceptanceType.EMPTY_STACK,
-                    true );
+                    false );
         }
         pdaBatchTestDialog.setPda( pda );
         pdaBatchTestDialog.setVisible( true );
@@ -2612,8 +2613,9 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     
     private void registerActions() {
         
-        InputMap im = drawPanel.getInputMap();
-        ActionMap am = drawPanel.getActionMap();
+        InputMap im = getRootPane().getInputMap( 
+                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+        ActionMap am = getRootPane().getActionMap();
         
         im.put( KeyStroke.getKeyStroke( KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK ), "createNewModel" );
         am.put( "createNewModel", new AbstractAction() {

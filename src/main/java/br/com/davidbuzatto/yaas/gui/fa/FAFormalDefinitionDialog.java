@@ -22,6 +22,7 @@ import br.com.davidbuzatto.yaas.gui.fa.table.FATransitionFunctionTableModel;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
+import java.awt.Frame;
 import javax.swing.ImageIcon;
 import javax.swing.border.TitledBorder;
 
@@ -32,16 +33,19 @@ import javax.swing.border.TitledBorder;
  */
 public class FAFormalDefinitionDialog extends javax.swing.JDialog {
 
+    private FAInternalFrame faIFrame;
     private FA fa;
     
     /**
      * Creates new form FAFormalDefinitionDialog
      */
-    public FAFormalDefinitionDialog( java.awt.Frame parent, boolean modal, FA fa ) {
+    public FAFormalDefinitionDialog( Frame parent, FAInternalFrame faIFrame, FA fa, boolean modal ) {
         super( parent, modal );
+        this.faIFrame = faIFrame;
         this.fa = fa;
         initComponents();
         customInit();
+        setLocationRelativeTo( faIFrame );
     }
     
     private void customInit() {

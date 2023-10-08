@@ -75,6 +75,7 @@ import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import javax.swing.InputMap;
 import javax.swing.JColorChooser;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -1137,7 +1138,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
     private void drawPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drawPanelMousePressed
 
-        drawPanel.requestFocus();
+        //drawPanel.requestFocus();
         
         xPressed = evt.getX();
         yPressed = evt.getY();
@@ -1592,7 +1593,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             updateSimulationButtons( currentSimulationStep );
             activateSimulationStep( currentSimulationStep );
             
-            drawPanel.requestFocus();
+            //drawPanel.requestFocus();
             
         } else {
             Utils.showErrorMessage( this, "You must set an initial state!" );
@@ -1659,7 +1660,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
     private void btnBatchTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatchTestActionPerformed
         if ( faBatchTestDialog == null ) {
-            faBatchTestDialog = new FABatchTest( mainWindow, this, true );
+            faBatchTestDialog = new FABatchTest( mainWindow, this, false );
         }
         faBatchTestDialog.setFa( fa );
         faBatchTestDialog.setVisible( true );
@@ -2857,8 +2858,9 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     
     private void registerActions() {
         
-        InputMap im = drawPanel.getInputMap();
-        ActionMap am = drawPanel.getActionMap();
+        InputMap im = getRootPane().getInputMap( 
+                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT );
+        ActionMap am = getRootPane().getActionMap();
         
         im.put( KeyStroke.getKeyStroke( KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK ), "createNewModel" );
         am.put( "createNewModel", new AbstractAction() {

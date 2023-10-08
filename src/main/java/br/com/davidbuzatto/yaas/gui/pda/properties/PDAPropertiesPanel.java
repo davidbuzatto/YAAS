@@ -168,7 +168,8 @@ public class PDAPropertiesPanel extends javax.swing.JPanel {
         } else if ( pda.getInitialState() == null ) {
             Utils.showWarningMessage( pdaIFrame, "Set the initial state!" );
         } else {
-            PDAFormalDefinitionDialog d = new PDAFormalDefinitionDialog( null, true, pda );
+            PDAFormalDefinitionDialog d = new PDAFormalDefinitionDialog( 
+                    null, pdaIFrame, pda, false );
             d.setVisible( true );
         }
         

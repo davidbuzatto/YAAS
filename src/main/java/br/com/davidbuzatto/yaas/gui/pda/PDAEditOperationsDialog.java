@@ -44,7 +44,8 @@ public class PDAEditOperationsDialog extends javax.swing.JDialog {
     /**
      * Creates new form PDAEditTransitionOperationDialog
      */
-    public PDAEditOperationsDialog( Frame parent, PDAInternalFrame pdaIFrame, PDA pda, PDATransition transition, boolean modal ) {
+    public PDAEditOperationsDialog( Frame parent, PDAInternalFrame pdaIFrame, 
+            PDA pda, PDATransition transition, boolean modal ) {
         super( parent, modal );
         this.pdaIFrame = pdaIFrame;
         this.pda = pda;

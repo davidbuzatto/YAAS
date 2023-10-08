@@ -166,7 +166,8 @@ public class FAPropertiesPanel extends javax.swing.JPanel {
         } else if ( fa.getInitialState() == null ) {
             Utils.showWarningMessage( faIFrame, "Set the initial state!" );
         } else {
-            FAFormalDefinitionDialog d = new FAFormalDefinitionDialog( null, true, fa );
+            FAFormalDefinitionDialog d = new FAFormalDefinitionDialog( 
+                    null, faIFrame, fa, false );
             d.setVisible( true );
         }
         
