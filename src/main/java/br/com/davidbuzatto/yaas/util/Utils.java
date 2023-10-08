@@ -38,6 +38,7 @@ import java.awt.RenderingHints;
 import java.awt.SplashScreen;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.font.LineMetrics;
 import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Point2D;
@@ -60,17 +61,22 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import javax.swing.AbstractAction;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
@@ -1152,6 +1158,12 @@ public class Utils {
                     JOptionPane.YES_NO_CANCEL_OPTION );
     }
     
+    /**
+     * Creates a new color that is lighter than the color used as parameter.
+     * 
+     * @param color The color used to create a lighter color.
+     * @return A lighter color.
+     */
     public static Color lighterColor( Color color ) {
         
         float[] hsb = Color.RGBtoHSB( color.getRed(), color.getGreen(), color.getBlue(), null );
@@ -1173,6 +1185,29 @@ public class Utils {
                 rgbColor.getBlue(), 
                 color.getAlpha() );
         
+    }
+    
+    /**
+     * Register the default and cancel buttons of a dialog.
+     * 
+     * @param rootPane The root pane.
+     * @param defaultButton The button that will be the default button.
+     * @param cancelButton The button that will be triggered when the ESC
+     * key is pressed.
+     */
+    public static void registerDefaultAndCancelButton( 
+            JRootPane rootPane, 
+            JButton defaultButton,
+            JButton cancelButton ) {
+        rootPane.setDefaultButton( defaultButton );
+        rootPane.getInputMap( JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT ).put( 
+                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0 ), "UTIL_CANCEL" );
+        rootPane.getActionMap().put( "UTIL_CANCEL", new AbstractAction(){
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                cancelButton.doClick();
+            }
+        });
     }
     
 }

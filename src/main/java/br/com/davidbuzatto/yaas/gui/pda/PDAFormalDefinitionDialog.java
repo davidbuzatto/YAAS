@@ -46,7 +46,7 @@ public class PDAFormalDefinitionDialog extends javax.swing.JDialog {
     
     private void customInit() {
         
-        getRootPane().setDefaultButton( btnClose );
+        Utils.registerDefaultAndCancelButton( getRootPane(), btnClose, btnClose );
         PDATransitionFunctionTableModel m = Utils.createPDATransitionFunctionTableModel( pda );
         
         textAreaFD.setText( pda.getFormalDefinition() );

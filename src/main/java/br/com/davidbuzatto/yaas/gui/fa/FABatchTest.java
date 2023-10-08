@@ -18,6 +18,7 @@ package br.com.davidbuzatto.yaas.gui.fa;
 
 import br.com.davidbuzatto.yaas.model.fa.FA;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
+import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.Frame;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -48,6 +49,7 @@ public class FABatchTest extends javax.swing.JDialog {
 
     private void customInit() {
         setIconImage( new ImageIcon( getClass().getResource( "/book.png" ) ).getImage() );
+        Utils.registerDefaultAndCancelButton( getRootPane(), btnTest, btnClose );
     }
     
     /**

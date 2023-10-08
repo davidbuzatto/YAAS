@@ -46,7 +46,7 @@ public class FAFormalDefinitionDialog extends javax.swing.JDialog {
     
     private void customInit() {
         
-        getRootPane().setDefaultButton( btnClose );
+        Utils.registerDefaultAndCancelButton( getRootPane(), btnClose, btnClose );
         FATransitionFunctionTableModel m = Utils.createFATransitionFunctionTableModel( fa );
         
         textAreaFD.setText( fa.getFormalDefinition() );

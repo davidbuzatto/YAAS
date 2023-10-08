@@ -56,6 +56,8 @@ public class PDAEditOperationsDialog extends javax.swing.JDialog {
 
     private void customInit() {
         
+        Utils.registerDefaultAndCancelButton( getRootPane(), btnOK, btnCancel );
+        
         model = new DefaultListModel<>();
         lstOp.setModel( model );
         
@@ -107,6 +109,11 @@ public class PDAEditOperationsDialog extends javax.swing.JDialog {
         panelOp.setBorder(javax.swing.BorderFactory.createTitledBorder("Operation(s)"));
 
         lstOp.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
+        lstOp.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lstOpMouseClicked(evt);
+            }
+        });
         scrollOp.setViewportView(lstOp);
 
         btnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/add.png"))); // NOI18N
@@ -232,7 +239,7 @@ public class PDAEditOperationsDialog extends javax.swing.JDialog {
             Utils.showErrorMessage( this, "You must select one operation to edit!" );
         } else {
             Utils.showInputDialogNewPDAOperation( 
-                    this, "Add Transition Operation", 
+                    this, "Edit Transition Operation", 
                     pda.getStackStartingSymbol(), model.get( indexes[0] ) );
         }
         
@@ -281,6 +288,12 @@ public class PDAEditOperationsDialog extends javax.swing.JDialog {
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void lstOpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstOpMouseClicked
+        if ( evt.getClickCount() >= 2 ) {
+            btnEdit.doClick();
+        }
+    }//GEN-LAST:event_lstOpMouseClicked
 
     public boolean isTransitionRemoved() {
         return transitionRemoved;

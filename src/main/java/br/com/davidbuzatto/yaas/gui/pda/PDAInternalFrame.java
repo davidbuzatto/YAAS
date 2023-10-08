@@ -135,6 +135,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     private PDABatchTest pdaBatchTestDialog;
     private Color txtTestStringDefaultBC;
     private Color txtTestStringDefaultFC;
+    private Color txtTestStringDefaultCaretColor;
     private Color lblTestResultDefaultFC;
     
     private ZoomFacility zoomFacility;
@@ -713,6 +714,11 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         txtTestString.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtTestStringActionPerformed(evt);
+            }
+        });
+        txtTestString.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtTestStringKeyReleased(evt);
             }
         });
 
@@ -2185,6 +2191,10 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_btnCloneActionPerformed
 
+    private void txtTestStringKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTestStringKeyReleased
+        resetTestInGUI();
+    }//GEN-LAST:event_txtTestStringKeyReleased
+
     public void repaintDrawPanel() {
         drawPanel.repaint();
         drawPanel.setPreferredSize( new Dimension( pda.getWidth(), pda.getHeight() ) );
@@ -2291,6 +2301,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                 DrawingConstants.ACCEPTED_TEXTFIELD_FOREGROUND_COLOR );
         txtTestString.setBackground(
                 DrawingConstants.ACCEPTED_TEXTFIELD_BACKGROUND_COLOR );
+        txtTestString.setCaretColor( txtTestString.getForeground() );
         lblTestResult.setText( "ACCEPTED" );
     }
     
@@ -2301,12 +2312,14 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                 DrawingConstants.REJECTED_TEXTFIELD_FOREGROUND_COLOR );
         txtTestString.setBackground(
                 DrawingConstants.REJECTED_TEXTFIELD_BACKGROUND_COLOR );
+        txtTestString.setCaretColor( txtTestString.getForeground() );
         lblTestResult.setText( "REJECTED" );
     }
     
     private void resetTestInGUI() {
         txtTestString.setBackground( txtTestStringDefaultBC );
         txtTestString.setForeground( txtTestStringDefaultFC );
+        txtTestString.setCaretColor( txtTestStringDefaultCaretColor );
         lblTestResult.setForeground( lblTestResultDefaultFC );
         lblTestResult.setText( "TEST RESULT" );
     }
@@ -2807,6 +2820,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     private void saveDefaultColors() {
         txtTestStringDefaultBC = UIManager.getColor( "TextField.background" );
         txtTestStringDefaultFC = UIManager.getColor( "TextField.foreground" );
+        txtTestStringDefaultCaretColor = UIManager.getColor( "TextField.caretForeground" );
         lblTestResultDefaultFC = UIManager.getColor( "Label.foreground" );
     }
     

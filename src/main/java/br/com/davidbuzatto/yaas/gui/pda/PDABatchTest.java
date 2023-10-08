@@ -19,6 +19,7 @@ package br.com.davidbuzatto.yaas.gui.pda;
 import br.com.davidbuzatto.yaas.model.pda.PDA;
 import br.com.davidbuzatto.yaas.model.pda.PDAAcceptanceType;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
+import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.Frame;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -51,6 +52,7 @@ public class PDABatchTest extends javax.swing.JDialog {
 
     private void customInit() {
         setIconImage( new ImageIcon( getClass().getResource( "/book.png" ) ).getImage() );
+        Utils.registerDefaultAndCancelButton( getRootPane(), btnTest, btnClose );
     }
     
     /**
