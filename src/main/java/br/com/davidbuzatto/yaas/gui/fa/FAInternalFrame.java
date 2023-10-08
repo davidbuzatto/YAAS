@@ -1676,21 +1676,11 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         fa.updateType();
         
         if ( fa.getType() == FAType.EMPTY ) {
-            
-            JOptionPane.showMessageDialog( 
-                    this, 
-                    "You must define a Finite Automaton First!", 
-                    "Information", 
-                    JOptionPane.INFORMATION_MESSAGE );
-            
+            Utils.showInformationMessage( this, 
+                    "You must define a Finite Automaton First!" );
         } else if ( fa.getType() == FAType.DFA ) {
-            
-            JOptionPane.showMessageDialog( 
-                    this, 
-                    "You already have a DFA!", 
-                    "Information", 
-                    JOptionPane.INFORMATION_MESSAGE );
-            
+            Utils.showInformationMessage( this, 
+                    "You already have a DFA!" );
         } else {
             
             try {
@@ -1722,11 +1712,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 FA minDFA = new DFAMinimize( fa, r == JOptionPane.YES_OPTION ).getGeneratedDFA();
 
                 if ( minDFA.equals( fa ) ) {
-                    JOptionPane.showMessageDialog( 
-                        this, 
-                        "Your DFA is already mimimum!", 
-                        "Information", 
-                        JOptionPane.INFORMATION_MESSAGE );
+                    Utils.showInformationMessage( this, 
+                            "Your DFA is already mimimum!" );
                 } else {
                     FAArrangement.arrangeByLevel( minDFA, 100, 100, 150, false );
                     mainWindow.createFAInternalFrame( minDFA, false, false );

@@ -2229,13 +2229,8 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         pda.updateType();
         
         if ( pda.getType() == PDAType.EMPTY ) {
-            
-            JOptionPane.showMessageDialog( 
-                    this, 
-                    "You must define a Pushdown Automaton First!", 
-                    "Information", 
-                    JOptionPane.INFORMATION_MESSAGE );
-            
+            Utils.showInformationMessage( this, 
+                    "You must define a Pushdown Automaton First!" );
         } else {
             
             try {
@@ -2257,13 +2252,8 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         pda.updateType();
         
         if ( pda.getType() == PDAType.EMPTY ) {
-            
-            JOptionPane.showMessageDialog( 
-                    this, 
-                    "You must define a Pushdown Automaton First!", 
-                    "Information", 
-                    JOptionPane.INFORMATION_MESSAGE );
-            
+            Utils.showInformationMessage( this, 
+                    "You must define a Pushdown Automaton First!" );
         } else {
             
             try {
