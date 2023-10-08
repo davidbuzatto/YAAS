@@ -1141,15 +1141,13 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             } else if ( btnAddState.isSelected() ) {
 
                 PDAState newState = new PDAState( currentState++ );
-                newState.setX1( xPressed );
-                newState.setY1( yPressed );
+                newState.setX1Y1( xPressed, yPressed );
 
                 pda.addState( newState );
 
                 if ( btnSnapToGrid.isSelected() ) {
                     updateSnapPoint( evt );
-                    newState.setX1( xSnap );
-                    newState.setY1( ySnap );
+                    newState.setX1Y1( xSnap, ySnap );
                 }
 
                 setCurrentFileSaved( false );
@@ -1317,11 +1315,12 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
 
             } else if ( btnMove.isSelected() ) {
 
+                int xAmount = evt.getX() - xPrev;
+                int yAmount = evt.getY() - yPrev;
+                xPrev += xAmount;
+                yPrev += yAmount;
+                    
                 if ( !selectedStates.isEmpty() ) {
-                    int xAmount = evt.getX() - xPrev;
-                    int yAmount = evt.getY() - yPrev;
-                    xPrev += xAmount;
-                    yPrev += yAmount;
                     for ( PDAState s : selectedStates ) {
                         s.move( xAmount, yAmount );
                     }
@@ -1330,11 +1329,9 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                 } else if ( selectedState != null ) {
                     if ( btnSnapToGrid.isSelected() ) {
                         updateSnapPoint( evt );
-                        selectedState.setX1( xSnap );
-                        selectedState.setY1( ySnap );
+                        selectedState.setX1Y1( xSnap, ySnap );
                     } else {
-                        selectedState.setX1( evt.getX() - xOffset );
-                        selectedState.setY1( evt.getY() - yOffset );
+                        selectedState.move( xAmount, yAmount );
                     }
                     pda.updateTransitions();
                     if ( selectedTransition != null ) {
@@ -1345,10 +1342,6 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                 } else if ( selectedTransition != null ) {
                     selectedTransition.mouseDragged( evt );
                 } else {
-                    int xAmount = evt.getX() - xPrev;
-                    int yAmount = evt.getY() - yPrev;
-                    xPrev += xAmount;
-                    yPrev += yAmount;
                     pda.move( xAmount, yAmount );
                 }
 
