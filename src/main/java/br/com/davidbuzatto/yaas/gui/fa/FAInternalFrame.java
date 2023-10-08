@@ -1771,7 +1771,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         try {
             
-            String value = JOptionPane.showInputDialog( "Distance between states:" );
+            String value = JOptionPane.showInputDialog( this, "Distance between states:" );
             
             if ( value != null ) {
                 
@@ -1797,7 +1797,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         try {
             
-            String value = JOptionPane.showInputDialog( "Distance between states:" );
+            String value = JOptionPane.showInputDialog( this, "Distance between states:" );
             
             if ( value != null ) {
                 
@@ -1888,7 +1888,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         try {
             
-            String value = JOptionPane.showInputDialog( "Circle radius:" );
+            String value = JOptionPane.showInputDialog( this, "Circle radius:" );
             
             if ( value != null ) {
                 
@@ -1990,7 +1990,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         try {
             
-            String value = JOptionPane.showInputDialog( "Distance between states:" );
+            String value = JOptionPane.showInputDialog( this, "Distance between states:" );
             
             if ( value != null ) {
                 
