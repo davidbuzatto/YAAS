@@ -1433,6 +1433,10 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                         selectedState.setY1( evt.getY() - yOffset );
                     }
                     fa.updateTransitions();
+                    if ( selectedTransition != null ) {
+                        selectedTransition.cancelDragging();
+                        selectedTransition = null;
+                    }
                     fa.draggTransitions( evt );
                 } else if ( selectedTransition != null ) {
                     selectedTransition.mouseDragged( evt );

@@ -168,6 +168,10 @@ public class PDATransition extends AbstractGeometricForm implements Cloneable {
     }
     
     public void mouseReleased( MouseEvent evt ) {
+        cancelDragging();
+    }
+    
+    public void cancelDragging() {
         targetCPDragging = false;
         centralCPDragging = false;
         leftCPDragging = false;

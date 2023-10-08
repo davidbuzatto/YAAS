@@ -1337,6 +1337,10 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                         selectedState.setY1( evt.getY() - yOffset );
                     }
                     pda.updateTransitions();
+                    if ( selectedTransition != null ) {
+                        selectedTransition.cancelDragging();
+                        selectedTransition = null;
+                    }
                     pda.draggTransitions( evt );
                 } else if ( selectedTransition != null ) {
                     selectedTransition.mouseDragged( evt );
