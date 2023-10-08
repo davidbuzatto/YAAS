@@ -59,7 +59,6 @@ public class MainWindow extends javax.swing.JFrame {
                 ApplicationConstants.APP_VERSION );
         
         if ( !ApplicationConstants.IN_DEVELOPMENT ) {
-            menuMinimizationTest.setVisible( false );
             setExtendedState( MAXIMIZED_BOTH );
         }
         
@@ -99,6 +98,17 @@ public class MainWindow extends javax.swing.JFrame {
         miNFAEndsWith11 = new javax.swing.JMenuItem();
         menuENFA = new javax.swing.JMenu();
         miENFADecimalNumber = new javax.swing.JMenuItem();
+        menuFASep01 = new javax.swing.JPopupMenu.Separator();
+        menuExamplesForMinimization = new javax.swing.JMenu();
+        miMiniE01 = new javax.swing.JMenuItem();
+        miMiniE02 = new javax.swing.JMenuItem();
+        miMiniE03 = new javax.swing.JMenuItem();
+        miMiniE04 = new javax.swing.JMenuItem();
+        miMiniE05 = new javax.swing.JMenuItem();
+        miMiniE06 = new javax.swing.JMenuItem();
+        miMiniE07 = new javax.swing.JMenuItem();
+        miMiniE08 = new javax.swing.JMenuItem();
+        miMiniE09 = new javax.swing.JMenuItem();
         menuPDA = new javax.swing.JMenu();
         menuPDAFinalState = new javax.swing.JMenu();
         miPDAEvenPalindromeFinalState = new javax.swing.JMenuItem();
@@ -114,16 +124,6 @@ public class MainWindow extends javax.swing.JFrame {
         miDPDA0n1n = new javax.swing.JMenuItem();
         miDPDA01Same = new javax.swing.JMenuItem();
         menuTM = new javax.swing.JMenu();
-        menuMinimizationTest = new javax.swing.JMenu();
-        miMiniT01 = new javax.swing.JMenuItem();
-        miMiniT02 = new javax.swing.JMenuItem();
-        miMiniT03 = new javax.swing.JMenuItem();
-        miMiniT04 = new javax.swing.JMenuItem();
-        miMiniT05 = new javax.swing.JMenuItem();
-        miMiniT06 = new javax.swing.JMenuItem();
-        miMiniT07 = new javax.swing.JMenuItem();
-        miMiniT08 = new javax.swing.JMenuItem();
-        miMiniT09 = new javax.swing.JMenuItem();
         menuThemes = new javax.swing.JMenu();
         riLightTheme = new javax.swing.JRadioButtonMenuItem();
         riDarkTheme = new javax.swing.JRadioButtonMenuItem();
@@ -210,7 +210,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         menuBar.add(menuFile);
 
-        menuExamples.setMnemonic('x');
+        menuExamples.setMnemonic('E');
         menuExamples.setText("Examples");
         menuExamples.setToolTipText("");
 
@@ -337,6 +337,103 @@ public class MainWindow extends javax.swing.JFrame {
         menuENFA.add(miENFADecimalNumber);
 
         menuFA.add(menuENFA);
+        menuFA.add(menuFASep01);
+
+        menuExamplesForMinimization.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fa.png"))); // NOI18N
+        menuExamplesForMinimization.setMnemonic('E');
+        menuExamplesForMinimization.setText("Examples for Minimization");
+
+        miMiniE01.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fa.png"))); // NOI18N
+        miMiniE01.setMnemonic('1');
+        miMiniE01.setText("Example 01");
+        miMiniE01.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miMiniE01ActionPerformed(evt);
+            }
+        });
+        menuExamplesForMinimization.add(miMiniE01);
+
+        miMiniE02.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fa.png"))); // NOI18N
+        miMiniE02.setMnemonic('2');
+        miMiniE02.setText("Example 02");
+        miMiniE02.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miMiniE02ActionPerformed(evt);
+            }
+        });
+        menuExamplesForMinimization.add(miMiniE02);
+
+        miMiniE03.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fa.png"))); // NOI18N
+        miMiniE03.setMnemonic('3');
+        miMiniE03.setText("Example 03");
+        miMiniE03.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miMiniE03ActionPerformed(evt);
+            }
+        });
+        menuExamplesForMinimization.add(miMiniE03);
+
+        miMiniE04.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fa.png"))); // NOI18N
+        miMiniE04.setMnemonic('4');
+        miMiniE04.setText("Example 04");
+        miMiniE04.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miMiniE04ActionPerformed(evt);
+            }
+        });
+        menuExamplesForMinimization.add(miMiniE04);
+
+        miMiniE05.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fa.png"))); // NOI18N
+        miMiniE05.setMnemonic('5');
+        miMiniE05.setText("Example 05");
+        miMiniE05.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miMiniE05ActionPerformed(evt);
+            }
+        });
+        menuExamplesForMinimization.add(miMiniE05);
+
+        miMiniE06.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fa.png"))); // NOI18N
+        miMiniE06.setMnemonic('6');
+        miMiniE06.setText("Example 06");
+        miMiniE06.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miMiniE06ActionPerformed(evt);
+            }
+        });
+        menuExamplesForMinimization.add(miMiniE06);
+
+        miMiniE07.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fa.png"))); // NOI18N
+        miMiniE07.setMnemonic('7');
+        miMiniE07.setText("Example 07");
+        miMiniE07.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miMiniE07ActionPerformed(evt);
+            }
+        });
+        menuExamplesForMinimization.add(miMiniE07);
+
+        miMiniE08.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fa.png"))); // NOI18N
+        miMiniE08.setMnemonic('8');
+        miMiniE08.setText("Example 08");
+        miMiniE08.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miMiniE08ActionPerformed(evt);
+            }
+        });
+        menuExamplesForMinimization.add(miMiniE08);
+
+        miMiniE09.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fa.png"))); // NOI18N
+        miMiniE09.setMnemonic('9');
+        miMiniE09.setText("Example 09");
+        miMiniE09.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miMiniE09ActionPerformed(evt);
+            }
+        });
+        menuExamplesForMinimization.add(miMiniE09);
+
+        menuFA.add(menuExamplesForMinimization);
 
         menuExamples.add(menuFA);
 
@@ -462,82 +559,6 @@ public class MainWindow extends javax.swing.JFrame {
         menuExamples.add(menuTM);
 
         menuBar.add(menuExamples);
-
-        menuMinimizationTest.setText("Minimization Tests");
-
-        miMiniT01.setText("Test 01");
-        miMiniT01.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miMiniT01ActionPerformed(evt);
-            }
-        });
-        menuMinimizationTest.add(miMiniT01);
-
-        miMiniT02.setText("Test 02");
-        miMiniT02.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miMiniT02ActionPerformed(evt);
-            }
-        });
-        menuMinimizationTest.add(miMiniT02);
-
-        miMiniT03.setText("Test 03");
-        miMiniT03.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miMiniT03ActionPerformed(evt);
-            }
-        });
-        menuMinimizationTest.add(miMiniT03);
-
-        miMiniT04.setText("Test 04");
-        miMiniT04.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miMiniT04ActionPerformed(evt);
-            }
-        });
-        menuMinimizationTest.add(miMiniT04);
-
-        miMiniT05.setText("Test 05");
-        miMiniT05.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miMiniT05ActionPerformed(evt);
-            }
-        });
-        menuMinimizationTest.add(miMiniT05);
-
-        miMiniT06.setText("Test 06");
-        miMiniT06.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miMiniT06ActionPerformed(evt);
-            }
-        });
-        menuMinimizationTest.add(miMiniT06);
-
-        miMiniT07.setText("Test 07");
-        miMiniT07.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miMiniT07ActionPerformed(evt);
-            }
-        });
-        menuMinimizationTest.add(miMiniT07);
-
-        miMiniT08.setText("Test 08");
-        miMiniT08.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miMiniT08ActionPerformed(evt);
-            }
-        });
-        menuMinimizationTest.add(miMiniT08);
-
-        miMiniT09.setText("Test 09");
-        miMiniT09.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miMiniT09ActionPerformed(evt);
-            }
-        });
-        menuMinimizationTest.add(miMiniT09);
-
-        menuBar.add(menuMinimizationTest);
 
         menuThemes.setMnemonic('T');
         menuThemes.setText("Themes");
@@ -681,50 +702,50 @@ public class MainWindow extends javax.swing.JFrame {
         Utils.showNotImplementedYetMessage();
     }//GEN-LAST:event_btnTMActionPerformed
 
-    private void miMiniT01ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniT01ActionPerformed
+    private void miMiniE01ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniE01ActionPerformed
         createFAInternalFrame(FAExamplesForMinimizationTest.createDFAForMinimizationTest01(), 
                 false, false );
-    }//GEN-LAST:event_miMiniT01ActionPerformed
+    }//GEN-LAST:event_miMiniE01ActionPerformed
 
-    private void miMiniT02ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniT02ActionPerformed
+    private void miMiniE02ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniE02ActionPerformed
         createFAInternalFrame(FAExamplesForMinimizationTest.createDFAForMinimizationTest02(), 
                 false, false );
-    }//GEN-LAST:event_miMiniT02ActionPerformed
+    }//GEN-LAST:event_miMiniE02ActionPerformed
 
-    private void miMiniT03ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniT03ActionPerformed
+    private void miMiniE03ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniE03ActionPerformed
         createFAInternalFrame(FAExamplesForMinimizationTest.createDFAForMinimizationTest03(), 
                 false, false );
-    }//GEN-LAST:event_miMiniT03ActionPerformed
+    }//GEN-LAST:event_miMiniE03ActionPerformed
 
-    private void miMiniT04ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniT04ActionPerformed
+    private void miMiniE04ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniE04ActionPerformed
         createFAInternalFrame(FAExamplesForMinimizationTest.createDFAForMinimizationTest04(), 
                 false, false );
-    }//GEN-LAST:event_miMiniT04ActionPerformed
+    }//GEN-LAST:event_miMiniE04ActionPerformed
 
-    private void miMiniT05ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniT05ActionPerformed
+    private void miMiniE05ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniE05ActionPerformed
         createFAInternalFrame(FAExamplesForMinimizationTest.createDFAForMinimizationTest05(), 
                 false, false );
-    }//GEN-LAST:event_miMiniT05ActionPerformed
+    }//GEN-LAST:event_miMiniE05ActionPerformed
 
-    private void miMiniT06ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniT06ActionPerformed
+    private void miMiniE06ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniE06ActionPerformed
         createFAInternalFrame(FAExamplesForMinimizationTest.createDFAForMinimizationTest06(), 
                 false, false );
-    }//GEN-LAST:event_miMiniT06ActionPerformed
+    }//GEN-LAST:event_miMiniE06ActionPerformed
 
-    private void miMiniT07ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniT07ActionPerformed
+    private void miMiniE07ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniE07ActionPerformed
         createFAInternalFrame(FAExamplesForMinimizationTest.createDFAForMinimizationTest07(), 
                 false, false );
-    }//GEN-LAST:event_miMiniT07ActionPerformed
+    }//GEN-LAST:event_miMiniE07ActionPerformed
 
-    private void miMiniT08ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniT08ActionPerformed
+    private void miMiniE08ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniE08ActionPerformed
         createFAInternalFrame(FAExamplesForMinimizationTest.createDFAForMinimizationTest08(), 
                 false, false );
-    }//GEN-LAST:event_miMiniT08ActionPerformed
+    }//GEN-LAST:event_miMiniE08ActionPerformed
 
-    private void miMiniT09ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniT09ActionPerformed
+    private void miMiniE09ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniE09ActionPerformed
         createFAInternalFrame(FAExamplesForMinimizationTest.createDFAForMinimizationTest09(), 
                 false, false );
-    }//GEN-LAST:event_miMiniT09ActionPerformed
+    }//GEN-LAST:event_miMiniE09ActionPerformed
 
     private void miPDAEvenPalindromeFinalStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miPDAEvenPalindromeFinalStateActionPerformed
         createPDAInternalFrame( PDAExamples.createPDAEvenPalindromeFinalState(), 
@@ -919,12 +940,13 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JMenu menuDPDA;
     private javax.swing.JMenu menuENFA;
     private javax.swing.JMenu menuExamples;
+    private javax.swing.JMenu menuExamplesForMinimization;
     private javax.swing.JMenu menuFA;
+    private javax.swing.JPopupMenu.Separator menuFASep01;
     private javax.swing.JMenu menuFile;
     private javax.swing.JMenu menuHelp;
     private javax.swing.JMenuItem menuItemAbout;
     private javax.swing.JMenuItem menuItemExit;
-    private javax.swing.JMenu menuMinimizationTest;
     private javax.swing.JMenu menuNFA;
     private javax.swing.JMenu menuPDA;
     private javax.swing.JMenu menuPDAEmptyStack;
@@ -941,15 +963,15 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem miDPDA0n1n;
     private javax.swing.JMenuItem miDPDAEvenPalindromeCenterMark;
     private javax.swing.JMenuItem miENFADecimalNumber;
-    private javax.swing.JMenuItem miMiniT01;
-    private javax.swing.JMenuItem miMiniT02;
-    private javax.swing.JMenuItem miMiniT03;
-    private javax.swing.JMenuItem miMiniT04;
-    private javax.swing.JMenuItem miMiniT05;
-    private javax.swing.JMenuItem miMiniT06;
-    private javax.swing.JMenuItem miMiniT07;
-    private javax.swing.JMenuItem miMiniT08;
-    private javax.swing.JMenuItem miMiniT09;
+    private javax.swing.JMenuItem miMiniE01;
+    private javax.swing.JMenuItem miMiniE02;
+    private javax.swing.JMenuItem miMiniE03;
+    private javax.swing.JMenuItem miMiniE04;
+    private javax.swing.JMenuItem miMiniE05;
+    private javax.swing.JMenuItem miMiniE06;
+    private javax.swing.JMenuItem miMiniE07;
+    private javax.swing.JMenuItem miMiniE08;
+    private javax.swing.JMenuItem miMiniE09;
     private javax.swing.JMenuItem miNFAEndsWith00;
     private javax.swing.JMenuItem miNFAEndsWith01;
     private javax.swing.JMenuItem miNFAEndsWith10;
