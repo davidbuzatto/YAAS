@@ -525,6 +525,10 @@ public class Utils {
                 
                 for ( PDAOperation o : t.getOperations() ) {
                     
+                    if ( o.getTop() == CharacterConstants.EMPTY_STRING ) {
+                        break;
+                    }
+                    
                     String op = o.getSymbol() + "," + o.getTop();
                     int ind = operationIndexes.get( op );
                     

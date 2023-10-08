@@ -19,7 +19,6 @@ package br.com.davidbuzatto.yaas.model.fa;
 import br.com.davidbuzatto.yaas.gui.fa.FASimulationStep;
 import br.com.davidbuzatto.yaas.model.AbstractGeometricForm;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
-import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;

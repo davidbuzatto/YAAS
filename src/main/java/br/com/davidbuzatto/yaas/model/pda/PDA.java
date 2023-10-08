@@ -660,7 +660,9 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
         
             for ( PDATransition t : transitions ) {
                 for ( PDAOperation o : t.getOperations() ) {
-                    stackAlphabet.add( o.getTop() );
+                    if ( o.getTop() != CharacterConstants.EMPTY_STRING ) {
+                        stackAlphabet.add( o.getTop() );
+                    }
                     stackAlphabet.addAll( o.getSymbolsToPush() );
                 }
             }
@@ -815,6 +817,11 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
 
     public char getStackStartingSymbol() {
         return stackStartingSymbol;
+    }
+    
+    public void setStackStartingSymbol( char stackStartingSymbol ) {
+        this.stackStartingSymbol = stackStartingSymbol;
+        markAllCachesAsObsolete();
     }
 
     public PDAID getRootId() {

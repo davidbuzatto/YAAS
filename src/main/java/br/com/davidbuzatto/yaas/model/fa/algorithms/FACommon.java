@@ -227,12 +227,12 @@ public class FACommon {
         
         if ( fa1.getInitialState() == null ) {
             throw new IllegalArgumentException( 
-                    "The first Finite Automata must have an initial state!" );
+                    "The first Finite Automaton must have an initial state!" );
         }
         
         if ( fa2.getInitialState() == null ) {
             throw new IllegalArgumentException( 
-                    "The second Finite Automata must have an initial state!" );
+                    "The second Finite Automaton must have an initial state!" );
         }
         
     }
@@ -265,12 +265,12 @@ public class FACommon {
         
         if ( fa1.getFinalStates().isEmpty() ) {
             throw new IllegalArgumentException( 
-                    "The first Finite Automata must have at least one final state!" );
+                    "The first Finite Automaton must have at least one final state!" );
         }
         
         if ( fa2.getFinalStates().isEmpty() ) {
             throw new IllegalArgumentException( 
-                    "The second Finite Automata must have at least one final state!" );
+                    "The second Finite Automaton must have at least one final state!" );
         }
         
     }

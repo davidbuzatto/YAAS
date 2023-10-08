@@ -26,7 +26,10 @@ import br.com.davidbuzatto.yaas.model.pda.PDAAcceptanceType;
 import br.com.davidbuzatto.yaas.model.pda.PDAOperation;
 import br.com.davidbuzatto.yaas.model.pda.PDAState;
 import br.com.davidbuzatto.yaas.model.pda.PDATransition;
+import br.com.davidbuzatto.yaas.model.pda.PDAType;
 import br.com.davidbuzatto.yaas.model.pda.algorithms.PDAArrangement;
+import br.com.davidbuzatto.yaas.model.pda.algorithms.PDAEmptyStackToFinalState;
+import br.com.davidbuzatto.yaas.model.pda.algorithms.PDAFinalStateToEmptyStack;
 import br.com.davidbuzatto.yaas.util.ApplicationConstants;
 import br.com.davidbuzatto.yaas.util.ApplicationPreferences;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
@@ -210,7 +213,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         });
         
         if ( !ApplicationConstants.IN_DEVELOPMENT ) {
-            sep06.setVisible( false );
+            sep05.setVisible( false );
             btnZoomIn.setVisible( false );
             btnZoomOut.setVisible( false );
             btnCodeGen.setVisible( false );
@@ -276,14 +279,17 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         btnMove = new javax.swing.JToggleButton();
         btnAddState = new javax.swing.JToggleButton();
         btnAddTransition = new javax.swing.JToggleButton();
+        sep02 = new javax.swing.JToolBar.Separator();
+        btnFinalStateToEmptyStack = new javax.swing.JButton();
+        btnEmptyStackToFinalState = new javax.swing.JButton();
         hFiller = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         btnShowTransitionControls = new javax.swing.JToggleButton();
-        sep04 = new javax.swing.JToolBar.Separator();
+        sep03 = new javax.swing.JToolBar.Separator();
         btnShowGrid = new javax.swing.JToggleButton();
         btnSnapToGrid = new javax.swing.JToggleButton();
-        sep05 = new javax.swing.JToolBar.Separator();
+        sep04 = new javax.swing.JToolBar.Separator();
         btnRearrangeStates = new javax.swing.JButton();
-        sep06 = new javax.swing.JToolBar.Separator();
+        sep05 = new javax.swing.JToolBar.Separator();
         btnZoomIn = new javax.swing.JButton();
         btnZoomOut = new javax.swing.JButton();
         panelModel = new javax.swing.JPanel();
@@ -634,6 +640,31 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         toolBar.add(btnAddTransition);
+        toolBar.add(sep02);
+
+        btnFinalStateToEmptyStack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/finalState.png"))); // NOI18N
+        btnFinalStateToEmptyStack.setToolTipText("New PDA from Final State to Empty Stack (Alt+Shift+E)");
+        btnFinalStateToEmptyStack.setFocusable(false);
+        btnFinalStateToEmptyStack.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnFinalStateToEmptyStack.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnFinalStateToEmptyStack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFinalStateToEmptyStackActionPerformed(evt);
+            }
+        });
+        toolBar.add(btnFinalStateToEmptyStack);
+
+        btnEmptyStackToFinalState.setIcon(new javax.swing.ImageIcon(getClass().getResource("/emptyStack.png"))); // NOI18N
+        btnEmptyStackToFinalState.setToolTipText("New PDA from Empty Stack to Final State (Alt+Shift+F)");
+        btnEmptyStackToFinalState.setFocusable(false);
+        btnEmptyStackToFinalState.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnEmptyStackToFinalState.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnEmptyStackToFinalState.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEmptyStackToFinalStateActionPerformed(evt);
+            }
+        });
+        toolBar.add(btnEmptyStackToFinalState);
         toolBar.add(hFiller);
 
         btnShowTransitionControls.setIcon(new javax.swing.ImageIcon(getClass().getResource("/shape_square_edit.png"))); // NOI18N
@@ -647,7 +678,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         toolBar.add(btnShowTransitionControls);
-        toolBar.add(sep04);
+        toolBar.add(sep03);
 
         btnShowGrid.setIcon(new javax.swing.ImageIcon(getClass().getResource("/note.png"))); // NOI18N
         btnShowGrid.setToolTipText("Show/Hide Grid (Ctrl+Shift+G)");
@@ -667,7 +698,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         btnSnapToGrid.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSnapToGrid.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         toolBar.add(btnSnapToGrid);
-        toolBar.add(sep05);
+        toolBar.add(sep04);
 
         btnRearrangeStates.setIcon(new javax.swing.ImageIcon(getClass().getResource("/layers.png"))); // NOI18N
         btnRearrangeStates.setToolTipText("Rearrange States");
@@ -680,7 +711,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         toolBar.add(btnRearrangeStates);
-        toolBar.add(sep06);
+        toolBar.add(sep05);
 
         btnZoomIn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/zoom_in.png"))); // NOI18N
         btnZoomIn.setToolTipText("Zoom In");
@@ -2193,6 +2224,62 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         resetTestInGUI();
     }//GEN-LAST:event_txtTestStringKeyReleased
 
+    private void btnFinalStateToEmptyStackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalStateToEmptyStackActionPerformed
+        
+        pda.updateType();
+        
+        if ( pda.getType() == PDAType.EMPTY ) {
+            
+            JOptionPane.showMessageDialog( 
+                    this, 
+                    "You must define a Pushdown Automaton First!", 
+                    "Information", 
+                    JOptionPane.INFORMATION_MESSAGE );
+            
+        } else {
+            
+            try {
+                
+                PDA newPda = new PDAFinalStateToEmptyStack( pda ).getGeneratedPDA();
+                PDAArrangement.arrangeByLevel( newPda, 100, 100, 150, false );
+                mainWindow.createPDAInternalFrame( newPda, false, false );
+                
+            } catch ( IllegalArgumentException exc ) {
+                Utils.showErrorMessage( this, exc.getMessage() );
+            }
+            
+        }
+        
+    }//GEN-LAST:event_btnFinalStateToEmptyStackActionPerformed
+
+    private void btnEmptyStackToFinalStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmptyStackToFinalStateActionPerformed
+        
+        pda.updateType();
+        
+        if ( pda.getType() == PDAType.EMPTY ) {
+            
+            JOptionPane.showMessageDialog( 
+                    this, 
+                    "You must define a Pushdown Automaton First!", 
+                    "Information", 
+                    JOptionPane.INFORMATION_MESSAGE );
+            
+        } else {
+            
+            try {
+                
+                PDA newPda = new PDAEmptyStackToFinalState( pda ).getGeneratedPDA();
+                PDAArrangement.arrangeByLevel( newPda, 100, 100, 150, false );
+                mainWindow.createPDAInternalFrame( newPda, false, false );
+                
+            } catch ( IllegalArgumentException exc ) {
+                Utils.showErrorMessage( this, exc.getMessage() );
+            }
+            
+        }
+        
+    }//GEN-LAST:event_btnEmptyStackToFinalStateActionPerformed
+
     public void repaintDrawPanel() {
         drawPanel.repaint();
         drawPanel.setPreferredSize( new Dimension( pda.getWidth(), pda.getHeight() ) );
@@ -2351,6 +2438,9 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         btnAddState.setEnabled( false );
         btnAddTransition.setEnabled( false );
         
+        btnFinalStateToEmptyStack.setEnabled( false );
+        btnEmptyStackToFinalState.setEnabled( false );
+        
         btnTest.setEnabled( false );
         btnReset.setEnabled( false );
         checkShowIDs.setEnabled( false );
@@ -2375,6 +2465,9 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         
         btnAddState.setEnabled( true );
         btnAddTransition.setEnabled( true );
+        
+        btnFinalStateToEmptyStack.setEnabled( true );
+        btnEmptyStackToFinalState.setEnabled( true );
         
         btnTest.setEnabled( true );
         btnReset.setEnabled( true );
@@ -2689,6 +2782,22 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_E, KeyEvent.ALT_DOWN_MASK + KeyEvent.SHIFT_DOWN_MASK ), "toEmptyStack" );
+        am.put( "toEmptyStack", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                btnFinalStateToEmptyStack.doClick();
+            }
+        });
+        
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_F, KeyEvent.ALT_DOWN_MASK + KeyEvent.SHIFT_DOWN_MASK ), "toFinalState" );
+        am.put( "toFinalState", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                btnEmptyStackToFinalState.doClick();
+            }
+        });
+        
         im.put( KeyStroke.getKeyStroke( KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK + KeyEvent.SHIFT_DOWN_MASK ), "showCP" );
         am.put( "showCP", new AbstractAction() {
             @Override
@@ -2829,6 +2938,8 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnBatchTest;
     private javax.swing.JButton btnClone;
     private javax.swing.JButton btnCodeGen;
+    private javax.swing.JButton btnEmptyStackToFinalState;
+    private javax.swing.JButton btnFinalStateToEmptyStack;
     private javax.swing.JButton btnFirstStep;
     private javax.swing.ButtonGroup btnGroup;
     private javax.swing.ButtonGroup btnGroupAcceptanceType;
@@ -2883,9 +2994,10 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JRadioButton radioAcceptByFinalState;
     private javax.swing.JScrollPane scrollPaneModel;
     private javax.swing.JToolBar.Separator sep01;
+    private javax.swing.JToolBar.Separator sep02;
+    private javax.swing.JToolBar.Separator sep03;
     private javax.swing.JToolBar.Separator sep04;
     private javax.swing.JToolBar.Separator sep05;
-    private javax.swing.JToolBar.Separator sep06;
     private javax.swing.JToolBar.Separator sepTS01;
     private javax.swing.JToolBar.Separator sepTS02;
     private javax.swing.JToolBar.Separator sepTS03;

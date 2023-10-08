@@ -4,7 +4,6 @@ Finite Automata
     Regular Expressions
 
 Pushdown Automata
-    Final State to Empty Stack and vice-versa?
     PDA to CFGs?
 
 Turing Machines

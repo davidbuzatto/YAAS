@@ -437,6 +437,36 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddTransitionActionPerformed"/>
           </Events>
         </Component>
+        <Component class="javax.swing.JToolBar$Separator" name="sep02">
+        </Component>
+        <Component class="javax.swing.JButton" name="btnFinalStateToEmptyStack">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/finalState.png"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value="New PDA from Final State to Empty Stack (Alt+Shift+E)"/>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="horizontalTextPosition" type="int" value="0"/>
+            <Property name="verticalTextPosition" type="int" value="3"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnFinalStateToEmptyStackActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="btnEmptyStackToFinalState">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/emptyStack.png"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value="New PDA from Empty Stack to Final State (Alt+Shift+F)"/>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="horizontalTextPosition" type="int" value="0"/>
+            <Property name="verticalTextPosition" type="int" value="3"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEmptyStackToFinalStateActionPerformed"/>
+          </Events>
+        </Component>
         <Component class="javax.swing.Box$Filler" name="hFiller">
           <Properties>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -461,7 +491,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnShowTransitionControlsActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JToolBar$Separator" name="sep04">
+        <Component class="javax.swing.JToolBar$Separator" name="sep03">
         </Component>
         <Component class="javax.swing.JToggleButton" name="btnShowGrid">
           <Properties>
@@ -488,7 +518,7 @@
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JToolBar$Separator" name="sep05">
+        <Component class="javax.swing.JToolBar$Separator" name="sep04">
         </Component>
         <Component class="javax.swing.JButton" name="btnRearrangeStates">
           <Properties>
@@ -504,7 +534,7 @@
             <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnRearrangeStatesMouseReleased"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JToolBar$Separator" name="sep06">
+        <Component class="javax.swing.JToolBar$Separator" name="sep05">
         </Component>
         <Component class="javax.swing.JButton" name="btnZoomIn">
           <Properties>
