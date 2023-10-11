@@ -786,6 +786,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         toolBarTestsAndSimulation.add(sepTS01);
 
         checkShowIDs.setText("Show IDs");
+        checkShowIDs.setToolTipText("Show Instantaneous Descriptions");
         checkShowIDs.setFocusable(false);
         checkShowIDs.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         checkShowIDs.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -806,7 +807,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
 
         btnGroupAcceptanceType.add(radioAcceptByEmptyStack);
         radioAcceptByEmptyStack.setText("ES");
-        radioAcceptByEmptyStack.setToolTipText("EmptyStack");
+        radioAcceptByEmptyStack.setToolTipText("Empty Stack");
         radioAcceptByEmptyStack.setFocusable(false);
         radioAcceptByEmptyStack.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         radioAcceptByEmptyStack.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
