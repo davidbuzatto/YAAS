@@ -14,16 +14,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.davidbuzatto.yaas.model.pda;
+package br.com.davidbuzatto.yaas.model.tm;
 
 /**
- * Acceptance type for Pushdown Automata.
+ * The type of a Turing Machne.
  * 
  * @author Prof. Dr. David Buzatto
  */
-public enum PDAAcceptanceType {
+public enum TMType {
     
-    FINAL_STATE,
-    EMPTY_STACK
+    EMPTY( "Empty", "Empty" ),
+    TM( "TM", "Turing Machine" ),
+    NTM( "NTM", "Nondeterministic Turing Machine" );
+    
+    private final String acronym;
+    private final String description;
+    
+    TMType( String acronym, String description ) {
+        this.acronym = acronym;
+        this.description = description;
+    }
+
+    public String getAcronym() {
+        return acronym;
+    }
+    
+    public String getDescription() {
+        return description;
+    }
     
 }

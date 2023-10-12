@@ -113,9 +113,6 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private int xPressed;
     private int yPressed;
     
-    private int xOffset;
-    private int yOffset;
-    
     private int xPrev;
     private int yPrev;
     
@@ -274,7 +271,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnOpen = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
         btnSaveAs = new javax.swing.JButton();
-        btnSaveFAAsImage = new javax.swing.JButton();
+        btnSaveAsImage = new javax.swing.JButton();
         btnCodeGen = new javax.swing.JButton();
         btnClone = new javax.swing.JButton();
         sep01 = new javax.swing.JToolBar.Separator();
@@ -597,17 +594,17 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         });
         toolBar.add(btnSaveAs);
 
-        btnSaveFAAsImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture.png"))); // NOI18N
-        btnSaveFAAsImage.setToolTipText("Save Finite Automaton as Image (Ctrl+Shift+I)");
-        btnSaveFAAsImage.setFocusable(false);
-        btnSaveFAAsImage.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnSaveFAAsImage.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnSaveFAAsImage.addActionListener(new java.awt.event.ActionListener() {
+        btnSaveAsImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture.png"))); // NOI18N
+        btnSaveAsImage.setToolTipText("Save Finite Automaton as Image (Ctrl+Shift+I)");
+        btnSaveAsImage.setFocusable(false);
+        btnSaveAsImage.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnSaveAsImage.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSaveAsImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveFAAsImageActionPerformed(evt);
+                btnSaveAsImageActionPerformed(evt);
             }
         });
-        toolBar.add(btnSaveFAAsImage);
+        toolBar.add(btnSaveAsImage);
 
         btnCodeGen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/script_gear.png"))); // NOI18N
         btnCodeGen.setToolTipText("Generate Code and Copy to Clipboard");
@@ -1172,11 +1169,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                     selectedState = fa.getStateAt( xPressed, yPressed );
 
                     if ( selectedStates.contains( selectedState ) ) {
-
-                        xOffset = xPressed - selectedState.getX1();
-                        yOffset = yPressed - selectedState.getY1();
                         fa.updateTransitions();
-
                     } else {
                         selectedStates.clear();
                         defaultMove = true;
@@ -1192,9 +1185,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                     selectedState = fa.getStateAt( xPressed, yPressed );
 
                     if ( selectedState != null ) {
-
-                        xOffset = xPressed - selectedState.getX1();
-                        yOffset = yPressed - selectedState.getY1();
+                        
                         fa.updateTransitions();
 
                         statePPanel.setFa( fa );
@@ -1494,7 +1485,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_drawPanelMouseWheelMoved
 
-    private void btnSaveFAAsImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveFAAsImageActionPerformed
+    private void btnSaveAsImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveAsImageActionPerformed
         
         JFileChooser jfc = new JFileChooser( new File( ApplicationPreferences.getPref( ApplicationPreferences.PREF_DEFAULT_FOLDER_PATH ) ) );
         jfc.setDialogTitle( "Save Finite Automaton as Image" );
@@ -1561,7 +1552,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             
         }
         
-    }//GEN-LAST:event_btnSaveFAAsImageActionPerformed
+    }//GEN-LAST:event_btnSaveAsImageActionPerformed
 
     private void btnTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTestActionPerformed
         runSingleTest();
@@ -2568,7 +2559,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnOpen.setEnabled( false );
         btnSave.setEnabled( false );
         btnSaveAs.setEnabled( false );
-        btnSaveFAAsImage.setEnabled( false );
+        btnSaveAsImage.setEnabled( false );
         btnCodeGen.setEnabled( false );
         btnClone.setEnabled( false );
         
@@ -2601,7 +2592,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnOpen.setEnabled( true );
         btnSave.setEnabled( true );
         btnSaveAs.setEnabled( true );
-        btnSaveFAAsImage.setEnabled( true );
+        btnSaveAsImage.setEnabled( true );
         btnCodeGen.setEnabled( true );
         btnClone.setEnabled( true );
         
@@ -2885,7 +2876,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         am.put( "saveModelAsImage", new AbstractAction() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                btnSaveFAAsImage.doClick();
+                btnSaveAsImage.doClick();
             }
         });
         
@@ -3103,7 +3094,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSaveAs;
-    private javax.swing.JButton btnSaveFAAsImage;
+    private javax.swing.JButton btnSaveAsImage;
     private javax.swing.JToggleButton btnSelectMultipleStates;
     private javax.swing.JToggleButton btnShowGrid;
     private javax.swing.JToggleButton btnShowTransitionControls;

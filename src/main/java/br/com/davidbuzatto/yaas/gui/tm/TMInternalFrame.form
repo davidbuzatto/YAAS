@@ -4,69 +4,8 @@
   <NonVisualComponents>
     <Component class="javax.swing.ButtonGroup" name="btnGroup">
     </Component>
-    <Container class="javax.swing.JPopupMenu" name="popupMenuRegularOperations">
-
-      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
-        <Property name="useNullLayout" type="boolean" value="true"/>
-      </Layout>
-      <SubComponents>
-        <MenuItem class="javax.swing.JMenuItem" name="popItemUnion">
-          <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/union.png"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="Union"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="popItemUnionActionPerformed"/>
-          </Events>
-        </MenuItem>
-        <MenuItem class="javax.swing.JMenuItem" name="popItemConcatenation">
-          <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/concatenation.png"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="Concatenation"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="popItemConcatenationActionPerformed"/>
-          </Events>
-        </MenuItem>
-        <MenuItem class="javax.swing.JMenuItem" name="popItemKleeneStar">
-          <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/kleeneStar.png"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="Kleene Star"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="popItemKleeneStarActionPerformed"/>
-          </Events>
-        </MenuItem>
-        <MenuItem class="javax.swing.JMenuItem" name="popItemComplement">
-          <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/complement.png"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="Complement"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="popItemComplementActionPerformed"/>
-          </Events>
-        </MenuItem>
-        <MenuItem class="javax.swing.JMenuItem" name="popItemIntersection">
-          <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/intersection.png"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="Intersection"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="popItemIntersectionActionPerformed"/>
-          </Events>
-        </MenuItem>
-      </SubComponents>
-    </Container>
+    <Component class="javax.swing.ButtonGroup" name="btnGroupAcceptanceType">
+    </Component>
     <Container class="javax.swing.JPopupMenu" name="popupMenuReorganizeStates">
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
@@ -214,15 +153,15 @@
         <Property name="useNullLayout" type="boolean" value="true"/>
       </Layout>
       <SubComponents>
-        <MenuItem class="javax.swing.JMenuItem" name="popItemTransitionSymbols">
+        <MenuItem class="javax.swing.JMenuItem" name="popItemTransitionOperations">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/pencil.png"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Symbol(s)"/>
+            <Property name="text" type="java.lang.String" value="Operation(s)"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="popItemTransitionSymbolsActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="popItemTransitionOperationsActionPerformed"/>
           </Events>
         </MenuItem>
         <Component class="javax.swing.JPopupMenu$Separator" name="spPopupTransition01">
@@ -271,9 +210,9 @@
     <Property name="iconifiable" type="boolean" value="true"/>
     <Property name="maximizable" type="boolean" value="true"/>
     <Property name="resizable" type="boolean" value="true"/>
-    <Property name="title" type="java.lang.String" value="Finite Automata"/>
+    <Property name="title" type="java.lang.String" value="Turing Machine"/>
     <Property name="frameIcon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-      <Image iconType="3" name="/fa.png"/>
+      <Image iconType="3" name="/turing.png"/>
     </Property>
   </Properties>
   <SyntheticProperties>
@@ -297,7 +236,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="toolBar" pref="788" max="32767" attributes="0"/>
+          <Component id="toolBar" max="32767" attributes="0"/>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="panelModel" max="32767" attributes="0"/>
@@ -390,7 +329,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/picture.png"/>
             </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Save Finite Automaton as Image (Ctrl+Shift+I)"/>
+            <Property name="toolTipText" type="java.lang.String" value="Save Pushdown Automaton as Image (Ctrl+Shift+I)"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -418,7 +357,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/script_go.png"/>
             </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Clone Current Finite Automata"/>
+            <Property name="toolTipText" type="java.lang.String" value="Clone Current Pushdown Automata"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -498,80 +437,6 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddTransitionActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JToolBar$Separator" name="sep02">
-        </Component>
-        <Component class="javax.swing.JButton" name="btnAddAllMissingTransitionsDFA">
-          <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/transitionAddAll.png"/>
-            </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Add All Missing Transitions (Alt+Shift+T)"/>
-            <Property name="focusable" type="boolean" value="false"/>
-            <Property name="horizontalTextPosition" type="int" value="0"/>
-            <Property name="verticalTextPosition" type="int" value="3"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddAllMissingTransitionsDFAActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JButton" name="btnRemoveInaccessibleAndUselessStates">
-          <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/stateRemoveUI.png"/>
-            </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Remove Inaccessible and Useless States (Alt+Shift+DELETE)"/>
-            <Property name="focusable" type="boolean" value="false"/>
-            <Property name="horizontalTextPosition" type="int" value="0"/>
-            <Property name="verticalTextPosition" type="int" value="3"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRemoveInaccessibleAndUselessStatesActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JToolBar$Separator" name="sep03">
-        </Component>
-        <Component class="javax.swing.JButton" name="btnGenerateEquivalentDFA">
-          <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/dfa.png"/>
-            </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Generate Equivalent DFA (Alt+Shift+D)"/>
-            <Property name="focusable" type="boolean" value="false"/>
-            <Property name="horizontalTextPosition" type="int" value="0"/>
-            <Property name="verticalTextPosition" type="int" value="3"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGenerateEquivalentDFAActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JButton" name="btnGenerateMinimizedDFA">
-          <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/arrow_in.png"/>
-            </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Generate Minimized DFA (Alt+Shift+M)"/>
-            <Property name="focusable" type="boolean" value="false"/>
-            <Property name="horizontalTextPosition" type="int" value="0"/>
-            <Property name="verticalTextPosition" type="int" value="3"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGenerateMinimizedDFAActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JButton" name="btnRegularOperations">
-          <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/lightning.png"/>
-            </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Regular Operations"/>
-            <Property name="focusable" type="boolean" value="false"/>
-            <Property name="horizontalTextPosition" type="int" value="0"/>
-            <Property name="verticalTextPosition" type="int" value="3"/>
-          </Properties>
-          <Events>
-            <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnRegularOperationsMouseReleased"/>
-          </Events>
-        </Component>
         <Component class="javax.swing.Box$Filler" name="hFiller">
           <Properties>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -596,7 +461,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnShowTransitionControlsActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JToolBar$Separator" name="sep04">
+        <Component class="javax.swing.JToolBar$Separator" name="sep02">
         </Component>
         <Component class="javax.swing.JToggleButton" name="btnShowGrid">
           <Properties>
@@ -623,7 +488,7 @@
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JToolBar$Separator" name="sep05">
+        <Component class="javax.swing.JToolBar$Separator" name="sep03">
         </Component>
         <Component class="javax.swing.JButton" name="btnRearrangeStates">
           <Properties>
@@ -639,7 +504,7 @@
             <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnRearrangeStatesMouseReleased"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JToolBar$Separator" name="sep06">
+        <Component class="javax.swing.JToolBar$Separator" name="sep04">
         </Component>
         <Component class="javax.swing.JButton" name="btnZoomIn">
           <Properties>
@@ -722,7 +587,7 @@
                       <Component id="lblTestString" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="toolBarTestsAndSimulation" pref="388" max="32767" attributes="0"/>
+                          <Component id="toolBarTestsAndSimulation" max="32767" attributes="0"/>
                           <Component id="txtTestString" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -809,6 +674,49 @@
                 </Component>
                 <Component class="javax.swing.JToolBar$Separator" name="sepTS01">
                 </Component>
+                <Component class="javax.swing.JCheckBox" name="checkShowIDs">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Show IDs"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Show Instantaneous Descriptions"/>
+                    <Property name="focusable" type="boolean" value="false"/>
+                    <Property name="horizontalTextPosition" type="int" value="4"/>
+                    <Property name="verticalTextPosition" type="int" value="3"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JToolBar$Separator" name="sepTS02">
+                </Component>
+                <Component class="javax.swing.JLabel" name="lblAcceptBy">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Accept by:"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JRadioButton" name="radioAcceptByFinalState">
+                  <Properties>
+                    <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                      <ComponentRef name="btnGroupAcceptanceType"/>
+                    </Property>
+                    <Property name="selected" type="boolean" value="true"/>
+                    <Property name="text" type="java.lang.String" value="FS"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Final State"/>
+                    <Property name="focusable" type="boolean" value="false"/>
+                    <Property name="horizontalTextPosition" type="int" value="4"/>
+                    <Property name="verticalTextPosition" type="int" value="3"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JRadioButton" name="radioAcceptByEmptyStack">
+                  <Properties>
+                    <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                      <ComponentRef name="btnGroupAcceptanceType"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="ES"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Empty Stack"/>
+                    <Property name="focusable" type="boolean" value="false"/>
+                    <Property name="horizontalTextPosition" type="int" value="4"/>
+                    <Property name="verticalTextPosition" type="int" value="3"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JToolBar$Separator" name="sepTS03">
+                </Component>
                 <Component class="javax.swing.JButton" name="btnBatchTest">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
@@ -823,7 +731,7 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBatchTestActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JToolBar$Separator" name="sepTS02">
+                <Component class="javax.swing.JToolBar$Separator" name="sepTS04">
                 </Component>
                 <Component class="javax.swing.JButton" name="btnStart">
                   <Properties>

@@ -21,8 +21,11 @@ import br.com.davidbuzatto.yaas.model.fa.examples.FAExamples;
 import br.com.davidbuzatto.yaas.model.fa.examples.FAExamplesForMinimizationTest;
 import br.com.davidbuzatto.yaas.gui.fa.FAInternalFrame;
 import br.com.davidbuzatto.yaas.gui.pda.PDAInternalFrame;
+import br.com.davidbuzatto.yaas.gui.tm.TMInternalFrame;
 import br.com.davidbuzatto.yaas.model.pda.PDA;
 import br.com.davidbuzatto.yaas.model.pda.examples.PDAExamples;
+import br.com.davidbuzatto.yaas.model.tm.TM;
+import br.com.davidbuzatto.yaas.model.tm.examples.TMExamples;
 import br.com.davidbuzatto.yaas.util.ApplicationConstants;
 import br.com.davidbuzatto.yaas.util.ApplicationPreferences;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
@@ -699,7 +702,7 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPDAActionPerformed
 
     private void btnTMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTMActionPerformed
-        Utils.showNotImplementedYetMessage();
+        createTMInternalFrame( null, false, true );
     }//GEN-LAST:event_btnTMActionPerformed
 
     private void miMiniE01ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniE01ActionPerformed
@@ -851,6 +854,27 @@ public class MainWindow extends javax.swing.JFrame {
         
     }
     
+    public void createTMInternalFrame( TM tm, boolean maximized, boolean currentFileSaved ) {
+        
+        if ( tm == null ) {
+            tm = new TM();
+        }
+        
+        TMInternalFrame iFrame = new TMInternalFrame( this, tm );
+        iFrame.setCurrentState( tm.getStates().size() );
+        iFrame.setCurrentFileSaved( currentFileSaved );
+        
+        desktopPane.add( iFrame );
+        iFrame.setVisible( true );
+        
+        try {
+            iFrame.setMaximum( maximized );
+        } catch ( PropertyVetoException exc ) {
+            Utils.showException( exc );
+        }
+        
+    }
+    
     @SuppressWarnings( "unchecked" )
     private void close() {
         
@@ -925,7 +949,8 @@ public class MainWindow extends javax.swing.JFrame {
     
     private void openExample() {
         if ( ApplicationConstants.IN_DEVELOPMENT ) {
-            createPDAInternalFrame( PDAExamples.createPDA0n1nFinalState(), true, true );
+            //createPDAInternalFrame( PDAExamples.createPDA0n1nFinalState(), true, true );
+            createTMInternalFrame( TMExamples.createTMTest(), true, true );
         }
     }
     

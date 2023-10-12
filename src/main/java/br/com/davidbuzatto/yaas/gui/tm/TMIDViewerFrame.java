@@ -14,49 +14,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.davidbuzatto.yaas.gui.pda;
+package br.com.davidbuzatto.yaas.gui.tm;
 
-import br.com.davidbuzatto.yaas.model.pda.PDA;
-import br.com.davidbuzatto.yaas.util.Utils;
-import java.util.List;
+import br.com.davidbuzatto.yaas.model.tm.TM;
 
 /**
- * A viewer of a ID tree for the simulation proccess.
+ * A viewer of a ID tree.
  * 
  * @author Prof. Dr. David Buzatto
  */
-public class PDAIDSimulationViewerFrame extends javax.swing.JFrame {
+public class TMIDViewerFrame extends javax.swing.JFrame {
 
-    private int currentSimulationStep;
-    private PDAInternalFrame pdaIFrame;
-    private PDA pda;
-    List<PDASimulationStep> simulationSteps;
+    private TMInternalFrame tmIFrame;
+    private TM tm;
     
     /**
-     * Creates new form PDAIDSimulationViewerFrame
+     * Creates new form TMIDViewerFrame
      */
-    public PDAIDSimulationViewerFrame( 
-            PDAInternalFrame pdaIFrame, 
-            PDA pda,
-            List<PDASimulationStep> simulationSteps ) {
+    public TMIDViewerFrame( TMInternalFrame tmIFrame, TM tm ) {
         
-        this.pdaIFrame = pdaIFrame;
-        this.pda = pda;
-        this.simulationSteps = simulationSteps;
+        this.tmIFrame = tmIFrame;
+        this.tm = tm;
         
         initComponents();
-        setLocationRelativeTo( pdaIFrame );
-        setAlwaysOnTop( true );
+        setLocationRelativeTo( tmIFrame );
         
-        drawPanel.setPda( pda );
-        drawPanel.arrangeAndProccessIdsForSimulation( simulationSteps );
+        drawPanel.setTm( tm );
+        drawPanel.arrangeAndProccessIds();
         drawPanel.repaint();
         drawPanel.revalidate();
         
-        setCurrentSimulationStep( currentSimulationStep );
-        
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -67,26 +56,21 @@ public class PDAIDSimulationViewerFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         scrollDrawPanel = new javax.swing.JScrollPane();
-        drawPanel = new br.com.davidbuzatto.yaas.gui.pda.PDAIDViewerDrawPanel();
+        drawPanel = new br.com.davidbuzatto.yaas.gui.tm.TMIDViewerDrawPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle("Simulation ID Viewer");
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Instantaneous Description Viewer");
         setIconImage(new javax.swing.ImageIcon( getClass().getResource( "/arrow_right.png" ) ).getImage());
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                formWindowClosing(evt);
-            }
-        });
 
         javax.swing.GroupLayout drawPanelLayout = new javax.swing.GroupLayout(drawPanel);
         drawPanel.setLayout(drawPanelLayout);
         drawPanelLayout.setHorizontalGroup(
             drawPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 798, Short.MAX_VALUE)
+            .addGap(0, 800, Short.MAX_VALUE)
         );
         drawPanelLayout.setVerticalGroup(
             drawPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 598, Short.MAX_VALUE)
+            .addGap(0, 600, Short.MAX_VALUE)
         );
 
         scrollDrawPanel.setViewportView(drawPanel);
@@ -95,7 +79,7 @@ public class PDAIDSimulationViewerFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrollDrawPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+            .addComponent(scrollDrawPanel)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -105,24 +89,9 @@ public class PDAIDSimulationViewerFrame extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        Utils.showInformationMessage( this, "This window will close automatically when you stop the simulation." );
-    }//GEN-LAST:event_formWindowClosing
-    
-    public void setCurrentSimulationStep( int currentSimulationStep ) {
-        this.currentSimulationStep = currentSimulationStep;
-        for ( PDASimulationStep step : simulationSteps ) {
-            step.getId().setActiveInSimulation( false );
-        }
-        for ( int i = 0; i <= currentSimulationStep; i++ ) {
-            simulationSteps.get( i ).getId().setActiveInSimulation( true );
-        }
-        drawPanel.repaint();
-    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private br.com.davidbuzatto.yaas.gui.pda.PDAIDViewerDrawPanel drawPanel;
+    private br.com.davidbuzatto.yaas.gui.tm.TMIDViewerDrawPanel drawPanel;
     private javax.swing.JScrollPane scrollDrawPanel;
     // End of variables declaration//GEN-END:variables
 }

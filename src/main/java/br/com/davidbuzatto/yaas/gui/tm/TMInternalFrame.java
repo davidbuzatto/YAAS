@@ -14,22 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.davidbuzatto.yaas.gui.pda;
+package br.com.davidbuzatto.yaas.gui.tm;
 
 import br.com.davidbuzatto.yaas.gui.MainWindow;
 import br.com.davidbuzatto.yaas.gui.ZoomFacility;
-import br.com.davidbuzatto.yaas.gui.pda.properties.PDAPropertiesPanel;
-import br.com.davidbuzatto.yaas.gui.pda.properties.PDAStatePropertiesPanel;
-import br.com.davidbuzatto.yaas.gui.pda.properties.PDATransitionPropertiesPanel;
-import br.com.davidbuzatto.yaas.model.pda.PDA;
-import br.com.davidbuzatto.yaas.model.pda.PDAAcceptanceType;
-import br.com.davidbuzatto.yaas.model.pda.PDAOperation;
-import br.com.davidbuzatto.yaas.model.pda.PDAState;
-import br.com.davidbuzatto.yaas.model.pda.PDATransition;
-import br.com.davidbuzatto.yaas.model.pda.PDAType;
-import br.com.davidbuzatto.yaas.model.pda.algorithms.PDAArrangement;
-import br.com.davidbuzatto.yaas.model.pda.algorithms.PDAEmptyStackToFinalState;
-import br.com.davidbuzatto.yaas.model.pda.algorithms.PDAFinalStateToEmptyStack;
+import br.com.davidbuzatto.yaas.gui.tm.properties.TMPropertiesPanel;
+import br.com.davidbuzatto.yaas.gui.tm.properties.TMStatePropertiesPanel;
+import br.com.davidbuzatto.yaas.gui.tm.properties.TMTransitionPropertiesPanel;
+import br.com.davidbuzatto.yaas.model.tm.TM;
+import br.com.davidbuzatto.yaas.model.tm.TMAcceptanceType;
+import br.com.davidbuzatto.yaas.model.tm.TMOperation;
+import br.com.davidbuzatto.yaas.model.tm.TMState;
+import br.com.davidbuzatto.yaas.model.tm.TMTransition;
+import br.com.davidbuzatto.yaas.model.tm.algorithms.TMArrangement;
 import br.com.davidbuzatto.yaas.util.ApplicationConstants;
 import br.com.davidbuzatto.yaas.util.ApplicationPreferences;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
@@ -91,17 +88,18 @@ import javax.swing.event.AncestorListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
- * Pushdown Automaton modelation and simulation.
+ * Turing Machine modelation and simulation.
+ * TODO update
  * 
  * @author Prof. Dr. David Buzatto
  */
-public class PDAInternalFrame extends javax.swing.JInternalFrame {
+public class TMInternalFrame extends javax.swing.JInternalFrame {
 
     private static final String MODEL_PROPERTIES_CARD = "model";
     private static final String STATE_PROPERTIES_CARD = "state";
     private static final String TRANSITION_PROPERTIES_CARD = "transition";
     
-    private PDA pda;
+    private TM tm;
     private MainWindow mainWindow;
     
     private boolean canDrag;
@@ -117,23 +115,23 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     
     private int currentState;
     
-    private PDAState selectedState;
-    private PDATransition selectedTransition;
-    private Set<PDAState> selectedStates;
+    private TMState selectedState;
+    private TMTransition selectedTransition;
+    private Set<TMState> selectedStates;
     
-    private PDAState originState;
-    private PDAState targetState;
+    private TMState originState;
+    private TMState targetState;
     
-    private PDAPropertiesPanel pdaPPanel;
-    private PDAStatePropertiesPanel statePPanel;
-    private PDATransitionPropertiesPanel transitionPPanel;
+    private TMPropertiesPanel tmPPanel;
+    private TMStatePropertiesPanel statePPanel;
+    private TMTransitionPropertiesPanel transitionPPanel;
     private CardLayout cardLayout;
     
-    private List<PDASimulationStep> simulationSteps;
+    private List<TMSimulationStep> simulationSteps;
     private int currentSimulationStep;
-    private PDAIDSimulationViewerFrame simulationVFrame;
+    private TMIDSimulationViewerFrame simulationVFrame;
     
-    private PDABatchTest pdaBatchTestDialog;
+    private TMBatchTest tmBatchTestDialog;
     private Color txtTestStringDefaultBC;
     private Color txtTestStringDefaultFC;
     private Color txtTestStringDefaultCaretColor;
@@ -146,21 +144,21 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     private String baseTitle;
     
     /**
-     * Creates new form PDAInternalFrame
+     * Creates new form TMInternalFrame
      */
-    public PDAInternalFrame( MainWindow mainWindow ) {
-        this( mainWindow, new PDA() );
+    public TMInternalFrame( MainWindow mainWindow ) {
+        this( mainWindow, new TM() );
     }
     
-    public PDAInternalFrame( MainWindow mainWindow, PDA pda ) {
+    public TMInternalFrame( MainWindow mainWindow, TM tm ) {
         
         this.mainWindow = mainWindow;
         this.simulationSteps = new ArrayList<>();
        
-        if ( pda == null ) {
-            this.pda = new PDA();
+        if ( tm == null ) {
+            this.tm = new TM();
         } else {
-            this.pda = pda;
+            this.tm = tm;
         }
         
         this.selectedStates = new HashSet<>();
@@ -173,19 +171,19 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
 
     private void customInit() {
         
-        pdaPPanel = new PDAPropertiesPanel( this );
-        statePPanel = new PDAStatePropertiesPanel( this );
-        transitionPPanel = new PDATransitionPropertiesPanel( this );
+        tmPPanel = new TMPropertiesPanel( this );
+        statePPanel = new TMStatePropertiesPanel( this );
+        transitionPPanel = new TMTransitionPropertiesPanel( this );
         
         cardLayout = (CardLayout) panelProperties.getLayout();
-        panelProperties.add( pdaPPanel, MODEL_PROPERTIES_CARD );
+        panelProperties.add( tmPPanel, MODEL_PROPERTIES_CARD );
         panelProperties.add( statePPanel, STATE_PROPERTIES_CARD );
         panelProperties.add( transitionPPanel, TRANSITION_PROPERTIES_CARD );
         
-        drawPanel.setPda( pda );
+        drawPanel.setTm( tm );
         
-        pdaPPanel.setPda( pda );
-        pdaPPanel.readProperties();
+        tmPPanel.setTm( tm );
+        tmPPanel.readProperties();
         cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
         
         drawPanel.setCursor( Cursor.getPredefinedCursor( Cursor.HAND_CURSOR ) );
@@ -210,7 +208,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         });
         
         if ( !ApplicationConstants.IN_DEVELOPMENT ) {
-            sep05.setVisible( false );
+            sep04.setVisible( false );
             btnZoomIn.setVisible( false );
             btnZoomOut.setVisible( false );
             btnCodeGen.setVisible( false );
@@ -276,17 +274,14 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         btnMove = new javax.swing.JToggleButton();
         btnAddState = new javax.swing.JToggleButton();
         btnAddTransition = new javax.swing.JToggleButton();
-        sep02 = new javax.swing.JToolBar.Separator();
-        btnFinalStateToEmptyStack = new javax.swing.JButton();
-        btnEmptyStackToFinalState = new javax.swing.JButton();
         hFiller = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         btnShowTransitionControls = new javax.swing.JToggleButton();
-        sep03 = new javax.swing.JToolBar.Separator();
+        sep02 = new javax.swing.JToolBar.Separator();
         btnShowGrid = new javax.swing.JToggleButton();
         btnSnapToGrid = new javax.swing.JToggleButton();
-        sep04 = new javax.swing.JToolBar.Separator();
+        sep03 = new javax.swing.JToolBar.Separator();
         btnRearrangeStates = new javax.swing.JButton();
-        sep05 = new javax.swing.JToolBar.Separator();
+        sep04 = new javax.swing.JToolBar.Separator();
         btnZoomIn = new javax.swing.JButton();
         btnZoomOut = new javax.swing.JButton();
         panelModel = new javax.swing.JPanel();
@@ -478,8 +473,8 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
-        setTitle("Pushdown Automata");
-        setFrameIcon(new javax.swing.ImageIcon(getClass().getResource("/pda.png"))); // NOI18N
+        setTitle("Turing Machine");
+        setFrameIcon(new javax.swing.ImageIcon(getClass().getResource("/turing.png"))); // NOI18N
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
             }
@@ -637,31 +632,6 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         toolBar.add(btnAddTransition);
-        toolBar.add(sep02);
-
-        btnFinalStateToEmptyStack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/finalState.png"))); // NOI18N
-        btnFinalStateToEmptyStack.setToolTipText("New PDA from Final State to Empty Stack (Alt+Shift+E)");
-        btnFinalStateToEmptyStack.setFocusable(false);
-        btnFinalStateToEmptyStack.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnFinalStateToEmptyStack.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnFinalStateToEmptyStack.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFinalStateToEmptyStackActionPerformed(evt);
-            }
-        });
-        toolBar.add(btnFinalStateToEmptyStack);
-
-        btnEmptyStackToFinalState.setIcon(new javax.swing.ImageIcon(getClass().getResource("/emptyStack.png"))); // NOI18N
-        btnEmptyStackToFinalState.setToolTipText("New PDA from Empty Stack to Final State (Alt+Shift+F)");
-        btnEmptyStackToFinalState.setFocusable(false);
-        btnEmptyStackToFinalState.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnEmptyStackToFinalState.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnEmptyStackToFinalState.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEmptyStackToFinalStateActionPerformed(evt);
-            }
-        });
-        toolBar.add(btnEmptyStackToFinalState);
         toolBar.add(hFiller);
 
         btnShowTransitionControls.setIcon(new javax.swing.ImageIcon(getClass().getResource("/shape_square_edit.png"))); // NOI18N
@@ -675,7 +645,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         toolBar.add(btnShowTransitionControls);
-        toolBar.add(sep03);
+        toolBar.add(sep02);
 
         btnShowGrid.setIcon(new javax.swing.ImageIcon(getClass().getResource("/note.png"))); // NOI18N
         btnShowGrid.setToolTipText("Show/Hide Grid (Ctrl+Shift+G)");
@@ -695,7 +665,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         btnSnapToGrid.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSnapToGrid.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         toolBar.add(btnSnapToGrid);
-        toolBar.add(sep04);
+        toolBar.add(sep03);
 
         btnRearrangeStates.setIcon(new javax.swing.ImageIcon(getClass().getResource("/layers.png"))); // NOI18N
         btnRearrangeStates.setToolTipText("Rearrange States");
@@ -708,7 +678,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         toolBar.add(btnRearrangeStates);
-        toolBar.add(sep05);
+        toolBar.add(sep04);
 
         btnZoomIn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/zoom_in.png"))); // NOI18N
         btnZoomIn.setToolTipText("Zoom In");
@@ -1026,20 +996,20 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                 "New model",
                 JOptionPane.YES_NO_OPTION ) == JOptionPane.YES_OPTION ) {
             
-            pda = new PDA();
+            tm = new TM();
             setCurrentFileSaved( false );
             
-            drawPanel.setPda( pda );
-            pdaPPanel.setPda( pda );
-            statePPanel.setPda( pda );
-            transitionPPanel.setPda( pda );
+            drawPanel.setTm( tm );
+            tmPPanel.setTm( tm );
+            statePPanel.setTm( tm );
+            transitionPPanel.setTm( tm );
             
             selectedState = null;
             selectedTransition = null;
             
             currentState = 0;
             
-            pdaPPanel.readProperties();
+            tmPPanel.readProperties();
             statePPanel.readProperties();
             transitionPPanel.readProperties();
             
@@ -1062,7 +1032,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnAddTransitionActionPerformed
 
     private void btnShowTransitionControlsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowTransitionControlsActionPerformed
-        pda.setTransitionsControlPointsVisible( btnShowTransitionControls.isSelected() );
+        tm.setTransitionsControlPointsVisible( btnShowTransitionControls.isSelected() );
         repaintDrawPanel();
     }//GEN-LAST:event_btnShowTransitionControlsActionPerformed
 
@@ -1099,7 +1069,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                     selectedStates.clear();
                 }
 
-                for ( PDAState s : pda.getStates() ) {
+                for ( TMState s : tm.getStates() ) {
                     if ( !selectedStates.contains( s ) ) {
                         s.setSelected( false );
                     }
@@ -1112,10 +1082,10 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
 
                 if ( !selectedStates.isEmpty() ) {
 
-                    selectedState = pda.getStateAt( xPressed, yPressed );
+                    selectedState = tm.getStateAt( xPressed, yPressed );
 
                     if ( selectedStates.contains( selectedState ) ) {
-                        pda.updateTransitions();
+                        tm.updateTransitions();
                     } else {
                         selectedStates.clear();
                         defaultMove = true;
@@ -1127,33 +1097,33 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
 
                 if ( defaultMove ) {
 
-                    pda.deselectAll();
-                    selectedState = pda.getStateAt( xPressed, yPressed );
+                    tm.deselectAll();
+                    selectedState = tm.getStateAt( xPressed, yPressed );
 
                     if ( selectedState != null ) {
                         
-                        pda.updateTransitions();
+                        tm.updateTransitions();
 
-                        statePPanel.setPda( pda );
+                        statePPanel.setTm( tm );
                         statePPanel.setState( selectedState );
                         statePPanel.readProperties();
                         cardLayout.show( panelProperties, STATE_PROPERTIES_CARD );
 
                     } else {
 
-                        selectedTransition = pda.getTransitionAt( xPressed, yPressed );
+                        selectedTransition = tm.getTransitionAt( xPressed, yPressed );
 
                         if ( selectedTransition != null ) {
 
-                            transitionPPanel.setPda( pda );
+                            transitionPPanel.setTm( tm );
                             transitionPPanel.setTransition( selectedTransition );
                             transitionPPanel.readProperties();
                             cardLayout.show( panelProperties, TRANSITION_PROPERTIES_CARD );
 
                         } else {
 
-                            pdaPPanel.setPda( pda );
-                            pdaPPanel.readProperties();
+                            tmPPanel.setTm( tm );
+                            tmPPanel.readProperties();
                             cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
 
                         }
@@ -1164,10 +1134,10 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
 
             } else if ( btnAddState.isSelected() ) {
 
-                PDAState newState = new PDAState( currentState++ );
+                TMState newState = new TMState( currentState++ );
                 newState.setX1Y1( xPressed, yPressed );
 
-                pda.addState( newState );
+                tm.addState( newState );
 
                 if ( btnSnapToGrid.isSelected() ) {
                     updateSnapPoint( evt );
@@ -1179,7 +1149,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             } else if ( btnAddTransition.isSelected() ) {
 
                 if ( originState == null ) {
-                    originState = pda.getStateAt( xPressed, yPressed );
+                    originState = tm.getStateAt( xPressed, yPressed );
                     if ( originState != null ) {
                         drawPanel.setDrawingTempTransition( true );
                         drawPanel.setTempTransitionX1( originState.getX1() );
@@ -1194,8 +1164,8 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         } else if ( evt.getButton() == MouseEvent.BUTTON3 ) {
         }
         
-        pdaPPanel.setPda( pda );
-        pdaPPanel.readProperties();
+        tmPPanel.setTm( tm );
+        tmPPanel.readProperties();
         repaintDrawPanel();
         
     }//GEN-LAST:event_drawPanelMousePressed
@@ -1214,7 +1184,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                         xPressed <= evt.getX() ? evt.getX() - xPressed : xPressed - evt.getX(), 
                         yPressed <= evt.getY() ? evt.getY() - yPressed : yPressed - evt.getY() );
 
-                for ( PDAState s : pda.getStates() ) {
+                for ( TMState s : tm.getStates() ) {
                     if ( s.intersects( rectangle ) ) {
                         s.setSelected( true );
                         selectedStates.add( s );
@@ -1238,19 +1208,19 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                 if ( originState != null ) {
 
                     if ( targetState == null ) {
-                        targetState = pda.getStateAt( evt.getX(), evt.getY() );
+                        targetState = tm.getStateAt( evt.getX(), evt.getY() );
                     } 
 
                     if ( targetState != null ) {
 
-                        PDAOperation op = Utils.showInputDialogNewPDAOperation( 
+                        TMOperation op = Utils.showInputDialogNewTMOperation( 
                                 this, "Add Transition Operation", 
-                                pda.getStackStartingSymbol(), null );
+                                tm.getStackStartingSymbol(), null );
                         
                         if ( op != null ) {
-                            PDATransition t = new PDATransition( 
+                            TMTransition t = new TMTransition( 
                                     originState, targetState, op );
-                            pda.addTransition( t );
+                            tm.addTransition( t );
                             setCurrentFileSaved( false );
                         }
 
@@ -1262,7 +1232,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
 
                 }
 
-                pda.deselectAll();
+                tm.deselectAll();
 
             }
             
@@ -1270,14 +1240,14 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             
             if ( btnMove.isSelected() ) {
                 
-                pda.deselectAll();
+                tm.deselectAll();
                 selectedStates.clear();
-                selectedState = pda.getStateAt( evt.getX(), evt.getY() );
-                selectedTransition = pda.getTransitionAt( evt.getX(), evt.getY() );
+                selectedState = tm.getStateAt( evt.getX(), evt.getY() );
+                selectedTransition = tm.getTransitionAt( evt.getX(), evt.getY() );
                 
                 if ( selectedState != null ) {
 
-                    statePPanel.setPda( pda );
+                    statePPanel.setTm( tm );
                     statePPanel.setState( selectedState );
                     statePPanel.readProperties();
                     cardLayout.show( panelProperties, STATE_PROPERTIES_CARD );
@@ -1289,7 +1259,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
 
                 } else if ( selectedTransition != null ) {
 
-                    transitionPPanel.setPda( pda );
+                    transitionPPanel.setTm( tm );
                     transitionPPanel.setTransition( selectedTransition );
                     transitionPPanel.readProperties();
                     cardLayout.show( panelProperties, TRANSITION_PROPERTIES_CARD );
@@ -1298,8 +1268,8 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
 
                 } else {
 
-                    pdaPPanel.setPda( pda );
-                    pdaPPanel.readProperties();
+                    tmPPanel.setTm( tm );
+                    tmPPanel.readProperties();
                     cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
 
                 }
@@ -1308,8 +1278,8 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             
         }
         
-        pdaPPanel.setPda( pda );
-        pdaPPanel.readProperties();
+        tmPPanel.setTm( tm );
+        tmPPanel.readProperties();
         repaintDrawPanel();
         
     }//GEN-LAST:event_drawPanelMouseReleased
@@ -1326,7 +1296,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                         xPressed <= evt.getX() ? evt.getX() - xPressed : xPressed - evt.getX(), 
                         yPressed <= evt.getY() ? evt.getY() - yPressed : yPressed - evt.getY() );
 
-                for ( PDAState s : pda.getStates() ) {
+                for ( TMState s : tm.getStates() ) {
                     if ( s.intersects( rectangle ) ) {
                         s.setMouseHover( true );
                     } else {
@@ -1345,11 +1315,11 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                 yPrev += yAmount;
                     
                 if ( !selectedStates.isEmpty() ) {
-                    for ( PDAState s : selectedStates ) {
+                    for ( TMState s : selectedStates ) {
                         s.move( xAmount, yAmount );
                     }
-                    pda.updateTransitions();
-                    pda.draggTransitions( evt );
+                    tm.updateTransitions();
+                    tm.draggTransitions( evt );
                 } else if ( selectedState != null ) {
                     if ( btnSnapToGrid.isSelected() ) {
                         updateSnapPoint( evt );
@@ -1357,16 +1327,16 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                     } else {
                         selectedState.move( xAmount, yAmount );
                     }
-                    pda.updateTransitions();
+                    tm.updateTransitions();
                     if ( selectedTransition != null ) {
                         selectedTransition.cancelDragging();
                         selectedTransition = null;
                     }
-                    pda.draggTransitions( evt );
+                    tm.draggTransitions( evt );
                 } else if ( selectedTransition != null ) {
                     selectedTransition.mouseDragged( evt );
                 } else {
-                    pda.move( xAmount, yAmount );
+                    tm.move( xAmount, yAmount );
                 }
 
                 setCurrentFileSaved( false );
@@ -1385,7 +1355,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     private void drawPanelMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drawPanelMouseMoved
         
         if ( btnMove.isSelected() || btnAddTransition.isSelected() ) {
-            pda.mouseHoverStatesAndTransitions( evt.getX(), evt.getY() );
+            tm.mouseHoverStatesAndTransitions( evt.getX(), evt.getY() );
             repaintDrawPanel();
         }
         
@@ -1476,7 +1446,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                     g2d.fillRect( 0, 0, img.getWidth(), img.getHeight() );
                 }
 
-                pda.draw( g2d );
+                tm.draw( g2d );
 
                 try {
                     ImageIO.write( img, "png", f );
@@ -1496,28 +1466,28 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
         
-        if ( pda.canExecute() ) {
+        if ( tm.canExecute() ) {
             
             txtTestString.setEditable( false );
             resetTestInGUI();
             disableGUI();
-            pda.deselectAll();
+            tm.deselectAll();
             selectedStates.clear();
             simulationSteps.clear();
             currentSimulationStep = 0;
             
-            boolean accepted = pda.accepts( 
+            boolean accepted = tm.accepts( 
                     txtTestString.getText(), 
                     radioAcceptByFinalState.isSelected() ? 
-                            PDAAcceptanceType.FINAL_STATE : 
-                            PDAAcceptanceType.EMPTY_STACK,
+                            TMAcceptanceType.FINAL_STATE : 
+                            TMAcceptanceType.STOP,
                     simulationSteps );
             
             btnStart.setEnabled( false );
             btnStop.setEnabled( true );
             
             drawPanel.setSimulationString( txtTestString.getText() );
-            drawPanel.setPDASimulationSteps( simulationSteps );
+            drawPanel.setTMSimulationSteps( simulationSteps );
             drawPanel.setCurrentSimulationStep( currentSimulationStep );
             drawPanel.setSimulationAccepted( accepted );
             drawPanel.repaint();
@@ -1530,7 +1500,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             if ( simulationSteps.isEmpty() ) {
                 Utils.showWarningMessage( this, String.format(
                         """
-                        The PDA simulation only works with accepted strings!
+                        The TM simulation only works with accepted strings!
                         Since the input string "%s" is not accepted, the
                         simulation will not start.""", 
                         txtTestString.getText().isEmpty() ? 
@@ -1538,8 +1508,8 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                                 txtTestString.getText() ) );
                 btnStop.doClick();
             } else {
-                simulationVFrame = new PDAIDSimulationViewerFrame( 
-                        this, pda, simulationSteps );
+                simulationVFrame = new TMIDSimulationViewerFrame( 
+                        this, tm, simulationSteps );
                 simulationVFrame.setVisible( true );
             }
             
@@ -1586,7 +1556,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     private void btnStopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStopActionPerformed
         
         simulationSteps.clear();
-        pda.deactivateAllStatesInSimulation();
+        tm.deactivateAllStatesInSimulation();
         txtTestString.setEditable( true );
         resetTestInGUI();
         enableGUI();
@@ -1612,17 +1582,17 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnStopActionPerformed
 
     private void btnBatchTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatchTestActionPerformed
-        if ( pdaBatchTestDialog == null ) {
-            pdaBatchTestDialog = new PDABatchTest( 
+        if ( tmBatchTestDialog == null ) {
+            tmBatchTestDialog = new TMBatchTest( 
                     mainWindow, 
                     this, 
                     radioAcceptByFinalState.isSelected() ? 
-                            PDAAcceptanceType.FINAL_STATE : 
-                            PDAAcceptanceType.EMPTY_STACK,
+                            TMAcceptanceType.FINAL_STATE : 
+                            TMAcceptanceType.STOP,
                     false );
         }
-        pdaBatchTestDialog.setPda( pda );
-        pdaBatchTestDialog.setVisible( true );
+        tmBatchTestDialog.setTm( tm );
+        tmBatchTestDialog.setVisible( true );
     }//GEN-LAST:event_btnBatchTestActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
@@ -1647,7 +1617,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                     throw new NumberFormatException();
                 }
                 
-                PDAArrangement.arrangeHorizontally( pda, 100, 100, distance );
+                TMArrangement.arrangeHorizontally( tm, 100, 100, distance );
                 
                 setCurrentFileSaved( false );
                 repaintDrawPanel();
@@ -1673,7 +1643,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                     throw new NumberFormatException();
                 }
                 
-                PDAArrangement.arrangeVertically( pda, 100, 100, distance );
+                TMArrangement.arrangeVertically( tm, 100, 100, distance );
                 
                 setCurrentFileSaved( false );
                 repaintDrawPanel();
@@ -1688,7 +1658,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
 
     private void popItemRectangularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemRectangularActionPerformed
         
-        int size = pda.getStates().size();
+        int size = tm.getStates().size();
         SpinnerNumberModel spinModel = new SpinnerNumberModel( 1, 1, size == 0 ? 1 : size, 1 );
         
         JLabel lblColumns = new JLabel( "How many columns:" );
@@ -1736,7 +1706,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                     throw new NumberFormatException();
                 }
 
-                PDAArrangement.arrangeRectangularly( pda, 100, 100, 
+                TMArrangement.arrangeRectangularly( tm, 100, 100, 
                         Integer.parseInt( spinColumns.getValue().toString() ), 
                         distance );
 
@@ -1764,8 +1734,8 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                     throw new NumberFormatException();
                 }
                 
-                PDAArrangement.arrangeInCircle( 
-                        pda, radius + 100, radius + 100, radius );
+                TMArrangement.arrangeInCircle( 
+                        tm, radius + 100, radius + 100, radius );
                 
                 setCurrentFileSaved( false );
                 repaintDrawPanel();
@@ -1780,7 +1750,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
 
     private void popItemByLevelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemByLevelActionPerformed
                 
-        if ( pda.getInitialState() != null ) {
+        if ( tm.getInitialState() != null ) {
         
             JLabel lblAlign = new JLabel( "Align:" );
             JRadioButton rbHorizontal = new JRadioButton( "Horizontal" );
@@ -1835,8 +1805,8 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                         throw new NumberFormatException();
                     }
 
-                    PDAArrangement.arrangeByLevel( 
-                            pda, 100, 100, distance, rbVertical.isSelected() );
+                    TMArrangement.arrangeByLevel( 
+                            tm, 100, 100, distance, rbVertical.isSelected() );
 
                     setCurrentFileSaved( false );
                     repaintDrawPanel();
@@ -1866,7 +1836,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                     throw new NumberFormatException();
                 }
                 
-                PDAArrangement.arrangeDiagonally( pda, 100, 100, distance );
+                TMArrangement.arrangeDiagonally( tm, 100, 100, distance );
                 
                 setCurrentFileSaved( false );
                 repaintDrawPanel();
@@ -1897,25 +1867,25 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                     "Save modifications before oppening?" );
             
             if ( r == JOptionPane.YES_OPTION ) {
-                if ( savePDA() ) {
-                    openPDA();
+                if ( saveTM() ) {
+                    openTM();
                 }
             } else if ( r == JOptionPane.NO_OPTION ) {
-                openPDA();
+                openTM();
             }
             
         } else {
-            openPDA();
+            openTM();
         }
         
     }//GEN-LAST:event_btnOpenActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        savePDA();
+        saveTM();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveAsActionPerformed
-        savePDAAs( "Save Pushdown Automaton As..." );
+        saveTMAs( "Save Pushdown Automaton As..." );
     }//GEN-LAST:event_btnSaveAsActionPerformed
 
     private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
@@ -1930,7 +1900,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                         "Save modifications before close?" );
 
                 if ( r == JOptionPane.YES_OPTION ) {
-                    if ( savePDA() ) {
+                    if ( saveTM() ) {
                         dispose();
                     }
                 } else if ( r == JOptionPane.NO_OPTION ) {
@@ -1947,7 +1917,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
 
     private void btnCodeGenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCodeGenActionPerformed
         
-        String code = pda.generateCode();
+        String code = tm.generateCode();
         StringSelection codeSelection = new StringSelection( code );
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents( codeSelection, null );
@@ -1972,14 +1942,14 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnCodeGenActionPerformed
 
     private void popupMenuStatePropertiesPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_popupMenuStatePropertiesPopupMenuCanceled
-        pdaPPanel.setPda( pda );
-        pdaPPanel.readProperties();
+        tmPPanel.setTm( tm );
+        tmPPanel.readProperties();
         cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
     }//GEN-LAST:event_popupMenuStatePropertiesPopupMenuCanceled
 
     private void popupMenuTransitionPropertiesPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_popupMenuTransitionPropertiesPopupMenuCanceled
-        pdaPPanel.setPda( pda );
-        pdaPPanel.readProperties();
+        tmPPanel.setTm( tm );
+        tmPPanel.readProperties();
         cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
     }//GEN-LAST:event_popupMenuTransitionPropertiesPopupMenuCanceled
 
@@ -1989,15 +1959,15 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             
             if ( checkInitialState.isSelected() ) {
                 selectedState.setInitial( true );
-                pda.setInitialState( selectedState );
+                tm.setInitialState( selectedState );
             } else {
                 if ( selectedState.isInitial() ) {
-                    pda.setInitialState( null );
+                    tm.setInitialState( null );
                 }
                 selectedState.setInitial( false );
             }
 
-            statePPanel.setPda( pda );
+            statePPanel.setTm( tm );
             statePPanel.setState( selectedState );
             statePPanel.readProperties();
             cardLayout.show( panelProperties, STATE_PROPERTIES_CARD );
@@ -2015,7 +1985,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             
             selectedState.setFinal( checkFinalState.isSelected() );
 
-            statePPanel.setPda( pda );
+            statePPanel.setTm( tm );
             statePPanel.setState( selectedState );
             statePPanel.readProperties();
             cardLayout.show( panelProperties, STATE_PROPERTIES_CARD );
@@ -2038,7 +2008,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                 
                 selectedState.setStrokeColor( c );
                 
-                statePPanel.setPda( pda );
+                statePPanel.setTm( tm );
                 statePPanel.setState( selectedState );
                 statePPanel.readProperties();
                 cardLayout.show( panelProperties, STATE_PROPERTIES_CARD );
@@ -2060,7 +2030,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                     this, 
                     "Do you really want to remove the selected state?" )
                     == JOptionPane.YES_OPTION ) {
-                pda.removeState( selectedState );
+                tm.removeState( selectedState );
                 setCurrentFileSaved( false );
                 repaintDrawPanel();
                 updateAfterRemotion();
@@ -2077,20 +2047,20 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         
         if ( selectedTransition != null ) {
             
-            PDAEditOperationsDialog d = new PDAEditOperationsDialog( 
+            TMEditOperationsDialog d = new TMEditOperationsDialog( 
                     null, 
                     this, 
-                    pda,
+                    tm,
                     selectedTransition, 
                     true );
             d.setVisible( true );
             
             if ( d.isTransitionRemoved() ) {
-                pdaPPanel.setPda( pda );
-                pdaPPanel.readProperties();
+                tmPPanel.setTm( tm );
+                tmPPanel.readProperties();
                 cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
             } else {
-                transitionPPanel.setPda( pda );
+                transitionPPanel.setTm( tm );
                 transitionPPanel.setTransition( selectedTransition );
                 transitionPPanel.readProperties();
                 cardLayout.show( panelProperties, TRANSITION_PROPERTIES_CARD );
@@ -2116,7 +2086,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                 
                 selectedTransition.setStrokeColor( c );
                 
-                transitionPPanel.setPda( pda );
+                transitionPPanel.setTm( tm );
                 transitionPPanel.setTransition( selectedTransition );
                 transitionPPanel.readProperties();
                 cardLayout.show( panelProperties, TRANSITION_PROPERTIES_CARD );
@@ -2136,7 +2106,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             
             selectedTransition.resetTransformations();
             
-            transitionPPanel.setPda( pda );
+            transitionPPanel.setTm( tm );
             transitionPPanel.setTransition( selectedTransition );
             transitionPPanel.readProperties();
             cardLayout.show( panelProperties, TRANSITION_PROPERTIES_CARD );
@@ -2158,7 +2128,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                     this, 
                     "Do you really want to remove the selected transition?" )
                     == JOptionPane.YES_OPTION ) {
-                pda.removeTransition( selectedTransition );
+                tm.removeTransition( selectedTransition );
                 setCurrentFileSaved( false );
                 repaintDrawPanel();
                 updateAfterRemotion();
@@ -2186,7 +2156,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                 
                 selectedState.setCustomLabel( input );
 
-                statePPanel.setPda( pda );
+                statePPanel.setTm( tm );
                 statePPanel.setState( selectedState );
                 statePPanel.readProperties();
                 cardLayout.show( panelProperties, STATE_PROPERTIES_CARD );
@@ -2203,8 +2173,8 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     private void btnCloneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloneActionPerformed
         
         try {
-            PDA clone = (PDA) pda.clone();
-            mainWindow.createPDAInternalFrame( clone, false, false );
+            TM clone = (TM) tm.clone();
+            mainWindow.createTMInternalFrame( clone, false, false );
         } catch ( CloneNotSupportedException exc ) {
             // should never be reached
             exc.printStackTrace();
@@ -2216,69 +2186,23 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         resetTestInGUI();
     }//GEN-LAST:event_txtTestStringKeyReleased
 
-    private void btnFinalStateToEmptyStackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalStateToEmptyStackActionPerformed
-        
-        pda.updateType();
-        
-        if ( pda.getType() == PDAType.EMPTY ) {
-            Utils.showInformationMessage( this, 
-                    "You must define a Pushdown Automaton First!" );
-        } else {
-            
-            try {
-                
-                PDA newPda = new PDAFinalStateToEmptyStack( pda ).getGeneratedPDA();
-                PDAArrangement.arrangeByLevel( newPda, 100, 100, 150, false );
-                mainWindow.createPDAInternalFrame( newPda, false, false );
-                
-            } catch ( IllegalArgumentException exc ) {
-                Utils.showErrorMessage( this, exc.getMessage() );
-            }
-            
-        }
-        
-    }//GEN-LAST:event_btnFinalStateToEmptyStackActionPerformed
-
-    private void btnEmptyStackToFinalStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmptyStackToFinalStateActionPerformed
-        
-        pda.updateType();
-        
-        if ( pda.getType() == PDAType.EMPTY ) {
-            Utils.showInformationMessage( this, 
-                    "You must define a Pushdown Automaton First!" );
-        } else {
-            
-            try {
-                
-                PDA newPda = new PDAEmptyStackToFinalState( pda ).getGeneratedPDA();
-                PDAArrangement.arrangeByLevel( newPda, 100, 100, 150, false );
-                mainWindow.createPDAInternalFrame( newPda, false, false );
-                
-            } catch ( IllegalArgumentException exc ) {
-                Utils.showErrorMessage( this, exc.getMessage() );
-            }
-            
-        }
-        
-    }//GEN-LAST:event_btnEmptyStackToFinalStateActionPerformed
-
     public void repaintDrawPanel() {
         drawPanel.repaint();
-        drawPanel.setPreferredSize( new Dimension( pda.getWidth(), pda.getHeight() ) );
+        drawPanel.setPreferredSize( new Dimension( tm.getWidth(), tm.getHeight() ) );
         drawPanel.revalidate();
     }
     
     public void updateAfterRemotion() {
-        pdaPPanel.setPda( pda );
-        pdaPPanel.readProperties();
+        tmPPanel.setTm( tm );
+        tmPPanel.readProperties();
         cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
         repaintDrawPanel();
     }
     
-    public void updateAfterUpdate() {
-        pda.updateType();
-        pdaPPanel.setPda( pda );
-        pdaPPanel.readProperties();
+    public void updateAfterUtmte() {
+        tm.updateType();
+        tmPPanel.setTm( tm );
+        tmPPanel.readProperties();
     }
     
     private void zoomIn() {
@@ -2313,19 +2237,19 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     
     private void runSingleTest() throws HeadlessException {
         
-        if ( pda.canExecute() ) {
+        if ( tm.canExecute() ) {
             
-            if ( pda.accepts( txtTestString.getText(), 
+            if ( tm.accepts( txtTestString.getText(), 
                     radioAcceptByFinalState.isSelected() ? 
-                            PDAAcceptanceType.FINAL_STATE : 
-                            PDAAcceptanceType.EMPTY_STACK ) ) {
+                            TMAcceptanceType.FINAL_STATE : 
+                            TMAcceptanceType.STOP ) ) {
                 setTestToAcceptedInGUI( );
             } else {
                 setTestToRejectedInGUI( );
             }
             
             if ( checkShowIDs.isSelected() ) {
-                PDAIDViewerFrame pViewer = new PDAIDViewerFrame( this, pda );
+                TMIDViewerFrame pViewer = new TMIDViewerFrame( this, tm );
                 pViewer.setVisible( true );
             }
             
@@ -2394,7 +2318,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     private void btnMoveAction() {
         
         if ( selectedStates.isEmpty() ) {
-            pda.deselectAll();
+            tm.deselectAll();
         }
         
         cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
@@ -2419,9 +2343,6 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         btnMoveAction();
         btnAddState.setEnabled( false );
         btnAddTransition.setEnabled( false );
-        
-        btnFinalStateToEmptyStack.setEnabled( false );
-        btnEmptyStackToFinalState.setEnabled( false );
         
         btnTest.setEnabled( false );
         btnReset.setEnabled( false );
@@ -2448,9 +2369,6 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         btnAddState.setEnabled( true );
         btnAddTransition.setEnabled( true );
         
-        btnFinalStateToEmptyStack.setEnabled( true );
-        btnEmptyStackToFinalState.setEnabled( true );
-        
         btnTest.setEnabled( true );
         btnReset.setEnabled( true );
         checkShowIDs.setEnabled( true );
@@ -2467,8 +2385,8 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         
         if ( step >= 0 && step < simulationSteps.size() ) {
             
-            PDASimulationStep current = simulationSteps.get( step );
-            current.activateInPDA( pda );
+            TMSimulationStep current = simulationSteps.get( step );
+            current.activateInTM( tm );
             drawPanel.setCurrentSimulationStep( step );
             
             if ( step == simulationSteps.size() - 1 ) {
@@ -2525,12 +2443,12 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         
     }
     
-    private void serializePDAToFile( File file ) {
+    private void serializeTMToFile( File file ) {
         
         try ( FileOutputStream fos = new FileOutputStream( file );
                 ObjectOutputStream oos = new ObjectOutputStream( fos ) ) {
 
-            oos.writeObject( pda );
+            oos.writeObject( tm );
             oos.flush();
             currentFile = file;
             setCurrentFileSaved( true );
@@ -2541,32 +2459,32 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         
     }
     
-    private boolean savePDA() {
+    private boolean saveTM() {
         
         if ( currentFile == null ) {
-            return savePDAAs( "Save Pushdown Automaton" );
+            return saveTMAs( "Save Pushdown Automaton" );
         } else {
-            serializePDAToFile( currentFile );
+            serializeTMToFile( currentFile );
             return true;
         }
         
     }
     
-    private boolean savePDAAs( String saveDialogTitle ) {
+    private boolean saveTMAs( String saveDialogTitle ) {
         
         JFileChooser jfc = new JFileChooser( new File( ApplicationPreferences.getPref( ApplicationPreferences.PREF_DEFAULT_FOLDER_PATH ) ) );
         jfc.setDialogTitle( saveDialogTitle );
         jfc.setMultiSelectionEnabled( false );
         jfc.setFileSelectionMode( JFileChooser.FILES_ONLY );
         jfc.removeChoosableFileFilter( jfc.getFileFilter() );
-        jfc.setFileFilter( new FileNameExtensionFilter( "YAAS Pushdown Automaton", "ypda" ) );
+        jfc.setFileFilter( new FileNameExtensionFilter( "YAAS Pushdown Automaton", "ytm" ) );
 
         if ( jfc.showSaveDialog( mainWindow ) == JFileChooser.APPROVE_OPTION ) {
 
             File f = jfc.getSelectedFile();
 
-            if ( !f.getName().endsWith( ".ypda" ) ) {
-                f = new File( f.getAbsolutePath() + ".ypda" );
+            if ( !f.getName().endsWith( ".ytm" ) ) {
+                f = new File( f.getAbsolutePath() + ".ytm" );
             }
 
             boolean save = true;
@@ -2586,7 +2504,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                         ApplicationPreferences.PREF_DEFAULT_FOLDER_PATH, 
                         f.getParentFile().getAbsolutePath() );
 
-                serializePDAToFile( f );
+                serializeTMToFile( f );
                 return true;
 
             }
@@ -2597,14 +2515,14 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             
     }
     
-    private void openPDA() {
+    private void openTM() {
         
         JFileChooser jfc = new JFileChooser( new File( ApplicationPreferences.getPref( ApplicationPreferences.PREF_DEFAULT_FOLDER_PATH ) ) );
         jfc.setDialogTitle( "Open Pushdown Automaton" );
         jfc.setMultiSelectionEnabled( false );
         jfc.setFileSelectionMode( JFileChooser.FILES_ONLY );
         jfc.removeChoosableFileFilter( jfc.getFileFilter() );
-        jfc.setFileFilter( new FileNameExtensionFilter( "YAAS Pushdown Automaton", "ypda" ) );
+        jfc.setFileFilter( new FileNameExtensionFilter( "YAAS Pushdown Automaton", "ytm" ) );
         
         if ( jfc.showSaveDialog( mainWindow ) == JFileChooser.APPROVE_OPTION ) {
 
@@ -2619,14 +2537,14 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                 try ( FileInputStream fis = new FileInputStream( f );
                       ObjectInputStream ois = new ObjectInputStream( fis ) ) {
                     
-                    pda = (PDA) ois.readObject();
-                    pda.deactivateAllStatesInSimulation();
-                    pda.deselectAll();
-                    pda.setTransitionsControlPointsVisible( false );
-                    drawPanel.setPda( pda );
+                    tm = (TM) ois.readObject();
+                    tm.deactivateAllStatesInSimulation();
+                    tm.deselectAll();
+                    tm.setTransitionsControlPointsVisible( false );
+                    drawPanel.setTm( tm );
                     
-                    pdaPPanel.setPda( pda );
-                    pdaPPanel.readProperties();
+                    tmPPanel.setTm( tm );
+                    tmPPanel.readProperties();
                     cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
         
                     currentFile = f;
@@ -2644,14 +2562,14 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         
     }
     
-    private PDA loadPDA( String title ) {
+    private TM loadTM( String title ) {
         
         JFileChooser jfc = new JFileChooser( new File( ApplicationPreferences.getPref( ApplicationPreferences.PREF_DEFAULT_FOLDER_PATH ) ) );
         jfc.setDialogTitle( title );
         jfc.setMultiSelectionEnabled( false );
         jfc.setFileSelectionMode( JFileChooser.FILES_ONLY );
         jfc.removeChoosableFileFilter( jfc.getFileFilter() );
-        jfc.setFileFilter( new FileNameExtensionFilter( "YAAS Pushdown Automaton", "ypda" ) );
+        jfc.setFileFilter( new FileNameExtensionFilter( "YAAS Pushdown Automaton", "ytm" ) );
         
         if ( jfc.showSaveDialog( mainWindow ) == JFileChooser.APPROVE_OPTION ) {
 
@@ -2666,13 +2584,13 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                 try ( FileInputStream fis = new FileInputStream( f );
                       ObjectInputStream ois = new ObjectInputStream( fis ) ) {
                     
-                    PDA pda = (PDA) ois.readObject();
-                    pda = (PDA) pda.clone();
-                    pda.deactivateAllStatesInSimulation();
-                    pda.deselectAll();
-                    pda.setTransitionsControlPointsVisible( false );
+                    TM tm = (TM) ois.readObject();
+                    tm = (TM) tm.clone();
+                    tm.deactivateAllStatesInSimulation();
+                    tm.deselectAll();
+                    tm.setTransitionsControlPointsVisible( false );
                     
-                    return pda;
+                    return tm;
                     
                 } catch ( IOException | ClassNotFoundException | CloneNotSupportedException exc ) {
                     Utils.showException( exc );
@@ -2761,22 +2679,6 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             @Override
             public void actionPerformed( ActionEvent e ) {
                 btnAddTransition.doClick();
-            }
-        });
-        
-        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_E, KeyEvent.ALT_DOWN_MASK + KeyEvent.SHIFT_DOWN_MASK ), "toEmptyStack" );
-        am.put( "toEmptyStack", new AbstractAction() {
-            @Override
-            public void actionPerformed( ActionEvent e ) {
-                btnFinalStateToEmptyStack.doClick();
-            }
-        });
-        
-        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_F, KeyEvent.ALT_DOWN_MASK + KeyEvent.SHIFT_DOWN_MASK ), "toFinalState" );
-        am.put( "toFinalState", new AbstractAction() {
-            @Override
-            public void actionPerformed( ActionEvent e ) {
-                btnEmptyStackToFinalState.doClick();
             }
         });
         
@@ -2893,7 +2795,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     
     private void resetGUIToAddStatesAndTransitions() {
         selectedStates.clear();
-        pda.deselectAll();
+        tm.deselectAll();
         cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );
         repaintDrawPanel();
         drawPanel.setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR ) );
@@ -2920,8 +2822,6 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnBatchTest;
     private javax.swing.JButton btnClone;
     private javax.swing.JButton btnCodeGen;
-    private javax.swing.JButton btnEmptyStackToFinalState;
-    private javax.swing.JButton btnFinalStateToEmptyStack;
     private javax.swing.JButton btnFirstStep;
     private javax.swing.ButtonGroup btnGroup;
     private javax.swing.ButtonGroup btnGroupAcceptanceType;
@@ -2979,7 +2879,6 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JToolBar.Separator sep02;
     private javax.swing.JToolBar.Separator sep03;
     private javax.swing.JToolBar.Separator sep04;
-    private javax.swing.JToolBar.Separator sep05;
     private javax.swing.JToolBar.Separator sepTS01;
     private javax.swing.JToolBar.Separator sepTS02;
     private javax.swing.JToolBar.Separator sepTS03;

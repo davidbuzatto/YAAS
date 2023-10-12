@@ -14,16 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.davidbuzatto.yaas.model.pda;
+package br.com.davidbuzatto.yaas.gui.tm;
+
+import br.com.davidbuzatto.yaas.model.tm.TMID;
+import org.abego.treelayout.NodeExtentProvider;
 
 /**
- * Acceptance type for Pushdown Automata.
+ * Node extent provider for TMAIDs.
  * 
  * @author Prof. Dr. David Buzatto
  */
-public enum PDAAcceptanceType {
-    
-    FINAL_STATE,
-    EMPTY_STACK
+public class TMIDNodeExtentProvider implements NodeExtentProvider<TMID>{
+
+    @Override
+    public double getWidth( TMID tn ) {
+        return tn.getTextWidth();
+    }
+
+    @Override
+    public double getHeight( TMID tn ) {
+        return tn.getTextHeight();
+    }
     
 }

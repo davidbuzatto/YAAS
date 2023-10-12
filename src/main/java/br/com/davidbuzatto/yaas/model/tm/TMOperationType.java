@@ -14,16 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.davidbuzatto.yaas.model.pda;
+package br.com.davidbuzatto.yaas.model.tm;
 
 /**
- * Acceptance type for Pushdown Automata.
+ * Models a tape operation type.
+ * TODO update
  * 
  * @author Prof. Dr. David Buzatto
  */
-public enum PDAAcceptanceType {
+public enum TMOperationType {
     
-    FINAL_STATE,
-    EMPTY_STACK
+    DO_NOTHING,
+    POP,
+    PUSH,
+    REPLACE
     
 }

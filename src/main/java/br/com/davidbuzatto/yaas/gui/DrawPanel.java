@@ -20,7 +20,9 @@ import br.com.davidbuzatto.yaas.model.Arrow;
 import br.com.davidbuzatto.yaas.model.fa.FA;
 import br.com.davidbuzatto.yaas.gui.fa.FASimulationStep;
 import br.com.davidbuzatto.yaas.gui.pda.PDASimulationStep;
+import br.com.davidbuzatto.yaas.gui.tm.TMSimulationStep;
 import br.com.davidbuzatto.yaas.model.pda.PDA;
+import br.com.davidbuzatto.yaas.model.tm.TM;
 import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.Color;
@@ -42,6 +44,7 @@ public class DrawPanel extends JPanel {
 
     private FA fa;
     private PDA pda;
+    private TM tm;
     
     private boolean showGrid;
     private boolean drawingTempTransition;
@@ -57,6 +60,7 @@ public class DrawPanel extends JPanel {
     private String simulationString;
     private List<FASimulationStep> faSimulationSteps;
     private List<PDASimulationStep> pdaSimulationSteps;
+    private List<TMSimulationStep> tmSimulationSteps;
     private int currentSimulationStep;
     private boolean simulationAccepted;
     
@@ -92,10 +96,11 @@ public class DrawPanel extends JPanel {
         if ( fa != null ) {
             fa.draw( g2d );
             containsMachine = true;
-        }
-        
-        if ( pda != null ) {
+        } else if ( pda != null ) {
             pda.draw( g2d );
+            containsMachine = true;
+        } else if ( tm != null ) {
+            tm.draw( g2d );
             containsMachine = true;
         }
         
@@ -123,6 +128,8 @@ public class DrawPanel extends JPanel {
                 processFASimulation( g2d );
             } else if ( pdaSimulationSteps != null ) {
                 processPDASimulation( g2d );
+            } else if ( tmSimulationSteps != null ) {
+                processTMSimulation( g2d );
             }
         }
         
@@ -274,12 +281,84 @@ public class DrawPanel extends JPanel {
         
     }
     
+    // TODO update
+    private void processTMSimulation( Graphics2D g2d ) {
+        
+        Rectangle r = getVisibleRect();
+        int x1R = (int) r.getX();
+        int y1R = (int) r.getY();
+        int x2R = (int) ( r.getX() + r.getWidth() );
+        int y2R = (int) ( r.getY() + r.getHeight() );
+        int half = x1R + ( x2R - x1R ) / 2;
+
+        g2d.setFont( DrawingConstants.SIMULATION_STRING_FONT );
+
+        FontMetrics fm = g2d.getFontMetrics();
+        LineMetrics lm = Utils.getLineMetrics( simulationString, g2d.getFont() );
+
+        int start = half - fm.stringWidth( simulationString ) / 2;
+        int inc = fm.stringWidth( "0" );
+        int height = (int) lm.getHeight();
+        int ySimulationString = y2R - height / 2 - 10;
+        char[] cs = simulationString.toCharArray();
+        int i;
+        
+        int currentSymbolIndex = 0;
+        for ( int k = 0; k < currentSimulationStep; k++ ) {
+            int str1Length = pdaSimulationSteps.get( k ).getId().getString().length();
+            int str2Length = pdaSimulationSteps.get( k+1 ).getId().getString().length();
+            if ( str1Length != str2Length ) {
+                currentSymbolIndex++;
+            }
+        }
+        
+        for ( i = 0; i < cs.length; i++ ) {
+
+            if ( i == currentSymbolIndex ) {
+                g2d.setColor( DrawingConstants.SYMBOL_ACTIVE_IN_SIMULATION_BACKGROUND_COLOR );
+                g2d.fillRoundRect( start + inc * i - 2, 
+                        ySimulationString - height / 2 - 4, 
+                        inc + 3, 
+                        height / 2 + 8, 10, 10 );
+                g2d.setColor( DrawingConstants.SYMBOL_ACTIVE_IN_SIMULATION_COLOR );
+                g2d.drawRoundRect( start + inc * i - 2, 
+                        ySimulationString - height / 2 - 4, 
+                        inc + 3, 
+                        height / 2 + 8, 10, 10 );
+            } else if ( i < currentSymbolIndex ) {
+                g2d.setColor( DrawingConstants.SIMULATION_STRING_PROCESSED_COLOR );
+            } else {
+                g2d.setColor( DrawingConstants.SIMULATION_STRING_NON_PROCESSED_COLOR );
+            }
+
+            g2d.drawString( String.valueOf( cs[i] ), 
+                    start + inc * i, 
+                    ySimulationString );
+
+        }
+
+        if ( currentSimulationStep == pdaSimulationSteps.size() - 1 ) {
+            if ( simulationAccepted ) {
+                g2d.setColor( DrawingConstants.ACCEPTED_SIMULATION_RESULT_COLOR );
+                g2d.drawString( " ACCEPTED", start + inc * i, ySimulationString );
+            } else {
+                g2d.setColor( DrawingConstants.REJECTED_SIMULATION_RESULT_COLOR );
+                g2d.drawString( " REJECTED", start + inc * i, ySimulationString );
+            }
+        }
+        
+    }
+    
     public void setFa( FA fa ) {
         this.fa = fa;
     }
 
     public void setPda( PDA pda ) {
         this.pda = pda;
+    }
+
+    public void setTm( TM tm ) {
+        this.tm = tm;
     }
 
     public boolean isShowGrid() {
@@ -324,6 +403,10 @@ public class DrawPanel extends JPanel {
     
     public void setPDASimulationSteps( List<PDASimulationStep> pdaSimulationSteps ) {
         this.pdaSimulationSteps = pdaSimulationSteps;
+    }
+    
+    public void setTMSimulationSteps( List<TMSimulationStep> tmSimulationSteps ) {
+        this.tmSimulationSteps = tmSimulationSteps;
     }
 
     public void setCurrentSimulationStep( int currentSimulationStep ) {

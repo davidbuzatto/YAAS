@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.davidbuzatto.yaas.model.pda;
+package br.com.davidbuzatto.yaas.model.tm;
 
 import br.com.davidbuzatto.yaas.model.AbstractGeometricForm;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
@@ -29,19 +29,20 @@ import java.util.Deque;
 import java.util.List;
 
 /**
- * This class models Pushdown Automata Instantaneous Descriptions (IDs).
+ * This class models Turing Machine Instantaneous Descriptions (IDs).
+ * TODO update 
  * 
  * @author Prof. Dr. David Buzatto
  */
-public class PDAID extends AbstractGeometricForm implements Comparable<PDAID> {
+public class TMID extends AbstractGeometricForm implements Comparable<TMID> {
     
-    private PDAState state;
+    private TMState state;
     private String string;
     private Deque<Character> stack;
-    private PDAOperation operation;
+    private TMOperation operation;
     
-    private PDAID parent;
-    private List<PDAID> children;
+    private TMID parent;
+    private List<TMID> children;
     
     private boolean acceptedByFinalState;
     private boolean acceptedByEmptyStack;
@@ -57,7 +58,7 @@ public class PDAID extends AbstractGeometricForm implements Comparable<PDAID> {
     private Color activeInSimulationStrokeColor;
     private Color activeInSimulationFillColor;
     
-    public PDAID( PDAState state, String string, Deque<Character> stack, PDAOperation operation, Color strokeColor ) {
+    public TMID( TMState state, String string, Deque<Character> stack, TMOperation operation, Color strokeColor ) {
         
         this.state = state;
         this.string = string;
@@ -77,7 +78,7 @@ public class PDAID extends AbstractGeometricForm implements Comparable<PDAID> {
         
     }
     
-    public void addChild( PDAID child ) {
+    public void addChild( TMID child ) {
         children.add( child );
         child.parent = this;
     }
@@ -90,7 +91,7 @@ public class PDAID extends AbstractGeometricForm implements Comparable<PDAID> {
         textHeight = (int) ( lm.getHeight() / 2 );
     }
 
-    public PDAOperation getOperation() {
+    public TMOperation getOperation() {
         return operation;
     }
 
@@ -145,7 +146,7 @@ public class PDAID extends AbstractGeometricForm implements Comparable<PDAID> {
         return false;
     }
     
-    public PDAState getState() {
+    public TMState getState() {
         return state;
     }
 
@@ -157,11 +158,11 @@ public class PDAID extends AbstractGeometricForm implements Comparable<PDAID> {
         return stack;
     }
 
-    public PDAID getParent() {
+    public TMID getParent() {
         return parent;
     }
 
-    public List<PDAID> getChildren() {
+    public List<TMID> getChildren() {
         return children;
     }
 
@@ -201,7 +202,7 @@ public class PDAID extends AbstractGeometricForm implements Comparable<PDAID> {
     }
     
     @Override
-    public int compareTo( PDAID o ) {
+    public int compareTo( TMID o ) {
         return state.compareTo( o.state );
     }
     

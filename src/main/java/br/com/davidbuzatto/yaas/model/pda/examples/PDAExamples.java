@@ -25,7 +25,7 @@ import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import java.awt.Color;
 
 /**
- * A set of methods to construct example FAs for testing purposes.
+ * A set of methods to construct example PDAs for testing purposes.
  * 
  * @author Prof. Dr. David Buzatto
  */

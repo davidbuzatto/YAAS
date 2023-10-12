@@ -14,16 +14,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.davidbuzatto.yaas.model.pda;
+package br.com.davidbuzatto.yaas.gui.tm;
+
+import br.com.davidbuzatto.yaas.model.tm.TM;
+import br.com.davidbuzatto.yaas.model.tm.TMID;
 
 /**
- * Acceptance type for Pushdown Automata.
+ * Encapsulates data related to a step in a pertinence simulation of a Turing
+ * Machines.
+ * TODO update
  * 
  * @author Prof. Dr. David Buzatto
  */
-public enum PDAAcceptanceType {
+public class TMSimulationStep {
     
-    FINAL_STATE,
-    EMPTY_STACK
+    private TMID id;
+    
+    public TMSimulationStep( TMID id ) {
+        this.id = id;
+    }
+    
+    public void activateInTM( TM tm ) {
+        tm.deactivateAllStatesInSimulation();
+        id.getState().setActiveInSimulation( true );
+        id.setActiveInSimulation( true );
+    }
+
+    public TMID getId() {
+        return id;
+    }
+
+    @Override
+    public String toString() {
+        return id.toString();
+    }
     
 }

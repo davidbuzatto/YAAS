@@ -14,16 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.davidbuzatto.yaas.model.pda;
+package br.com.davidbuzatto.yaas.model.tm;
 
 /**
- * Acceptance type for Pushdown Automata.
+ * Acceptance type for Turing Machines.
  * 
  * @author Prof. Dr. David Buzatto
  */
-public enum PDAAcceptanceType {
+public enum TMAcceptanceType {
     
     FINAL_STATE,
-    EMPTY_STACK
+    STOP           // TODO chose a better name
     
 }

@@ -14,14 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.davidbuzatto.yaas.model.pda.algorithms;
+package br.com.davidbuzatto.yaas.model.tm.algorithms;
 
-import br.com.davidbuzatto.yaas.gui.pda.PDAIDNodeExtentProvider;
-import br.com.davidbuzatto.yaas.model.pda.PDA;
-import br.com.davidbuzatto.yaas.model.pda.PDAID;
-import br.com.davidbuzatto.yaas.model.pda.PDAIDLine;
-import br.com.davidbuzatto.yaas.model.pda.PDAState;
-import br.com.davidbuzatto.yaas.model.pda.PDATransition;
+import br.com.davidbuzatto.yaas.gui.tm.TMIDNodeExtentProvider;
+import br.com.davidbuzatto.yaas.model.tm.TM;
+import br.com.davidbuzatto.yaas.model.tm.TMID;
+import br.com.davidbuzatto.yaas.model.tm.TMIDLine;
+import br.com.davidbuzatto.yaas.model.tm.TMState;
+import br.com.davidbuzatto.yaas.model.tm.TMTransition;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.geom.Rectangle2D;
@@ -40,52 +40,52 @@ import org.abego.treelayout.util.DefaultConfiguration;
 import org.abego.treelayout.util.DefaultTreeForTreeLayout;
 
 /**
- * Pushdown Automata arrangement algorithms.
+ * Turing Machine arrangement algorithms.
  * 
  * @author Prof. Dr. David Buzatto
  */
-public class PDAArrangement {
+public class TMArrangement {
     
     /**
-     * Reorganize Pushdown Automata horizontally.
+     * Reorganize Turing Machines horizontally.
      * 
-     * @param pda The Pushdown Automaton to be processed.
+     * @param tm The Turing Machine to be processed.
      * @param xCenter The x of the first state.
      * @param yCenter The y of the first state.
      * @param distance The horizontal distance between each state.
      */
     public static void arrangeHorizontally( 
-            PDA pda, int xCenter, int yCenter, int distance ) {
-        arrangeRectangularly( pda, xCenter, yCenter, pda.getStates().size(), distance );
+            TM tm, int xCenter, int yCenter, int distance ) {
+        arrangeRectangularly( tm, xCenter, yCenter, tm.getStates().size(), distance );
     }
     
     /**
-     * Reorganize Pushdown Automata vertically.
+     * Reorganize Turing Machines vertically.
      * 
-     * @param pda The Pushdown Automaton to be processed.
+     * @param tm The Turing Machine to be processed.
      * @param xCenter The x of the first state.
      * @param yCenter The y of the first state.
      * @param distance The vertical distance between each state.
      */
     public static void arrangeVertically( 
-            PDA pda, int xCenter, int yCenter, int distance ) {
-        arrangeRectangularly( pda, xCenter, yCenter, 1, distance );
+            TM tm, int xCenter, int yCenter, int distance ) {
+        arrangeRectangularly( tm, xCenter, yCenter, 1, distance );
     }
     
     /**
-     * Reorganize Pushdown Automata diagonally.
+     * Reorganize Turing Machines diagonally.
      * 
-     * @param pda The Pushdown Automaton to be processed.
+     * @param tm The Turing Machine to be processed.
      * @param xCenter The x of the first state.
      * @param yCenter The y of the first state.
      * @param distance The diagonal distance between each state.
      */
     public static void arrangeDiagonally( 
-            PDA pda, int xCenter, int yCenter, int distance ) {
+            TM tm, int xCenter, int yCenter, int distance ) {
         
-        PDAState initialState = pda.getInitialState();
-        List<PDAState> states = new ArrayList<>();
-        states.addAll( pda.getStates() );
+        TMState initialState = tm.getInitialState();
+        List<TMState> states = new ArrayList<>();
+        states.addAll( tm.getStates() );
         
         if ( initialState != null ) {
             states.remove( initialState );
@@ -97,32 +97,32 @@ public class PDAArrangement {
         int currentX = xCenter;
         int currentY = yCenter;
         
-        for ( PDAState s : states ) {
+        for ( TMState s : states ) {
             s.setX1( currentX );
             s.setY1( currentY );
             currentX += distanceX;
             currentY += distanceY;
         }
         
-        pda.resetTransitionsTransformations();
+        tm.resetTransitionsTransformations();
         
     }
     
     /**
-     * Reorganize Pushdown Automata rectangularly.
+     * Reorganize Turing Machines rectangularly.
      * 
-     * @param pda The Pushdown Automaton to be processed.
+     * @param tm The Turing Machine to be processed.
      * @param xCenter The x of the first state.
      * @param yCenter The y of the first state.
      * @param cols How many columns.
      * @param distance The horizontal and vertical distance between each state.
      */
     public static void arrangeRectangularly( 
-            PDA pda, int xCenter, int yCenter, int cols, int distance ) {
+            TM tm, int xCenter, int yCenter, int cols, int distance ) {
         
-        PDAState initialState = pda.getInitialState();
-        List<PDAState> states = new ArrayList<>();
-        states.addAll( pda.getStates() );
+        TMState initialState = tm.getInitialState();
+        List<TMState> states = new ArrayList<>();
+        states.addAll( tm.getStates() );
         
         if ( initialState != null ) {
             states.remove( initialState );
@@ -133,7 +133,7 @@ public class PDAArrangement {
         int currentY = yCenter;
         int currentColumn = 1;
         
-        for ( PDAState s : states ) {
+        for ( TMState s : states ) {
             
             s.setX1( currentX );
             s.setY1( currentY );
@@ -149,90 +149,90 @@ public class PDAArrangement {
             
         }
         
-        pda.resetTransitionsTransformations();
+        tm.resetTransitionsTransformations();
         
     }
     
     /**
-     * Reorganize Pushdown Automata states in a circle.
+     * Reorganize Turing Machines states in a circle.
      * 
-     * @param pda The Pushdown Automaton to be processed.
+     * @param tm The Turing Machine to be processed.
      * @param xCenter The x center of the circle.
      * @param yCenter The y center of the circle.
      * @param radius The distance of each state to the center.
      */
     public static void arrangeInCircle( 
-            PDA pda, int xCenter, int yCenter, int radius ) {
+            TM tm, int xCenter, int yCenter, int radius ) {
         
-        PDAState initialState = pda.getInitialState();
-        List<PDAState> states = new ArrayList<>();
-        states.addAll( pda.getStates() );
+        TMState initialState = tm.getInitialState();
+        List<TMState> states = new ArrayList<>();
+        states.addAll( tm.getStates() );
         
         if ( initialState != null ) {
             states.remove( initialState );
             states.add( 0, initialState );
         }
         
-        double inc = Math.PI * 2 / pda.getStates().size();
+        double inc = Math.PI * 2 / tm.getStates().size();
         double current = Math.PI;
         
-        for ( PDAState s : states ) {
+        for ( TMState s : states ) {
             s.setX1( xCenter + (int) ( radius * Math.cos( current ) ) );
             s.setY1( yCenter + (int) ( radius * Math.sin( current ) ) );
             current += inc;
         }
         
-        pda.resetTransitionsTransformations();
+        tm.resetTransitionsTransformations();
         
     }
     
     /**
-     * Reorganize Pushdown Automata by levels starting from initial state.
+     * Reorganize Turing Machines by levels starting from initial state.
      * 
-     * @param pda The Pushdown Automaton to be processed.
+     * @param tm The Turing Machine to be processed.
      * @param xCenter The x of the first state.
      * @param yCenter The y of the first state.
      * @param distance The distance between levels and between states horizontally.
      */
     public static void arrangeByLevel( 
-            PDA pda, int xCenter, int yCenter, int distance, boolean vertical ) {
+            TM tm, int xCenter, int yCenter, int distance, boolean vertical ) {
         
         int currentX;
         int currentY;
         
-        PDAState initialState = pda.getInitialState();
-        Map<PDAState, List<PDATransition>> delta = pda.getDelta();
+        TMState initialState = tm.getInitialState();
+        Map<TMState, List<TMTransition>> delta = tm.getDelta();
         
-        Map<Integer, List<PDAState>> leveledStates = new TreeMap<>();
-        List<PDAState> liInitial = new ArrayList<>();
+        Map<Integer, List<TMState>> leveledStates = new TreeMap<>();
+        List<TMState> liInitial = new ArrayList<>();
         liInitial.add( initialState );
         leveledStates.put( 0, liInitial );
         
-        Map<PDAState, Integer> distanceTo = new HashMap<>();
-        for ( PDAState e : pda.getStates() ) {
+        Map<TMState, Integer> distanceTo = new HashMap<>();
+        for ( TMState e : tm.getStates() ) {
             distanceTo.put( e, Integer.MAX_VALUE );
         }
         distanceTo.put( initialState, 0 );
         
-        Set<PDAState> visited = new HashSet<>();
+        Set<TMState> visited = new HashSet<>();
         visited.add( initialState );
         
-        Queue<PDAState> queue = new ArrayDeque<>();
+        Queue<TMState> queue = new ArrayDeque<>();
         queue.add( initialState );
         int maxDistance = 0;
         
         while ( !queue.isEmpty() ) {
             
-            PDAState current = queue.poll();
+            TMState current = queue.poll();
             
-            Set<PDAState> children = new HashSet<>();
-            for ( PDATransition t : delta.get( current ) ) {
+            Set<TMState> children = new HashSet<>();
+            for ( TMTransition t : delta.get( current ) ) {
                 children.add( t.getTargetState() );
             }
-            List<PDAState> lChildren = new ArrayList<>( children );
+            List<TMState> lChildren = new ArrayList<>( children );
             Collections.sort( lChildren );
             
-            for ( PDAState e : lChildren ) {
+            for ( TMState e : lChildren ) {
                 if ( !visited.contains( e ) ) {
                     
                     int d = distanceTo.get( current ) + 1;
@@ -244,7 +244,7 @@ public class PDAArrangement {
                     visited.add( e );
                     queue.add( e );
                     
-                    List<PDAState> es = leveledStates.get( d );
+                    List<TMState> es = leveledStates.get( d );
                     if ( es == null ) {
                         es = new ArrayList<>();
                         leveledStates.put( d, es );
@@ -256,8 +256,8 @@ public class PDAArrangement {
             
         }
         
-        List<PDAState> inaccessible = new ArrayList<>();
-        for ( PDAState e : pda.getStates() ) {
+        List<TMState> inaccessible = new ArrayList<>();
+        for ( TMState e : tm.getStates() ) {
             if ( !visited.contains( e ) ) {
                 inaccessible.add( e );
             }
@@ -268,14 +268,14 @@ public class PDAArrangement {
         
         if ( vertical ) {
             
-            for ( Map.Entry<Integer, List<PDAState>> e : leveledStates.entrySet() ) {
+            for ( Map.Entry<Integer, List<TMState>> e : leveledStates.entrySet() ) {
 
                 currentX = xCenter;
                 currentY = yCenter + e.getKey() * distance;
 
                 Collections.sort( e.getValue() );
                 
-                for ( PDAState s : e.getValue() ) {
+                for ( TMState s : e.getValue() ) {
                     s.setX1( currentX );
                     s.setY1( currentY );
                     currentX += distance;
@@ -285,14 +285,14 @@ public class PDAArrangement {
             
         } else {
             
-            for ( Map.Entry<Integer, List<PDAState>> e : leveledStates.entrySet() ) {
+            for ( Map.Entry<Integer, List<TMState>> e : leveledStates.entrySet() ) {
 
                 currentX = xCenter + e.getKey() * distance;
                 currentY = yCenter;
                 
                 Collections.sort( e.getValue() );
 
-                for ( PDAState s : e.getValue() ) {
+                for ( TMState s : e.getValue() ) {
                     s.setX1( currentX );
                     s.setY1( currentY );
                     currentY += distance;
@@ -302,27 +302,27 @@ public class PDAArrangement {
             
         }
         
-        pda.resetTransitionsTransformations();
+        tm.resetTransitionsTransformations();
         
     }
     
     /**
-     * Get the boundaries of a Pushdown Automaton.
+     * Get the boundaries of a Turing Machine.
      * 
-     * @param fa The Pushdown Automaton to proccess.
+     * @param fa The Turing Machine to proccess.
      * @return An array containing two Points. The first contains the cordinates
      * of the superior left vertex of the boundary rectangle and the second
      * contains the cordinates of the inferior right vertex of the boundary
      * rectangle.
      */
-    public static Point[] getPDABoundaries( PDA fa ) {
+    public static Point[] getTMBoundaries( TM fa ) {
         
         int minX = Integer.MAX_VALUE;
         int maxX = Integer.MIN_VALUE;
         int minY = Integer.MAX_VALUE;
         int maxY = Integer.MIN_VALUE;
 
-        for ( PDAState s : fa.getStates() ) {
+        for ( TMState s : fa.getStates() ) {
             if ( minX > s.getX1() ) {
                 minX = s.getX1();
             }
@@ -342,7 +342,7 @@ public class PDAArrangement {
     }
     
     /**
-     * Process a PDAID tree and organize it.
+     * Process a TMID tree and organize it.
      * 
      * @param root The root node
      * @param ids All the ids
@@ -354,32 +354,32 @@ public class PDAArrangement {
      * @return The dimension of the tree.
      */
     public static Dimension arrangeIDsInTreeFormat( 
-            PDAID root, 
-            List<PDAID> ids,
-            List<PDAIDLine> lines, 
+            TMID root, 
+            List<TMID> ids,
+            List<TMIDLine> lines, 
             int marginX, int marginY,
             int levelGap, int nodeGap ) {
         
-        DefaultTreeForTreeLayout<PDAID> tree = new DefaultTreeForTreeLayout<>(root);
-        for ( PDAID id : ids ) {
-            for ( PDAID cId : id.getChildren() ) {
+        DefaultTreeForTreeLayout<TMID> tree = new DefaultTreeForTreeLayout<>(root);
+        for ( TMID id : ids ) {
+            for ( TMID cId : id.getChildren() ) {
                 tree.addChild( id, cId );
             }
         }
         
-        DefaultConfiguration<PDAID> configuration = new DefaultConfiguration<>( levelGap, nodeGap );
-        PDAIDNodeExtentProvider nodeExtentProvider = new PDAIDNodeExtentProvider();
-        TreeLayout<PDAID> treeLayout = new TreeLayout<>( tree, nodeExtentProvider, configuration );
+        DefaultConfiguration<TMID> configuration = new DefaultConfiguration<>( levelGap, nodeGap );
+        TMIDNodeExtentProvider nodeExtentProvider = new TMIDNodeExtentProvider();
+        TreeLayout<TMID> treeLayout = new TreeLayout<>( tree, nodeExtentProvider, configuration );
         
-        for ( PDAID id : ids ) {
+        for ( TMID id : ids ) {
             Rectangle2D.Double box = treeLayout.getNodeBounds().get( id );
             id.setX1( (int) ( box.x + box.width/2 ) + marginX );
             id.setY1( (int) ( box.y + box.height/2 ) + marginY );
         }
         
-        for ( PDAID id : ids ) {
-            for ( PDAID cId : id.getChildren() ) {
-                lines.add( new PDAIDLine( 
+        for ( TMID id : ids ) {
+            for ( TMID cId : id.getChildren() ) {
+                lines.add( new TMIDLine( 
                         id,
                         cId,
                         id.getX1(), 
@@ -390,7 +390,7 @@ public class PDAArrangement {
                         cId.getStrokeColor() ) );
             }
             if ( id.isAcceptedByFinalState() || id.isAcceptedByEmptyStack() ) {
-                PDAID current = id.getParent();
+                TMID current = id.getParent();
                 while ( current != null ) {
                     current.setAcceptedByFinalState( id.isAcceptedByFinalState() );
                     current.setAcceptedByEmptyStack( id.isAcceptedByEmptyStack() );
@@ -404,7 +404,7 @@ public class PDAArrangement {
     }
     
     /**
-     * Process a PDAID tree and organize it.
+     * Process a TMID tree and organize it.
      * 
      * @param root The root node
      * @param ids All the ids
@@ -416,13 +416,13 @@ public class PDAArrangement {
      * @return The dimension of the tree.
      */
     public static Dimension arrangeIDsInTreeFormatForSimulation( 
-            PDAID root, 
-            List<PDAID> ids,
-            List<PDAIDLine> lines, 
+            TMID root, 
+            List<TMID> ids,
+            List<TMIDLine> lines, 
             int marginX, int marginY,
             int levelGap, int nodeGap ) {
         
-        DefaultTreeForTreeLayout<PDAID> tree = new DefaultTreeForTreeLayout<>(root);
+        DefaultTreeForTreeLayout<TMID> tree = new DefaultTreeForTreeLayout<>(root);
         for ( int i = 0; i < ids.size() - 1; i++ ) {
             tree.addChild( ids.get( i ), ids.get( i+1 ) );
         }
@@ -430,20 +430,20 @@ public class PDAArrangement {
         boolean acceptedByFinalState = ids.get( ids.size()-1 ).isAcceptedByFinalState();
         boolean acceptedByEmptyStack = ids.get( ids.size()-1 ).isAcceptedByEmptyStack();
         
-        DefaultConfiguration<PDAID> configuration = new DefaultConfiguration<>( levelGap, nodeGap );
-        PDAIDNodeExtentProvider nodeExtentProvider = new PDAIDNodeExtentProvider();
-        TreeLayout<PDAID> treeLayout = new TreeLayout<>( tree, nodeExtentProvider, configuration );
+        DefaultConfiguration<TMID> configuration = new DefaultConfiguration<>( levelGap, nodeGap );
+        TMIDNodeExtentProvider nodeExtentProvider = new TMIDNodeExtentProvider();
+        TreeLayout<TMID> treeLayout = new TreeLayout<>( tree, nodeExtentProvider, configuration );
         
-        for ( PDAID id : ids ) {
+        for ( TMID id : ids ) {
             Rectangle2D.Double box = treeLayout.getNodeBounds().get( id );
             id.setX1( (int) ( box.x + box.width/2 ) + marginX );
             id.setY1( (int) ( box.y + box.height/2 ) + marginY );
         }
         
         for ( int i = 0; i < ids.size() - 1; i++ ) {
-            PDAID id = ids.get( i );
-            PDAID cId = ids.get( i+1 );
-            lines.add( new PDAIDLine( 
+            TMID id = ids.get( i );
+            TMID cId = ids.get( i+1 );
+            lines.add( new TMIDLine( 
                     id,
                     cId,
                     id.getX1(), 

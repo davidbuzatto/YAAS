@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.davidbuzatto.yaas.model.pda;
+package br.com.davidbuzatto.yaas.model.tm;
 
 import br.com.davidbuzatto.yaas.model.AbstractGeometricForm;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
@@ -23,21 +23,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Models a Pushdown Automata transition operation.
+ * Models a Turing Machine transition operation.
+ * TODO update
  * 
  * @author Prof. Dr. David Buzatto
  */
-public class PDAOperation extends AbstractGeometricForm implements Cloneable, Comparable<PDAOperation> {
+public class TMOperation extends AbstractGeometricForm implements Cloneable, Comparable<TMOperation> {
     
     private char symbol;
     private char top;
-    private PDAOperationType type;
+    private TMOperationType type;
     private List<Character> symbolsToPush;
 
-    public PDAOperation( 
+    public TMOperation( 
             char symbol, 
             char top, 
-            PDAOperationType type, 
+            TMOperationType type, 
             List<Character> symbolsToPush ) {
         this.symbol = symbol;
         this.top = top;
@@ -45,41 +46,41 @@ public class PDAOperation extends AbstractGeometricForm implements Cloneable, Co
         this.symbolsToPush = symbolsToPush;
     }
     
-    public PDAOperation( 
+    public TMOperation( 
             char symbol, 
             char top, 
-            PDAOperationType type, 
+            TMOperationType type, 
             char symbolToPush ) {
         this( symbol, top, type, new ArrayList<Character>() );
         addSymbolToPush( symbolToPush );
     }
     
-    public PDAOperation( 
+    public TMOperation( 
             char symbol, 
             char top, 
-            PDAOperationType type, 
+            TMOperationType type, 
             char... symbolsToPush ) {
         this( symbol, top, type, new ArrayList<Character>() );
         addSymbolsToPush( symbolsToPush );
     }
     
-    public PDAOperation( 
+    public TMOperation( 
             char symbol, 
             char top, 
-            PDAOperationType type ) {
+            TMOperationType type ) {
         this( symbol, top, type, new ArrayList<Character>() );
     }
     
-    public static PDAOperation getDoNothingOperation( char symbol, char top ) {
-        return new PDAOperation( symbol, top, PDAOperationType.DO_NOTHING );
+    public static TMOperation getDoNothingOperation( char symbol, char top ) {
+        return new TMOperation( symbol, top, TMOperationType.DO_NOTHING );
     }
     
-    public static PDAOperation getPopOperation( char symbol, char top ) {
-        return new PDAOperation( symbol, top, PDAOperationType.POP );
+    public static TMOperation getPopOperation( char symbol, char top ) {
+        return new TMOperation( symbol, top, TMOperationType.POP );
     }
 
     @Override
-    public int compareTo( PDAOperation o ) {
+    public int compareTo( TMOperation o ) {
         
         if ( symbol != o.symbol ) {
             if ( symbol == CharacterConstants.EMPTY_STRING ) {
@@ -152,11 +153,11 @@ public class PDAOperation extends AbstractGeometricForm implements Cloneable, Co
         this.top = top;
     }
 
-    public PDAOperationType getType() {
+    public TMOperationType getType() {
         return type;
     }
 
-    public void setType( PDAOperationType type ) {
+    public void setType( TMOperationType type ) {
         this.type = type;
     }
 
@@ -187,14 +188,14 @@ public class PDAOperation extends AbstractGeometricForm implements Cloneable, Co
         if ( getClass() != obj.getClass() ) {
             return false;
         }
-        final PDAOperation other = (PDAOperation) obj;
+        final TMOperation other = (TMOperation) obj;
         if ( this.symbol != other.symbol ) {
             return false;
         }
         return this.top == other.top;
     }
     
-    @Override
+    @Override // TODO update
     public String toString() {
         
         String op = "";
@@ -224,16 +225,16 @@ public class PDAOperation extends AbstractGeometricForm implements Cloneable, Co
         
     }
     
-    public String generateCode( PDA pda, String modelName ) {
+    public String generateCode( TM pda, String modelName ) {
         
         String op = "            ";
         
-        if ( type == PDAOperationType.DO_NOTHING ) {
-            op += "PDAOperation.getDoNothingOperation( ";
-        } else if ( type == PDAOperationType.POP ) {
-            op += "PDAOperation.getPopOperation( ";
+        if ( type == TMOperationType.DO_NOTHING ) {
+            op += "TMOperationType.getDoNothingOperation( ";
+        } else if ( type == TMOperationType.POP ) {
+            op += "TMOperationType.getPopOperation( ";
         } else {
-            op += "new PDAOperation( ";
+            op += "new TMOperationType( ";
         }
         
         if ( symbol == CharacterConstants.EMPTY_STRING ) {
@@ -250,9 +251,9 @@ public class PDAOperation extends AbstractGeometricForm implements Cloneable, Co
             op += String.format( "'%c'", top );
         }
         
-        if ( type == PDAOperationType.DO_NOTHING ) {
+        if ( type == TMOperationType.DO_NOTHING ) {
             op += " )";
-        } else if ( type == PDAOperationType.POP ) {
+        } else if ( type == TMOperationType.POP ) {
             op += " )";
         } else {
             
@@ -267,8 +268,8 @@ public class PDAOperation extends AbstractGeometricForm implements Cloneable, Co
             }
         
             op += String.format( ", %s, %s )", 
-                    type == PDAOperationType.PUSH ? 
-                    "PDAOperationType.PUSH" : "PDAOperationType.REPLACE",
+                    type == TMOperationType.PUSH ? 
+                    "TMOperationType.PUSH" : "TMOperationType.REPLACE",
                     sy );
             
         }
@@ -281,7 +282,7 @@ public class PDAOperation extends AbstractGeometricForm implements Cloneable, Co
     @SuppressWarnings( "unchecked" )
     public Object clone() throws CloneNotSupportedException {
         
-        PDAOperation c = (PDAOperation) super.clone();
+        TMOperation c = (TMOperation) super.clone();
         
         c.symbol = symbol;
         c.top = top;
