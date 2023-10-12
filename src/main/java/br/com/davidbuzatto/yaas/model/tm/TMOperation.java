@@ -230,11 +230,11 @@ public class TMOperation extends AbstractGeometricForm implements Cloneable, Com
         String op = "            ";
         
         if ( type == TMOperationType.DO_NOTHING ) {
-            op += "TMOperationType.getDoNothingOperation( ";
+            op += "TMOperation.getDoNothingOperation( ";
         } else if ( type == TMOperationType.POP ) {
-            op += "TMOperationType.getPopOperation( ";
+            op += "TMOperation.getPopOperation( ";
         } else {
-            op += "new TMOperationType( ";
+            op += "new TMOperation( ";
         }
         
         if ( symbol == CharacterConstants.EMPTY_STRING ) {

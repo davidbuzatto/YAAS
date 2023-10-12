@@ -595,7 +595,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         toolBar.add(btnSaveAs);
 
         btnSaveAsImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture.png"))); // NOI18N
-        btnSaveAsImage.setToolTipText("Save Finite Automaton as Image (Ctrl+Shift+I)");
+        btnSaveAsImage.setToolTipText("Save as Image (Ctrl+Shift+I)");
         btnSaveAsImage.setFocusable(false);
         btnSaveAsImage.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSaveAsImage.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -619,7 +619,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         toolBar.add(btnCodeGen);
 
         btnClone.setIcon(new javax.swing.ImageIcon(getClass().getResource("/script_go.png"))); // NOI18N
-        btnClone.setToolTipText("Clone Current Finite Automata");
+        btnClone.setToolTipText("Clone Current Machine");
         btnClone.setFocusable(false);
         btnClone.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnClone.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);

@@ -544,7 +544,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
         toolBar.add(btnSaveAs);
 
         btnSaveAsImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture.png"))); // NOI18N
-        btnSaveAsImage.setToolTipText("Save Pushdown Automaton as Image (Ctrl+Shift+I)");
+        btnSaveAsImage.setToolTipText("Save as Image (Ctrl+Shift+I)");
         btnSaveAsImage.setFocusable(false);
         btnSaveAsImage.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSaveAsImage.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -568,7 +568,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
         toolBar.add(btnCodeGen);
 
         btnClone.setIcon(new javax.swing.ImageIcon(getClass().getResource("/script_go.png"))); // NOI18N
-        btnClone.setToolTipText("Clone Current Pushdown Automata");
+        btnClone.setToolTipText("Clone Current Machine");
         btnClone.setFocusable(false);
         btnClone.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnClone.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -1394,7 +1394,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
     private void btnSaveAsImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveAsImageActionPerformed
         
         JFileChooser jfc = new JFileChooser( new File( ApplicationPreferences.getPref( ApplicationPreferences.PREF_DEFAULT_FOLDER_PATH ) ) );
-        jfc.setDialogTitle( "Save Pushdown Automaton as Image" );
+        jfc.setDialogTitle( "Save Turing Machine as Image" );
         jfc.setMultiSelectionEnabled( false );
         jfc.setFileSelectionMode( JFileChooser.FILES_ONLY );
         jfc.removeChoosableFileFilter( jfc.getFileFilter() );
@@ -1818,7 +1818,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
             }
         
         } else {
-            Utils.showErrorMessage( this, "Your Pushdown Automata must have an initial state!" );
+            Utils.showErrorMessage( this, "Your Turing Machines must have an initial state!" );
         }
         
     }//GEN-LAST:event_popItemByLevelActionPerformed
@@ -1885,7 +1885,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveAsActionPerformed
-        saveTMAs( "Save Pushdown Automaton As..." );
+        saveTMAs( "Save Turing Machine As..." );
     }//GEN-LAST:event_btnSaveAsActionPerformed
 
     private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
@@ -2462,7 +2462,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
     private boolean saveTM() {
         
         if ( currentFile == null ) {
-            return saveTMAs( "Save Pushdown Automaton" );
+            return saveTMAs( "Save Turing Machine" );
         } else {
             serializeTMToFile( currentFile );
             return true;
@@ -2477,7 +2477,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
         jfc.setMultiSelectionEnabled( false );
         jfc.setFileSelectionMode( JFileChooser.FILES_ONLY );
         jfc.removeChoosableFileFilter( jfc.getFileFilter() );
-        jfc.setFileFilter( new FileNameExtensionFilter( "YAAS Pushdown Automaton", "ytm" ) );
+        jfc.setFileFilter( new FileNameExtensionFilter( "YAAS Turing Machine", "ytm" ) );
 
         if ( jfc.showSaveDialog( mainWindow ) == JFileChooser.APPROVE_OPTION ) {
 
@@ -2518,11 +2518,11 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
     private void openTM() {
         
         JFileChooser jfc = new JFileChooser( new File( ApplicationPreferences.getPref( ApplicationPreferences.PREF_DEFAULT_FOLDER_PATH ) ) );
-        jfc.setDialogTitle( "Open Pushdown Automaton" );
+        jfc.setDialogTitle( "Open Turing Machine" );
         jfc.setMultiSelectionEnabled( false );
         jfc.setFileSelectionMode( JFileChooser.FILES_ONLY );
         jfc.removeChoosableFileFilter( jfc.getFileFilter() );
-        jfc.setFileFilter( new FileNameExtensionFilter( "YAAS Pushdown Automaton", "ytm" ) );
+        jfc.setFileFilter( new FileNameExtensionFilter( "YAAS Turing Machine", "ytm" ) );
         
         if ( jfc.showSaveDialog( mainWindow ) == JFileChooser.APPROVE_OPTION ) {
 
@@ -2569,7 +2569,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
         jfc.setMultiSelectionEnabled( false );
         jfc.setFileSelectionMode( JFileChooser.FILES_ONLY );
         jfc.removeChoosableFileFilter( jfc.getFileFilter() );
-        jfc.setFileFilter( new FileNameExtensionFilter( "YAAS Pushdown Automaton", "ytm" ) );
+        jfc.setFileFilter( new FileNameExtensionFilter( "YAAS Turing Machine", "ytm" ) );
         
         if ( jfc.showSaveDialog( mainWindow ) == JFileChooser.APPROVE_OPTION ) {
 

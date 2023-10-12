@@ -7,6 +7,7 @@ Pushdown Automata
     PDA to CFGs?
 
 Turing Machines
+    Update transition operations
 
 General
     Moore Machines?

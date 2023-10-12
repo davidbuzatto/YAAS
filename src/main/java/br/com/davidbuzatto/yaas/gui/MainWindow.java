@@ -950,7 +950,7 @@ public class MainWindow extends javax.swing.JFrame {
     private void openExample() {
         if ( ApplicationConstants.IN_DEVELOPMENT ) {
             //createPDAInternalFrame( PDAExamples.createPDA0n1nFinalState(), true, true );
-            createTMInternalFrame( TMExamples.createTMTest(), true, true );
+            createTMInternalFrame( TMExamples.createTMEvenPalindromeFinalState(), true, true );
         }
     }
     
