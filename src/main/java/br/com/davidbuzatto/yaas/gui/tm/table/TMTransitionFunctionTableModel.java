@@ -23,7 +23,6 @@ import javax.swing.table.TableModel;
 
 /**
  * A table model for the transition function table of Turing Machines.
- * TODO update?
  * 
  * @author Prof. Dr. David Buzatto
  */

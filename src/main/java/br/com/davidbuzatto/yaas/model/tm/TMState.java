@@ -31,16 +31,16 @@ import java.awt.Rectangle;
  */
 public class TMState extends AbstractGeometricForm implements Comparable<TMState>, Cloneable {
     
-    protected int number;
-    protected String label;
-    protected String customLabel;
+    private int number;
+    private String label;
+    private String customLabel;
     
-    protected boolean initial;
-    protected boolean _final;
+    private boolean initial;
+    private boolean _final;
     
-    protected int radius;
-    protected int radiusSquared;
-    protected int diameter;
+    private int radius;
+    private int radiusSquared;
+    private int diameter;
     
     private Arrow arrow;
     

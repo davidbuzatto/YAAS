@@ -37,10 +37,6 @@ import java.util.List;
  * @author Prof. Dr. David Buzatto
  */
 public class FATransition extends AbstractGeometricForm implements Cloneable {
-
-    private static final double RAD_60 = Math.toRadians( 60 );
-    private static final double RAD_90 = Math.toRadians( 90 );
-    private static final double RAD_95 = Math.toRadians( 95 );
     
     private FAState originState;
     private FAState targetState;
@@ -60,7 +56,7 @@ public class FATransition extends AbstractGeometricForm implements Cloneable {
     private int xOffset;
     private int yOffset;
     
-    private boolean labelDragging;
+    private transient boolean labelDragging;
     private boolean labelMoved;
     
     private int prevCentralCPX;
@@ -70,17 +66,17 @@ public class FATransition extends AbstractGeometricForm implements Cloneable {
     private int prevRightCPX;
     private int prevRightCPY;
     
-    private boolean targetCPDragging;
-    private boolean centralCPDragging;
-    private boolean leftCPDragging;
-    private boolean rightCPDragging;
+    private transient boolean targetCPDragging;
+    private transient boolean centralCPDragging;
+    private transient boolean leftCPDragging;
+    private transient boolean rightCPDragging;
     
     private boolean centralCPMoved;
     private boolean targetCPMoved;
     
     private double targetCPAngle;
     
-    private boolean controlPointsVisible;
+    private transient boolean controlPointsVisible;
     
     private Color activeInSimulationStrokeColor;
     
@@ -200,7 +196,7 @@ public class FATransition extends AbstractGeometricForm implements Cloneable {
                     targetCPAngle = Math.atan2( 
                             targetState.getY1() - evt.getY(), 
                             targetState.getX1() - evt.getX() ) 
-                            - RAD_60;
+                            - DrawingConstants.RAD_60;
                     
                 } else {
                     
@@ -307,9 +303,9 @@ public class FATransition extends AbstractGeometricForm implements Cloneable {
         
         if ( originState == targetState ) {
             x2 = originState.getX1() - (int) ( originState.getRadius() * 
-                    Math.cos( targetCPAngle + RAD_60 ) );
+                    Math.cos( targetCPAngle + DrawingConstants.RAD_60 ) );
             y2 = originState.getY1() - (int) ( originState.getRadius() * 
-                    Math.sin( targetCPAngle + RAD_60 ) );
+                    Math.sin( targetCPAngle + DrawingConstants.RAD_60 ) );
         } else {
             if ( targetCPMoved ) {
                 x2 = targetState.getX1() - (int) ( Math.cos( targetCPAngle ) * 
@@ -338,9 +334,9 @@ public class FATransition extends AbstractGeometricForm implements Cloneable {
         
         if ( originState == targetState ) {
             if ( !labelMoved ) {
-                label.setX1( x1 + (int) ( Math.cos( targetCPAngle - RAD_90 ) * 
+                label.setX1( x1 + (int) ( Math.cos( targetCPAngle - DrawingConstants.RAD_90 ) * 
                         ( targetState.getDiameter() + label.getTextHeight() )));
-                label.setY1( y1 + (int) ( Math.sin( targetCPAngle - RAD_90 ) * 
+                label.setY1( y1 + (int) ( Math.sin( targetCPAngle - DrawingConstants.RAD_90 ) * 
                         ( targetState.getDiameter() + label.getTextHeight() )));
             }
         } else {
@@ -403,7 +399,7 @@ public class FATransition extends AbstractGeometricForm implements Cloneable {
             
             arrow.setX1( x1 - targetState.getRadius() / 2 );
             arrow.setY1( y1 - targetState.getRadius() + 1 );
-            arrow.setAngle( RAD_95 );
+            arrow.setAngle( DrawingConstants.RAD_95 );
             arrow.draw( g2dr );
             
             if ( controlPointsVisible ) {
@@ -920,8 +916,7 @@ public class FATransition extends AbstractGeometricForm implements Cloneable {
 
         c.xOffset = xOffset;
         c.yOffset = yOffset;
-
-        c.labelDragging = false;
+        
         c.labelMoved = labelMoved;
 
         c.prevCentralCPX = prevCentralCPX;
@@ -931,17 +926,10 @@ public class FATransition extends AbstractGeometricForm implements Cloneable {
         c.prevRightCPX = prevRightCPX;
         c.prevRightCPY = prevRightCPY;
 
-        c.targetCPDragging = false;
-        c.centralCPDragging = false;
-        c.leftCPDragging = false;
-        c.rightCPDragging = false;
-
         c.centralCPMoved = centralCPMoved;
         c.targetCPMoved = targetCPMoved;
 
         c.targetCPAngle = targetCPAngle;
-
-        c.controlPointsVisible = false;
 
         c.activeInSimulationStrokeColor = activeInSimulationStrokeColor;
         

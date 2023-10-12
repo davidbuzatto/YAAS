@@ -20,10 +20,8 @@ import br.com.davidbuzatto.yaas.gui.tm.TMSimulationStep;
 import br.com.davidbuzatto.yaas.model.AbstractGeometricForm;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
@@ -37,7 +35,6 @@ import java.util.TreeSet;
 
 /**
  * Turing Machine representation and algorithms.
- * TODO update
  * 
  * @author Prof. Dr. David Buzatto
  */
@@ -50,7 +47,6 @@ public class TM extends AbstractGeometricForm implements Cloneable {
     private List<TMTransition> transitions;
     private TMState initialState;
     private TMType type;
-    private char stackStartingSymbol;
     
     private transient TMID rootId;
     private transient List<TMID> ids;
@@ -61,24 +57,19 @@ public class TM extends AbstractGeometricForm implements Cloneable {
     private transient TMID firstAcceptedId;
     
     // cache control
-    private boolean alphabetUpToDate;
-    private boolean stackAlphabetUpToDate;
-    private boolean deltaUpToDate;
+    private transient boolean alphabetUpToDate;
+    private transient boolean tapeAlphabetUpToDate;
+    private transient boolean deltaUpToDate;
     
-    private Set<Character> alphabet;
-    private Set<Character> stackAlphabet;
-    private Map<TMState, List<TMTransition>> delta;
+    private transient Set<Character> alphabet;
+    private transient Set<Character> tapeAlphabet;
+    private transient Map<TMState, List<TMTransition>> delta;
     
-    private boolean transitionControlPointsVisible;
+    private transient boolean transitionControlPointsVisible;
     
     public TM() {
-        this( CharacterConstants.STACK_STARTING_SYMBOL );
-    }
-    
-    public TM( char startingSymbol ) {
         this.states = new ArrayList<>();
         this.transitions = new ArrayList<>();
-        this.stackStartingSymbol = startingSymbol;
         this.type = TMType.EMPTY;
     }
     
@@ -89,7 +80,7 @@ public class TM extends AbstractGeometricForm implements Cloneable {
     // TODO implement
     public boolean accepts( String str, TMAcceptanceType acceptanceType, List<TMSimulationStep> simulationSteps ) {
         
-        accepted = false;
+        /*accepted = false;
         acceptForSimulation = false;
         firstAcceptedId = null;
         
@@ -125,7 +116,7 @@ public class TM extends AbstractGeometricForm implements Cloneable {
                 
             }
             
-        }
+        }*/
         
         return accepted;
         
@@ -148,7 +139,7 @@ public class TM extends AbstractGeometricForm implements Cloneable {
                     return;
                 }
                 
-            } else if ( acceptanceType == TMAcceptanceType.STOP && node.getStack().isEmpty() ) {
+            } else if ( acceptanceType == TMAcceptanceType.HALT && node.getStack().isEmpty() ) {
                 
                 node.setAcceptedByEmptyStack( true );
                 accepted = true;
@@ -190,26 +181,23 @@ public class TM extends AbstractGeometricForm implements Cloneable {
                 }
 
                 // matches symbol
-                if ( !string.isEmpty() && o.getSymbol() == string.charAt( 0 ) ) {
+                if ( !string.isEmpty() && o.getReadSymbol() == string.charAt( 0 ) ) {
 
                     if ( DEBUG ) {
-                        System.out.println( levelString.repeat( buildTreeLevel ) + "      Matches symbol: " + o.getSymbol() );
+                        System.out.println( levelString.repeat( buildTreeLevel ) + "      Matches symbol: " + o.getReadSymbol() );
                     }
 
                     Deque<Character> stack = Utils.cloneCharacterStack( node.getStack() );
 
                     // matches stack top
-                    if ( !stack.isEmpty() && o.getTop() == stack.peek() ) {
+                    if ( !stack.isEmpty() && o.getWriteSymbol() == stack.peek() ) {
 
                         if ( DEBUG ) {
-                            System.out.println( levelString.repeat( buildTreeLevel ) + "      Matches stack top: " + o.getTop() );
+                            System.out.println( levelString.repeat( buildTreeLevel ) + "      Matches stack top: " + o.getWriteSymbol() );
                         }
 
                         // consumes the input symbol
                         String newString = string.substring( 1 );
-
-                        // updates the stack
-                        processStack( o, stack );
 
                         TMID newId = new TMID( t.getTargetState(), 
                                 newString, stack, o, t.getStrokeColor() );
@@ -218,14 +206,13 @@ public class TM extends AbstractGeometricForm implements Cloneable {
                         buildIDTree( newId, delta, acceptanceType );
 
                         // empty stack?
-                    } else if ( o.getTop() == CharacterConstants.EMPTY_STRING && stack.isEmpty() ) {
+                    } else if ( o.getWriteSymbol() == CharacterConstants.EMPTY_STRING && stack.isEmpty() ) {
 
                         if ( DEBUG ) {
                             System.out.println( levelString.repeat( buildTreeLevel ) + "      Matches empty stack" );
                         }
 
                         String newString = string.substring( 1 );
-                        processStack( o, stack );
 
                         TMID newId = new TMID( t.getTargetState(),
                                 newString, stack, o, t.getStrokeColor() );
@@ -236,7 +223,7 @@ public class TM extends AbstractGeometricForm implements Cloneable {
                     }
 
                     // empty transition 
-                } else if ( o.getSymbol() == CharacterConstants.EMPTY_STRING ) {
+                } else if ( o.getReadSymbol() == CharacterConstants.EMPTY_STRING ) {
 
                     if ( DEBUG ) {
                         System.out.println( levelString.repeat( buildTreeLevel ) + "      Empty transition" );
@@ -245,16 +232,13 @@ public class TM extends AbstractGeometricForm implements Cloneable {
                     Deque<Character> stack = Utils.cloneCharacterStack( node.getStack() );
 
                     // matches stack top
-                    if ( !stack.isEmpty() && o.getTop() == stack.peek() ) {
+                    if ( !stack.isEmpty() && o.getWriteSymbol() == stack.peek() ) {
 
                         if ( DEBUG ) {
-                            System.out.println( levelString.repeat( buildTreeLevel ) + "      Matches stack top: " + o.getTop() );
+                            System.out.println( levelString.repeat( buildTreeLevel ) + "      Matches stack top: " + o.getWriteSymbol() );
                         }
 
                         // don't consume any symbol
-
-                        // updates the stack
-                        processStack( o, stack );
 
                         TMID newId = new TMID( t.getTargetState(), 
                                 string, stack, o, t.getStrokeColor() );
@@ -263,14 +247,13 @@ public class TM extends AbstractGeometricForm implements Cloneable {
                         buildIDTree( newId, delta, acceptanceType );
 
                         // empty stack?
-                    } else if ( o.getTop() == CharacterConstants.EMPTY_STRING && stack.isEmpty() ) {
+                    } else if ( o.getWriteSymbol() == CharacterConstants.EMPTY_STRING && stack.isEmpty() ) {
 
                         if ( DEBUG ) {
                             System.out.println( levelString.repeat( buildTreeLevel ) + "      Matches empty stack" );
                         }
 
                         String newString = string.substring( 1 );
-                        processStack( o, stack );
 
                         TMID newId = new TMID( t.getTargetState(), 
                                 newString, stack, o, t.getStrokeColor() );
@@ -287,30 +270,6 @@ public class TM extends AbstractGeometricForm implements Cloneable {
         }
         
         buildTreeLevel--;
-        
-    }
-    
-    // TODO remove?
-    private void processStack( TMOperation op, Deque<Character> stack ) {
-        
-        switch ( op.getType() ) {
-            case DO_NOTHING:
-                break;
-            case POP:
-                stack.pop();
-                break;
-            case PUSH:
-                for ( Character s : op.getSymbolsToPush() ) {
-                    stack.push( s );
-                }
-                break;
-            case REPLACE:
-                stack.pop();
-                for ( Character s : op.getSymbolsToPush() ) {
-                    stack.push( s );
-                }
-                break;
-        }
         
     }
 
@@ -546,7 +505,6 @@ public class TM extends AbstractGeometricForm implements Cloneable {
         updateType();
     }
     
-    // TODO update
     public void updateType() {
         
         if ( states.isEmpty() ) {
@@ -555,35 +513,17 @@ public class TM extends AbstractGeometricForm implements Cloneable {
         }
         
         Map<String, Integer> counts = new HashMap<>();
-        Map<String, String> mirror = new HashMap<>();
-        boolean epsilon = false;
         boolean nondeterminism = false;
-        
-        String sepLeft = "-<|";
-        String sepRight = "|>-";
-        String lookEp = String.format( "%s%c%s", sepLeft,
-                CharacterConstants.EMPTY_STRING, sepRight );
         
         for ( TMTransition t : transitions ) {
             
             for ( TMOperation o : t.getOperations() ) {
                 
-                String k = String.format( "%s-%s%c%s-%c", 
-                        t.getOriginState(), sepLeft, 
-                        o.getSymbol(), sepRight, o.getTop() );
-                String kEp = String.format( "%s-%s%c%s-%c", 
-                        t.getOriginState(), sepLeft, 
-                        CharacterConstants.EMPTY_STRING, sepRight, o.getTop() );
+                String k = String.format( "%s-%c", 
+                        t.getOriginState(), o.getReadSymbol() );
                 
                 Integer v = counts.get( k );
                 counts.put( k, v == null ? 1 : v+1 );
-                
-                if ( !counts.containsKey( kEp ) ) {
-                    counts.put( kEp, 0 );
-                }
-                
-                mirror.put( k, kEp );
-                mirror.put( kEp, k );
                 
             }
             
@@ -596,19 +536,9 @@ public class TM extends AbstractGeometricForm implements Cloneable {
                 break;
             }
             
-            String k1 = e.getKey();
-            String k2 = mirror.get( k1 );
-            
-            if ( !k1.contains( lookEp ) && k2 != null ) {
-                Integer c = counts.get( k2 );
-                if ( c != null && c > 0 ) {
-                    epsilon = true;
-                }
-            }
-            
         }
         
-        if ( nondeterminism || epsilon ) {
+        if ( !nondeterminism ) {
             type = TMType.TM;
         } else {
             type = TMType.NTM;
@@ -623,17 +553,16 @@ public class TM extends AbstractGeometricForm implements Cloneable {
                 CharacterConstants.CAPITAL_GAMMA,
                 CharacterConstants.SMALL_DELTA, 
                 initialState.toString(),
-                stackStartingSymbol );
+                CharacterConstants.BLANK_TAPE_SYMBOL );
         def += getStatesString() + "\n";
-        def += getAlphabetString() + "\n";
-        def += getStackAlphabetString() + "\n";
+        def += getAlphabetString() + "(consider only input symbols)\n";
+        def += getTapeAlphabetString() + "\n";
         def += getFinalStatesString();
         
         return def;
         
     }
     
-    // TODO update
     public Set<Character> getAlphabet() {
         
         if ( alphabet == null || !alphabetUpToDate ) {
@@ -643,9 +572,7 @@ public class TM extends AbstractGeometricForm implements Cloneable {
         
             for ( TMTransition t : transitions ) {
                 for ( TMOperation o : t.getOperations() ) {
-                    if ( o.getSymbol() != CharacterConstants.EMPTY_STRING ) {
-                        alphabet.add( o.getSymbol() );
-                    }
+                    alphabet.add( o.getReadSymbol() );
                 }
             }
         
@@ -655,32 +582,26 @@ public class TM extends AbstractGeometricForm implements Cloneable {
         
     }
     
-    // TODO update
-    public Set<Character> getStackAlphabet() {
+    public Set<Character> getTapeAlphabet() {
         
-        if ( stackAlphabet == null || !stackAlphabetUpToDate ) {
+        if ( tapeAlphabet == null || !tapeAlphabetUpToDate ) {
             
-            stackAlphabetUpToDate = true;
-            
-            stackAlphabet = new TreeSet<>();
-            stackAlphabet.add( stackStartingSymbol );
+            tapeAlphabetUpToDate = true;
+            tapeAlphabet = new TreeSet<>();
         
             for ( TMTransition t : transitions ) {
                 for ( TMOperation o : t.getOperations() ) {
-                    if ( o.getTop() != CharacterConstants.EMPTY_STRING ) {
-                        stackAlphabet.add( o.getTop() );
-                    }
-                    stackAlphabet.addAll( o.getSymbolsToPush() );
+                    tapeAlphabet.add( o.getReadSymbol() );
+                    tapeAlphabet.add( o.getWriteSymbol() );
                 }
             }
         
         }
         
-        return stackAlphabet;
+        return tapeAlphabet;
         
     }
     
-    // TODO update
     public Map<TMState, List<TMTransition>> getDelta() {
         
         if ( delta == null || !deltaUpToDate ) {
@@ -735,7 +656,7 @@ public class TM extends AbstractGeometricForm implements Cloneable {
         
         List<String> ss = new ArrayList<>();
         for ( TMState s : states ) {
-            if ( s._final ) {
+            if ( s.isFinal() ) {
                 ss.add( s.toString() );
             }
         }
@@ -793,11 +714,11 @@ public class TM extends AbstractGeometricForm implements Cloneable {
         
     }
     
-    private String getStackAlphabetString() {
+    private String getTapeAlphabetString() {
         
         String str = "";
         
-        Set<Character> alf = getStackAlphabet();
+        Set<Character> alf = getTapeAlphabet();
         
         boolean first = true;
         
@@ -823,15 +744,6 @@ public class TM extends AbstractGeometricForm implements Cloneable {
         return transitions;
     }
 
-    public char getStackStartingSymbol() {
-        return stackStartingSymbol;
-    }
-    
-    public void setStackStartingSymbol( char stackStartingSymbol ) {
-        this.stackStartingSymbol = stackStartingSymbol;
-        markAllCachesAsObsolete();
-    }
-
     public TMID getRootId() {
         return rootId;
     }
@@ -848,7 +760,7 @@ public class TM extends AbstractGeometricForm implements Cloneable {
     
     public void markAllCachesAsObsolete() {
         alphabetUpToDate = false;
-        stackAlphabetUpToDate = false;
+        tapeAlphabetUpToDate = false;
         deltaUpToDate = false;
     }
     
@@ -978,21 +890,6 @@ public class TM extends AbstractGeometricForm implements Cloneable {
             n.setTargetState( ref.get( t.getTargetState() ) );
             c.addTransition( n );
         }
-        
-        // c.initialState = null;  <- c.addState() resolves it accordingly
-        // c.type = null;          <- c.updateType() resolves it accordingly
-        
-        c.stackStartingSymbol = stackStartingSymbol;
-        
-        c.alphabetUpToDate = false;
-        c.stackAlphabetUpToDate = false;
-        c.deltaUpToDate = false;
-
-        c.alphabet = null;
-        c.stackAlphabet = null;
-        c.delta = null;
-
-        c.transitionControlPointsVisible = false;
         
         c.updateType();
         return c;

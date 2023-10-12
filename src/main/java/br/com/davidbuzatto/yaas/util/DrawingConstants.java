@@ -27,6 +27,10 @@ import java.awt.Font;
  */
 public interface DrawingConstants {
     
+    public static final double RAD_60 = Math.toRadians( 60 );
+    public static final double RAD_90 = Math.toRadians( 90 );
+    public static final double RAD_95 = Math.toRadians( 95 );
+    
     public static final Font DEFAULT_FONT = new Font( Font.MONOSPACED, Font.PLAIN, 16 );
     public static final Font DEFAULT_TABLE_FONT = new Font( Font.MONOSPACED, Font.PLAIN, 16 );
     public static final Font SIMULATION_STRING_FONT = new Font( Font.MONOSPACED, Font.BOLD, 24 );

@@ -48,8 +48,8 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
     private List<PDAState> states;
     private List<PDATransition> transitions;
     private PDAState initialState;
-    private PDAType type;
     private char stackStartingSymbol;
+    private PDAType type;
     
     private transient PDAID rootId;
     private transient List<PDAID> ids;
@@ -60,15 +60,15 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
     private transient PDAID firstAcceptedId;
     
     // cache control
-    private boolean alphabetUpToDate;
-    private boolean stackAlphabetUpToDate;
-    private boolean deltaUpToDate;
+    private transient boolean alphabetUpToDate;
+    private transient boolean stackAlphabetUpToDate;
+    private transient boolean deltaUpToDate;
     
-    private Set<Character> alphabet;
-    private Set<Character> stackAlphabet;
-    private Map<PDAState, List<PDATransition>> delta;
+    private transient Set<Character> alphabet;
+    private transient Set<Character> stackAlphabet;
+    private transient Map<PDAState, List<PDATransition>> delta;
     
-    private boolean transitionControlPointsVisible;
+    private transient boolean transitionControlPointsVisible;
     
     public PDA() {
         this( CharacterConstants.STACK_STARTING_SYMBOL );
@@ -727,7 +727,7 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
         
         List<String> ss = new ArrayList<>();
         for ( PDAState s : states ) {
-            if ( s._final ) {
+            if ( s.isFinal() ) {
                 ss.add( s.toString() );
             }
         }
@@ -971,21 +971,7 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
             c.addTransition( n );
         }
         
-        // c.initialState = null;  <- c.addState() resolves it accordingly
-        // c.type = null;          <- c.updateType() resolves it accordingly
-        
         c.stackStartingSymbol = stackStartingSymbol;
-        
-        c.alphabetUpToDate = false;
-        c.stackAlphabetUpToDate = false;
-        c.deltaUpToDate = false;
-
-        c.alphabet = null;
-        c.stackAlphabet = null;
-        c.delta = null;
-
-        c.transitionControlPointsVisible = false;
-        
         c.updateType();
         return c;
         

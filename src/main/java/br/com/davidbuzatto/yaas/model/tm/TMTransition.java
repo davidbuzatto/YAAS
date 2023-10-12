@@ -38,10 +38,6 @@ import java.util.Set;
  * @author Prof. Dr. David Buzatto
  */
 public class TMTransition extends AbstractGeometricForm implements Cloneable {
-
-    private static final double RAD_60 = Math.toRadians( 60 );
-    private static final double RAD_90 = Math.toRadians( 90 );
-    private static final double RAD_95 = Math.toRadians( 95 );
     
     private TMState originState;
     private TMState targetState;
@@ -194,7 +190,7 @@ public class TMTransition extends AbstractGeometricForm implements Cloneable {
                     targetCPAngle = Math.atan2( 
                             targetState.getY1() - evt.getY(), 
                             targetState.getX1() - evt.getX() ) 
-                            - RAD_60;
+                            - DrawingConstants.RAD_60;
                     
                 } else {
                     
@@ -301,9 +297,9 @@ public class TMTransition extends AbstractGeometricForm implements Cloneable {
         
         if ( originState == targetState ) {
             x2 = originState.getX1() - (int) ( originState.getRadius() * 
-                    Math.cos( targetCPAngle + RAD_60 ) );
+                    Math.cos( targetCPAngle + DrawingConstants.RAD_60 ) );
             y2 = originState.getY1() - (int) ( originState.getRadius() * 
-                    Math.sin( targetCPAngle + RAD_60 ) );
+                    Math.sin( targetCPAngle + DrawingConstants.RAD_60 ) );
         } else {
             if ( targetCPMoved ) {
                 x2 = targetState.getX1() - (int) ( Math.cos( targetCPAngle ) * 
@@ -332,9 +328,9 @@ public class TMTransition extends AbstractGeometricForm implements Cloneable {
         
         if ( originState == targetState ) {
             if ( !labelMoved ) {
-                label.setX1( x1 + (int) ( Math.cos( targetCPAngle - RAD_90 ) * 
+                label.setX1( x1 + (int) ( Math.cos( targetCPAngle - DrawingConstants.RAD_90 ) * 
                         ( targetState.getDiameter() + label.getMaxTextHeight() ) ) );
-                label.setY1( y1 + (int) ( Math.sin( targetCPAngle - RAD_90 ) * 
+                label.setY1( y1 + (int) ( Math.sin( targetCPAngle - DrawingConstants.RAD_90 ) * 
                         ( targetState.getDiameter() + label.getMaxTextHeight() ) ) );
             }
         } else {
@@ -397,7 +393,7 @@ public class TMTransition extends AbstractGeometricForm implements Cloneable {
             
             arrow.setX1( x1 - targetState.getRadius() / 2 );
             arrow.setY1( y1 - targetState.getRadius() + 1 );
-            arrow.setAngle( RAD_95 );
+            arrow.setAngle( DrawingConstants.RAD_95 );
             arrow.draw( g2dr );
             
             if ( controlPointsVisible ) {

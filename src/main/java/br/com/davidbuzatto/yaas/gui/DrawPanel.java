@@ -281,7 +281,6 @@ public class DrawPanel extends JPanel {
         
     }
     
-    // TODO update
     private void processTMSimulation( Graphics2D g2d ) {
         
         Rectangle r = getVisibleRect();
@@ -337,7 +336,7 @@ public class DrawPanel extends JPanel {
 
         }
 
-        if ( currentSimulationStep == pdaSimulationSteps.size() - 1 ) {
+        if ( currentSimulationStep == tmSimulationSteps.size() - 1 ) {
             if ( simulationAccepted ) {
                 g2d.setColor( DrawingConstants.ACCEPTED_SIMULATION_RESULT_COLOR );
                 g2d.drawString( " ACCEPTED", start + inc * i, ySimulationString );

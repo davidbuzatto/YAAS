@@ -27,11 +27,13 @@ import br.com.davidbuzatto.yaas.model.pda.PDAOperation;
 import br.com.davidbuzatto.yaas.model.pda.PDAOperationType;
 import br.com.davidbuzatto.yaas.model.pda.PDAState;
 import br.com.davidbuzatto.yaas.model.pda.PDATransition;
+import br.com.davidbuzatto.yaas.model.pda.PDAType;
 import br.com.davidbuzatto.yaas.model.tm.TM;
 import br.com.davidbuzatto.yaas.model.tm.TMOperation;
-import br.com.davidbuzatto.yaas.model.tm.TMOperationType;
+import br.com.davidbuzatto.yaas.model.tm.TMMovementType;
 import br.com.davidbuzatto.yaas.model.tm.TMState;
 import br.com.davidbuzatto.yaas.model.tm.TMTransition;
+import br.com.davidbuzatto.yaas.model.tm.TMType;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -70,6 +72,7 @@ import java.util.UUID;
 import javax.swing.AbstractAction;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -405,7 +408,7 @@ public class Utils {
      */
     public static FATransitionFunctionTableModel createFATransitionFunctionTableModel( FA fa ) {
         
-        FATransitionFunctionTableModel tm = new FATransitionFunctionTableModel();
+        FATransitionFunctionTableModel tModel = new FATransitionFunctionTableModel();
         List<Character> symbols = new ArrayList<>();
         
         if ( fa.getType() == FAType.ENFA ) {
@@ -414,7 +417,7 @@ public class Utils {
         symbols.addAll( fa.getAlphabet() );
         
         for ( char s : symbols ) {
-            tm.getSymbols().add( String.valueOf( s ) );
+            tModel.getSymbols().add( String.valueOf( s ) );
         }
         
         Map<FAState, Map<Character, List<FAState>>> delta = fa.getDelta();
@@ -432,7 +435,7 @@ public class Utils {
             }
             eStr += state;
             
-            tm.getStates().add( eStr );
+            tModel.getStates().add( eStr );
             
             List<String> data = new ArrayList<>();
             data.add( eStr );
@@ -443,7 +446,7 @@ public class Utils {
                 
                 if ( targetStates == null || targetStates.isEmpty() ) {
                     data.add( CharacterConstants.EMPTY_SET.toString() );
-                    tm.setPartial( true );
+                    tModel.setPartial( true );
                 } else {
                     
                     String targetStr;
@@ -469,11 +472,11 @@ public class Utils {
                 
             }
             
-            tm.getData().add( data );
+            tModel.getData().add( data );
             
         }
         
-        return tm;
+        return tModel;
         
     }
     
@@ -486,7 +489,7 @@ public class Utils {
      */
     public static PDATransitionFunctionTableModel createPDATransitionFunctionTableModel( PDA pda ) {
         
-        PDATransitionFunctionTableModel tm = new PDATransitionFunctionTableModel();
+        PDATransitionFunctionTableModel tModel = new PDATransitionFunctionTableModel();
         List<Character> symbols = new ArrayList<>();
         Map<String, Integer> operationIndexes = new HashMap<>();
         String eSet = CharacterConstants.EMPTY_SET.toString();
@@ -498,7 +501,7 @@ public class Utils {
         for ( char s : symbols ) {
             for ( char ss : pda.getStackAlphabet() ) {
                 String op = s + "," + ss;
-                tm.getOperations().add( op );
+                tModel.getOperations().add( op );
                 operationIndexes.put( op, index++ );
             }
         }
@@ -518,12 +521,12 @@ public class Utils {
             }
             eStr += state;
             
-            tm.getStates().add( eStr );
+            tModel.getStates().add( eStr );
             
             List<String> data = new ArrayList<>();
             data.add( eStr );
             
-            for ( int i = 0; i < tm.getOperations().size(); i++ ) {
+            for ( int i = 0; i < tModel.getOperations().size(); i++ ) {
                 data.add( eSet );
             }
             
@@ -581,17 +584,21 @@ public class Utils {
             
             for ( int i = 1; i < data.size(); i++ ) {
                 if ( !data.get( i ).equals( eSet ) ) {
-                    data.set( i, "{" + data.get( i ) + "}" );
+                    if ( pda.getType() == PDAType.DPDA ) {
+                        data.set( i, data.get( i ) );
+                    } else {
+                        data.set( i, "{" + data.get( i ) + "}" );
+                    }
                 } else {
-                    tm.setPartial( true );
+                    tModel.setPartial( true );
                 }
             }
             
-            tm.getData().add( data );
+            tModel.getData().add( data );
             
         }
         
-        return tm;
+        return tModel;
         
     }
     
@@ -604,21 +611,27 @@ public class Utils {
      */
     public static TMTransitionFunctionTableModel createTMTransitionFunctionTableModel( TM tm ) {
         
-        TMTransitionFunctionTableModel tmo = new TMTransitionFunctionTableModel();
+        TMTransitionFunctionTableModel tModel = new TMTransitionFunctionTableModel();
         List<Character> symbols = new ArrayList<>();
-        Map<String, Integer> operationIndexes = new HashMap<>();
+        Map<Character, Integer> operationIndexes = new HashMap<>();
         String eSet = CharacterConstants.EMPTY_SET.toString();
         
-        symbols.add( CharacterConstants.EMPTY_STRING );
-        symbols.addAll( tm.getAlphabet() );
+        boolean alpContainsB = false;
+        for ( char c : tm.getAlphabet() ) {
+            if ( c != CharacterConstants.BLANK_TAPE_SYMBOL ) {
+                symbols.add( c );
+            } else {
+                alpContainsB = true;
+            }
+        }
+        if ( alpContainsB ) {
+            symbols.add( CharacterConstants.BLANK_TAPE_SYMBOL );
+        }
         
         int index = 1;
         for ( char s : symbols ) {
-            for ( char ss : tm.getStackAlphabet() ) {
-                String op = s + "," + ss;
-                tmo.getOperations().add( op );
-                operationIndexes.put( op, index++ );
-            }
+            tModel.getOperations().add( String.valueOf( s ) );
+            operationIndexes.put( s, index++ );
         }
         
         Map<TMState, List<TMTransition>> delta = tm.getDelta();
@@ -636,12 +649,12 @@ public class Utils {
             }
             eStr += state;
             
-            tmo.getStates().add( eStr );
+            tModel.getStates().add( eStr );
             
             List<String> data = new ArrayList<>();
             data.add( eStr );
             
-            for ( int i = 0; i < tmo.getOperations().size(); i++ ) {
+            for ( int i = 0; i < tModel.getOperations().size(); i++ ) {
                 data.add( eSet );
             }
             
@@ -649,41 +662,11 @@ public class Utils {
                 
                 for ( TMOperation o : t.getOperations() ) {
                     
-                    if ( o.getTop() == CharacterConstants.EMPTY_STRING ) {
-                        break;
-                    }
-                    
-                    String op = o.getSymbol() + "," + o.getTop();
-                    int ind = operationIndexes.get( op );
-                    
-                    String value = "(";
-                    
-                    value += t.getTargetState().toString() + ",";
-                    
-                    String stackData = "";
-                    if ( o.getType() == TMOperationType.PUSH || o.getType() == TMOperationType.REPLACE ) {
-                        for ( int i = o.getSymbolsToPush().size()-1; i >= 0; i-- ) {
-                            stackData += o.getSymbolsToPush().get( i );
-                        }
-                        stackData = stackData.trim();
-                    }
-                    
-                    switch ( o.getType() ) {
-                        case DO_NOTHING:
-                            value += o.getTop();
-                            break;
-                        case POP:
-                            value += CharacterConstants.EMPTY_STRING.toString();
-                            break;
-                        case PUSH:
-                            value += stackData + o.getTop();
-                            break;
-                        case REPLACE:
-                            value += stackData;
-                            break;
-                    }
-                    
-                    value += ")";
+                    int ind = operationIndexes.get( o.getReadSymbol() );
+                    String value = String.format("(%s,%c,%c)", 
+                            t.getTargetState(), 
+                            o.getWriteSymbol(), 
+                            o.getType() == TMMovementType.MOVE_RIGHT ? 'R' : 'L' );
                     
                     String cData = data.get( ind );
                     if ( cData.equals( eSet ) ) {
@@ -692,24 +675,27 @@ public class Utils {
                         data.set( ind, cData + ", " + value );
                     }
                     
-                    
                 }
                 
             }
             
             for ( int i = 1; i < data.size(); i++ ) {
                 if ( !data.get( i ).equals( eSet ) ) {
-                    data.set( i, "{" + data.get( i ) + "}" );
+                    if ( tm.getType() == TMType.TM ) {
+                        data.set( i, data.get( i ) );
+                    } else {
+                        data.set( i, "{" + data.get( i ) + "}" );
+                    }
                 } else {
-                    tmo.setPartial( true );
+                    tModel.setPartial( true );
                 }
             }
             
-            tmo.getData().add( data );
+            tModel.getData().add( data );
             
         }
         
-        return tmo;
+        return tModel;
         
     }
     
@@ -1124,7 +1110,6 @@ public class Utils {
      * 
      * @param parentComponent The parent component.
      * @param title The title of the dialog.
-     * @param startingSymbol The stack starting symbol of the TM.
      * @param op
      * 
      * @return The op TMOperation with it was updated, a new TMOperation if
@@ -1133,123 +1118,97 @@ public class Utils {
     public static TMOperation showInputDialogNewTMOperation( 
             Component parentComponent, 
             String title,
-            char startingSymbol,
             TMOperation op ) {
         
         JPanel panel = new JPanel();
         panel.setLayout( new GridBagLayout() );
         
-        JLabel lblTS = new JLabel( "Transition symbol:" );
-        lblTS.setHorizontalAlignment( SwingConstants.RIGHT );
+        JLabel lblReadSymbol = new JLabel( "Read symbol:" );
+        lblReadSymbol.setHorizontalAlignment( SwingConstants.RIGHT );
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new Insets( 5, 5, 5, 5 );
-        panel.add( lblTS, gridBagConstraints );
+        panel.add( lblReadSymbol, gridBagConstraints );
         
-        JLabel lblSTT = new JLabel( "Stack top:" );
-        lblSTT.setHorizontalAlignment( SwingConstants.RIGHT );
+        JLabel lblWriteSymbol = new JLabel( "Write symbol:" );
+        lblWriteSymbol.setHorizontalAlignment( SwingConstants.RIGHT );
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new Insets( 5, 5, 5, 5 );
-        panel.add( lblSTT, gridBagConstraints );
+        panel.add( lblWriteSymbol, gridBagConstraints );
 
-        JLabel lblST = new JLabel( "Stack operation:" );
-        lblST.setHorizontalAlignment( SwingConstants.RIGHT );
+        JLabel lblMove = new JLabel( "Move to:" );
+        lblMove.setHorizontalAlignment( SwingConstants.RIGHT );
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new Insets( 5, 5, 5, 5 );
-        panel.add( lblST, gridBagConstraints );
+        panel.add( lblMove, gridBagConstraints );
 
-        JLabel lblSP = new JLabel( "Symbol(s) to push/replace:" );
-        lblSP.setHorizontalAlignment( SwingConstants.RIGHT );
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new Insets( 5, 5, 5, 5 );
-        panel.add( lblSP, gridBagConstraints);
-
-        JPanel tsPanel = new JPanel();
-        tsPanel.setLayout( new BoxLayout( tsPanel, BoxLayout.X_AXIS ) );
-        JTextField txtTS = new JTextField( 5 );
-        txtTS.setAlignmentX( Component.LEFT_ALIGNMENT );
-        JCheckBox checkE = new JCheckBox( CharacterConstants.EMPTY_STRING.toString() );
-        checkE.setAlignmentX( Component.LEFT_ALIGNMENT );
-        checkE.setToolTipText( CharacterConstants.EMPTY_STRING + "-transition" );
-        tsPanel.add( txtTS );
-        tsPanel.add( checkE );
-        
+        JTextField txtReadSymbol = new JTextField( 5 );
+        txtReadSymbol.setAlignmentX( Component.LEFT_ALIGNMENT );
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.NONE;
         gridBagConstraints.anchor = GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new Insets( 5, 5, 5, 5 );
-        panel.add( tsPanel, gridBagConstraints );
+        panel.add( txtReadSymbol, gridBagConstraints );
         
-        JPanel stPanel = new JPanel();
-        stPanel.setAlignmentX( JPanel.LEFT_ALIGNMENT );
-        stPanel.setLayout( new BoxLayout( stPanel, BoxLayout.X_AXIS ) );
-        JTextField txtST = new JTextField( 5 );
-        JCheckBox checkEmptyST = new JCheckBox( CharacterConstants.EMPTY_STRING.toString() );
-        checkEmptyST.setToolTipText( "Empty stack" );
-        JCheckBox checkStartingST = new JCheckBox( String.valueOf( startingSymbol ) );
-        checkStartingST.setToolTipText( "Starting symbol" );
-        stPanel.add( txtST );
-        stPanel.add( checkEmptyST );
-        stPanel.add( checkStartingST );
+        JPanel writeSymbolPanel = new JPanel();
+        writeSymbolPanel.setAlignmentX( JPanel.LEFT_ALIGNMENT );
+        writeSymbolPanel.setLayout( new BoxLayout( writeSymbolPanel, BoxLayout.X_AXIS ) );
+        JTextField txtWriteSymbol = new JTextField( 5 );
+        JCheckBox checkBlankSymbol = new JCheckBox( CharacterConstants.BLANK_TAPE_SYMBOL.toString() );
+        checkBlankSymbol.setToolTipText( "Blank tape symbol" );
+        writeSymbolPanel.add( txtWriteSymbol );
+        writeSymbolPanel.add( checkBlankSymbol );
         
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = GridBagConstraints.NONE;
         gridBagConstraints.insets = new Insets( 5, 5, 5, 5 );
-        panel.add( stPanel, gridBagConstraints );
-        
-        JTextField txtSP = new JTextField();
-        txtSP.setEnabled( false );
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new Insets( 5, 5, 5, 5 );
-        panel.add( txtSP, gridBagConstraints );
+        panel.add( writeSymbolPanel, gridBagConstraints );
 
-        JRadioButton rNothing = new JRadioButton( "Do nothing" );
-        rNothing.setSelected( true );
-        JRadioButton rPop = new JRadioButton( "Pop" );
-        JRadioButton rPush = new JRadioButton( "Push" );
-        JRadioButton rReplace = new JRadioButton( "Replace" );
+        JRadioButton rMoveRight = new JRadioButton();
+        JLabel lblMoveRight = new JLabel( new ImageIcon( 
+                new Utils().getClass().getResource("/arrow_right.png" ) ) );
+        rMoveRight.setToolTipText( "Right" );
+        lblMoveRight.setToolTipText( "Right" );
+        rMoveRight.setSelected( true );
+        JRadioButton rMoveLeft = new JRadioButton();
+        JLabel lblMoveLeft = new JLabel( new ImageIcon( 
+                new Utils().getClass().getResource("/arrow_left.png" ) ) );
+        rMoveLeft.setToolTipText( "Left" );
+        lblMoveLeft.setToolTipText( "Left" );
         
         ButtonGroup bg = new ButtonGroup();
-        bg.add( rNothing );
-        bg.add( rPop );
-        bg.add( rPush );
-        bg.add( rReplace );
+        bg.add( rMoveRight );
+        bg.add( rMoveLeft );
         
-        JPanel stOpPanel = new JPanel();
-        stOpPanel.setLayout( new BoxLayout( stOpPanel, BoxLayout.PAGE_AXIS ) );
-        stOpPanel.add( rNothing );
-        stOpPanel.add( rPop );
-        stOpPanel.add( rPush );
-        stOpPanel.add( rReplace );
+        JPanel movePanel = new JPanel();
+        movePanel.setLayout( new BoxLayout( movePanel, BoxLayout.LINE_AXIS ) );
+        movePanel.add( rMoveRight );
+        movePanel.add( lblMoveRight );
+        movePanel.add( rMoveLeft );
+        movePanel.add( lblMoveLeft );
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        panel.add( stOpPanel, gridBagConstraints );
+        panel.add( movePanel, gridBagConstraints );
         
         Component[] components = new Component[]{ panel };
         
-        txtTS.addAncestorListener( new AncestorListener(){
+        txtReadSymbol.addAncestorListener( new AncestorListener(){
             @Override
             public void ancestorAdded( AncestorEvent evt ) {
                 evt.getComponent().requestFocusInWindow();
@@ -1262,98 +1221,35 @@ public class Utils {
             }
         });
         
-        ActionListener ac = new ActionListener() {
+        checkBlankSymbol.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                if ( rNothing.isSelected() || rPop.isSelected() ) {
-                    txtSP.setEnabled( false );
-                    txtSP.setText( "" );
+                if ( checkBlankSymbol.isSelected() ) {
+                    txtWriteSymbol.setEnabled( false );
+                    txtWriteSymbol.setText( "" );
                 } else {
-                    txtSP.setEnabled( true );
-                }
-            }
-        };
-                
-        rNothing.addActionListener( ac );
-        rPop.addActionListener( ac );
-        rPush.addActionListener( ac );
-        rReplace.addActionListener( ac );
-        
-        checkE.addActionListener( new ActionListener(){
-            @Override
-            public void actionPerformed( ActionEvent e ) {
-                if ( checkE.isSelected() ) {
-                    txtTS.setEnabled( false );
-                    txtTS.setText( "" );
-                } else {
-                    txtTS.setEnabled( true );
-                }
-            }
-        });
-        
-        checkEmptyST.addActionListener( new ActionListener() {
-            @Override
-            public void actionPerformed( ActionEvent e ) {
-                if ( checkEmptyST.isSelected() ) {
-                    txtST.setEnabled( false );
-                    txtST.setText( "" );
-                    checkStartingST.setSelected( false );
-                } else {
-                    txtST.setEnabled( true );
-                }
-            }
-        });
-        
-        checkStartingST.addActionListener( new ActionListener() {
-            @Override
-            public void actionPerformed( ActionEvent e ) {
-                if ( checkStartingST.isSelected() ) {
-                    txtST.setEnabled( false );
-                    txtST.setText( "" );
-                    checkEmptyST.setSelected( false );
-                } else {
-                    txtST.setEnabled( true );
+                    txtWriteSymbol.setEnabled( true );
                 }
             }
         });
         
         if ( op != null ) {
             
-            if ( op.getSymbol() == CharacterConstants.EMPTY_STRING ) {
-                checkE.doClick();
-            } else {
-                txtTS.setText( String.valueOf( op.getSymbol() ) );
-            }
+            txtReadSymbol.setText( String.valueOf( op.getReadSymbol() ) );
             
-            if ( op.getTop() == CharacterConstants.EMPTY_STRING ) {
-                checkEmptyST.doClick();
-            } else if ( op.getTop()== startingSymbol ) {
-                checkStartingST.doClick();
+            if ( op.getWriteSymbol() == CharacterConstants.BLANK_TAPE_SYMBOL ) {
+                checkBlankSymbol.doClick();
             } else {
-                txtST.setText( String.valueOf( op.getTop() ) );
+                txtWriteSymbol.setText( String.valueOf( op.getWriteSymbol() ) );
             }
             
             switch ( op.getType() ) {
-                case DO_NOTHING:
-                    rNothing.doClick();
+                case MOVE_RIGHT:
+                    rMoveRight.doClick();
                     break;
-                case POP:
-                    rPop.doClick();
+                case MOVE_LEFT:
+                    rMoveLeft.doClick();
                     break;
-                case PUSH:
-                    rPush.doClick();
-                    break;
-                case REPLACE:
-                    rReplace.doClick();
-                    break;
-            }
-            
-            if ( op.getType() == TMOperationType.PUSH || op.getType() == TMOperationType.REPLACE ) {
-                String s = "";
-                for ( char c : op.getSymbolsToPush() ) {
-                    s += c + " ";
-                }
-                txtSP.setText( s.trim() );
             }
             
         }
@@ -1370,79 +1266,55 @@ public class Utils {
                     new String[]{ "OK", "Cancel" }, 
                     "OK" ) == JOptionPane.OK_OPTION ) {
 
-                boolean errorTS = false;
-                boolean errorST = false;
-                boolean errorSP = false;
+                boolean errorRead = false;
+                boolean errorWrite = false;
 
-                char symbol = CharacterConstants.EMPTY_STRING;
-                if ( !checkE.isSelected() ) {
-                    String inputTS = txtTS.getText().trim();
-                    if ( !inputTS.isEmpty() ) {
-                        symbol = txtTS.getText().trim().charAt( 0 );
-                    } else {
-                        errorTS = true;
-                    }
+                char readSymbol = ' ';
+                String inputTS = txtReadSymbol.getText().trim();
+                if ( !inputTS.isEmpty() ) {
+                    readSymbol = txtReadSymbol.getText().trim().charAt( 0 );
+                } else {
+                    errorRead = true;
                 }
 
-                char stackTop = 'v';
-                if ( checkEmptyST.isSelected() ) {
-                    stackTop = CharacterConstants.EMPTY_STRING;
-                } else if ( checkStartingST.isSelected() ) {
-                    stackTop = startingSymbol;
+                char writeSymbol = ' ';
+                if ( checkBlankSymbol.isSelected() ) {
+                    writeSymbol = CharacterConstants.BLANK_TAPE_SYMBOL;
                 } else {
-                    String inputST = txtST.getText().trim();
+                    String inputST = txtWriteSymbol.getText().trim();
                     if ( !inputST.isEmpty() ) {
-                        stackTop = inputST.charAt( 0 );
+                        writeSymbol = inputST.charAt( 0 );
                     } else {
-                        errorST = true;
+                        errorWrite = true;
                     }
                 }
 
-                String pushSymbols = txtSP.getText().replace( " ", "" ).trim();
-                TMOperationType type;
+                TMMovementType type = null;
 
-                if ( rNothing.isSelected() ) {
-                    type = TMOperationType.DO_NOTHING;
-                } else if ( rPop.isSelected() ) {
-                    type = TMOperationType.POP;
-                } else if ( rPush.isSelected() ) {
-                    type = TMOperationType.PUSH;
-                } else {
-                    type = TMOperationType.REPLACE;
-                }
-
-                if ( pushSymbols.isEmpty() && ( type == TMOperationType.PUSH || type == TMOperationType.REPLACE ) ) {
-                    errorSP = true;
+                if ( rMoveRight.isSelected() ) {
+                    type = TMMovementType.MOVE_RIGHT;
+                } else if ( rMoveLeft.isSelected() ) {
+                    type = TMMovementType.MOVE_LEFT;
                 }
 
                 String error = "";
-                if ( errorTS ) {
-                    error += "You must set a transition symbol!";
+                if ( errorRead ) {
+                    error += "You must set a read symbol!";
                 }
-                if ( errorST ) {
-                    error += "\nYou must set a stack top!";
-                }
-                if ( errorSP ) {
-                    error += String.format( 
-                            "\nYou must add at least one symbol to %s!", 
-                            type == TMOperationType.PUSH ? "push" : "replace" );
+                if ( errorWrite ) {
+                    error += "\nYou must set a write symbol!";
                 }
 
-                if ( errorTS || errorST || errorSP ) {
+                if ( errorRead || errorWrite ) {
                     showErrorMessage( parentComponent, error.trim() );
                 } else {
                     if ( op != null ) {
-                        op.setSymbol( symbol );
-                        op.setTop( stackTop );
+                        op.setReadSymbol( readSymbol );
+                        op.setWriteSymbol( writeSymbol );
                         op.setType( type );
-                        List<Character> sp = new ArrayList<>();
-                        for ( char c : pushSymbols.toCharArray() ) {
-                            sp.add( c );
-                        }
-                        op.setSymbolsToPush( sp );
                         return op;
                     } else {
-                        return new TMOperation( symbol, stackTop, type, pushSymbols.toCharArray() );
+                        return new TMOperation( readSymbol, writeSymbol, type );
                     }
                 }
 

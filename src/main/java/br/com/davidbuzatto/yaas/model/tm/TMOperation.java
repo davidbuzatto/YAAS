@@ -19,97 +19,63 @@ package br.com.davidbuzatto.yaas.model.tm;
 import br.com.davidbuzatto.yaas.model.AbstractGeometricForm;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import java.awt.Graphics2D;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Models a Turing Machine transition operation.
- * TODO update
  * 
  * @author Prof. Dr. David Buzatto
  */
 public class TMOperation extends AbstractGeometricForm implements Cloneable, Comparable<TMOperation> {
     
-    private char symbol;
-    private char top;
-    private TMOperationType type;
-    private List<Character> symbolsToPush;
+    private char readSymbol;
+    private char writeSymbol;
+    private TMMovementType type;
 
     public TMOperation( 
-            char symbol, 
-            char top, 
-            TMOperationType type, 
-            List<Character> symbolsToPush ) {
-        this.symbol = symbol;
-        this.top = top;
+            char readSymbol, 
+            char writeSymbol, 
+            TMMovementType type ) {
+        this.readSymbol = readSymbol;
+        this.writeSymbol = writeSymbol;
         this.type = type;
-        this.symbolsToPush = symbolsToPush;
     }
     
-    public TMOperation( 
-            char symbol, 
-            char top, 
-            TMOperationType type, 
-            char symbolToPush ) {
-        this( symbol, top, type, new ArrayList<Character>() );
-        addSymbolToPush( symbolToPush );
+    public static TMOperation getMoveRightOperation( char symbol, char top ) {
+        return new TMOperation( symbol, top, TMMovementType.MOVE_RIGHT );
     }
     
-    public TMOperation( 
-            char symbol, 
-            char top, 
-            TMOperationType type, 
-            char... symbolsToPush ) {
-        this( symbol, top, type, new ArrayList<Character>() );
-        addSymbolsToPush( symbolsToPush );
-    }
-    
-    public TMOperation( 
-            char symbol, 
-            char top, 
-            TMOperationType type ) {
-        this( symbol, top, type, new ArrayList<Character>() );
-    }
-    
-    public static TMOperation getDoNothingOperation( char symbol, char top ) {
-        return new TMOperation( symbol, top, TMOperationType.DO_NOTHING );
-    }
-    
-    public static TMOperation getPopOperation( char symbol, char top ) {
-        return new TMOperation( symbol, top, TMOperationType.POP );
+    public static TMOperation getMoveLeftOperation( char symbol, char top ) {
+        return new TMOperation( symbol, top, TMMovementType.MOVE_LEFT );
     }
 
     @Override
     public int compareTo( TMOperation o ) {
         
-        if ( symbol != o.symbol ) {
-            if ( symbol == CharacterConstants.EMPTY_STRING ) {
+        if ( readSymbol != o.readSymbol ) {
+            if ( readSymbol == CharacterConstants.EMPTY_STRING ) {
                 return -1;
-            } else if ( o.symbol == CharacterConstants.EMPTY_STRING ) {
+            } else if ( o.readSymbol == CharacterConstants.EMPTY_STRING ) {
                 return 1;
             }
         }
         
-        if ( symbol < o.symbol ) {
+        if ( readSymbol < o.readSymbol ) {
             return -1;
-        } else if ( symbol > o.symbol ) {
+        } else if ( readSymbol > o.readSymbol ) {
             return 1;
-        } else if ( top != o.top ) {
+        } else if ( writeSymbol != o.writeSymbol ) {
             
-            if ( top == CharacterConstants.EMPTY_STRING ) {
+            if ( writeSymbol == CharacterConstants.EMPTY_STRING ) {
                 return -1;
-            } else if ( o.top == CharacterConstants.EMPTY_STRING ) {
+            } else if ( o.writeSymbol == CharacterConstants.EMPTY_STRING ) {
                 return 1;
             } else {
-                return top - o.top;
+                return writeSymbol - o.writeSymbol;
             }
             
         }
         
-        String s1 = symbolsToPush.toString();
-        String s2 = o.symbolsToPush.toString();
-
-        return s1.compareTo( s2 );
+        return 0;
         
     }
     
@@ -123,57 +89,35 @@ public class TMOperation extends AbstractGeometricForm implements Cloneable, Com
         throw new UnsupportedOperationException( "Not supported." );
     }
     
-    public void addSymbolToPush( char symbol ) {
-        symbolsToPush.add( symbol );
-    }
-    
-    public void addSymbolsToPush( char... symbols ) {
-        for ( char s : symbols ) {
-            symbolsToPush.add( s );
-        }
-    }
-    
-    public void addSymbolsToPush( List<Character> symbols ) {
-        symbolsToPush.addAll( symbols );
-    }
-    
-    public char getSymbol() {
-        return symbol;
+    public char getReadSymbol() {
+        return readSymbol;
     }
 
-    public void setSymbol( char symbol ) {
-        this.symbol = symbol;
+    public void setReadSymbol( char readSymbol ) {
+        this.readSymbol = readSymbol;
     }
 
-    public char getTop() {
-        return top;
+    public char getWriteSymbol() {
+        return writeSymbol;
     }
 
-    public void setTop( char top ) {
-        this.top = top;
+    public void setWriteSymbol( char writeSymbol ) {
+        this.writeSymbol = writeSymbol;
     }
 
-    public TMOperationType getType() {
+    public TMMovementType getType() {
         return type;
     }
 
-    public void setType( TMOperationType type ) {
+    public void setType( TMMovementType type ) {
         this.type = type;
-    }
-
-    public List<Character> getSymbolsToPush() {
-        return symbolsToPush;
-    }
-
-    public void setSymbolsToPush( List<Character> symbolsToPush ) {
-        this.symbolsToPush = symbolsToPush;
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 19 * hash + this.symbol;
-        hash = 19 * hash + this.top;
+        hash = 19 * hash + this.readSymbol;
+        hash = 19 * hash + this.writeSymbol;
         return hash;
     }
 
@@ -189,90 +133,31 @@ public class TMOperation extends AbstractGeometricForm implements Cloneable, Com
             return false;
         }
         final TMOperation other = (TMOperation) obj;
-        if ( this.symbol != other.symbol ) {
+        if ( this.readSymbol != other.readSymbol ) {
             return false;
         }
-        return this.top == other.top;
+        return this.writeSymbol == other.writeSymbol;
     }
     
-    @Override // TODO update
+    @Override
     public String toString() {
-        
-        String op = "";
-        
-        switch ( type ) {
-            case DO_NOTHING:
-                op += top;
-                break;
-            case POP:
-                op += CharacterConstants.EMPTY_STRING;
-                break;
-            case PUSH:
-                for ( int i = symbolsToPush.size()-1; i >= 0; i-- ) {
-                    op += symbolsToPush.get( i );
-                }
-                op += top;
-                break;
-            case REPLACE:
-                for ( int i = symbolsToPush.size()-1; i >= 0; i-- ) {
-                    op += symbolsToPush.get( i );
-                }
-                break;
-            
-        }
-        
-        return String.format( "%c,%c/%s", symbol, top, op );
-        
+        return String.format("%c/%c%s", readSymbol, writeSymbol, 
+                type == TMMovementType.MOVE_RIGHT ? 
+                        CharacterConstants.ARROW_RIGHT : 
+                        CharacterConstants.ARROW_LEFT );
     }
     
     public String generateCode( TM pda, String modelName ) {
         
         String op = "            ";
         
-        if ( type == TMOperationType.DO_NOTHING ) {
-            op += "TMOperation.getDoNothingOperation( ";
-        } else if ( type == TMOperationType.POP ) {
-            op += "TMOperation.getPopOperation( ";
-        } else {
-            op += "new TMOperation( ";
+        if ( type == TMMovementType.MOVE_RIGHT ) {
+            op += "TMOperation.getMoveRightOperation( ";
+        } else if ( type == TMMovementType.MOVE_LEFT ) {
+            op += "TMOperation.getMoveLeftOperation( ";
         }
         
-        if ( symbol == CharacterConstants.EMPTY_STRING ) {
-            op += "CharacterConstants.EMPTY_STRING, ";
-        } else {
-            op += String.format( "'%c', ", symbol );
-        }
-        
-        if ( top == CharacterConstants.EMPTY_STRING ) {
-            op += "CharacterConstants.EMPTY_STRING";
-        } else if ( top == pda.getStackStartingSymbol() ) {
-            op += modelName + ".getStackStartingSymbol()";
-        } else {
-            op += String.format( "'%c'", top );
-        }
-        
-        if ( type == TMOperationType.DO_NOTHING ) {
-            op += " )";
-        } else if ( type == TMOperationType.POP ) {
-            op += " )";
-        } else {
-            
-            String sy = "";
-            boolean fs = true;
-            for ( char c : symbolsToPush ) {
-                if ( !fs ) {
-                    sy += ", ";
-                }
-                sy += String.format( "'%c'", c );
-                fs = false;
-            }
-        
-            op += String.format( ", %s, %s )", 
-                    type == TMOperationType.PUSH ? 
-                    "TMOperationType.PUSH" : "TMOperationType.REPLACE",
-                    sy );
-            
-        }
+        op += String.format( "'%c', '%c' )", readSymbol, writeSymbol );
         
         return op;
         
@@ -284,14 +169,9 @@ public class TMOperation extends AbstractGeometricForm implements Cloneable, Com
         
         TMOperation c = (TMOperation) super.clone();
         
-        c.symbol = symbol;
-        c.top = top;
+        c.readSymbol = readSymbol;
+        c.writeSymbol = writeSymbol;
         c.type = type;
-        
-        c.symbolsToPush = new ArrayList<>();
-        for ( Character s : symbolsToPush ) {
-            c.symbolsToPush.add( s );
-        }
         
         return c;
         

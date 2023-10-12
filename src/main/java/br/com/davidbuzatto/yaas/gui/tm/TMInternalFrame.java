@@ -297,7 +297,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
         sepTS02 = new javax.swing.JToolBar.Separator();
         lblAcceptBy = new javax.swing.JLabel();
         radioAcceptByFinalState = new javax.swing.JRadioButton();
-        radioAcceptByEmptyStack = new javax.swing.JRadioButton();
+        radioAcceptByHalt = new javax.swing.JRadioButton();
         sepTS03 = new javax.swing.JToolBar.Separator();
         btnBatchTest = new javax.swing.JButton();
         sepTS04 = new javax.swing.JToolBar.Separator();
@@ -772,13 +772,13 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
         radioAcceptByFinalState.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         toolBarTestsAndSimulation.add(radioAcceptByFinalState);
 
-        btnGroupAcceptanceType.add(radioAcceptByEmptyStack);
-        radioAcceptByEmptyStack.setText("ES");
-        radioAcceptByEmptyStack.setToolTipText("Empty Stack");
-        radioAcceptByEmptyStack.setFocusable(false);
-        radioAcceptByEmptyStack.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        radioAcceptByEmptyStack.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        toolBarTestsAndSimulation.add(radioAcceptByEmptyStack);
+        btnGroupAcceptanceType.add(radioAcceptByHalt);
+        radioAcceptByHalt.setText("H");
+        radioAcceptByHalt.setToolTipText("Halt");
+        radioAcceptByHalt.setFocusable(false);
+        radioAcceptByHalt.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        radioAcceptByHalt.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        toolBarTestsAndSimulation.add(radioAcceptByHalt);
         toolBarTestsAndSimulation.add(sepTS03);
 
         btnBatchTest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/book.png"))); // NOI18N
@@ -1214,8 +1214,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
                     if ( targetState != null ) {
 
                         TMOperation op = Utils.showInputDialogNewTMOperation( 
-                                this, "Add Transition Operation", 
-                                tm.getStackStartingSymbol(), null );
+                                this, "Add Transition Operation", null );
                         
                         if ( op != null ) {
                             TMTransition t = new TMTransition( 
@@ -1480,7 +1479,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
                     txtTestString.getText(), 
                     radioAcceptByFinalState.isSelected() ? 
                             TMAcceptanceType.FINAL_STATE : 
-                            TMAcceptanceType.STOP,
+                            TMAcceptanceType.HALT,
                     simulationSteps );
             
             btnStart.setEnabled( false );
@@ -1588,7 +1587,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
                     this, 
                     radioAcceptByFinalState.isSelected() ? 
                             TMAcceptanceType.FINAL_STATE : 
-                            TMAcceptanceType.STOP,
+                            TMAcceptanceType.HALT,
                     false );
         }
         tmBatchTestDialog.setTm( tm );
@@ -2242,7 +2241,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
             if ( tm.accepts( txtTestString.getText(), 
                     radioAcceptByFinalState.isSelected() ? 
                             TMAcceptanceType.FINAL_STATE : 
-                            TMAcceptanceType.STOP ) ) {
+                            TMAcceptanceType.HALT ) ) {
                 setTestToAcceptedInGUI( );
             } else {
                 setTestToRejectedInGUI( );
@@ -2348,7 +2347,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
         btnReset.setEnabled( false );
         checkShowIDs.setEnabled( false );
         radioAcceptByFinalState.setEnabled( false );
-        radioAcceptByEmptyStack.setEnabled( false );
+        radioAcceptByHalt.setEnabled( false );
         btnBatchTest.setEnabled( false );
         
         statePPanel.disableGUI();
@@ -2373,7 +2372,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
         btnReset.setEnabled( true );
         checkShowIDs.setEnabled( true );
         radioAcceptByFinalState.setEnabled( true );
-        radioAcceptByEmptyStack.setEnabled( true );
+        radioAcceptByHalt.setEnabled( true );
         btnBatchTest.setEnabled( true );
         
         statePPanel.enableGUI();
@@ -2872,8 +2871,8 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JPopupMenu popupMenuReorganizeStates;
     private javax.swing.JPopupMenu popupMenuStateProperties;
     private javax.swing.JPopupMenu popupMenuTransitionProperties;
-    private javax.swing.JRadioButton radioAcceptByEmptyStack;
     private javax.swing.JRadioButton radioAcceptByFinalState;
+    private javax.swing.JRadioButton radioAcceptByHalt;
     private javax.swing.JScrollPane scrollPaneModel;
     private javax.swing.JToolBar.Separator sep01;
     private javax.swing.JToolBar.Separator sep02;

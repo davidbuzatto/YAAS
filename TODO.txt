@@ -1,16 +1,20 @@
-Finite Automata
+Finite Automata:
     Highlight inacessible states (properties panel)
+    Highlight useless states     (properties panel)
     Highlight nondeterminisms    (properties panel)
     Regular Expressions
 
-Pushdown Automata
+Pushdown Automata:
     PDA to CFGs?
 
-Turing Machines
-    Update transition operations
+Turing Machines:
+    Update IDs and Simulation
+    Take care of infinite loops
 
-General
+General -> Version 1.x.x
     Moore Machines?
     Mealy Machines?
+
+Probably will not be implemented:
     Zoom-in
     Zoom-out

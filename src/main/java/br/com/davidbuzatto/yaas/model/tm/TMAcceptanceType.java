@@ -24,6 +24,6 @@ package br.com.davidbuzatto.yaas.model.tm;
 public enum TMAcceptanceType {
     
     FINAL_STATE,
-    STOP           // TODO chose a better name
+    HALT
     
 }

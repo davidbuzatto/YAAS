@@ -18,7 +18,7 @@ package br.com.davidbuzatto.yaas.model.tm.examples;
 
 import br.com.davidbuzatto.yaas.model.tm.TM;
 import br.com.davidbuzatto.yaas.model.tm.TMOperation;
-import br.com.davidbuzatto.yaas.model.tm.TMOperationType;
+import br.com.davidbuzatto.yaas.model.tm.TMMovementType;
 import br.com.davidbuzatto.yaas.model.tm.TMState;
 import br.com.davidbuzatto.yaas.model.tm.TMTransition;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
@@ -69,7 +69,7 @@ public class TMExamples {
 
         // transitions
         TMTransition q0q1 = new TMTransition( q0, q1,
-                new TMOperation( '0', 'X', TMOperationType.REPLACE, 'R' ) );
+                TMOperation.getMoveRightOperation( '0', 'X' ) );
         q0q1.moveLabelTo( 196, 99 );
         q0q1.rotateTargetCP( 20 );
         q0q1.moveCPsTo( 187, 105, 166, 105, 209, 105 );
@@ -77,13 +77,13 @@ public class TMExamples {
         tm.addTransition( q0q1 );
 
         TMTransition q1q1 = new TMTransition( q1, q1,
-                new TMOperation( '0', '0', TMOperationType.REPLACE, 'R' ),
-                new TMOperation( 'Y', 'Y', TMOperationType.REPLACE, 'R' ) );
+                TMOperation.getMoveRightOperation( '0', '0' ),
+                TMOperation.getMoveRightOperation( 'Y', 'Y' ) );
         q1q1.setStrokeColor( new Color( 0, 0, 0, 255 ) );
         tm.addTransition( q1q1 );
 
         TMTransition q1q2 = new TMTransition( q1, q2,
-                new TMOperation( '1', 'Y', TMOperationType.REPLACE, 'L' ) );
+                TMOperation.getMoveLeftOperation( '1', 'Y' ) );
         q1q2.moveLabelTo( 347, 101 );
         q1q2.rotateTargetCP( 15 );
         q1q2.moveCPsTo( 338, 108, 317, 108, 360, 108 );
@@ -91,13 +91,13 @@ public class TMExamples {
         tm.addTransition( q1q2 );
 
         TMTransition q2q2 = new TMTransition( q2, q2,
-                new TMOperation( '0', '0', TMOperationType.REPLACE, 'L' ),
-                new TMOperation( 'Y', 'Y', TMOperationType.REPLACE, 'L' ) );
+                TMOperation.getMoveLeftOperation( '0', '0' ),
+                TMOperation.getMoveLeftOperation( 'Y', 'Y' ) );
         q2q2.setStrokeColor( new Color( 0, 0, 0, 255 ) );
         tm.addTransition( q2q2 );
 
         TMTransition q2q0 = new TMTransition( q2, q0,
-                new TMOperation( 'X', 'X', TMOperationType.REPLACE, 'R' ) );
+                TMOperation.getMoveRightOperation( 'X', 'X' ) );
         q2q0.moveLabelTo( 276, 190 );
         q2q0.rotateTargetCP( -145 );
         q2q0.moveCPsTo( 277, 183, 323, 183, 230, 183 );
@@ -105,7 +105,7 @@ public class TMExamples {
         tm.addTransition( q2q0 );
 
         TMTransition q0q3 = new TMTransition( q0, q3,
-                new TMOperation( 'Y', 'Y', TMOperationType.REPLACE, 'R' ) );
+                TMOperation.getMoveRightOperation( 'Y', 'Y' ) );
         q0q3.moveLabelTo( 144, 202 );
         q0q3.rotateTargetCP( 75 );
         q0q3.moveCPsTo( 107, 200, 107, 179, 107, 222 );
@@ -113,14 +113,14 @@ public class TMExamples {
         tm.addTransition( q0q3 );
 
         TMTransition q3q3 = new TMTransition( q3, q3,
-                new TMOperation( 'Y', 'Y', TMOperationType.REPLACE, 'R' ) );
+                TMOperation.getMoveRightOperation( 'Y', 'Y' ) );
         q3q3.moveLabelTo( 127, 342 );
         q3q3.rotateTargetCP( -180 );
         q3q3.setStrokeColor( new Color( 0, 0, 0, 255 ) );
         tm.addTransition( q3q3 );
 
         TMTransition q3q4 = new TMTransition( q3, q4,
-                new TMOperation( 'B', 'B', TMOperationType.REPLACE, 'R' ) );
+                TMOperation.getMoveRightOperation( 'B', 'B' ) );
         q3q4.moveLabelTo( 196, 250 );
         q3q4.rotateTargetCP( 15 );
         q3q4.moveCPsTo( 195, 256, 174, 256, 217, 256 );

@@ -18,15 +18,12 @@ package br.com.davidbuzatto.yaas.model.tm;
 
 /**
  * Models a tape operation type.
- * TODO update
  * 
  * @author Prof. Dr. David Buzatto
  */
-public enum TMOperationType {
+public enum TMMovementType {
     
-    DO_NOTHING,
-    POP,
-    PUSH,
-    REPLACE
+    MOVE_RIGHT,
+    MOVE_LEFT
     
 }

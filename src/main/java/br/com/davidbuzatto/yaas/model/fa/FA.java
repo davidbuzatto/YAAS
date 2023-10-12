@@ -45,15 +45,15 @@ public class FA extends AbstractGeometricForm implements Cloneable {
     private FAType type;
     
     // cache control
-    private boolean alphabetUpToDate;
-    private boolean deltaUpToDate;
-    private boolean eclosesUpToDate;
+    private transient boolean alphabetUpToDate;
+    private transient boolean deltaUpToDate;
+    private transient boolean eclosesUpToDate;
     
-    private Set<Character> alphabet;
-    private Map<FAState, Map<Character, List<FAState>>> delta;
-    private Map<FAState, Set<FAState>> ecloses;
+    private transient Set<Character> alphabet;
+    private transient Map<FAState, Map<Character, List<FAState>>> delta;
+    private transient Map<FAState, Set<FAState>> ecloses;
     
-    private boolean transitionControlPointsVisible;
+    private transient boolean transitionControlPointsVisible;
     
     public FA() {
         states = new ArrayList<>();
@@ -552,7 +552,7 @@ public class FA extends AbstractGeometricForm implements Cloneable {
         
         List<String> ss = new ArrayList<>();
         for ( FAState s : states ) {
-            if ( s._final ) {
+            if ( s.isFinal() ) {
                 ss.add( s.toString() );
             }
         }
@@ -759,19 +759,6 @@ public class FA extends AbstractGeometricForm implements Cloneable {
             n.setTargetState( ref.get( t.getTargetState() ) );
             c.addTransition( n );
         }
-        
-        // c.initialState = null;  <- c.addState() resolves it accordingly
-        // c.type = null;          <- c.updateType() resolves it accordingly
-        
-        c.alphabetUpToDate = false;
-        c.deltaUpToDate = false;
-        c.eclosesUpToDate = false;
-
-        c.alphabet = null;
-        c.delta = null;
-        c.ecloses = null;
-
-        c.transitionControlPointsVisible = false;
         
         c.updateType();
         return c;

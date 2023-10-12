@@ -21,8 +21,7 @@ import br.com.davidbuzatto.yaas.model.tm.TMID;
 
 /**
  * Encapsulates data related to a step in a pertinence simulation of a Turing
- * Machines.
- * TODO update
+ * Machine.
  * 
  * @author Prof. Dr. David Buzatto
  */

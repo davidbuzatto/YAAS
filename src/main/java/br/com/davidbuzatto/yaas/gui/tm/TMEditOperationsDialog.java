@@ -30,7 +30,6 @@ import javax.swing.JOptionPane;
 
 /**
  * TMOperation edit dialog.
- * TODO update
  * 
  * @author Prof. Dr. David Buzatto
  */
@@ -224,8 +223,7 @@ public class TMEditOperationsDialog extends javax.swing.JDialog {
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         
         TMOperation op = Utils.showInputDialogNewTMOperation( 
-                this, "Add Transition Operation", 
-                tm.getStackStartingSymbol(), null );
+                this, "Add Transition Operation", null );
 
         if ( op != null ) {
             model.addElement( op );
@@ -241,8 +239,7 @@ public class TMEditOperationsDialog extends javax.swing.JDialog {
             Utils.showErrorMessage( this, "You must select one operation to edit!" );
         } else {
             Utils.showInputDialogNewTMOperation( 
-                    this, "Edit Transition Operation", 
-                    tm.getStackStartingSymbol(), model.get( indexes[0] ) );
+                    this, "Edit Transition Operation", model.get( indexes[0] ) );
         }
         
         lstOp.updateUI();
