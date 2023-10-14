@@ -17,6 +17,7 @@
 package br.com.davidbuzatto.yaas.gui.tm;
 
 import br.com.davidbuzatto.yaas.model.tm.TM;
+import javax.swing.JScrollBar;
 
 /**
  * A viewer of a ID tree.
@@ -62,6 +63,12 @@ public class TMIDViewerFrame extends javax.swing.JFrame {
         setTitle("Instantaneous Description Viewer");
         setIconImage(new javax.swing.ImageIcon( getClass().getResource( "/arrow_right.png" ) ).getImage());
 
+        drawPanel.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
+            public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
+                drawPanelMouseWheelMoved(evt);
+            }
+        });
+
         javax.swing.GroupLayout drawPanelLayout = new javax.swing.GroupLayout(drawPanel);
         drawPanel.setLayout(drawPanelLayout);
         drawPanelLayout.setHorizontalGroup(
@@ -89,6 +96,24 @@ public class TMIDViewerFrame extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void drawPanelMouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_drawPanelMouseWheelMoved
+        
+        JScrollBar sb;
+
+        if ( evt.isShiftDown() ) {
+            sb = scrollDrawPanel.getHorizontalScrollBar();
+        } else {
+            sb = scrollDrawPanel.getVerticalScrollBar();
+        }
+
+        if ( evt.getWheelRotation() > 0 ) {
+            sb.setValue( sb.getValue() + sb.getBlockIncrement() );
+        } else {
+            sb.setValue( sb.getValue() - sb.getBlockIncrement() );
+        }
+        
+    }//GEN-LAST:event_drawPanelMouseWheelMoved
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private br.com.davidbuzatto.yaas.gui.tm.TMIDViewerDrawPanel drawPanel;

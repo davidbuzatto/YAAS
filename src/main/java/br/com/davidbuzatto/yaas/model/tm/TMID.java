@@ -25,12 +25,11 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.font.LineMetrics;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This class models Turing Machine Instantaneous Descriptions (IDs).
- * TODO update 
  * 
  * @author Prof. Dr. David Buzatto
  */
@@ -38,14 +37,14 @@ public class TMID extends AbstractGeometricForm implements Comparable<TMID> {
     
     private TMState state;
     private String string;
-    private Deque<Character> stack;
     private TMOperation operation;
+    private int position;
     
     private TMID parent;
     private List<TMID> children;
     
     private boolean acceptedByFinalState;
-    private boolean acceptedByEmptyStack;
+    private boolean acceptedByHalt;
     private Color acceptedStrokeColor;
     private Color acceptedFillColor;
     
@@ -58,22 +57,22 @@ public class TMID extends AbstractGeometricForm implements Comparable<TMID> {
     private Color activeInSimulationStrokeColor;
     private Color activeInSimulationFillColor;
     
-    public TMID( TMState state, String string, Deque<Character> stack, TMOperation operation, Color strokeColor ) {
+    public TMID( TMState state, String string, int position, TMOperation operation, Color strokeColor ) {
         
         this.state = state;
         this.string = string;
         this.children = new ArrayList<>();
-        this.stack = Utils.cloneCharacterStack( stack );
+        this.position = position;
         this.operation = operation;
         
         this.font = DrawingConstants.DEFAULT_FONT;
-        this.textColor = DrawingConstants.PDAID_DEFAULT_TEXT_COLOR;
+        this.textColor = DrawingConstants.TMID_DEFAULT_TEXT_COLOR;
         
-        activeInSimulationFillColor = DrawingConstants.PDAID_ACTIVE_IN_SIMULATION_FILL_COLOR;
-        activeInSimulationStrokeColor = DrawingConstants.PDAID_ACTIVE_IN_SIMULATION_STROKE_COLOR;
+        activeInSimulationFillColor = DrawingConstants.TMID_ACTIVE_IN_SIMULATION_FILL_COLOR;
+        activeInSimulationStrokeColor = DrawingConstants.TMID_ACTIVE_IN_SIMULATION_STROKE_COLOR;
         
         setStrokeColor( strokeColor );
-        setAcceptedStrokeColor( DrawingConstants.PDAID_DEFAULT_ACCEPTED_COLOR );
+        setAcceptedStrokeColor( DrawingConstants.TMID_DEFAULT_ACCEPTED_COLOR );
         setText( toString() );
         
     }
@@ -109,7 +108,7 @@ public class TMID extends AbstractGeometricForm implements Comparable<TMID> {
         Color hilightStrokeColor = null;
         Color hilightFillColor = null;
         
-        if ( acceptedByFinalState || acceptedByEmptyStack ) {
+        if ( acceptedByFinalState || acceptedByHalt ) {
             hilightStrokeColor = acceptedStrokeColor;
             hilightFillColor = acceptedFillColor;
         }
@@ -146,16 +145,39 @@ public class TMID extends AbstractGeometricForm implements Comparable<TMID> {
         return false;
     }
     
+    public TMID derive( TMTransition transition, TMOperation operation ) {
+        
+        String pre = string.substring( 0, position );
+        String pos = string.substring( position+1 );
+        String newString = pre + operation.getWriteSymbol() + pos;
+        
+        int newPosition = position + 
+                (operation.getType() == TMMovementType.MOVE_RIGHT ? 1 : -1 );
+        
+        if ( newPosition == newString.length() ) {
+            newString += CharacterConstants.BLANK_TAPE_SYMBOL;
+        } else if ( newPosition == -1 ) {
+            newString = CharacterConstants.BLANK_TAPE_SYMBOL + newString;
+        }
+        
+        return new TMID( 
+                transition.getTargetState(), 
+                newString, 
+                newPosition, 
+                operation, 
+                transition.getStrokeColor() );
+        
+    }
+    
+    public static void main( String[] args ) {
+    }
+    
     public TMState getState() {
         return state;
     }
 
     public String getString() {
         return string;
-    }
-
-    public Deque<Character> getStack() {
-        return stack;
     }
 
     public TMID getParent() {
@@ -166,6 +188,10 @@ public class TMID extends AbstractGeometricForm implements Comparable<TMID> {
         return children;
     }
 
+    public int getPosition() {
+        return position;
+    }
+
     public boolean isAcceptedByFinalState() {
         return acceptedByFinalState;
     }
@@ -174,12 +200,12 @@ public class TMID extends AbstractGeometricForm implements Comparable<TMID> {
         this.acceptedByFinalState = acceptedByFinalState;
     }
 
-    public boolean isAcceptedByEmptyStack() {
-        return acceptedByEmptyStack;
+    public boolean isAcceptedByHalt() {
+        return acceptedByHalt;
     }
 
-    public void setAcceptedByEmptyStack( boolean acceptedByEmptyStack ) {
-        this.acceptedByEmptyStack = acceptedByEmptyStack;
+    public void setAcceptedByHalt( boolean acceptedByHalt ) {
+        this.acceptedByHalt = acceptedByHalt;
     }
 
     @Override
@@ -205,16 +231,47 @@ public class TMID extends AbstractGeometricForm implements Comparable<TMID> {
     public int compareTo( TMID o ) {
         return state.compareTo( o.state );
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 29 * hash + Objects.hashCode( this.state );
+        hash = 29 * hash + Objects.hashCode( this.string );
+        hash = 29 * hash + Objects.hashCode( this.operation );
+        hash = 29 * hash + this.position;
+        return hash;
+    }
+
+    @Override
+    public boolean equals( Object obj ) {
+        if ( this == obj ) {
+            return true;
+        }
+        if ( obj == null ) {
+            return false;
+        }
+        if ( getClass() != obj.getClass() ) {
+            return false;
+        }
+        final TMID other = (TMID) obj;
+        if ( this.position != other.position ) {
+            return false;
+        }
+        if ( !Objects.equals( this.string, other.string ) ) {
+            return false;
+        }
+        if ( !Objects.equals( this.state, other.state ) ) {
+            return false;
+        }
+        return Objects.equals( this.operation, other.operation );
+    }
     
     @Override
     public String toString() {
-        String sStr = "";
-        for ( char c : stack ) {
-            sStr += c;
-        }
-        return String.format( "(%s, %s, %s)", state, 
-                string.isEmpty() ? CharacterConstants.EMPTY_STRING.toString() : string, 
-                sStr.isEmpty() ? CharacterConstants.EMPTY_STRING.toString() : sStr );
+        return String.format( "%s%s%s", 
+                string.substring( 0, position ), 
+                state, 
+                string.substring( position ) );
     }
     
 }

@@ -18,6 +18,7 @@ package br.com.davidbuzatto.yaas.model.tm;
 
 import br.com.davidbuzatto.yaas.model.AbstractGeometricForm;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
+import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.Graphics2D;
 
 /**
@@ -26,6 +27,9 @@ import java.awt.Graphics2D;
  * @author Prof. Dr. David Buzatto
  */
 public class TMOperation extends AbstractGeometricForm implements Cloneable, Comparable<TMOperation> {
+    
+    private transient static final boolean DEBUG = Boolean.parseBoolean( 
+            Utils.getMavenModel().getProperties().getProperty( "debugAlgorithms" ) );
     
     private char readSymbol;
     private char writeSymbol;
@@ -143,8 +147,8 @@ public class TMOperation extends AbstractGeometricForm implements Cloneable, Com
     public String toString() {
         return String.format("%c/%c%s", readSymbol, writeSymbol, 
                 type == TMMovementType.MOVE_RIGHT ? 
-                        CharacterConstants.ARROW_RIGHT : 
-                        CharacterConstants.ARROW_LEFT );
+                        ( DEBUG ? 'R' : CharacterConstants.ARROW_RIGHT ) : 
+                        ( DEBUG ? 'L' : CharacterConstants.ARROW_LEFT ) );
     }
     
     public String generateCode( TM pda, String modelName ) {

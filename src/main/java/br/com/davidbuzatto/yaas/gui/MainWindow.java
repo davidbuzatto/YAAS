@@ -127,6 +127,10 @@ public class MainWindow extends javax.swing.JFrame {
         miDPDA0n1n = new javax.swing.JMenuItem();
         miDPDA01Same = new javax.swing.JMenuItem();
         menuTM = new javax.swing.JMenu();
+        menuTMFinalState = new javax.swing.JMenu();
+        miTMEvenPalindromeFinalState = new javax.swing.JMenuItem();
+        menuTMHalt = new javax.swing.JMenu();
+        miTMMonusHalt = new javax.swing.JMenuItem();
         menuThemes = new javax.swing.JMenu();
         riLightTheme = new javax.swing.JRadioButtonMenuItem();
         riDarkTheme = new javax.swing.JRadioButtonMenuItem();
@@ -445,7 +449,7 @@ public class MainWindow extends javax.swing.JFrame {
         menuPDA.setText("Pushdown Automata");
 
         menuPDAFinalState.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pda.png"))); // NOI18N
-        menuPDAFinalState.setMnemonic('A');
+        menuPDAFinalState.setMnemonic('F');
         menuPDAFinalState.setText("Accept by Final State");
 
         miPDAEvenPalindromeFinalState.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pda.png"))); // NOI18N
@@ -559,6 +563,37 @@ public class MainWindow extends javax.swing.JFrame {
         menuTM.setMnemonic('T');
         menuTM.setText("Turing Machines");
         menuTM.setToolTipText("");
+
+        menuTMFinalState.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turing.png"))); // NOI18N
+        menuTMFinalState.setMnemonic('F');
+        menuTMFinalState.setText("Accept by Final State");
+
+        miTMEvenPalindromeFinalState.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turing.png"))); // NOI18N
+        miTMEvenPalindromeFinalState.setText(TMExamples.RECURSIVELY_ENUMERABLE_LANGUAGE_0N_1N);
+        miTMEvenPalindromeFinalState.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miTMEvenPalindromeFinalStateActionPerformed(evt);
+            }
+        });
+        menuTMFinalState.add(miTMEvenPalindromeFinalState);
+
+        menuTM.add(menuTMFinalState);
+
+        menuTMHalt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turing.png"))); // NOI18N
+        menuTMHalt.setMnemonic('H');
+        menuTMHalt.setText("Accept by Halt");
+
+        miTMMonusHalt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turing.png"))); // NOI18N
+        miTMMonusHalt.setText("Monus (Proper Subtraction)");
+        miTMMonusHalt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miTMMonusHaltActionPerformed(evt);
+            }
+        });
+        menuTMHalt.add(miTMMonusHalt);
+
+        menuTM.add(menuTMHalt);
+
         menuExamples.add(menuTM);
 
         menuBar.add(menuExamples);
@@ -812,6 +847,16 @@ public class MainWindow extends javax.swing.JFrame {
         openExample();
     }//GEN-LAST:event_formWindowOpened
 
+    private void miTMEvenPalindromeFinalStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miTMEvenPalindromeFinalStateActionPerformed
+        createTMInternalFrame( TMExamples.createTMEvenPalindromeFinalState(),
+                false, false );
+    }//GEN-LAST:event_miTMEvenPalindromeFinalStateActionPerformed
+
+    private void miTMMonusHaltActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miTMMonusHaltActionPerformed
+        createTMInternalFrame( TMExamples.createTMMonusHalt(),
+                false, false );
+    }//GEN-LAST:event_miTMMonusHaltActionPerformed
+
     public void createFAInternalFrame( FA fa, boolean maximized, boolean currentFileSaved ) {
         
         if ( fa == null ) {
@@ -950,7 +995,8 @@ public class MainWindow extends javax.swing.JFrame {
     private void openExample() {
         if ( ApplicationConstants.IN_DEVELOPMENT ) {
             //createPDAInternalFrame( PDAExamples.createPDA0n1nFinalState(), true, true );
-            createTMInternalFrame( TMExamples.createTMEvenPalindromeFinalState(), true, true );
+            //createTMInternalFrame( TMExamples.createTMEvenPalindromeFinalState(), true, true );
+            createTMInternalFrame( TMExamples.createTMMonusHalt(), true, true );
         }
     }
     
@@ -977,6 +1023,8 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JMenu menuPDAEmptyStack;
     private javax.swing.JMenu menuPDAFinalState;
     private javax.swing.JMenu menuTM;
+    private javax.swing.JMenu menuTMFinalState;
+    private javax.swing.JMenu menuTMHalt;
     private javax.swing.JMenu menuThemes;
     private javax.swing.JMenuItem miDFA0Even1Odd;
     private javax.swing.JMenuItem miDFAEndsWith00;
@@ -1008,6 +1056,8 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem miPDAEvenPalindromeEmptyStack;
     private javax.swing.JMenuItem miPDAEvenPalindromeFinalState;
     private javax.swing.JMenuItem miPDAPDAAiBjCkFinalState;
+    private javax.swing.JMenuItem miTMEvenPalindromeFinalState;
+    private javax.swing.JMenuItem miTMMonusHalt;
     private javax.swing.JRadioButtonMenuItem riDarkTheme;
     private javax.swing.JRadioButtonMenuItem riLightTheme;
     private javax.swing.JToolBar toolBar;

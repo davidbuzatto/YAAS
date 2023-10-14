@@ -19,6 +19,7 @@ package br.com.davidbuzatto.yaas.gui.pda;
 import br.com.davidbuzatto.yaas.model.pda.PDA;
 import br.com.davidbuzatto.yaas.util.Utils;
 import java.util.List;
+import javax.swing.JScrollBar;
 
 /**
  * A viewer of a ID tree for the simulation proccess.
@@ -78,6 +79,12 @@ public class PDAIDSimulationViewerFrame extends javax.swing.JFrame {
             }
         });
 
+        drawPanel.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
+            public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
+                drawPanelMouseWheelMoved(evt);
+            }
+        });
+
         javax.swing.GroupLayout drawPanelLayout = new javax.swing.GroupLayout(drawPanel);
         drawPanel.setLayout(drawPanelLayout);
         drawPanelLayout.setHorizontalGroup(
@@ -109,6 +116,24 @@ public class PDAIDSimulationViewerFrame extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         Utils.showInformationMessage( this, "This window will close automatically when you stop the simulation." );
     }//GEN-LAST:event_formWindowClosing
+
+    private void drawPanelMouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_drawPanelMouseWheelMoved
+        
+        JScrollBar sb;
+
+        if ( evt.isShiftDown() ) {
+            sb = scrollDrawPanel.getHorizontalScrollBar();
+        } else {
+            sb = scrollDrawPanel.getVerticalScrollBar();
+        }
+
+        if ( evt.getWheelRotation() > 0 ) {
+            sb.setValue( sb.getValue() + sb.getBlockIncrement() );
+        } else {
+            sb.setValue( sb.getValue() - sb.getBlockIncrement() );
+        }
+        
+    }//GEN-LAST:event_drawPanelMouseWheelMoved
     
     public void setCurrentSimulationStep( int currentSimulationStep ) {
         this.currentSimulationStep = currentSimulationStep;

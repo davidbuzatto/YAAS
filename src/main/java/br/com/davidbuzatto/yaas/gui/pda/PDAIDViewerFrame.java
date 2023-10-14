@@ -17,6 +17,7 @@
 package br.com.davidbuzatto.yaas.gui.pda;
 
 import br.com.davidbuzatto.yaas.model.pda.PDA;
+import javax.swing.JScrollBar;
 
 /**
  * A viewer of a ID tree.
@@ -62,6 +63,12 @@ public class PDAIDViewerFrame extends javax.swing.JFrame {
         setTitle("Instantaneous Description Viewer");
         setIconImage(new javax.swing.ImageIcon( getClass().getResource( "/arrow_right.png" ) ).getImage());
 
+        drawPanel.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
+            public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
+                drawPanelMouseWheelMoved(evt);
+            }
+        });
+
         javax.swing.GroupLayout drawPanelLayout = new javax.swing.GroupLayout(drawPanel);
         drawPanel.setLayout(drawPanelLayout);
         drawPanelLayout.setHorizontalGroup(
@@ -79,16 +86,34 @@ public class PDAIDViewerFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrollDrawPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
+            .addComponent(scrollDrawPanel)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrollDrawPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+            .addComponent(scrollDrawPanel, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void drawPanelMouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_drawPanelMouseWheelMoved
+        
+        JScrollBar sb;
+
+        if ( evt.isShiftDown() ) {
+            sb = scrollDrawPanel.getHorizontalScrollBar();
+        } else {
+            sb = scrollDrawPanel.getVerticalScrollBar();
+        }
+
+        if ( evt.getWheelRotation() > 0 ) {
+            sb.setValue( sb.getValue() + sb.getBlockIncrement() );
+        } else {
+            sb.setValue( sb.getValue() - sb.getBlockIncrement() );
+        }
+        
+    }//GEN-LAST:event_drawPanelMouseWheelMoved
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private br.com.davidbuzatto.yaas.gui.pda.PDAIDViewerDrawPanel drawPanel;

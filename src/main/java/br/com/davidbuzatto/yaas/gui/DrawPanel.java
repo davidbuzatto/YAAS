@@ -23,6 +23,7 @@ import br.com.davidbuzatto.yaas.gui.pda.PDASimulationStep;
 import br.com.davidbuzatto.yaas.gui.tm.TMSimulationStep;
 import br.com.davidbuzatto.yaas.model.pda.PDA;
 import br.com.davidbuzatto.yaas.model.tm.TM;
+import br.com.davidbuzatto.yaas.model.tm.TMID;
 import br.com.davidbuzatto.yaas.util.DrawingConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.Color;
@@ -128,9 +129,9 @@ public class DrawPanel extends JPanel {
                 processFASimulation( g2d );
             } else if ( pdaSimulationSteps != null ) {
                 processPDASimulation( g2d );
-            } else if ( tmSimulationSteps != null ) {
-                processTMSimulation( g2d );
             }
+        } else if ( tmSimulationSteps != null ) {
+            processTMSimulation( g2d );
         }
         
         if ( selectionRectangle != null ) {
@@ -292,24 +293,19 @@ public class DrawPanel extends JPanel {
 
         g2d.setFont( DrawingConstants.SIMULATION_STRING_FONT );
 
+        TMID currentId = tmSimulationSteps.get( currentSimulationStep ).getId();
+        
+        String localSimulationString = currentId.getString();
+        int currentSymbolIndex = currentId.getPosition();
         FontMetrics fm = g2d.getFontMetrics();
-        LineMetrics lm = Utils.getLineMetrics( simulationString, g2d.getFont() );
+        LineMetrics lm = Utils.getLineMetrics( localSimulationString, g2d.getFont() );
 
-        int start = half - fm.stringWidth( simulationString ) / 2;
+        int start = half - fm.stringWidth( localSimulationString ) / 2;
         int inc = fm.stringWidth( "0" );
         int height = (int) lm.getHeight();
         int ySimulationString = y2R - height / 2 - 10;
-        char[] cs = simulationString.toCharArray();
+        char[] cs = localSimulationString.toCharArray();
         int i;
-        
-        int currentSymbolIndex = 0;
-        for ( int k = 0; k < currentSimulationStep; k++ ) {
-            int str1Length = pdaSimulationSteps.get( k ).getId().getString().length();
-            int str2Length = pdaSimulationSteps.get( k+1 ).getId().getString().length();
-            if ( str1Length != str2Length ) {
-                currentSymbolIndex++;
-            }
-        }
         
         for ( i = 0; i < cs.length; i++ ) {
 

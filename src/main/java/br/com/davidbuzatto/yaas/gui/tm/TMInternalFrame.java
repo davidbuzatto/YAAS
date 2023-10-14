@@ -26,6 +26,7 @@ import br.com.davidbuzatto.yaas.model.tm.TMAcceptanceType;
 import br.com.davidbuzatto.yaas.model.tm.TMOperation;
 import br.com.davidbuzatto.yaas.model.tm.TMState;
 import br.com.davidbuzatto.yaas.model.tm.TMTransition;
+import br.com.davidbuzatto.yaas.model.tm.TMType;
 import br.com.davidbuzatto.yaas.model.tm.algorithms.TMArrangement;
 import br.com.davidbuzatto.yaas.util.ApplicationConstants;
 import br.com.davidbuzatto.yaas.util.ApplicationPreferences;
@@ -89,7 +90,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * Turing Machine modelation and simulation.
- * TODO update
  * 
  * @author Prof. Dr. David Buzatto
  */
@@ -223,7 +223,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
         
         if ( ApplicationConstants.IN_DEVELOPMENT ) {
             checkShowIDs.setSelected( true );
-            txtTestString.setText( "0011" );
+            txtTestString.setText( "000100" );
         }
         
     }
@@ -1465,51 +1465,45 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
     
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
         
+        tm.updateType();
+        
         if ( tm.canExecute() ) {
             
-            txtTestString.setEditable( false );
-            resetTestInGUI();
-            disableGUI();
-            tm.deselectAll();
-            selectedStates.clear();
-            simulationSteps.clear();
-            currentSimulationStep = 0;
-            
-            boolean accepted = tm.accepts( 
-                    txtTestString.getText(), 
-                    radioAcceptByFinalState.isSelected() ? 
-                            TMAcceptanceType.FINAL_STATE : 
-                            TMAcceptanceType.HALT,
-                    simulationSteps );
-            
-            btnStart.setEnabled( false );
-            btnStop.setEnabled( true );
-            
-            drawPanel.setSimulationString( txtTestString.getText() );
-            drawPanel.setTMSimulationSteps( simulationSteps );
-            drawPanel.setCurrentSimulationStep( currentSimulationStep );
-            drawPanel.setSimulationAccepted( accepted );
-            drawPanel.repaint();
-            
-            updateSimulationButtons( currentSimulationStep );
-            activateSimulationStep( currentSimulationStep );
-            
-            //drawPanel.requestFocus();
-            
-            if ( simulationSteps.isEmpty() ) {
-                Utils.showWarningMessage( this, String.format(
-                        """
-                        The TM simulation only works with accepted strings!
-                        Since the input string "%s" is not accepted, the
-                        simulation will not start.""", 
-                        txtTestString.getText().isEmpty() ? 
-                                CharacterConstants.EMPTY_STRING.toString() : 
-                                txtTestString.getText() ) );
-                btnStop.doClick();
-            } else {
+            if ( tm.getType() == TMType.TM ) {
+                
+                txtTestString.setEditable( false );
+                resetTestInGUI();
+                disableGUI();
+                tm.deselectAll();
+                selectedStates.clear();
+                simulationSteps.clear();
+                currentSimulationStep = 0;
+
+                boolean accepted = tm.accepts( 
+                        txtTestString.getText(), 
+                        radioAcceptByFinalState.isSelected() ? 
+                                TMAcceptanceType.FINAL_STATE : 
+                                TMAcceptanceType.HALT,
+                        simulationSteps );
+
+                btnStart.setEnabled( false );
+                btnStop.setEnabled( true );
+
+                drawPanel.setTMSimulationSteps( simulationSteps );
+                drawPanel.setCurrentSimulationStep( currentSimulationStep );
+                drawPanel.setSimulationAccepted( accepted );
+                drawPanel.repaint();
+
+                updateSimulationButtons( currentSimulationStep );
+                activateSimulationStep( currentSimulationStep );
+
                 simulationVFrame = new TMIDSimulationViewerFrame( 
                         this, tm, simulationSteps );
                 simulationVFrame.setVisible( true );
+            
+            } else {
+                Utils.showErrorMessage( this, 
+                        "Nondeterministic Turing Machines are currently not supported!" );
             }
             
         } else {
@@ -2236,20 +2230,29 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
     
     private void runSingleTest() throws HeadlessException {
         
+        tm.updateType();
+        
         if ( tm.canExecute() ) {
             
-            if ( tm.accepts( txtTestString.getText(), 
-                    radioAcceptByFinalState.isSelected() ? 
-                            TMAcceptanceType.FINAL_STATE : 
-                            TMAcceptanceType.HALT ) ) {
-                setTestToAcceptedInGUI( );
+            if ( tm.getType() == TMType.TM ) {
+                
+                if ( tm.accepts( txtTestString.getText(), 
+                        radioAcceptByFinalState.isSelected() ? 
+                                TMAcceptanceType.FINAL_STATE : 
+                                TMAcceptanceType.HALT ) ) {
+                    setTestToAcceptedInGUI( );
+                } else {
+                    setTestToRejectedInGUI( );
+                }
+
+                if ( checkShowIDs.isSelected() ) {
+                    TMIDViewerFrame pViewer = new TMIDViewerFrame( this, tm );
+                    pViewer.setVisible( true );
+                }
+                
             } else {
-                setTestToRejectedInGUI( );
-            }
-            
-            if ( checkShowIDs.isSelected() ) {
-                TMIDViewerFrame pViewer = new TMIDViewerFrame( this, tm );
-                pViewer.setVisible( true );
+                Utils.showErrorMessage( this, 
+                        "Nondeterministic Turing Machines are currently not supported!" );
             }
             
         } else {

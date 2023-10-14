@@ -389,11 +389,11 @@ public class TMArrangement {
                         cId.getOperation(),
                         cId.getStrokeColor() ) );
             }
-            if ( id.isAcceptedByFinalState() || id.isAcceptedByEmptyStack() ) {
+            if ( id.isAcceptedByFinalState() || id.isAcceptedByHalt() ) {
                 TMID current = id.getParent();
                 while ( current != null ) {
                     current.setAcceptedByFinalState( id.isAcceptedByFinalState() );
-                    current.setAcceptedByEmptyStack( id.isAcceptedByEmptyStack() );
+                    current.setAcceptedByHalt( id.isAcceptedByHalt() );
                     current = current.getParent();
                 }
             }
@@ -428,7 +428,7 @@ public class TMArrangement {
         }
         
         boolean acceptedByFinalState = ids.get( ids.size()-1 ).isAcceptedByFinalState();
-        boolean acceptedByEmptyStack = ids.get( ids.size()-1 ).isAcceptedByEmptyStack();
+        boolean acceptedByEmptyStack = ids.get( ids.size()-1 ).isAcceptedByHalt();
         
         DefaultConfiguration<TMID> configuration = new DefaultConfiguration<>( levelGap, nodeGap );
         TMIDNodeExtentProvider nodeExtentProvider = new TMIDNodeExtentProvider();
@@ -453,7 +453,7 @@ public class TMArrangement {
                     cId.getOperation(),
                     cId.getStrokeColor() ) );
             id.setAcceptedByFinalState( acceptedByFinalState );
-            id.setAcceptedByEmptyStack( acceptedByEmptyStack );
+            id.setAcceptedByHalt( acceptedByEmptyStack );
         }
         
         return treeLayout.getBounds().getBounds().getSize();

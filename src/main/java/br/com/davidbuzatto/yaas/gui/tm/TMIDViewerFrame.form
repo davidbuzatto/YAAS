@@ -42,6 +42,9 @@
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
         <Container class="br.com.davidbuzatto.yaas.gui.tm.TMIDViewerDrawPanel" name="drawPanel">
+          <Events>
+            <EventHandler event="mouseWheelMoved" listener="java.awt.event.MouseWheelListener" parameters="java.awt.event.MouseWheelEvent" handler="drawPanelMouseWheelMoved"/>
+          </Events>
 
           <Layout>
             <DimensionLayout dim="0">
