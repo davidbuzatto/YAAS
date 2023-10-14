@@ -837,7 +837,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         toolBarTestsAndSimulation.add(btnStart);
 
         btnFirstStep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_start_blue.png"))); // NOI18N
-        btnFirstStep.setToolTipText("First Step (Ctrl+Left)");
+        btnFirstStep.setToolTipText("First Step (Ctrl+Alt+Left)");
         btnFirstStep.setEnabled(false);
         btnFirstStep.setFocusable(false);
         btnFirstStep.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -850,7 +850,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         toolBarTestsAndSimulation.add(btnFirstStep);
 
         btnPreviousStep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_rewind_blue.png"))); // NOI18N
-        btnPreviousStep.setToolTipText("Previous Step (Left)");
+        btnPreviousStep.setToolTipText("Previous Step (Ctrl+Left)");
         btnPreviousStep.setEnabled(false);
         btnPreviousStep.setFocusable(false);
         btnPreviousStep.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -863,7 +863,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         toolBarTestsAndSimulation.add(btnPreviousStep);
 
         btnNextStep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_fastforward_blue.png"))); // NOI18N
-        btnNextStep.setToolTipText("Next Step (Right)");
+        btnNextStep.setToolTipText("Next Step (Ctrl+Right)");
         btnNextStep.setEnabled(false);
         btnNextStep.setFocusable(false);
         btnNextStep.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -876,7 +876,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         toolBarTestsAndSimulation.add(btnNextStep);
 
         btnLastStep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_end_blue.png"))); // NOI18N
-        btnLastStep.setToolTipText("Last Step (Ctrl+Right)");
+        btnLastStep.setToolTipText("Last Step (Ctrl+Alt+Right)");
         btnLastStep.setEnabled(false);
         btnLastStep.setFocusable(false);
         btnLastStep.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -1081,7 +1081,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
 
     private void drawPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drawPanelMousePressed
 
-        //drawPanel.requestFocus();
+        drawPanel.requestFocus();
         
         xPressed = evt.getX();
         yPressed = evt.getY();
@@ -1525,7 +1525,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             updateSimulationButtons( currentSimulationStep );
             activateSimulationStep( currentSimulationStep );
             
-            //drawPanel.requestFocus();
+            drawPanel.requestFocus();
             
             if ( simulationSteps.isEmpty() ) {
                 Utils.showWarningMessage( this, String.format(
@@ -2828,7 +2828,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         
-        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_LEFT, KeyEvent.CTRL_DOWN_MASK ), "firstStep" );
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_LEFT, KeyEvent.CTRL_DOWN_MASK + KeyEvent.ALT_DOWN_MASK ), "firstStep" );
         am.put( "firstStep", new AbstractAction() {
             @Override
             public void actionPerformed( ActionEvent e ) {
@@ -2836,7 +2836,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         
-        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_LEFT, 0 ), "previousStep" );
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_LEFT, KeyEvent.CTRL_DOWN_MASK ), "previousStep" );
         am.put( "previousStep", new AbstractAction() {
             @Override
             public void actionPerformed( ActionEvent e ) {
@@ -2844,7 +2844,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         
-        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_RIGHT, 0 ), "nextStep" );
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_RIGHT, KeyEvent.CTRL_DOWN_MASK ), "nextStep" );
         am.put( "nextStep", new AbstractAction() {
             @Override
             public void actionPerformed( ActionEvent e ) {
@@ -2852,7 +2852,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         
-        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_RIGHT, KeyEvent.CTRL_DOWN_MASK ), "lastStep" );
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_RIGHT, KeyEvent.CTRL_DOWN_MASK + KeyEvent.ALT_DOWN_MASK ), "lastStep" );
         am.put( "lastStep", new AbstractAction() {
             @Override
             public void actionPerformed( ActionEvent e ) {

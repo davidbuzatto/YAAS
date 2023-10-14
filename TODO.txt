@@ -9,10 +9,10 @@ Pushdown Automata:
     Option to define the stack starting symbol?
 
 Turing Machines:
-    New text field to show the TM tape after processing
-    Bug simulation acceptance by halt
-    Take care of infinite loops
     Test other TMs (build examples)
+
+Preparation for version 1:
+    Make the application resilient to deal with different model versions.
 
 General -> Version 1.x.x
     Moore Machines?

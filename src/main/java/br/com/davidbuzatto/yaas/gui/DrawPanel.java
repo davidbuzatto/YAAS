@@ -284,62 +284,66 @@ public class DrawPanel extends JPanel {
     
     private void processTMSimulation( Graphics2D g2d ) {
         
-        Rectangle r = getVisibleRect();
-        int x1R = (int) r.getX();
-        int y1R = (int) r.getY();
-        int x2R = (int) ( r.getX() + r.getWidth() );
-        int y2R = (int) ( r.getY() + r.getHeight() );
-        int half = x1R + ( x2R - x1R ) / 2;
+        if ( currentSimulationStep < tmSimulationSteps.size() ) {
+            
+            Rectangle r = getVisibleRect();
+            int x1R = (int) r.getX();
+            int y1R = (int) r.getY();
+            int x2R = (int) ( r.getX() + r.getWidth() );
+            int y2R = (int) ( r.getY() + r.getHeight() );
+            int half = x1R + ( x2R - x1R ) / 2;
 
-        g2d.setFont( DrawingConstants.SIMULATION_STRING_FONT );
+            g2d.setFont( DrawingConstants.SIMULATION_STRING_FONT );
 
-        TMID currentId = tmSimulationSteps.get( currentSimulationStep ).getId();
-        
-        String localSimulationString = currentId.getString();
-        int currentSymbolIndex = currentId.getPosition();
-        FontMetrics fm = g2d.getFontMetrics();
-        LineMetrics lm = Utils.getLineMetrics( localSimulationString, g2d.getFont() );
+            TMID currentId = tmSimulationSteps.get( currentSimulationStep ).getId();
 
-        int start = half - fm.stringWidth( localSimulationString ) / 2;
-        int inc = fm.stringWidth( "0" );
-        int height = (int) lm.getHeight();
-        int ySimulationString = y2R - height / 2 - 10;
-        char[] cs = localSimulationString.toCharArray();
-        int i;
-        
-        for ( i = 0; i < cs.length; i++ ) {
+            String localSimulationString = currentId.getString();
+            int currentSymbolIndex = currentId.getPosition();
+            FontMetrics fm = g2d.getFontMetrics();
+            LineMetrics lm = Utils.getLineMetrics( localSimulationString, g2d.getFont() );
 
-            if ( i == currentSymbolIndex ) {
-                g2d.setColor( DrawingConstants.SYMBOL_ACTIVE_IN_SIMULATION_BACKGROUND_COLOR );
-                g2d.fillRoundRect( start + inc * i - 2, 
-                        ySimulationString - height / 2 - 4, 
-                        inc + 3, 
-                        height / 2 + 8, 10, 10 );
-                g2d.setColor( DrawingConstants.SYMBOL_ACTIVE_IN_SIMULATION_COLOR );
-                g2d.drawRoundRect( start + inc * i - 2, 
-                        ySimulationString - height / 2 - 4, 
-                        inc + 3, 
-                        height / 2 + 8, 10, 10 );
-            } else if ( i < currentSymbolIndex ) {
-                g2d.setColor( DrawingConstants.SIMULATION_STRING_PROCESSED_COLOR );
-            } else {
-                g2d.setColor( DrawingConstants.SIMULATION_STRING_NON_PROCESSED_COLOR );
+            int start = half - fm.stringWidth( localSimulationString ) / 2;
+            int inc = fm.stringWidth( "0" );
+            int height = (int) lm.getHeight();
+            int ySimulationString = y2R - height / 2 - 10;
+            char[] cs = localSimulationString.toCharArray();
+            int i;
+
+            for ( i = 0; i < cs.length; i++ ) {
+
+                if ( i == currentSymbolIndex ) {
+                    g2d.setColor( DrawingConstants.SYMBOL_ACTIVE_IN_SIMULATION_BACKGROUND_COLOR );
+                    g2d.fillRoundRect( start + inc * i - 2, 
+                            ySimulationString - height / 2 - 4, 
+                            inc + 3, 
+                            height / 2 + 8, 10, 10 );
+                    g2d.setColor( DrawingConstants.SYMBOL_ACTIVE_IN_SIMULATION_COLOR );
+                    g2d.drawRoundRect( start + inc * i - 2, 
+                            ySimulationString - height / 2 - 4, 
+                            inc + 3, 
+                            height / 2 + 8, 10, 10 );
+                } else if ( i < currentSymbolIndex ) {
+                    g2d.setColor( DrawingConstants.SIMULATION_STRING_PROCESSED_COLOR );
+                } else {
+                    g2d.setColor( DrawingConstants.SIMULATION_STRING_NON_PROCESSED_COLOR );
+                }
+
+                g2d.drawString( String.valueOf( cs[i] ), 
+                        start + inc * i, 
+                        ySimulationString );
+
             }
 
-            g2d.drawString( String.valueOf( cs[i] ), 
-                    start + inc * i, 
-                    ySimulationString );
-
-        }
-
-        if ( currentSimulationStep == tmSimulationSteps.size() - 1 ) {
-            if ( simulationAccepted ) {
-                g2d.setColor( DrawingConstants.ACCEPTED_SIMULATION_RESULT_COLOR );
-                g2d.drawString( " ACCEPTED", start + inc * i, ySimulationString );
-            } else {
-                g2d.setColor( DrawingConstants.REJECTED_SIMULATION_RESULT_COLOR );
-                g2d.drawString( " REJECTED", start + inc * i, ySimulationString );
+            if ( currentSimulationStep == tmSimulationSteps.size() - 1 ) {
+                if ( simulationAccepted ) {
+                    g2d.setColor( DrawingConstants.ACCEPTED_SIMULATION_RESULT_COLOR );
+                    g2d.drawString( " ACCEPTED", start + inc * i, ySimulationString );
+                } else {
+                    g2d.setColor( DrawingConstants.REJECTED_SIMULATION_RESULT_COLOR );
+                    g2d.drawString( " REJECTED", start + inc * i, ySimulationString );
+                }
             }
+            
         }
         
     }

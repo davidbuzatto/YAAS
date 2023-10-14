@@ -17,6 +17,7 @@
 package br.com.davidbuzatto.yaas.gui.pda;
 
 import br.com.davidbuzatto.yaas.model.pda.PDA;
+import br.com.davidbuzatto.yaas.model.pda.PDAID;
 import br.com.davidbuzatto.yaas.util.Utils;
 import java.util.List;
 import javax.swing.JScrollBar;
@@ -102,7 +103,7 @@ public class PDAIDSimulationViewerFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrollDrawPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+            .addComponent(scrollDrawPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -136,14 +137,25 @@ public class PDAIDSimulationViewerFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_drawPanelMouseWheelMoved
     
     public void setCurrentSimulationStep( int currentSimulationStep ) {
+        
         this.currentSimulationStep = currentSimulationStep;
+        
         for ( PDASimulationStep step : simulationSteps ) {
             step.getId().setActiveInSimulation( false );
         }
+        
         for ( int i = 0; i <= currentSimulationStep; i++ ) {
             simulationSteps.get( i ).getId().setActiveInSimulation( true );
         }
+        
+        if ( this.currentSimulationStep < simulationSteps.size() ) {
+            PDAID id = simulationSteps.get( this.currentSimulationStep ).getId();
+            int tick = drawPanel.getHeight() / simulationSteps.size();
+            scrollDrawPanel.getVerticalScrollBar().setValue( tick * ( this.currentSimulationStep - 2 ) );
+        }
+        
         drawPanel.repaint();
+        
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

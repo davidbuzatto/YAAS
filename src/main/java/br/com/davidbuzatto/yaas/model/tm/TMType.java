@@ -25,6 +25,7 @@ public enum TMType {
     
     EMPTY( "Empty", "Empty" ),
     TM( "TM", "Turing Machine" ),
+    DTM( "DTM", "Deterministic Turing Machine" ),
     NTM( "NTM", "Nondeterministic Turing Machine" );
     
     private final String acronym;

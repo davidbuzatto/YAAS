@@ -287,7 +287,9 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
         panelModel = new javax.swing.JPanel();
         panelTestsAndSimulation = new javax.swing.JPanel();
         lblTestString = new javax.swing.JLabel();
+        lblTape = new javax.swing.JLabel();
         txtTestString = new javax.swing.JTextField();
+        txtTape = new javax.swing.JTextField();
         lblTestResult = new javax.swing.JLabel();
         toolBarTestsAndSimulation = new javax.swing.JToolBar();
         btnTest = new javax.swing.JButton();
@@ -710,6 +712,9 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
 
         lblTestString.setText("String:");
 
+        lblTape.setText("Tape:");
+        lblTape.setToolTipText("Tape state after test");
+
         txtTestString.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtTestStringActionPerformed(evt);
@@ -720,6 +725,9 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
                 txtTestStringKeyReleased(evt);
             }
         });
+
+        txtTape.setEditable(false);
+        txtTape.setToolTipText("Tape state after test");
 
         lblTestResult.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblTestResult.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -807,7 +815,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
         toolBarTestsAndSimulation.add(btnStart);
 
         btnFirstStep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_start_blue.png"))); // NOI18N
-        btnFirstStep.setToolTipText("First Step (Ctrl+Left)");
+        btnFirstStep.setToolTipText("First Step (Ctrl+Alt+Left)");
         btnFirstStep.setEnabled(false);
         btnFirstStep.setFocusable(false);
         btnFirstStep.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -820,7 +828,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
         toolBarTestsAndSimulation.add(btnFirstStep);
 
         btnPreviousStep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_rewind_blue.png"))); // NOI18N
-        btnPreviousStep.setToolTipText("Previous Step (Left)");
+        btnPreviousStep.setToolTipText("Previous Step (Ctrl+Left)");
         btnPreviousStep.setEnabled(false);
         btnPreviousStep.setFocusable(false);
         btnPreviousStep.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -833,7 +841,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
         toolBarTestsAndSimulation.add(btnPreviousStep);
 
         btnNextStep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_fastforward_blue.png"))); // NOI18N
-        btnNextStep.setToolTipText("Next Step (Right)");
+        btnNextStep.setToolTipText("Next Step (Ctrl+Right)");
         btnNextStep.setEnabled(false);
         btnNextStep.setFocusable(false);
         btnNextStep.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -846,7 +854,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
         toolBarTestsAndSimulation.add(btnNextStep);
 
         btnLastStep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/control_end_blue.png"))); // NOI18N
-        btnLastStep.setToolTipText("Last Step (Ctrl+Right)");
+        btnLastStep.setToolTipText("Last Step (Ctrl+Alt+Right)");
         btnLastStep.setEnabled(false);
         btnLastStep.setFocusable(false);
         btnLastStep.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -877,11 +885,14 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
             panelTestsAndSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelTestsAndSimulationLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblTestString)
+                .addGroup(panelTestsAndSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblTestString)
+                    .addComponent(lblTape))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelTestsAndSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(toolBarTestsAndSimulation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtTestString))
+                    .addComponent(txtTestString)
+                    .addComponent(txtTape))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblTestResult, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -889,16 +900,20 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
         panelTestsAndSimulationLayout.setVerticalGroup(
             panelTestsAndSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelTestsAndSimulationLayout.createSequentialGroup()
-                .addGroup(panelTestsAndSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(lblTestResult, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelTestsAndSimulationLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(panelTestsAndSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblTestString)
-                            .addComponent(txtTestString, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(toolBarTestsAndSimulation, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(panelTestsAndSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblTestString)
+                    .addComponent(txtTestString, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelTestsAndSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtTape, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblTape))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(toolBarTestsAndSimulation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(panelTestsAndSimulationLayout.createSequentialGroup()
+                .addComponent(lblTestResult, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         drawPanel.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
@@ -950,7 +965,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
         panelModelLayout.setVerticalGroup(
             panelModelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelModelLayout.createSequentialGroup()
-                .addComponent(scrollPaneModel, javax.swing.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE)
+                .addComponent(scrollPaneModel, javax.swing.GroupLayout.DEFAULT_SIZE, 379, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelTestsAndSimulation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -1051,7 +1066,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
 
     private void drawPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drawPanelMousePressed
 
-        //drawPanel.requestFocus();
+        drawPanel.requestFocus();
         
         xPressed = evt.getX();
         yPressed = evt.getY();
@@ -1466,10 +1481,11 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
         
         tm.updateType();
+        txtTape.setText( "" );
         
         if ( tm.canExecute() ) {
             
-            if ( tm.getType() == TMType.TM ) {
+            if ( tm.getType() == TMType.DTM ) {
                 
                 txtTestString.setEditable( false );
                 resetTestInGUI();
@@ -1486,24 +1502,40 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
                                 TMAcceptanceType.HALT,
                         simulationSteps );
 
-                btnStart.setEnabled( false );
-                btnStop.setEnabled( true );
+                if ( tm.isAbleToHalt() ) {
+                    
+                    String tape = tm.getTapeAfterAcceptsExecution();
+                    if ( tape != null ) {
+                        txtTape.setText( tape );
+                    }
 
-                drawPanel.setTMSimulationSteps( simulationSteps );
-                drawPanel.setCurrentSimulationStep( currentSimulationStep );
-                drawPanel.setSimulationAccepted( accepted );
-                drawPanel.repaint();
+                    btnStart.setEnabled( false );
+                    btnStop.setEnabled( true );
 
-                updateSimulationButtons( currentSimulationStep );
-                activateSimulationStep( currentSimulationStep );
+                    drawPanel.setTMSimulationSteps( simulationSteps );
+                    drawPanel.setCurrentSimulationStep( currentSimulationStep );
+                    drawPanel.setSimulationAccepted( accepted );
+                    drawPanel.repaint();
 
-                simulationVFrame = new TMIDSimulationViewerFrame( 
-                        this, tm, simulationSteps );
-                simulationVFrame.setVisible( true );
+                    updateSimulationButtons( currentSimulationStep );
+                    activateSimulationStep( currentSimulationStep );
+                    
+                    simulationVFrame = new TMIDSimulationViewerFrame( 
+                            this, tm, simulationSteps );
+                    simulationVFrame.setVisible( true );
+                    
+                    drawPanel.requestFocus();
+                    
+                } else {
+                    Utils.showErrorMessage( this, 
+                            "The designed Turing Machine never halts!" );
+                    enableGUI();
+                }
             
             } else {
                 Utils.showErrorMessage( this, 
                         "Nondeterministic Turing Machines are currently not supported!" );
+                enableGUI();
             }
             
         } else {
@@ -2231,10 +2263,11 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
     private void runSingleTest() throws HeadlessException {
         
         tm.updateType();
+        txtTape.setText( "" );
         
         if ( tm.canExecute() ) {
             
-            if ( tm.getType() == TMType.TM ) {
+            if ( tm.getType() == TMType.DTM ) {
                 
                 if ( tm.accepts( txtTestString.getText(), 
                         radioAcceptByFinalState.isSelected() ? 
@@ -2245,9 +2278,21 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
                     setTestToRejectedInGUI( );
                 }
 
-                if ( checkShowIDs.isSelected() ) {
-                    TMIDViewerFrame pViewer = new TMIDViewerFrame( this, tm );
-                    pViewer.setVisible( true );
+                if ( tm.isAbleToHalt() ) {
+                    
+                    String tape = tm.getTapeAfterAcceptsExecution();
+                    if ( tape != null ) {
+                        txtTape.setText( tape );
+                    }
+
+                    if ( checkShowIDs.isSelected() ) {
+                        TMIDViewerFrame pViewer = new TMIDViewerFrame( this, tm );
+                        pViewer.setVisible( true );
+                    }
+                    
+                } else {
+                    Utils.showErrorMessage( this, 
+                            "The designed Turing Machine never halts!" );
                 }
                 
             } else {
@@ -2732,7 +2777,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         
-        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_LEFT, KeyEvent.CTRL_DOWN_MASK ), "firstStep" );
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_LEFT, KeyEvent.CTRL_DOWN_MASK + KeyEvent.ALT_DOWN_MASK ), "firstStep" );
         am.put( "firstStep", new AbstractAction() {
             @Override
             public void actionPerformed( ActionEvent e ) {
@@ -2740,7 +2785,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         
-        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_LEFT, 0 ), "previousStep" );
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_LEFT, KeyEvent.CTRL_DOWN_MASK ), "previousStep" );
         am.put( "previousStep", new AbstractAction() {
             @Override
             public void actionPerformed( ActionEvent e ) {
@@ -2748,7 +2793,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         
-        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_RIGHT, 0 ), "nextStep" );
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_RIGHT, KeyEvent.CTRL_DOWN_MASK ), "nextStep" );
         am.put( "nextStep", new AbstractAction() {
             @Override
             public void actionPerformed( ActionEvent e ) {
@@ -2756,7 +2801,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         
-        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_RIGHT, KeyEvent.CTRL_DOWN_MASK ), "lastStep" );
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_RIGHT, KeyEvent.CTRL_DOWN_MASK + KeyEvent.ALT_DOWN_MASK ), "lastStep" );
         am.put( "lastStep", new AbstractAction() {
             @Override
             public void actionPerformed( ActionEvent e ) {
@@ -2853,6 +2898,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
     private br.com.davidbuzatto.yaas.gui.DrawPanel drawPanel;
     private javax.swing.Box.Filler hFiller;
     private javax.swing.JLabel lblAcceptBy;
+    private javax.swing.JLabel lblTape;
     private javax.swing.JLabel lblTestResult;
     private javax.swing.JLabel lblTestString;
     private javax.swing.JPanel panelModel;
@@ -2891,6 +2937,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JPopupMenu.Separator spPopupTransition02;
     private javax.swing.JToolBar toolBar;
     private javax.swing.JToolBar toolBarTestsAndSimulation;
+    private javax.swing.JTextField txtTape;
     private javax.swing.JTextField txtTestString;
     // End of variables declaration//GEN-END:variables
 }

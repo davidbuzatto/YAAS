@@ -681,7 +681,7 @@ public class Utils {
             
             for ( int i = 1; i < data.size(); i++ ) {
                 if ( !data.get( i ).equals( eSet ) ) {
-                    if ( tm.getType() == TMType.TM ) {
+                    if ( tm.getType() == TMType.DTM ) {
                         data.set( i, data.get( i ) );
                     } else {
                         data.set( i, "{" + data.get( i ) + "}" );
@@ -919,6 +919,7 @@ public class Utils {
                     txtSP.setText( "" );
                 } else {
                     txtSP.setEnabled( true );
+                    txtSP.requestFocus();
                 }
             }
         };
@@ -936,6 +937,7 @@ public class Utils {
                     txtTS.setText( "" );
                 } else {
                     txtTS.setEnabled( true );
+                    txtTS.requestFocus();
                 }
             }
         });
@@ -949,6 +951,7 @@ public class Utils {
                     checkStartingST.setSelected( false );
                 } else {
                     txtST.setEnabled( true );
+                    txtST.requestFocus();
                 }
             }
         });
@@ -962,6 +965,7 @@ public class Utils {
                     checkEmptyST.setSelected( false );
                 } else {
                     txtST.setEnabled( true );
+                    txtST.requestFocus();
                 }
             }
         });
@@ -1150,24 +1154,30 @@ public class Utils {
         gridBagConstraints.insets = new Insets( 5, 5, 5, 5 );
         panel.add( lblMove, gridBagConstraints );
 
+        JPanel readSymbolPanel = new JPanel();
+        readSymbolPanel.setAlignmentX( JPanel.LEFT_ALIGNMENT );
+        readSymbolPanel.setLayout( new BoxLayout( readSymbolPanel, BoxLayout.X_AXIS ) );
         JTextField txtReadSymbol = new JTextField( 5 );
-        txtReadSymbol.setAlignmentX( Component.LEFT_ALIGNMENT );
+        JCheckBox checkReadBlankSymbol = new JCheckBox( CharacterConstants.BLANK_TAPE_SYMBOL.toString() );
+        checkReadBlankSymbol.setToolTipText( "Blank tape symbol" );
+        readSymbolPanel.add( txtReadSymbol );
+        readSymbolPanel.add( checkReadBlankSymbol );
+        
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = GridBagConstraints.NONE;
-        gridBagConstraints.anchor = GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new Insets( 5, 5, 5, 5 );
-        panel.add( txtReadSymbol, gridBagConstraints );
+        panel.add( readSymbolPanel, gridBagConstraints );
         
         JPanel writeSymbolPanel = new JPanel();
         writeSymbolPanel.setAlignmentX( JPanel.LEFT_ALIGNMENT );
         writeSymbolPanel.setLayout( new BoxLayout( writeSymbolPanel, BoxLayout.X_AXIS ) );
         JTextField txtWriteSymbol = new JTextField( 5 );
-        JCheckBox checkBlankSymbol = new JCheckBox( CharacterConstants.BLANK_TAPE_SYMBOL.toString() );
-        checkBlankSymbol.setToolTipText( "Blank tape symbol" );
+        JCheckBox checkWriteBlankSymbol = new JCheckBox( CharacterConstants.BLANK_TAPE_SYMBOL.toString() );
+        checkWriteBlankSymbol.setToolTipText( "Blank tape symbol" );
         writeSymbolPanel.add( txtWriteSymbol );
-        writeSymbolPanel.add( checkBlankSymbol );
+        writeSymbolPanel.add( checkWriteBlankSymbol );
         
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -1221,14 +1231,28 @@ public class Utils {
             }
         });
         
-        checkBlankSymbol.addActionListener( new ActionListener() {
+        checkReadBlankSymbol.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                if ( checkBlankSymbol.isSelected() ) {
+                if ( checkReadBlankSymbol.isSelected() ) {
+                    txtReadSymbol.setEnabled( false );
+                    txtReadSymbol.setText( "" );
+                } else {
+                    txtReadSymbol.setEnabled( true );
+                    txtReadSymbol.requestFocus();
+                }
+            }
+        });
+        
+        checkWriteBlankSymbol.addActionListener( new ActionListener() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                if ( checkWriteBlankSymbol.isSelected() ) {
                     txtWriteSymbol.setEnabled( false );
                     txtWriteSymbol.setText( "" );
                 } else {
                     txtWriteSymbol.setEnabled( true );
+                    txtWriteSymbol.requestFocus();
                 }
             }
         });
@@ -1237,8 +1261,14 @@ public class Utils {
             
             txtReadSymbol.setText( String.valueOf( op.getReadSymbol() ) );
             
+            if ( op.getReadSymbol() == CharacterConstants.BLANK_TAPE_SYMBOL ) {
+                checkReadBlankSymbol.doClick();
+            } else {
+                txtReadSymbol.setText( String.valueOf( op.getReadSymbol() ) );
+            }
+            
             if ( op.getWriteSymbol() == CharacterConstants.BLANK_TAPE_SYMBOL ) {
-                checkBlankSymbol.doClick();
+                checkWriteBlankSymbol.doClick();
             } else {
                 txtWriteSymbol.setText( String.valueOf( op.getWriteSymbol() ) );
             }
@@ -1270,20 +1300,24 @@ public class Utils {
                 boolean errorWrite = false;
 
                 char readSymbol = ' ';
-                String inputTS = txtReadSymbol.getText().trim();
-                if ( !inputTS.isEmpty() ) {
-                    readSymbol = txtReadSymbol.getText().trim().charAt( 0 );
+                if ( checkReadBlankSymbol.isSelected() ) {
+                    readSymbol = CharacterConstants.BLANK_TAPE_SYMBOL;
                 } else {
-                    errorRead = true;
+                    String inputRead = txtReadSymbol.getText().trim();
+                    if ( !inputRead.isEmpty() ) {
+                        readSymbol = inputRead.charAt( 0 );
+                    } else {
+                        errorRead = true;
+                    }
                 }
 
                 char writeSymbol = ' ';
-                if ( checkBlankSymbol.isSelected() ) {
+                if ( checkWriteBlankSymbol.isSelected() ) {
                     writeSymbol = CharacterConstants.BLANK_TAPE_SYMBOL;
                 } else {
-                    String inputST = txtWriteSymbol.getText().trim();
-                    if ( !inputST.isEmpty() ) {
-                        writeSymbol = inputST.charAt( 0 );
+                    String inputWrite = txtWriteSymbol.getText().trim();
+                    if ( !inputWrite.isEmpty() ) {
+                        writeSymbol = inputWrite.charAt( 0 );
                     } else {
                         errorWrite = true;
                     }
@@ -1545,6 +1579,39 @@ public class Utils {
                 cancelButton.doClick();
             }
         });
+    }
+    
+    /**
+     * Trims a String using a specific character.
+     * 
+     * @param str The String to be trimed.
+     * @param c The character to remove.
+     * @return A new trimed String.
+     */
+    public static String trim( String str, char c ) {
+        
+        if ( str == null ) {
+            return null;
+        }
+        
+        if ( str.isEmpty() ) {
+            return str;
+        }
+        
+        String trimed = str;
+            
+        while ( trimed.length() > 0 && 
+                trimed.charAt( 0 ) == CharacterConstants.BLANK_TAPE_SYMBOL ) {
+            trimed = trimed.substring( 1 );
+        }
+
+        while ( trimed.length() > 0 && 
+                trimed.charAt( trimed.length()-1 ) == CharacterConstants.BLANK_TAPE_SYMBOL ) {
+            trimed = trimed.substring( 0, trimed.length()-1 );
+        }
+        
+        return trimed;
+        
     }
     
 }

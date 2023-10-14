@@ -31,4 +31,6 @@ public interface ApplicationConstants {
     public static final String LIGHT_THEME = "LIGHT";
     public static final String DARK_THEME = "DARK";
     
+    public static final int TURING_MACHINE_MAX_COUNT = 2000;
+    
 }

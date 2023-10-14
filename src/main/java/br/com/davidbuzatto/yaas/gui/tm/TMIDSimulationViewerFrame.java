@@ -17,7 +17,10 @@
 package br.com.davidbuzatto.yaas.gui.tm;
 
 import br.com.davidbuzatto.yaas.model.tm.TM;
+import br.com.davidbuzatto.yaas.model.tm.TMID;
 import br.com.davidbuzatto.yaas.util.Utils;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.List;
 import javax.swing.JScrollBar;
 
@@ -89,7 +92,7 @@ public class TMIDSimulationViewerFrame extends javax.swing.JFrame {
         drawPanel.setLayout(drawPanelLayout);
         drawPanelLayout.setHorizontalGroup(
             drawPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 298, Short.MAX_VALUE)
+            .addGap(0, 338, Short.MAX_VALUE)
         );
         drawPanelLayout.setVerticalGroup(
             drawPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -106,7 +109,7 @@ public class TMIDSimulationViewerFrame extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrollDrawPanel, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(scrollDrawPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
         );
 
         pack();
@@ -136,14 +139,25 @@ public class TMIDSimulationViewerFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_drawPanelMouseWheelMoved
     
     public void setCurrentSimulationStep( int currentSimulationStep ) {
+        
         this.currentSimulationStep = currentSimulationStep;
+        
         for ( TMSimulationStep step : simulationSteps ) {
             step.getId().setActiveInSimulation( false );
         }
+        
         for ( int i = 0; i <= currentSimulationStep; i++ ) {
             simulationSteps.get( i ).getId().setActiveInSimulation( true );
         }
+        
+        if ( this.currentSimulationStep < simulationSteps.size() ) {
+            TMID id = simulationSteps.get( this.currentSimulationStep ).getId();
+            int tick = drawPanel.getHeight() / simulationSteps.size();
+            scrollDrawPanel.getVerticalScrollBar().setValue( tick * ( this.currentSimulationStep - 2 ) );
+        }
+        
         drawPanel.repaint();
+        
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -561,7 +561,7 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <Component id="scrollPaneModel" pref="404" max="32767" attributes="0"/>
+                  <Component id="scrollPaneModel" pref="379" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="panelTestsAndSimulation" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -583,14 +583,18 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="lblTestString" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="lblTestString" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblTape" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="toolBarTestsAndSimulation" max="32767" attributes="0"/>
                           <Component id="txtTestString" max="32767" attributes="0"/>
+                          <Component id="txtTape" alignment="0" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="lblTestResult" min="-2" pref="92" max="-2" attributes="0"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -599,19 +603,23 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                          <Component id="lblTestResult" alignment="1" max="32767" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="lblTestString" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txtTestString" alignment="3" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="toolBarTestsAndSimulation" min="-2" pref="25" max="-2" attributes="0"/>
-                          </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="lblTestString" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtTestString" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="txtTape" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblTape" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="toolBarTestsAndSimulation" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="lblTestResult" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -622,11 +630,23 @@
                 <Property name="text" type="java.lang.String" value="String:"/>
               </Properties>
             </Component>
+            <Component class="javax.swing.JLabel" name="lblTape">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Tape:"/>
+                <Property name="toolTipText" type="java.lang.String" value="Tape state after test"/>
+              </Properties>
+            </Component>
             <Component class="javax.swing.JTextField" name="txtTestString">
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtTestStringActionPerformed"/>
                 <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtTestStringKeyReleased"/>
               </Events>
+            </Component>
+            <Component class="javax.swing.JTextField" name="txtTape">
+              <Properties>
+                <Property name="editable" type="boolean" value="false"/>
+                <Property name="toolTipText" type="java.lang.String" value="Tape state after test"/>
+              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="lblTestResult">
               <Properties>
@@ -752,7 +772,7 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/control_start_blue.png"/>
                     </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="First Step (Ctrl+Left)"/>
+                    <Property name="toolTipText" type="java.lang.String" value="First Step (Ctrl+Alt+Left)"/>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -767,7 +787,7 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/control_rewind_blue.png"/>
                     </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="Previous Step (Left)"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Previous Step (Ctrl+Left)"/>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -782,7 +802,7 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/control_fastforward_blue.png"/>
                     </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="Next Step (Right)"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Next Step (Ctrl+Right)"/>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -797,7 +817,7 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/control_end_blue.png"/>
                     </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="Last Step (Ctrl+Right)"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Last Step (Ctrl+Alt+Right)"/>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>

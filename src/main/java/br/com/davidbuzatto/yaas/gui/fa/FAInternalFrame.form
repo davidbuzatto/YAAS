@@ -844,7 +844,7 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/control_start_blue.png"/>
                     </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="First Step (Ctrl+Left)"/>
+                    <Property name="toolTipText" type="java.lang.String" value="First Step (Ctrl+Alt+Left)"/>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -859,7 +859,7 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/control_rewind_blue.png"/>
                     </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="Previous Step (Left)"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Previous Step (Ctrl+Left)"/>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -874,7 +874,7 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/control_fastforward_blue.png"/>
                     </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="Next Step (Right)"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Next Step (Ctrl+Right)"/>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -889,7 +889,7 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/control_end_blue.png"/>
                     </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="Last Step (Ctrl+Right)"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Last Step (Ctrl+Alt+Right)"/>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalTextPosition" type="int" value="0"/>

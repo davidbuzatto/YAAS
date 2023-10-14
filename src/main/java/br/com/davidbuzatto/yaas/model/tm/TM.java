@@ -18,7 +18,7 @@ package br.com.davidbuzatto.yaas.model.tm;
 
 import br.com.davidbuzatto.yaas.gui.tm.TMSimulationStep;
 import br.com.davidbuzatto.yaas.model.AbstractGeometricForm;
-import br.com.davidbuzatto.yaas.model.tm.examples.TMExamples;
+import br.com.davidbuzatto.yaas.util.ApplicationConstants;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.Color;
@@ -37,6 +37,9 @@ import java.util.TreeSet;
 /**
  * Turing Machine representation and algorithms.
  * 
+ * Note: Only Deterministic Turing Machines can be simulated, since NTMs will
+ * be problematic to control when they accept by halt.
+ * 
  * @author Prof. Dr. David Buzatto
  */
 public class TM extends AbstractGeometricForm implements Cloneable {
@@ -51,12 +54,8 @@ public class TM extends AbstractGeometricForm implements Cloneable {
     
     private transient TMID rootId;
     private transient List<TMID> ids;
-    /*private transient static int buildTreeLevel;
-    private transient static final String levelString = "  ";
-    private transient boolean accepted;
-    private transient boolean acceptForSimulation;
-    private transient TMID firstAcceptedId;*/
-    //private transient boolean halted;
+    private transient String tapeAfterAcceptsExecution;
+    private transient boolean ableToHalt;
     
     // cache control
     private transient boolean alphabetUpToDate;
@@ -81,8 +80,11 @@ public class TM extends AbstractGeometricForm implements Cloneable {
     
     public boolean accepts( String str, TMAcceptanceType acceptanceType, List<TMSimulationStep> simulationSteps ) {
         
+        int count = 0;
         boolean halted = false;
         boolean accepted = false;
+        tapeAfterAcceptsExecution = null;
+        ableToHalt = true;
         
         if ( canExecute() ) {
             
@@ -93,10 +95,9 @@ public class TM extends AbstractGeometricForm implements Cloneable {
             TMID node = rootId;
             ids.add( node );
             
-            while ( !halted ) {
+            while ( !halted && count < ApplicationConstants.TURING_MACHINE_MAX_COUNT ) {
                 
                 halted = true;
-                String string = node.getString();
                 
                 if ( DEBUG ) {
                     System.out.println( "Processing: " + node );
@@ -115,7 +116,7 @@ public class TM extends AbstractGeometricForm implements Cloneable {
                         }
 
                         // matches symbol
-                        if ( o.getReadSymbol() == string.charAt( node.getPosition() ) ) {
+                        if ( o.getReadSymbol() == node.getCharAtPosition() ) {
 
                             if ( DEBUG ) {
                                 System.out.println( "      Matches symbol: " + o.getReadSymbol() );
@@ -130,7 +131,9 @@ public class TM extends AbstractGeometricForm implements Cloneable {
                             node = newId;
                             halted = false;
                             
-
+                            // trying to detect infinite loop
+                            count++;
+                            
                         }
 
                     }
@@ -143,166 +146,44 @@ public class TM extends AbstractGeometricForm implements Cloneable {
                 
             }
             
-            if ( acceptanceType == TMAcceptanceType.FINAL_STATE && node.getState().isFinal() ) {
-                node.setAcceptedByFinalState( true );
-                accepted = true;
-            } else if ( acceptanceType == TMAcceptanceType.HALT ) {
-                node.setAcceptedByHalt( true );
-                accepted = true;
-            }
-            
-            if ( simulationSteps != null ) {
-                
-                List<TMID> pathIds = new ArrayList<>();
-                TMID current = node;
-                
-                while ( current != null ) {
-                    pathIds.add( current );
-                    current = current.getParent();
+            if ( count == ApplicationConstants.TURING_MACHINE_MAX_COUNT ) {
+                ids.clear();
+                ableToHalt = false;
+                accepted = false;
+            } else {
+
+                if ( acceptanceType == TMAcceptanceType.FINAL_STATE && node.getState().isFinal() ) {
+                    node.setAcceptedByFinalState( true );
+                    accepted = true;
+                } else if ( acceptanceType == TMAcceptanceType.HALT ) {
+                    node.setAcceptedByHalt( true );
+                    accepted = true;
                 }
 
-                for ( int i = pathIds.size()-1; i >= 0; i-- ) {
-                    simulationSteps.add( new TMSimulationStep( pathIds.get( i ) ) );
-                }
-                
-            }
-            
-        }
-        
-        return accepted;
-        
-    }
-    
-    /*public boolean accepts( String str, TMAcceptanceType acceptanceType, List<TMSimulationStep> simulationSteps ) {
-        
-        accepted = false;
-        acceptForSimulation = false;
-        firstAcceptedId = null;
-        
-        if ( simulationSteps != null ) {
-            acceptForSimulation = true;
-        }
-        
-        if ( canExecute() ) {
-            
-            Map<TMState, List<TMTransition>> delta = getDelta();
-            
-            rootId = new TMID( initialState, str, 0, null, Color.BLACK );
-            
-            buildTreeLevel = 0;
-            ids = new ArrayList<>();
-            buildIDTree( rootId, delta, acceptanceType );
-            
-            if ( firstAcceptedId != null ) {
-                
-                List<TMID> pathIds = new ArrayList<>();
-                
-                TMID current = firstAcceptedId;
-                while ( current != null ) {
-                    pathIds.add( current );
-                    current = current.getParent();
-                }
-                
-                for ( int i = pathIds.size()-1; i >= 0; i-- ) {
-                    simulationSteps.add( new TMSimulationStep( pathIds.get( i ) ) );
-                }
-                
-            }
-            
-        }
-        
-        return accepted;
-        
-    }
-    
-    private void buildIDTree( TMID node, Map<TMState, List<TMTransition>> delta, TMAcceptanceType acceptanceType ) {
-        
-        if ( halted ) {
-            
-            if ( acceptanceType == TMAcceptanceType.FINAL_STATE && node.getState().isFinal() ) {
-                
-                node.setAcceptedByFinalState( true );
-                accepted = true;
-                
-                // finds only one solution path
-                if ( acceptForSimulation ) {
-                    firstAcceptedId = node;
-                    ids.add( node );
-                    return;
-                }
-                
-            } else if ( acceptanceType == TMAcceptanceType.HALT ) {
-                
-                node.setAcceptedByHalt( true );
-                accepted = true;
-                
-                if ( acceptForSimulation ) {
-                    firstAcceptedId = node;
-                    ids.add( node );
-                    return;
-                }
-                
-            }
-            
-        }
-        
-        ids.add( node );
-        buildTreeLevel++;
-        
-        // found the first leaf when is collecting data for simulation
-        if ( firstAcceptedId != null ) {
-            return;
-        }
-        
-        if ( DEBUG ) {
-            System.out.println( levelString.repeat( buildTreeLevel ) + "Processing: " + node );
-        }
+                if ( simulationSteps != null ) {
 
-        String string = node.getString();
+                    List<TMID> pathIds = new ArrayList<>();
+                    TMID current = node;
 
-        for ( TMTransition t : delta.get( node.getState() ) ) {
-
-            if ( DEBUG ) {
-                System.out.println( levelString.repeat( buildTreeLevel ) + "  Transition: " + t );
-            }
-
-            halted = true;
-            
-            for ( TMOperation o : t.getOperations() ) {
-
-                if ( DEBUG ) {
-                    System.out.println( levelString.repeat( buildTreeLevel ) + "    Operation: " + o );
-                }
-
-                // matches symbol
-                if ( !string.isEmpty() && o.getReadSymbol() == string.charAt( node.getPosition() ) ) {
-
-                    if ( DEBUG ) {
-                        System.out.println( levelString.repeat( buildTreeLevel ) + "      Matches symbol: " + o.getReadSymbol() );
+                    while ( current != null ) {
+                        pathIds.add( current );
+                        current = current.getParent();
                     }
-                    
-                    // the derivation process creates a new id and transforms
-                    // the input (read and write on string)
-                    TMID newId = node.derive( t, o );
-                    node.addChild( newId );
-                    buildIDTree( newId, delta, acceptanceType );
-                    
-                    halted = false;
+
+                    for ( int i = pathIds.size()-1; i >= 0; i-- ) {
+                        simulationSteps.add( new TMSimulationStep( pathIds.get( i ) ) );
+                    }
 
                 }
 
+                tapeAfterAcceptsExecution = node.getCleanedString();
+            
             }
-
+            
         }
         
-        buildTreeLevel--;
+        return accepted;
         
-    }*/
-
-    public static void main( String[] args ) {
-        TM tm = TMExamples.createTMEvenPalindromeFinalState();
-        String test = "0011";
-        System.out.printf( "%s: %b\n", test, tm.accepts( test, TMAcceptanceType.FINAL_STATE ) );
     }
     
     public boolean canExecute() {
@@ -499,6 +380,10 @@ public class TM extends AbstractGeometricForm implements Cloneable {
         
     }
 
+    public boolean isAbleToHalt() {
+        return ableToHalt;
+    }
+
     public TMState getInitialState() {
         return initialState;
     }
@@ -571,7 +456,7 @@ public class TM extends AbstractGeometricForm implements Cloneable {
         }
         
         if ( !nondeterminism ) {
-            type = TMType.TM;
+            type = TMType.DTM;
         } else {
             type = TMType.NTM;
         }
@@ -654,6 +539,10 @@ public class TM extends AbstractGeometricForm implements Cloneable {
         
         return delta;
         
+    }
+
+    public String getTapeAfterAcceptsExecution() {
+        return tapeAfterAcceptsExecution;
     }
     
     private String getStatesString() {
@@ -820,6 +709,9 @@ public class TM extends AbstractGeometricForm implements Cloneable {
                 break;
             case TM:
                 modelName = "tm";
+                break;
+            case DTM:
+                modelName = "dtm";
                 break;
             case NTM:
                 modelName = "ntm";

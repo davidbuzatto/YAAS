@@ -179,6 +179,10 @@ public class TMID extends AbstractGeometricForm implements Comparable<TMID> {
     public String getString() {
         return string;
     }
+    
+    public String getCleanedString() {
+        return Utils.trim( string, CharacterConstants.BLANK_TAPE_SYMBOL );
+    }
 
     public TMID getParent() {
         return parent;
@@ -190,6 +194,21 @@ public class TMID extends AbstractGeometricForm implements Comparable<TMID> {
 
     public int getPosition() {
         return position;
+    }
+    
+    public char getCharAtPosition() {
+        
+        if ( string.isEmpty() ) {
+            return CharacterConstants.BLANK_TAPE_SYMBOL;
+        }
+        
+        if ( position >= string.length() || 
+             position < 0 ) {
+            return CharacterConstants.BLANK_TAPE_SYMBOL;
+        }
+        
+        return string.charAt( position );
+        
     }
 
     public boolean isAcceptedByFinalState() {

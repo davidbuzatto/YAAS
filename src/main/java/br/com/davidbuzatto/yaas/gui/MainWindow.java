@@ -848,12 +848,12 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void miTMEvenPalindromeFinalStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miTMEvenPalindromeFinalStateActionPerformed
-        createTMInternalFrame( TMExamples.createTMEvenPalindromeFinalState(),
+        createTMInternalFrame( TMExamples.createDTMEvenPalindromeFinalState(),
                 false, false );
     }//GEN-LAST:event_miTMEvenPalindromeFinalStateActionPerformed
 
     private void miTMMonusHaltActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miTMMonusHaltActionPerformed
-        createTMInternalFrame( TMExamples.createTMMonusHalt(),
+        createTMInternalFrame( TMExamples.createDTMMonusHalt(),
                 false, false );
     }//GEN-LAST:event_miTMMonusHaltActionPerformed
 
@@ -995,8 +995,10 @@ public class MainWindow extends javax.swing.JFrame {
     private void openExample() {
         if ( ApplicationConstants.IN_DEVELOPMENT ) {
             //createPDAInternalFrame( PDAExamples.createPDA0n1nFinalState(), true, true );
-            //createTMInternalFrame( TMExamples.createTMEvenPalindromeFinalState(), true, true );
-            createTMInternalFrame( TMExamples.createTMMonusHalt(), true, true );
+            //createTMInternalFrame( TMExamples.createDTMEvenPalindromeFinalState(), true, true );
+            createTMInternalFrame( TMExamples.createDTMMonusHalt(), true, true );
+            //createTMInternalFrame( TMExamples.createDTMInfiniteLoop(), true, true );
+            //createTMInternalFrame( TMExamples.createDTMExample(), true, true );
         }
     }
     
