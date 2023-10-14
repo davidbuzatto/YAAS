@@ -160,6 +160,12 @@ public class TMID extends AbstractGeometricForm implements Comparable<TMID> {
             newString = CharacterConstants.BLANK_TAPE_SYMBOL + newString;
         }
         
+        if ( newPosition < 0 ) {
+            newPosition = 0;
+        } else if ( newPosition >= newString.length() ) {
+            newPosition = newString.length()-1;
+        }
+        
         return new TMID( 
                 transition.getTargetState(), 
                 newString, 

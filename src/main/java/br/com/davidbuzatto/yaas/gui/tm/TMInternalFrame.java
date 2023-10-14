@@ -98,6 +98,14 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
     private static final String MODEL_PROPERTIES_CARD = "model";
     private static final String STATE_PROPERTIES_CARD = "state";
     private static final String TRANSITION_PROPERTIES_CARD = "transition";
+    private static final String MAX_COUNT_ERROR_MESSAGE = String.format(
+            """
+            It seems that the designed Turing Machine doesn't halt!
+            
+            Since YAAS can store around %d transitions in tests, 
+            either your input takes too long to be processed, or you
+            have an infinite loop.
+            """, ApplicationConstants.TURING_MACHINE_MAX_COUNT );
     
     private TM tm;
     private MainWindow mainWindow;
@@ -1526,8 +1534,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
                     drawPanel.requestFocus();
                     
                 } else {
-                    Utils.showErrorMessage( this, 
-                            "The designed Turing Machine never halts!" );
+                    Utils.showErrorMessage( this, MAX_COUNT_ERROR_MESSAGE );
                     enableGUI();
                 }
             
@@ -2293,8 +2300,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
                     }
                     
                 } else {
-                    Utils.showErrorMessage( this, 
-                            "The designed Turing Machine never halts!" );
+                    Utils.showErrorMessage( this, MAX_COUNT_ERROR_MESSAGE );
                 }
                 
             } else {

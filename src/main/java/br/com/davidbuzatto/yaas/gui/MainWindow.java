@@ -1068,7 +1068,9 @@ public class MainWindow extends javax.swing.JFrame {
     
     private void openExample() {
         if ( ApplicationConstants.IN_DEVELOPMENT ) {
-            createTMInternalFrame( TMExamples.createDTMMonusHalt(), true, true, "0000100", TMAcceptanceType.HALT );
+            createTMInternalFrame( 
+                    TMExamples.createDTMDivideHalt(), true, true, 
+                    "00001001", TMAcceptanceType.HALT );
         }
     }
     
