@@ -225,7 +225,6 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         
         if ( ApplicationConstants.IN_DEVELOPMENT ) {
             checkShowIDs.setSelected( true );
-            txtTestString.setText( "0011" );
         }
         
     }
@@ -2204,7 +2203,10 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         
         try {
             PDA clone = (PDA) pda.clone();
-            mainWindow.createPDAInternalFrame( clone, false, false );
+            mainWindow.createPDAInternalFrame( clone, false, false, null, 
+                    radioAcceptByFinalState.isSelected() ? 
+                            PDAAcceptanceType.FINAL_STATE : 
+                            PDAAcceptanceType.EMPTY_STACK );
         } catch ( CloneNotSupportedException exc ) {
             // should never be reached
             exc.printStackTrace();
@@ -2229,7 +2231,8 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                 
                 PDA newPda = new PDAFinalStateToEmptyStack( pda ).getGeneratedPDA();
                 PDAArrangement.arrangeByLevel( newPda, 100, 100, 150, false );
-                mainWindow.createPDAInternalFrame( newPda, false, false );
+                mainWindow.createPDAInternalFrame( newPda, false, false, null, 
+                        PDAAcceptanceType.EMPTY_STACK );
                 
             } catch ( IllegalArgumentException exc ) {
                 Utils.showErrorMessage( this, exc.getMessage() );
@@ -2252,7 +2255,8 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                 
                 PDA newPda = new PDAEmptyStackToFinalState( pda ).getGeneratedPDA();
                 PDAArrangement.arrangeByLevel( newPda, 100, 100, 150, false );
-                mainWindow.createPDAInternalFrame( newPda, false, false );
+                mainWindow.createPDAInternalFrame( newPda, false, false, null,
+                        PDAAcceptanceType.FINAL_STATE );
                 
             } catch ( IllegalArgumentException exc ) {
                 Utils.showErrorMessage( this, exc.getMessage() );
@@ -2912,6 +2916,20 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         txtTestStringDefaultFC = UIManager.getColor( "TextField.foreground" );
         txtTestStringDefaultCaretColor = UIManager.getColor( "TextField.caretForeground" );
         lblTestResultDefaultFC = UIManager.getColor( "Label.foreground" );
+    }
+    
+    public void setInputExample( String inputExample ) {
+        if ( inputExample != null ) {
+            txtTestString.setText( inputExample );
+        }
+    }
+    
+    public void setAcceptanceType( PDAAcceptanceType type ) {
+        if ( type == null || type == PDAAcceptanceType.FINAL_STATE ) {
+            radioAcceptByFinalState.setSelected( true );
+        } else if ( type == PDAAcceptanceType.EMPTY_STACK ) {
+            radioAcceptByEmptyStack.setSelected( true );
+        }
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

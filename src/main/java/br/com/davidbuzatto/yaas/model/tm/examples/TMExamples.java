@@ -36,7 +36,14 @@ public class TMExamples {
             CharacterConstants.SUPER_N,
             CharacterConstants.GREATER_THAN_OR_EQUAL_TO );
     
-    public static TM createDTMEvenPalindromeFinalState() {
+    public static final String RECURSIVELY_ENUMERABLE_LANGUAGE_AN_BN_CN = 
+            String.format( "L = { a%cb%cc%c | n %c 1 }", 
+            CharacterConstants.SUPER_N, 
+            CharacterConstants.SUPER_N,
+            CharacterConstants.SUPER_N,
+            CharacterConstants.GREATER_THAN_OR_EQUAL_TO );
+    
+    public static TM createDTM0n1nFinalState() {
 
         TM dtm = new TM();
 
@@ -263,7 +270,7 @@ public class TMExamples {
 
     }
     
-    public static TM createDTMInfiniteLoop() {
+    public static TM createDTMInfiniteLoopFinalState() {
 
         TM dtm = new TM();
 
@@ -405,6 +412,435 @@ public class TMExamples {
                 TMOperation.getMoveRightOperation( '1', '1' ) );
         q0q0.setStrokeColor( new Color( 0, 0, 0, 255 ) );
         dtm.addTransition( q0q0 );
+
+        return dtm;
+
+    }
+    
+    public static TM createDTM01SameFinalState() {
+
+        TM dtm = new TM();
+
+        // states
+        TMState q0 = new TMState( 0, null, true, false );
+        q0.setX1Y1( 100, 200 );
+        q0.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addState( q0 );
+
+        TMState q1 = new TMState( 1, null, false, false );
+        q1.setX1Y1( 250, 100 );
+        q1.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addState( q1 );
+
+        TMState q2 = new TMState( 2, null, false, false );
+        q2.setX1Y1( 400, 100 );
+        q2.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addState( q2 );
+
+        TMState q3 = new TMState( 3, null, false, false );
+        q3.setX1Y1( 250, 300 );
+        q3.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addState( q3 );
+
+        TMState q4 = new TMState( 4, null, false, false );
+        q4.setX1Y1( 400, 300 );
+        q4.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addState( q4 );
+
+        TMState q5 = new TMState( 5, null, false, true );
+        q5.setX1Y1( 450, 200 );
+        q5.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addState( q5 );
+
+        // transitions
+        TMTransition q0q0 = new TMTransition( q0, q0,
+                TMOperation.getMoveRightOperation( 'X', 'B' ),
+                TMOperation.getMoveRightOperation( 'Y', 'B' ) );
+        q0q0.rotateTargetCP( -25 );
+        q0q0.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q0q0 );
+
+        TMTransition q0q1 = new TMTransition( q0, q1,
+                TMOperation.getMoveRightOperation( '0', 'B' ) );
+        q0q1.moveLabelTo( 164, 134 );
+        q0q1.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q0q1 );
+
+        TMTransition q0q3 = new TMTransition( q0, q3,
+                TMOperation.getMoveRightOperation( '1', 'B' ) );
+        q0q3.moveLabelTo( 164, 275 );
+        q0q3.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q0q3 );
+
+        TMTransition q1q2 = new TMTransition( q1, q2,
+                TMOperation.getMoveLeftOperation( '1', 'Y' ) );
+        q1q2.moveLabelTo( 319, 90 );
+        q1q2.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q1q2 );
+
+        TMTransition q1q1 = new TMTransition( q1, q1,
+                TMOperation.getMoveRightOperation( '0', '0' ),
+                TMOperation.getMoveRightOperation( 'Y', 'Y' ) );
+        q1q1.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q1q1 );
+
+        TMTransition q2q2 = new TMTransition( q2, q2,
+                TMOperation.getMoveLeftOperation( '0', '0' ),
+                TMOperation.getMoveLeftOperation( 'Y', 'Y' ) );
+        q2q2.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q2q2 );
+
+        TMTransition q2q0 = new TMTransition( q2, q0,
+                TMOperation.getMoveRightOperation( 'B', 'B' ) );
+        q2q0.moveLabelTo( 251, 174 );
+        q2q0.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q2q0 );
+
+        TMTransition q3q3 = new TMTransition( q3, q3,
+                TMOperation.getMoveRightOperation( '1', '1' ),
+                TMOperation.getMoveRightOperation( 'X', 'X' ) );
+        q3q3.moveLabelTo( 250, 383 );
+        q3q3.rotateTargetCP( -180 );
+        q3q3.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q3q3 );
+
+        TMTransition q4q4 = new TMTransition( q4, q4,
+                TMOperation.getMoveLeftOperation( '1', '1' ),
+                TMOperation.getMoveLeftOperation( 'X', 'X' ) );
+        q4q4.moveLabelTo( 375, 383 );
+        q4q4.rotateTargetCP( -180 );
+        q4q4.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q4q4 );
+
+        TMTransition q3q4 = new TMTransition( q3, q4,
+                TMOperation.getMoveLeftOperation( '0', 'X' ) );
+        q3q4.moveLabelTo( 324, 318 );
+        q3q4.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q3q4 );
+
+        TMTransition q4q0 = new TMTransition( q4, q0,
+                TMOperation.getMoveRightOperation( 'B', 'B' ) );
+        q4q0.moveLabelTo( 246, 233 );
+        q4q0.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q4q0 );
+
+        TMTransition q0q5 = new TMTransition( q0, q5,
+                TMOperation.getMoveRightOperation( 'B', 'B' ) );
+        q0q5.moveLabelTo( 346, 190 );
+        q0q5.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q0q5 );
+
+        return dtm;
+
+    }
+    
+    public static TM createDTMAnBnCnFinalState() {
+
+        TM dtm = new TM();
+
+        // states
+        TMState q0 = new TMState( 0, null, true, false );
+        q0.setX1Y1( 100, 225 );
+        q0.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addState( q0 );
+
+        TMState q1 = new TMState( 1, null, false, false );
+        q1.setX1Y1( 225, 125 );
+        q1.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addState( q1 );
+
+        TMState q2 = new TMState( 2, null, false, false );
+        q2.setX1Y1( 375, 125 );
+        q2.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addState( q2 );
+
+        TMState q3 = new TMState( 3, null, false, false );
+        q3.setX1Y1( 525, 125 );
+        q3.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addState( q3 );
+
+        TMState q4 = new TMState( 4, null, false, false );
+        q4.setX1Y1( 225, 325 );
+        q4.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addState( q4 );
+
+        TMState q5 = new TMState( 5, null, false, true );
+        q5.setX1Y1( 375, 325 );
+        q5.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addState( q5 );
+
+        // transitions
+        TMTransition q0q1 = new TMTransition( q0, q1,
+                TMOperation.getMoveRightOperation( 'a', 'B' ) );
+        q0q1.moveLabelTo( 141, 166 );
+        q0q1.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q0q1 );
+
+        TMTransition q1q1 = new TMTransition( q1, q1,
+                TMOperation.getMoveRightOperation( 'X', 'X' ),
+                TMOperation.getMoveRightOperation( 'a', 'a' ) );
+        q1q1.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q1q1 );
+
+        TMTransition q1q2 = new TMTransition( q1, q2,
+                TMOperation.getMoveRightOperation( 'b', 'X' ) );
+        q1q2.moveLabelTo( 299, 116 );
+        q1q2.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q1q2 );
+
+        TMTransition q2q2 = new TMTransition( q2, q2,
+                TMOperation.getMoveRightOperation( 'Y', 'Y' ),
+                TMOperation.getMoveRightOperation( 'b', 'b' ) );
+        q2q2.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q2q2 );
+
+        TMTransition q2q3 = new TMTransition( q2, q3,
+                TMOperation.getMoveLeftOperation( 'c', 'Y' ) );
+        q2q3.moveLabelTo( 450, 116 );
+        q2q3.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q2q3 );
+
+        TMTransition q3q3 = new TMTransition( q3, q3,
+                TMOperation.getMoveLeftOperation( 'X', 'X' ),
+                TMOperation.getMoveLeftOperation( 'Y', 'Y' ),
+                TMOperation.getMoveLeftOperation( 'a', 'a' ),
+                TMOperation.getMoveLeftOperation( 'b', 'b' ) );
+        q3q3.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q3q3 );
+
+        TMTransition q3q0 = new TMTransition( q3, q0,
+                TMOperation.getMoveRightOperation( 'B', 'B' ) );
+        q3q0.moveLabelTo( 273, 176 );
+        q3q0.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q3q0 );
+
+        TMTransition q0q4 = new TMTransition( q0, q4,
+                TMOperation.getMoveRightOperation( 'X', 'B' ) );
+        q0q4.moveLabelTo( 140, 291 );
+        q0q4.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q0q4 );
+
+        TMTransition q4q4 = new TMTransition( q4, q4,
+                TMOperation.getMoveRightOperation( 'X', 'X' ),
+                TMOperation.getMoveRightOperation( 'Y', 'Y' ) );
+        q4q4.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q4q4 );
+
+        TMTransition q4q5 = new TMTransition( q4, q5,
+                TMOperation.getMoveRightOperation( 'B', 'B' ) );
+        q4q5.moveLabelTo( 300, 316 );
+        q4q5.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q4q5 );
+
+        return dtm;
+
+    }
+    
+    public static TM createDTMDivideHalt() {
+
+        TM dtm = new TM();
+
+        // states
+        TMState q0 = new TMState( 0, null, true, false );
+        q0.setX1Y1( 125, 275 );
+        q0.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addState( q0 );
+
+        TMState q1 = new TMState( 1, null, false, false );
+        q1.setX1Y1( 275, 275 );
+        q1.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addState( q1 );
+
+        TMState q2 = new TMState( 2, null, false, false );
+        q2.setX1Y1( 425, 275 );
+        q2.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addState( q2 );
+
+        TMState q3 = new TMState( 3, null, false, false );
+        q3.setX1Y1( 575, 275 );
+        q3.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addState( q3 );
+
+        TMState q4 = new TMState( 4, null, false, false );
+        q4.setX1Y1( 725, 275 );
+        q4.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addState( q4 );
+
+        TMState q5 = new TMState( 5, null, false, false );
+        q5.setX1Y1( 425, 425 );
+        q5.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addState( q5 );
+
+        TMState q6 = new TMState( 6, null, false, false );
+        q6.setX1Y1( 575, 425 );
+        q6.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addState( q6 );
+
+        TMState q7 = new TMState( 7, null, false, false );
+        q7.setX1Y1( 725, 425 );
+        q7.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addState( q7 );
+
+        TMState q8 = new TMState( 8, null, false, false );
+        q8.setX1Y1( 575, 125 );
+        q8.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addState( q8 );
+
+        TMState q9 = new TMState( 9, null, false, false );
+        q9.setX1Y1( 725, 125 );
+        q9.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addState( q9 );
+
+        TMState q10 = new TMState( 10, null, false, false );
+        q10.setX1Y1( 875, 125 );
+        q10.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addState( q10 );
+
+        TMState q11 = new TMState( 11, null, false, false );
+        q11.setX1Y1( 1025, 125 );
+        q11.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addState( q11 );
+
+        // transitions
+        TMTransition q0q0 = new TMTransition( q0, q0,
+                TMOperation.getMoveRightOperation( '0', '0' ) );
+        q0q0.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q0q0 );
+
+        TMTransition q0q1 = new TMTransition( q0, q1,
+                TMOperation.getMoveRightOperation( '1', '1' ) );
+        q0q1.moveLabelTo( 201, 265 );
+        q0q1.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q0q1 );
+
+        TMTransition q1q1 = new TMTransition( q1, q1,
+                TMOperation.getMoveRightOperation( 'X', 'X' ) );
+        q1q1.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q1q1 );
+
+        TMTransition q1q2 = new TMTransition( q1, q2,
+                TMOperation.getMoveLeftOperation( '0', 'X' ) );
+        q1q2.moveLabelTo( 350, 266 );
+        q1q2.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q1q2 );
+
+        TMTransition q2q2 = new TMTransition( q2, q2,
+                TMOperation.getMoveLeftOperation( '0', '0' ),
+                TMOperation.getMoveLeftOperation( '1', '1' ),
+                TMOperation.getMoveLeftOperation( 'X', 'X' ) );
+        q2q2.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q2q2 );
+
+        TMTransition q2q3 = new TMTransition( q2, q3,
+                TMOperation.getMoveRightOperation( 'B', 'B' ),
+                TMOperation.getMoveRightOperation( 'Y', 'Y' ) );
+        q2q3.moveLabelTo( 499, 265 );
+        q2q3.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q2q3 );
+
+        TMTransition q3q4 = new TMTransition( q3, q4,
+                TMOperation.getMoveRightOperation( '0', 'Y' ) );
+        q3q4.moveLabelTo( 649, 265 );
+        q3q4.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q3q4 );
+
+        TMTransition q4q4 = new TMTransition( q4, q4,
+                TMOperation.getMoveRightOperation( '0', '0' ),
+                TMOperation.getMoveRightOperation( '1', '1' ) );
+        q4q4.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q4q4 );
+
+        TMTransition q1q5 = new TMTransition( q1, q5,
+                TMOperation.getMoveRightOperation( '1', '1' ) );
+        q1q5.moveLabelTo( 337, 375 );
+        q1q5.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q1q5 );
+
+        TMTransition q5q6 = new TMTransition( q5, q6,
+                TMOperation.getMoveLeftOperation( 'B', '0' ) );
+        q5q6.moveLabelTo( 501, 416 );
+        q5q6.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q5q6 );
+
+        TMTransition q5q5 = new TMTransition( q5, q5,
+                TMOperation.getMoveRightOperation( '0', '0' ) );
+        q5q5.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q5q5 );
+
+        TMTransition q6q6 = new TMTransition( q6, q6,
+                TMOperation.getMoveLeftOperation( '0', '0' ) );
+        q6q6.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q6q6 );
+
+        TMTransition q6q7 = new TMTransition( q6, q7,
+                TMOperation.getMoveLeftOperation( '1', '1' ) );
+        q6q7.moveLabelTo( 653, 415 );
+        q6q7.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q6q7 );
+
+        TMTransition q7q7 = new TMTransition( q7, q7,
+                TMOperation.getMoveLeftOperation( 'X', '0' ) );
+        q7q7.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q7q7 );
+
+        TMTransition q4q1 = new TMTransition( q4, q1,
+                TMOperation.getMoveRightOperation( 'X', 'X' ) );
+        q4q1.moveLabelTo( 501, 314 );
+        q4q1.rotateTargetCP( -160 );
+        q4q1.moveCPsTo( 501, 340, 572, 340, 429, 340 );
+        q4q1.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q4q1 );
+
+        TMTransition q7q1 = new TMTransition( q7, q1,
+                TMOperation.getMoveRightOperation( '1', '1' ) );
+        q7q1.moveLabelTo( 298, 422 );
+        q7q1.rotateTargetCP( -95 );
+        q7q1.moveCPsTo( 388, 507, 459, 531, 316, 482 );
+        q7q1.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q7q1 );
+
+        TMTransition q3q8 = new TMTransition( q3, q8,
+                TMOperation.getMoveRightOperation( '1', '1' ) );
+        q3q8.moveLabelTo( 546, 203 );
+        q3q8.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q3q8 );
+
+        TMTransition q8q8 = new TMTransition( q8, q8,
+                TMOperation.getMoveRightOperation( '0', '0' ),
+                TMOperation.getMoveRightOperation( 'X', 'X' ) );
+        q8q8.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q8q8 );
+
+        TMTransition q8q9 = new TMTransition( q8, q9,
+                TMOperation.getMoveLeftOperation( '1', 'B' ) );
+        q8q9.moveLabelTo( 651, 116 );
+        q8q9.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q8q9 );
+
+        TMTransition q9q10 = new TMTransition( q9, q10,
+                TMOperation.getMoveRightOperation( 'B', 'B' ) );
+        q9q10.moveLabelTo( 801, 115 );
+        q9q10.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q9q10 );
+
+        TMTransition q10q10 = new TMTransition( q10, q10,
+                TMOperation.getMoveRightOperation( 'B', 'B' ) );
+        q10q10.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q10q10 );
+
+        TMTransition q10q11 = new TMTransition( q10, q11,
+                TMOperation.getMoveRightOperation( '0', '0' ) );
+        q10q11.moveLabelTo( 951, 116 );
+        q10q11.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q10q11 );
+
+        TMTransition q9q9 = new TMTransition( q9, q9,
+                TMOperation.getMoveLeftOperation( '0', 'B' ),
+                TMOperation.getMoveLeftOperation( '1', 'B' ),
+                TMOperation.getMoveLeftOperation( 'X', 'B' ),
+                TMOperation.getMoveLeftOperation( 'Y', 'B' ) );
+        q9q9.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        dtm.addTransition( q9q9 );
 
         return dtm;
 

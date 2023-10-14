@@ -514,7 +514,7 @@
                     <Property name="text" type="java.lang.String" value="Accept by Final State"/>
                   </Properties>
                   <SubComponents>
-                    <MenuItem class="javax.swing.JMenuItem" name="miTMEvenPalindromeFinalState">
+                    <MenuItem class="javax.swing.JMenuItem" name="miTM0n1nFinalState">
                       <Properties>
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                           <Image iconType="3" name="/turing.png"/>
@@ -524,7 +524,44 @@
                         </Property>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miTMEvenPalindromeFinalStateActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miTM0n1nFinalStateActionPerformed"/>
+                      </Events>
+                    </MenuItem>
+                    <MenuItem class="javax.swing.JMenuItem" name="miTMAnBnCnFinalState">
+                      <Properties>
+                        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                          <Image iconType="3" name="/turing.png"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                          <Connection code="TMExamples.RECURSIVELY_ENUMERABLE_LANGUAGE_AN_BN_CN" type="code"/>
+                        </Property>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miTMAnBnCnFinalStateActionPerformed"/>
+                      </Events>
+                    </MenuItem>
+                    <MenuItem class="javax.swing.JMenuItem" name="miTM01SameFinalState">
+                      <Properties>
+                        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                          <Image iconType="3" name="/turing.png"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" value="L = { w | w contains the same amount of 0&apos;s and 1&apos;s }"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miTM01SameFinalStateActionPerformed"/>
+                      </Events>
+                    </MenuItem>
+                    <MenuItem class="javax.swing.JPopupMenu$Separator" name="menuTMSep01">
+                    </MenuItem>
+                    <MenuItem class="javax.swing.JMenuItem" name="miTMInfiniteLoopFinalState">
+                      <Properties>
+                        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                          <Image iconType="3" name="/turing.png"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" value="Infinite Loop"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miTMInfiniteLoopFinalStateActionPerformed"/>
                       </Events>
                     </MenuItem>
                   </SubComponents>
@@ -547,6 +584,17 @@
                       </Properties>
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miTMMonusHaltActionPerformed"/>
+                      </Events>
+                    </MenuItem>
+                    <MenuItem class="javax.swing.JMenuItem" name="miTMDivideHalt">
+                      <Properties>
+                        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                          <Image iconType="3" name="/turing.png"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" value="Divide"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miTMDivideHaltActionPerformed"/>
                       </Events>
                     </MenuItem>
                   </SubComponents>

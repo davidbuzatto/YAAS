@@ -223,7 +223,6 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
         
         if ( ApplicationConstants.IN_DEVELOPMENT ) {
             checkShowIDs.setSelected( true );
-            txtTestString.setText( "000100" );
         }
         
     }
@@ -2199,7 +2198,10 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
         
         try {
             TM clone = (TM) tm.clone();
-            mainWindow.createTMInternalFrame( clone, false, false );
+            mainWindow.createTMInternalFrame( clone, false, false, null, 
+                    radioAcceptByFinalState.isSelected() ? 
+                            TMAcceptanceType.FINAL_STATE : 
+                            TMAcceptanceType.HALT );
         } catch ( CloneNotSupportedException exc ) {
             // should never be reached
             exc.printStackTrace();
@@ -2861,6 +2863,20 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
         txtTestStringDefaultFC = UIManager.getColor( "TextField.foreground" );
         txtTestStringDefaultCaretColor = UIManager.getColor( "TextField.caretForeground" );
         lblTestResultDefaultFC = UIManager.getColor( "Label.foreground" );
+    }
+    
+    public void setInputExample( String inputExample ) {
+        if ( inputExample != null ) {
+            txtTestString.setText( inputExample );
+        }
+    }
+    
+    public void setAcceptanceType( TMAcceptanceType type ) {
+        if ( type == null || type == TMAcceptanceType.FINAL_STATE ) {
+            radioAcceptByFinalState.setSelected( true );
+        } else if ( type == TMAcceptanceType.HALT ) {
+            radioAcceptByHalt.setSelected( true );
+        }
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
