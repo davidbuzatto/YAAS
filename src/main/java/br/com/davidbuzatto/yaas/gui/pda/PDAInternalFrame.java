@@ -2203,7 +2203,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         
         try {
             PDA clone = (PDA) pda.clone();
-            mainWindow.createPDAInternalFrame( clone, false, false, null, 
+            mainWindow.createPDAInternalFrame( clone, false, false, null, null, 
                     radioAcceptByFinalState.isSelected() ? 
                             PDAAcceptanceType.FINAL_STATE : 
                             PDAAcceptanceType.EMPTY_STACK );
@@ -2231,7 +2231,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                 
                 PDA newPda = new PDAFinalStateToEmptyStack( pda ).getGeneratedPDA();
                 PDAArrangement.arrangeByLevel( newPda, 100, 100, 150, false );
-                mainWindow.createPDAInternalFrame( newPda, false, false, null, 
+                mainWindow.createPDAInternalFrame( newPda, false, false, null, null, 
                         PDAAcceptanceType.EMPTY_STACK );
                 
             } catch ( IllegalArgumentException exc ) {
@@ -2255,7 +2255,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                 
                 PDA newPda = new PDAEmptyStackToFinalState( pda ).getGeneratedPDA();
                 PDAArrangement.arrangeByLevel( newPda, 100, 100, 150, false );
-                mainWindow.createPDAInternalFrame( newPda, false, false, null,
+                mainWindow.createPDAInternalFrame( newPda, false, false, null, null,
                         PDAAcceptanceType.FINAL_STATE );
                 
             } catch ( IllegalArgumentException exc ) {
@@ -2508,6 +2508,11 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         this.currentState = currentState;
     }
 
+    public void setCurrentFile( File currentFile ) {
+        this.currentFile = currentFile;
+        updateTitle();
+    }
+    
     public void setCurrentFileSaved( boolean currentFileSaved ) {
         this.currentFileSaved = currentFileSaved;
         updateTitle();
@@ -2930,6 +2935,26 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         } else if ( type == PDAAcceptanceType.EMPTY_STACK ) {
             radioAcceptByEmptyStack.setSelected( true );
         }
+    }
+    
+    public void activateFirstSimulationStep() {
+        btnFirstStep.doClick();
+    }
+    
+    public void activatePreviousSimulationStep() {
+        btnPreviousStep.doClick();
+    }
+    
+    public void activateNextSimulationStep() {
+        btnNextStep.doClick();
+    }
+    
+    public void activateLastSimulationStep() {
+        btnLastStep.doClick();
+    }
+    
+    public void stopSimulation() {
+        btnStop.doClick();
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

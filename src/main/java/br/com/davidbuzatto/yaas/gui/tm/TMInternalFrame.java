@@ -2205,7 +2205,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
         
         try {
             TM clone = (TM) tm.clone();
-            mainWindow.createTMInternalFrame( clone, false, false, null, 
+            mainWindow.createTMInternalFrame( clone, false, false, null, null, 
                     radioAcceptByFinalState.isSelected() ? 
                             TMAcceptanceType.FINAL_STATE : 
                             TMAcceptanceType.HALT );
@@ -2477,6 +2477,11 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
         this.currentState = currentState;
     }
 
+    public void setCurrentFile( File currentFile ) {
+        this.currentFile = currentFile;
+        updateTitle();
+    }
+    
     public void setCurrentFileSaved( boolean currentFileSaved ) {
         this.currentFileSaved = currentFileSaved;
         updateTitle();
@@ -2883,6 +2888,26 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
         } else if ( type == TMAcceptanceType.HALT ) {
             radioAcceptByHalt.setSelected( true );
         }
+    }
+    
+    public void activateFirstSimulationStep() {
+        btnFirstStep.doClick();
+    }
+    
+    public void activatePreviousSimulationStep() {
+        btnPreviousStep.doClick();
+    }
+    
+    public void activateNextSimulationStep() {
+        btnNextStep.doClick();
+    }
+    
+    public void activateLastSimulationStep() {
+        btnLastStep.doClick();
+    }
+    
+    public void stopSimulation() {
+        btnStop.doClick();
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

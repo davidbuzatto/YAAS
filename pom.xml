@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>br.com.davidbuzatto</groupId>
     <artifactId>YAAS</artifactId>
-    <version>0.9.1</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
     <name>YAAS</name>
     <description>Yet Another Automata Simulator (YAAS) is a prototype tool for simulating the execution of Finite Automata, Pushdown Automata and Turing Machines.</description>
@@ -19,7 +19,7 @@
         <dependency>
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf</artifactId>
-            <version>3.2</version>
+            <version>3.2.1</version>
         </dependency>
         <dependency>
             <groupId>org.abego.treelayout</groupId>

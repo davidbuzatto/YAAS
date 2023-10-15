@@ -846,4 +846,47 @@ public class TMExamples {
 
     }
     
+    public static TM createNTM() {
+
+        TM ntm = new TM();
+
+        // states
+        TMState q0 = new TMState( 0, null, true, false );
+        q0.setX1Y1( 100, 150 );
+        q0.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        ntm.addState( q0 );
+
+        TMState q1 = new TMState( 1, null, false, false );
+        q1.setX1Y1( 250, 150 );
+        q1.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        ntm.addState( q1 );
+
+        TMState q2 = new TMState( 2, null, false, true );
+        q2.setX1Y1( 400, 150 );
+        q2.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        ntm.addState( q2 );
+
+        // transitions
+        TMTransition q0q0 = new TMTransition( q0, q0,
+                TMOperation.getMoveRightOperation( '0', '0' ),
+                TMOperation.getMoveRightOperation( '1', '1' ) );
+        q0q0.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        ntm.addTransition( q0q0 );
+
+        TMTransition q0q1 = new TMTransition( q0, q1,
+                TMOperation.getMoveRightOperation( '0', '0' ) );
+        q0q1.moveLabelTo( 176, 141 );
+        q0q1.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        ntm.addTransition( q0q1 );
+
+        TMTransition q1q2 = new TMTransition( q1, q2,
+                TMOperation.getMoveRightOperation( '0', '0' ) );
+        q1q2.moveLabelTo( 327, 141 );
+        q1q2.setStrokeColor( new Color( 0, 0, 0, 255 ) );
+        ntm.addTransition( q1q2 );
+
+        return ntm;
+
+    }
+    
 }

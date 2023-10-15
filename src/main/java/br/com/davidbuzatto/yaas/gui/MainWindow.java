@@ -36,6 +36,10 @@ import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.EventQueue;
 import java.beans.PropertyVetoException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -705,27 +709,32 @@ public class MainWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnFAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFAActionPerformed
-        createFAInternalFrame( null, false, true, null );
+        createFAInternalFrame( null, false, true, null, null );
     }//GEN-LAST:event_btnFAActionPerformed
 
     private void miDFASubstring01ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDFASubstring01ActionPerformed
-        createFAInternalFrame( FAExamples.createDFASubstring01(), false, false, "0010" );
+        createFAInternalFrame( FAExamples.createDFASubstring01(), 
+                false, false, null, "0010" );
     }//GEN-LAST:event_miDFASubstring01ActionPerformed
 
     private void miDFAEndsWith01ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDFAEndsWith01ActionPerformed
-        createFAInternalFrame( FAExamples.createDFAEndsWith01(), false, false, "1001" );
+        createFAInternalFrame( FAExamples.createDFAEndsWith01(), 
+                false, false, null, "1001" );
     }//GEN-LAST:event_miDFAEndsWith01ActionPerformed
 
     private void miDFA0Even1OddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDFA0Even1OddActionPerformed
-        createFAInternalFrame( FAExamples.createDFA0Even1Odd(), false, false, "0000" );
+        createFAInternalFrame( FAExamples.createDFA0Even1Odd(), 
+                false, false, null, "0000" );
     }//GEN-LAST:event_miDFA0Even1OddActionPerformed
 
     private void miNFAEndsWith01ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miNFAEndsWith01ActionPerformed
-        createFAInternalFrame( FAExamples.createNFAEndsWith01(), false, false, "1001" );
+        createFAInternalFrame( FAExamples.createNFAEndsWith01(), 
+                false, false, null, "1001" );
     }//GEN-LAST:event_miNFAEndsWith01ActionPerformed
 
     private void miENFADecimalNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miENFADecimalNumberActionPerformed
-        createFAInternalFrame( FAExamples.createENFADecimalNumber(), false, false, "-1.54" );
+        createFAInternalFrame( FAExamples.createENFADecimalNumber(), 
+                false, false, null, "-1.54" );
     }//GEN-LAST:event_miENFADecimalNumberActionPerformed
 
     private void menuItemExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemExitActionPerformed
@@ -749,27 +758,33 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_menuItemAboutActionPerformed
 
     private void miNFAEndsWith00ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miNFAEndsWith00ActionPerformed
-        createFAInternalFrame( FAExamples.createNFAEndsWith00(), false, false, "1000" );
+        createFAInternalFrame( FAExamples.createNFAEndsWith00(), 
+                false, false, null, "1000" );
     }//GEN-LAST:event_miNFAEndsWith00ActionPerformed
 
     private void miNFAEndsWith10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miNFAEndsWith10ActionPerformed
-        createFAInternalFrame( FAExamples.createNFAEndsWith10(), false, false, "1010" );
+        createFAInternalFrame( FAExamples.createNFAEndsWith10(), 
+                false, false, null, "1010" );
     }//GEN-LAST:event_miNFAEndsWith10ActionPerformed
 
     private void miNFAEndsWith11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miNFAEndsWith11ActionPerformed
-        createFAInternalFrame( FAExamples.createNFAEndsWith11(), false, false, "1011" );
+        createFAInternalFrame( FAExamples.createNFAEndsWith11(), 
+                false, false, null, "1011" );
     }//GEN-LAST:event_miNFAEndsWith11ActionPerformed
 
     private void miDFAEndsWith00ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDFAEndsWith00ActionPerformed
-        createFAInternalFrame( FAExamples.createDFAEndsWith00(), false, false, "1000" );
+        createFAInternalFrame( FAExamples.createDFAEndsWith00(), 
+                false, false, null, "1000" );
     }//GEN-LAST:event_miDFAEndsWith00ActionPerformed
 
     private void miDFAEndsWith11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDFAEndsWith11ActionPerformed
-        createFAInternalFrame( FAExamples.createDFAEndsWith11(), false, false, "1011" );
+        createFAInternalFrame( FAExamples.createDFAEndsWith11(), 
+                false, false, null, "1011" );
     }//GEN-LAST:event_miDFAEndsWith11ActionPerformed
 
     private void miDFAEndsWith10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDFAEndsWith10ActionPerformed
-        createFAInternalFrame( FAExamples.createDFAEndsWith10(), false, false, "1010" );
+        createFAInternalFrame( FAExamples.createDFAEndsWith10(), 
+                false, false, null, "1010" );
     }//GEN-LAST:event_miDFAEndsWith10ActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -777,71 +792,80 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void btnPDAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPDAActionPerformed
-        createPDAInternalFrame( null, false, true, null, null );
+        createPDAInternalFrame( null, false, true, null, null, null );
     }//GEN-LAST:event_btnPDAActionPerformed
 
     private void btnTMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTMActionPerformed
-        createTMInternalFrame( null, false, true, null, null );
+        createTMInternalFrame( null, false, true, null, null, null );
     }//GEN-LAST:event_btnTMActionPerformed
 
     private void miMiniE01ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniE01ActionPerformed
-        createFAInternalFrame(FAExamplesForMinimizationTest.createDFAForMinimizationTest01(), 
-                false, false, null );
+        createFAInternalFrame( 
+                FAExamplesForMinimizationTest.createDFAForMinimizationTest01(), 
+                false, false, null, null );
     }//GEN-LAST:event_miMiniE01ActionPerformed
 
     private void miMiniE02ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniE02ActionPerformed
-        createFAInternalFrame(FAExamplesForMinimizationTest.createDFAForMinimizationTest02(), 
-                false, false, null );
+        createFAInternalFrame( 
+                FAExamplesForMinimizationTest.createDFAForMinimizationTest02(), 
+                false, false, null, null );
     }//GEN-LAST:event_miMiniE02ActionPerformed
 
     private void miMiniE03ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniE03ActionPerformed
-        createFAInternalFrame(FAExamplesForMinimizationTest.createDFAForMinimizationTest03(), 
-                false, false, null );
+        createFAInternalFrame(
+                FAExamplesForMinimizationTest.createDFAForMinimizationTest03(), 
+                false, false, null, null );
     }//GEN-LAST:event_miMiniE03ActionPerformed
 
     private void miMiniE04ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniE04ActionPerformed
-        createFAInternalFrame(FAExamplesForMinimizationTest.createDFAForMinimizationTest04(), 
-                false, false, null );
+        createFAInternalFrame(
+                FAExamplesForMinimizationTest.createDFAForMinimizationTest04(), 
+                false, false, null, null );
     }//GEN-LAST:event_miMiniE04ActionPerformed
 
     private void miMiniE05ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniE05ActionPerformed
-        createFAInternalFrame(FAExamplesForMinimizationTest.createDFAForMinimizationTest05(), 
-                false, false, null );
+        createFAInternalFrame(
+                FAExamplesForMinimizationTest.createDFAForMinimizationTest05(), 
+                false, false, null, null );
     }//GEN-LAST:event_miMiniE05ActionPerformed
 
     private void miMiniE06ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniE06ActionPerformed
-        createFAInternalFrame(FAExamplesForMinimizationTest.createDFAForMinimizationTest06(), 
-                false, false, null );
+        createFAInternalFrame(
+                FAExamplesForMinimizationTest.createDFAForMinimizationTest06(), 
+                false, false, null, null );
     }//GEN-LAST:event_miMiniE06ActionPerformed
 
     private void miMiniE07ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniE07ActionPerformed
-        createFAInternalFrame(FAExamplesForMinimizationTest.createDFAForMinimizationTest07(), 
-                false, false, null );
+        createFAInternalFrame(
+                FAExamplesForMinimizationTest.createDFAForMinimizationTest07(), 
+                false, false, null, null );
     }//GEN-LAST:event_miMiniE07ActionPerformed
 
     private void miMiniE08ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniE08ActionPerformed
-        createFAInternalFrame(FAExamplesForMinimizationTest.createDFAForMinimizationTest08(), 
-                false, false, null );
+        createFAInternalFrame(
+                FAExamplesForMinimizationTest.createDFAForMinimizationTest08(), 
+                false, false, null, null );
     }//GEN-LAST:event_miMiniE08ActionPerformed
 
     private void miMiniE09ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMiniE09ActionPerformed
-        createFAInternalFrame(FAExamplesForMinimizationTest.createDFAForMinimizationTest09(), 
-                false, false, null );
+        createFAInternalFrame(
+                FAExamplesForMinimizationTest.createDFAForMinimizationTest09(), 
+                false, false, null, null );
     }//GEN-LAST:event_miMiniE09ActionPerformed
 
     private void miPDAEvenPalindromeFinalStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miPDAEvenPalindromeFinalStateActionPerformed
         createPDAInternalFrame( PDAExamples.createPDAEvenPalindromeFinalState(), 
-                false, false, "001100", PDAAcceptanceType.FINAL_STATE );
+                false, false, null, "001100", PDAAcceptanceType.FINAL_STATE );
     }//GEN-LAST:event_miPDAEvenPalindromeFinalStateActionPerformed
 
     private void miPDAEvenPalindromeEmptyStackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miPDAEvenPalindromeEmptyStackActionPerformed
         createPDAInternalFrame( PDAExamples.createPDAEvenPalindromeEmptyStack(), 
-                false, false, "001100", PDAAcceptanceType.EMPTY_STACK );
+                false, false, null, "001100", PDAAcceptanceType.EMPTY_STACK );
     }//GEN-LAST:event_miPDAEvenPalindromeEmptyStackActionPerformed
 
     private void miDPDAEvenPalindromeCenterMarkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDPDAEvenPalindromeCenterMarkActionPerformed
         createPDAInternalFrame( PDAExamples.createDPDAEvenPalindromeCenterMark(), 
-                false, false, "001c100", PDAAcceptanceType.FINAL_STATE );
+                false, false, null, "001c100", PDAAcceptanceType.FINAL_STATE );
     }//GEN-LAST:event_miDPDAEvenPalindromeCenterMarkActionPerformed
 
     private void riLightThemeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_riLightThemeActionPerformed
@@ -854,37 +878,37 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void miPDA0n1nFinalStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miPDA0n1nFinalStateActionPerformed
         createPDAInternalFrame( PDAExamples.createPDA0n1nFinalState(), 
-                false, false, "000111", PDAAcceptanceType.FINAL_STATE );
+                false, false, null, "000111", PDAAcceptanceType.FINAL_STATE );
     }//GEN-LAST:event_miPDA0n1nFinalStateActionPerformed
 
     private void miPDA01SameFinalStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miPDA01SameFinalStateActionPerformed
         createPDAInternalFrame( PDAExamples.createPDA01SameFinalState(), 
-                false, false, "010011", PDAAcceptanceType.FINAL_STATE );
+                false, false, null, "010011", PDAAcceptanceType.FINAL_STATE );
     }//GEN-LAST:event_miPDA01SameFinalStateActionPerformed
 
     private void miPDAPDAAiBjCkFinalStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miPDAPDAAiBjCkFinalStateActionPerformed
         createPDAInternalFrame( PDAExamples.createPDAAiBjCkFinalState(), 
-                false, false, "aabbccc", PDAAcceptanceType.FINAL_STATE );
+                false, false, null, "aabbccc", PDAAcceptanceType.FINAL_STATE );
     }//GEN-LAST:event_miPDAPDAAiBjCkFinalStateActionPerformed
 
     private void miPDA0n1nEmptyStackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miPDA0n1nEmptyStackActionPerformed
         createPDAInternalFrame( PDAExamples.createPDA0n1nEmptyStack(), 
-                false, false, "000111", PDAAcceptanceType.EMPTY_STACK );
+                false, false, null, "000111", PDAAcceptanceType.EMPTY_STACK );
     }//GEN-LAST:event_miPDA0n1nEmptyStackActionPerformed
 
     private void miPDA01SameEmptyStackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miPDA01SameEmptyStackActionPerformed
         createPDAInternalFrame( PDAExamples.createPDA01SameEmptyStack(), 
-                false, false, "010011", PDAAcceptanceType.EMPTY_STACK );
+                false, false, null, "010011", PDAAcceptanceType.EMPTY_STACK );
     }//GEN-LAST:event_miPDA01SameEmptyStackActionPerformed
 
     private void miDPDA0n1nActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDPDA0n1nActionPerformed
         createPDAInternalFrame( PDAExamples.createDPDA0n1n(), 
-                false, false, "000111", PDAAcceptanceType.FINAL_STATE );
+                false, false, null, "000111", PDAAcceptanceType.FINAL_STATE );
     }//GEN-LAST:event_miDPDA0n1nActionPerformed
 
     private void miDPDA01SameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miDPDA01SameActionPerformed
         createPDAInternalFrame( PDAExamples.createDPDA01Same(), 
-                false, false, "010011", PDAAcceptanceType.FINAL_STATE );
+                false, false, null, "010011", PDAAcceptanceType.FINAL_STATE );
     }//GEN-LAST:event_miDPDA01SameActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
@@ -893,36 +917,38 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void miTM0n1nFinalStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miTM0n1nFinalStateActionPerformed
         createTMInternalFrame( TMExamples.createDTM0n1nFinalState(),
-                false, false, "000111", TMAcceptanceType.FINAL_STATE );
+                false, false, null, "000111", TMAcceptanceType.FINAL_STATE );
     }//GEN-LAST:event_miTM0n1nFinalStateActionPerformed
 
     private void miTMMonusHaltActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miTMMonusHaltActionPerformed
         createTMInternalFrame( TMExamples.createDTMMonusHalt(),
-                false, false, "0000100", TMAcceptanceType.HALT );
+                false, false, null, "0000100", TMAcceptanceType.HALT );
     }//GEN-LAST:event_miTMMonusHaltActionPerformed
 
     private void miTMDivideHaltActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miTMDivideHaltActionPerformed
         createTMInternalFrame( TMExamples.createDTMDivideHalt(),
-                false, false, "00001001", TMAcceptanceType.HALT );
+                false, false, null, "00001001", TMAcceptanceType.HALT );
     }//GEN-LAST:event_miTMDivideHaltActionPerformed
 
     private void miTMAnBnCnFinalStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miTMAnBnCnFinalStateActionPerformed
         createTMInternalFrame( TMExamples.createDTMAnBnCnFinalState(),
-                false, false, "aaabbbccc", TMAcceptanceType.FINAL_STATE );
+                false, false, null, "aaabbbccc", TMAcceptanceType.FINAL_STATE );
     }//GEN-LAST:event_miTMAnBnCnFinalStateActionPerformed
 
     private void miTM01SameFinalStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miTM01SameFinalStateActionPerformed
         createTMInternalFrame( TMExamples.createDTM01SameFinalState(),
-                false, false, "010011", TMAcceptanceType.FINAL_STATE );
+                false, false, null, "010011", TMAcceptanceType.FINAL_STATE );
     }//GEN-LAST:event_miTM01SameFinalStateActionPerformed
 
     private void miTMInfiniteLoopFinalStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miTMInfiniteLoopFinalStateActionPerformed
         createTMInternalFrame( TMExamples.createDTMInfiniteLoopFinalState(),
-                false, false, "01", TMAcceptanceType.FINAL_STATE );
+                false, false, null, "01", TMAcceptanceType.FINAL_STATE );
     }//GEN-LAST:event_miTMInfiniteLoopFinalStateActionPerformed
 
     public void createFAInternalFrame( FA fa, boolean maximized, 
-            boolean currentFileSaved, String inputExample ) {
+            boolean currentFileSaved, 
+            File currentFile,
+            String inputExample ) {
         
         if ( fa == null ) {
             fa = new FA();
@@ -930,6 +956,7 @@ public class MainWindow extends javax.swing.JFrame {
         
         FAInternalFrame iFrame = new FAInternalFrame( this, fa );
         iFrame.setCurrentState( fa.getStates().size() );
+        iFrame.setCurrentFile( currentFile );
         iFrame.setCurrentFileSaved( currentFileSaved );
         iFrame.setInputExample( inputExample );
         
@@ -946,6 +973,7 @@ public class MainWindow extends javax.swing.JFrame {
     
     public void createPDAInternalFrame( PDA pda, boolean maximized,
             boolean currentFileSaved,
+            File currentFile,
             String inputExample, PDAAcceptanceType type ) {
         
         if ( pda == null ) {
@@ -954,6 +982,7 @@ public class MainWindow extends javax.swing.JFrame {
         
         PDAInternalFrame iFrame = new PDAInternalFrame( this, pda );
         iFrame.setCurrentState( pda.getStates().size() );
+        iFrame.setCurrentFile( currentFile );
         iFrame.setCurrentFileSaved( currentFileSaved );
         iFrame.setInputExample( inputExample );
         iFrame.setAcceptanceType( type );
@@ -971,7 +1000,9 @@ public class MainWindow extends javax.swing.JFrame {
     
     public void createTMInternalFrame( TM tm, boolean maximized,
             boolean currentFileSaved,
-            String inputExample, TMAcceptanceType type ) {
+            File currentFile,
+            String inputExample,
+            TMAcceptanceType type ) {
         
         if ( tm == null ) {
             tm = new TM();
@@ -979,6 +1010,7 @@ public class MainWindow extends javax.swing.JFrame {
         
         TMInternalFrame iFrame = new TMInternalFrame( this, tm );
         iFrame.setCurrentState( tm.getStates().size() );
+        iFrame.setCurrentFile( currentFile );
         iFrame.setCurrentFileSaved( currentFileSaved );
         iFrame.setInputExample( inputExample );
         iFrame.setAcceptanceType( type );
@@ -1049,6 +1081,43 @@ public class MainWindow extends javax.swing.JFrame {
                 
                 MainWindow mainWindow = new MainWindow();
                 
+                if ( args.length > 0 ) {
+                    
+                    File fileToOpen = new File( args[0] );
+                    
+                    if ( fileToOpen.exists() ) {
+                        
+                        try ( FileInputStream fis = new FileInputStream( fileToOpen );
+                                ObjectInputStream ois = new ObjectInputStream( fis ) ) {
+                            
+                            if ( fileToOpen.getName().endsWith( ".yfa" ) ) {
+                                FA fa = (FA) ois.readObject();
+                                fa.deactivateAllStatesInSimulation();
+                                fa.deselectAll();
+                                fa.setTransitionsControlPointsVisible( false );
+                                mainWindow.createFAInternalFrame( fa, false, true, fileToOpen, null );
+                            } else if ( fileToOpen.getName().endsWith( ".ypda" ) ) {
+                                PDA pda = (PDA) ois.readObject();
+                                pda.deactivateAllStatesInSimulation();
+                                pda.deselectAll();
+                                pda.setTransitionsControlPointsVisible( false );
+                                mainWindow.createPDAInternalFrame( pda, false, true, fileToOpen, null, null );
+                            } else if ( fileToOpen.getName().endsWith( ".ytm" ) ) {
+                                TM tm = (TM) ois.readObject();
+                                tm.deactivateAllStatesInSimulation();
+                                tm.deselectAll();
+                                tm.setTransitionsControlPointsVisible( false );
+                                mainWindow.createTMInternalFrame( tm, false, true, fileToOpen, null, null );
+                            }
+                    
+                        } catch ( IOException | ClassNotFoundException exc ) {
+                            Utils.showException( exc );
+                        }
+                        
+                    }
+                    
+                }
+                
                 switch ( ApplicationPreferences.getPref( ApplicationPreferences.PREF_THEME ) ) {
                     case ApplicationConstants.LIGHT_THEME:
                         mainWindow.changeThemeToLight();
@@ -1069,7 +1138,7 @@ public class MainWindow extends javax.swing.JFrame {
     private void openExample() {
         if ( ApplicationConstants.IN_DEVELOPMENT ) {
             createTMInternalFrame( 
-                    TMExamples.createDTMDivideHalt(), true, true, 
+                    TMExamples.createDTMDivideHalt(), true, true, null,
                     "00001001", TMAcceptanceType.HALT );
         }
     }

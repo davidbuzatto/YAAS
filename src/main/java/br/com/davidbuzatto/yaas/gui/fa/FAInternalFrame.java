@@ -1678,7 +1678,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 
                 FA dfa = new FADeterminize( fa ).getGeneratedDFA();
                 FAArrangement.arrangeByLevel( dfa, 100, 100, 150, false );
-                mainWindow.createFAInternalFrame( dfa, false, false, null );
+                mainWindow.createFAInternalFrame( dfa, false, false, null, null );
                 
             } catch ( IllegalArgumentException exc ) {
                 Utils.showErrorMessage( this, exc.getMessage() );
@@ -1707,7 +1707,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                             "Your DFA is already mimimum!" );
                 } else {
                     FAArrangement.arrangeByLevel( minDFA, 100, 100, 150, false );
-                    mainWindow.createFAInternalFrame( minDFA, false, false, null );
+                    mainWindow.createFAInternalFrame( minDFA, false, false, null, null );
                 }
                 
             }
@@ -2325,7 +2325,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         try {
             FA clone = (FA) fa.clone();
-            mainWindow.createFAInternalFrame( clone, false, false, null );
+            mainWindow.createFAInternalFrame( clone, false, false, null, null );
         } catch ( CloneNotSupportedException exc ) {
             // should never be reached
             exc.printStackTrace();
@@ -2340,7 +2340,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             if ( fa2 != null ) {
                 FA faUnion = new FAUnion( fa, fa2 ).getGeneratedFA();
                 FAArrangement.arrangeByLevel( faUnion, 100, 100, 150, false );
-                mainWindow.createFAInternalFrame( faUnion, false, false, null );
+                mainWindow.createFAInternalFrame( faUnion, false, false, null, null );
             }
         } catch ( IllegalArgumentException exc ) {
             Utils.showErrorMessage( this, exc.getMessage() );
@@ -2355,7 +2355,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             if ( fa2 != null ) {
                 FA faConcatenation = new FAConcatenation( fa, fa2 ).getGeneratedFA();
                 FAArrangement.arrangeByLevel( faConcatenation, 100, 100, 150, false );
-                mainWindow.createFAInternalFrame( faConcatenation, false, false, null );
+                mainWindow.createFAInternalFrame( faConcatenation, false, false, null, null );
             }
         } catch ( IllegalArgumentException exc ) {
             Utils.showErrorMessage( this, exc.getMessage() );
@@ -2368,7 +2368,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         try {
             FA faStar = new FAKleeneStar( fa ).getGeneratedFA();
             FAArrangement.arrangeByLevel( faStar, 100, 100, 150, false );
-            mainWindow.createFAInternalFrame( faStar, false, false, null );
+            mainWindow.createFAInternalFrame( faStar, false, false, null, null );
         } catch ( IllegalArgumentException exc ) {
             Utils.showErrorMessage( this, exc.getMessage() );
         }
@@ -2379,7 +2379,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         try {
             FA complementedDFA = new DFAComplement( fa ).getGeneratedDFA();
-            mainWindow.createFAInternalFrame( complementedDFA, false, false, null );
+            mainWindow.createFAInternalFrame( complementedDFA, false, false, null, null );
         } catch ( IllegalArgumentException exc ) {
             Utils.showErrorMessage( this, exc.getMessage() );
         }
@@ -2393,7 +2393,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             if ( fa2 != null ) {
                 FA faIntersection = new FAIntersection( fa, fa2 ).getGeneratedFA();
                 FAArrangement.arrangeByLevel( faIntersection, 100, 100, 150, false );
-                mainWindow.createFAInternalFrame( faIntersection, false, false, null );
+                mainWindow.createFAInternalFrame( faIntersection, false, false, null, null );
             }
         } catch ( IllegalArgumentException exc ) {
             Utils.showErrorMessage( this, exc.getMessage() );
@@ -2409,7 +2409,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         try {
             FA faCleaned = new FARemoveInaccessibleAndUselessStates( fa, true ).getGeneratedFA();
-            mainWindow.createFAInternalFrame( faCleaned, false, false, null );
+            mainWindow.createFAInternalFrame( faCleaned, false, false, null, null );
         } catch ( IllegalArgumentException exc ) {
             Utils.showErrorMessage( this, exc.getMessage() );
         }
@@ -2652,6 +2652,11 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         this.currentState = currentState;
     }
 
+    public void setCurrentFile( File currentFile ) {
+        this.currentFile = currentFile;
+        updateTitle();
+    }
+    
     public void setCurrentFileSaved( boolean currentFileSaved ) {
         this.currentFileSaved = currentFileSaved;
         updateTitle();

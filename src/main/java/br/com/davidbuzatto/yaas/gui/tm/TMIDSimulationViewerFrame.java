@@ -19,10 +19,14 @@ package br.com.davidbuzatto.yaas.gui.tm;
 import br.com.davidbuzatto.yaas.model.tm.TM;
 import br.com.davidbuzatto.yaas.model.tm.TMID;
 import br.com.davidbuzatto.yaas.util.Utils;
-import java.awt.Point;
-import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.util.List;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
 import javax.swing.JScrollBar;
+import javax.swing.KeyStroke;
 
 /**
  * A viewer of a ID tree for the simulation proccess.
@@ -58,6 +62,49 @@ public class TMIDSimulationViewerFrame extends javax.swing.JFrame {
         drawPanel.revalidate();
         
         setCurrentSimulationStep( currentSimulationStep );
+        
+        InputMap im = getRootPane().getInputMap();
+        ActionMap am = getRootPane().getActionMap();
+
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_LEFT, KeyEvent.CTRL_DOWN_MASK + KeyEvent.ALT_DOWN_MASK ), "firstStep" );
+        am.put( "firstStep", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                tmIFrame.activateFirstSimulationStep();
+            }
+        });
+        
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_LEFT, KeyEvent.CTRL_DOWN_MASK ), "previousStep" );
+        am.put( "previousStep", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                tmIFrame.activatePreviousSimulationStep();
+            }
+        });
+        
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_RIGHT, KeyEvent.CTRL_DOWN_MASK ), "nextStep" );
+        am.put( "nextStep", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                tmIFrame.activateNextSimulationStep();
+            }
+        });
+        
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_RIGHT, KeyEvent.CTRL_DOWN_MASK + KeyEvent.ALT_DOWN_MASK ), "lastStep" );
+        am.put( "lastStep", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                tmIFrame.activateLastSimulationStep();
+            }
+        });
+        
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_ESCAPE, 0 ), "stop" );
+        am.put( "stop", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                tmIFrame.stopSimulation();
+            }
+        });
         
     }
     
