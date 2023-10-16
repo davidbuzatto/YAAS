@@ -175,9 +175,6 @@ public class TMID extends AbstractGeometricForm implements Comparable<TMID> {
         
     }
     
-    public static void main( String[] args ) {
-    }
-    
     public TMState getState() {
         return state;
     }
