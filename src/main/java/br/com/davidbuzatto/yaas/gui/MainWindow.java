@@ -1053,6 +1053,10 @@ public class MainWindow extends javax.swing.JFrame {
                 pdaJif.updateUIFlatLaf();
                 pdaJif.updateUI();
             }
+            if ( jif instanceof TMInternalFrame tmJif ) {
+                tmJif.updateUIFlatLaf();
+                tmJif.updateUI();
+            }
         }
         
     }
