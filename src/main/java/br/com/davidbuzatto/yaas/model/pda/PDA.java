@@ -409,6 +409,11 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
                 initialState = state;
             }
             
+            if ( initialState == null ) {
+                state.setInitial( true );
+                initialState = state;
+            }
+            
         }
         
         markAllCachesAsObsolete();

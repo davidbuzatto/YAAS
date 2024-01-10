@@ -2176,6 +2176,9 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 repaintDrawPanel();
                 updateAfterRemotion();
                 selectedState = null;
+                if ( fa.getStates().isEmpty() ) {
+                    currentState = 0;
+                }
             }
         
         } else {

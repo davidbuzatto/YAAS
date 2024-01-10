@@ -2064,6 +2064,9 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                 repaintDrawPanel();
                 updateAfterRemotion();
                 selectedState = null;
+                if ( pda.getStates().isEmpty() ) {
+                    currentState = 0;
+                }
             }
         
         } else {

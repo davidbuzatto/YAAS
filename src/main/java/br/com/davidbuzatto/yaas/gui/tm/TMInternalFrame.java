@@ -2066,6 +2066,9 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
                 repaintDrawPanel();
                 updateAfterRemotion();
                 selectedState = null;
+                if ( tm.getStates().isEmpty() ) {
+                    currentState = 0;
+                }
             }
         
         } else {
