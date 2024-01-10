@@ -747,9 +747,17 @@ public class MainWindow extends javax.swing.JFrame {
                 String.format( """
                 Yet Another Automata Simulator (YAAS) is a prototype tool for
                 simulating the execution of Finite Automata, Pushdown Automata
-                and Turing Machines.
+                and Turing Machines. It uses the definitions presented in:
                                
+                "J. E. Hopcroft, R. Motwani, and J. D. Ullman, Introduction
+                to Automata Theory, Languages, and Computation, 3rd ed.,
+                Pearson Education, 2006."
+                
+                The project repository can be accessed through the URL:
+                https://github.com/davidbuzatto/YAAS
+                
                 This tool is developed by Prof. Dr. David Buzatto.
+                E-mail: davidbuzatto[at]ifsp.edu.br
                 
                 Current version: %s""", Utils.getMavenModel().getVersion() ),
                 "About...", 
