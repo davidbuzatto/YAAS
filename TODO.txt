@@ -1,3 +1,5 @@
+Open dialogs are implemented like save dialogs (I don't remember why). It needs to be verified.
+
 Finite Automata:
     Highlight inacessible states (properties panel)
     Highlight useless states     (properties panel)
