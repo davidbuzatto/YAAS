@@ -2618,7 +2618,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         jfc.removeChoosableFileFilter( jfc.getFileFilter() );
         jfc.setFileFilter( new FileNameExtensionFilter( "YAAS Pushdown Automaton", "ypda" ) );
         
-        if ( jfc.showSaveDialog( mainWindow ) == JFileChooser.APPROVE_OPTION ) {
+        if ( jfc.showOpenDialog( mainWindow ) == JFileChooser.APPROVE_OPTION ) {
 
             File f = jfc.getSelectedFile();
 
@@ -2635,6 +2635,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                     pda.deactivateAllStatesInSimulation();
                     pda.deselectAll();
                     pda.setTransitionsControlPointsVisible( false );
+                    setCurrentState( pda.getNewStateId() + 1 );
                     drawPanel.setPda( pda );
                     
                     pdaPPanel.setPda( pda );

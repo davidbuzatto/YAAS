@@ -39,6 +39,8 @@ import java.util.TreeSet;
  */
 public class FA extends AbstractGeometricForm implements Cloneable {
     
+    private static final long serialVersionUID = 1L;
+    
     private List<FAState> states;
     private List<FATransition> transitions;
     private FAState initialState;
@@ -617,6 +619,16 @@ public class FA extends AbstractGeometricForm implements Cloneable {
 
     public List<FAState> getStates() {
         return states;
+    }
+    
+    public int getNewStateId() {
+        int max = -1;
+        for ( FAState s : states ) {
+            if ( max < s.getNumber() ) {
+                max = s.getNumber();
+            }
+        }
+        return max;
     }
 
     public List<FATransition> getTransitions() {

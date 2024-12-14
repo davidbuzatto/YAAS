@@ -2762,7 +2762,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         jfc.removeChoosableFileFilter( jfc.getFileFilter() );
         jfc.setFileFilter( new FileNameExtensionFilter( "YAAS Finite Automaton", "yfa" ) );
         
-        if ( jfc.showSaveDialog( mainWindow ) == JFileChooser.APPROVE_OPTION ) {
+        if ( jfc.showOpenDialog( mainWindow ) == JFileChooser.APPROVE_OPTION ) {
 
             File f = jfc.getSelectedFile();
 
@@ -2779,6 +2779,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                     fa.deactivateAllStatesInSimulation();
                     fa.deselectAll();
                     fa.setTransitionsControlPointsVisible( false );
+                    setCurrentState( fa.getNewStateId() + 1 );
                     drawPanel.setFa( fa );
                     
                     faPPanel.setFa( fa );

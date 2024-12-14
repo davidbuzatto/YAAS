@@ -2587,7 +2587,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
         jfc.removeChoosableFileFilter( jfc.getFileFilter() );
         jfc.setFileFilter( new FileNameExtensionFilter( "YAAS Turing Machine", "ytm" ) );
         
-        if ( jfc.showSaveDialog( mainWindow ) == JFileChooser.APPROVE_OPTION ) {
+        if ( jfc.showOpenDialog( mainWindow ) == JFileChooser.APPROVE_OPTION ) {
 
             File f = jfc.getSelectedFile();
 
@@ -2604,6 +2604,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
                     tm.deactivateAllStatesInSimulation();
                     tm.deselectAll();
                     tm.setTransitionsControlPointsVisible( false );
+                    setCurrentState( tm.getNewStateId() + 1 );
                     drawPanel.setTm( tm );
                     
                     tmPPanel.setTm( tm );

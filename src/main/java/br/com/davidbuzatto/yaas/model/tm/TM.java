@@ -44,6 +44,8 @@ import java.util.TreeSet;
  */
 public class TM extends AbstractGeometricForm implements Cloneable {
     
+    private static final long serialVersionUID = 1L;
+    
     private transient static final boolean DEBUG = Boolean.parseBoolean( 
             Utils.getMavenModel().getProperties().getProperty( "debugAlgorithms" ) );
     
@@ -664,6 +666,16 @@ public class TM extends AbstractGeometricForm implements Cloneable {
 
     public List<TMState> getStates() {
         return states;
+    }
+    
+    public int getNewStateId() {
+        int max = -1;
+        for ( TMState s : states ) {
+            if ( max < s.getNumber() ) {
+                max = s.getNumber();
+            }
+        }
+        return max;
     }
 
     public List<TMTransition> getTransitions() {

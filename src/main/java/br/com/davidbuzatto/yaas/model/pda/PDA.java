@@ -42,6 +42,8 @@ import java.util.TreeSet;
  */
 public class PDA extends AbstractGeometricForm implements Cloneable {
     
+    private static final long serialVersionUID = 1L;
+    
     private transient static final boolean DEBUG = Boolean.parseBoolean( 
             Utils.getMavenModel().getProperties().getProperty( "debugAlgorithms" ) );
     
@@ -814,6 +816,16 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
 
     public List<PDAState> getStates() {
         return states;
+    }
+    
+    public int getNewStateId() {
+        int max = -1;
+        for ( PDAState s : states ) {
+            if ( max < s.getNumber() ) {
+                max = s.getNumber();
+            }
+        }
+        return max;
     }
 
     public List<PDATransition> getTransitions() {
