@@ -316,7 +316,7 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
     
     @Override
     @SuppressWarnings( "unchecked" )
-    public Object clone() throws CloneNotSupportedException {
+    public FAState clone() throws CloneNotSupportedException {
         
         FAState c = (FAState) super.clone();
         
@@ -331,7 +331,7 @@ public class FAState extends AbstractGeometricForm implements Comparable<FAState
         c.radiusSquared = radiusSquared;
         c.diameter = diameter;
 
-        c.arrow = (Arrow) arrow.clone();
+        c.arrow = arrow.clone();
 
         c.activeInSimulation = false;
         c.activeInSimulationStrokeColor = activeInSimulationStrokeColor;

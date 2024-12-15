@@ -192,7 +192,7 @@ public class SerializableBasicStroke implements Serializable, Cloneable {
     
     @Override
     @SuppressWarnings( "unchecked" )
-    public Object clone() throws CloneNotSupportedException {
+    public SerializableBasicStroke clone() throws CloneNotSupportedException {
         
         SerializableBasicStroke c = (SerializableBasicStroke) super.clone();
         

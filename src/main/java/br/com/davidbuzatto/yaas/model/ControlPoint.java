@@ -62,7 +62,7 @@ public class ControlPoint extends AbstractGeometricForm implements Cloneable {
     
     @Override
     @SuppressWarnings( "unchecked" )
-    public Object clone() throws CloneNotSupportedException {
+    public ControlPoint clone() throws CloneNotSupportedException {
         
         ControlPoint c = (ControlPoint) super.clone();
         

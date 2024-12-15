@@ -232,7 +232,7 @@ public abstract class AbstractGeometricForm implements Serializable, Cloneable {
 
     @Override
     @SuppressWarnings( "unchecked" )
-    public Object clone() throws CloneNotSupportedException {
+    public AbstractGeometricForm clone() throws CloneNotSupportedException {
         
         AbstractGeometricForm c = (AbstractGeometricForm) super.clone();
         

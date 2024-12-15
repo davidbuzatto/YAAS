@@ -316,7 +316,7 @@ public class PDAState extends AbstractGeometricForm implements Comparable<PDASta
     
     @Override
     @SuppressWarnings( "unchecked" )
-    public Object clone() throws CloneNotSupportedException {
+    public PDAState clone() throws CloneNotSupportedException {
         
         PDAState c = (PDAState) super.clone();
         
@@ -331,7 +331,7 @@ public class PDAState extends AbstractGeometricForm implements Comparable<PDASta
         c.radiusSquared = radiusSquared;
         c.diameter = diameter;
 
-        c.arrow = (Arrow) arrow.clone();
+        c.arrow = arrow.clone();
 
         c.activeInSimulation = false;
         c.activeInSimulationStrokeColor = activeInSimulationStrokeColor;

@@ -813,21 +813,21 @@ public class TM extends AbstractGeometricForm implements Cloneable {
     
     @Override
     @SuppressWarnings( "unchecked" )
-    public Object clone() throws CloneNotSupportedException {
+    public TM clone() throws CloneNotSupportedException {
         
         TM c = (TM) super.clone();
         Map<TMState, TMState> ref = new HashMap<>();
     
         c.states = new ArrayList<>();
         for ( TMState s : states ) {
-            TMState n = (TMState) s.clone();
+            TMState n = s.clone();
             c.addState( n );
             ref.put( s, n );
         }
         
         c.transitions = new ArrayList<>();
         for ( TMTransition t : transitions ) {
-            TMTransition n = (TMTransition) t.clone();
+            TMTransition n = t.clone();
             n.setOriginState( ref.get( t.getOriginState() ) );
             n.setTargetState( ref.get( t.getTargetState() ) );
             c.addTransition( n );

@@ -214,7 +214,7 @@ public class PDATransitionLabel extends AbstractGeometricForm implements Cloneab
     
     @Override
     @SuppressWarnings( "unchecked" )
-    public Object clone() throws CloneNotSupportedException {
+    public PDATransitionLabel clone() throws CloneNotSupportedException {
         
         PDATransitionLabel c = (PDATransitionLabel) super.clone();
         

@@ -758,21 +758,21 @@ public class FA extends AbstractGeometricForm implements Cloneable {
     
     @Override
     @SuppressWarnings( "unchecked" )
-    public Object clone() throws CloneNotSupportedException {
+    public FA clone() throws CloneNotSupportedException {
         
         FA c = (FA) super.clone();
         Map<FAState, FAState> ref = new HashMap<>();
     
         c.states = new ArrayList<>();
         for ( FAState s : states ) {
-            FAState n = (FAState) s.clone();
+            FAState n = s.clone();
             c.addState( n );
             ref.put( s, n );
         }
         
         c.transitions = new ArrayList<>();
         for ( FATransition t : transitions ) {
-            FATransition n = (FATransition) t.clone();
+            FATransition n = t.clone();
             n.setOriginState( ref.get( t.getOriginState() ) );
             n.setTargetState( ref.get( t.getTargetState() ) );
             c.addTransition( n );

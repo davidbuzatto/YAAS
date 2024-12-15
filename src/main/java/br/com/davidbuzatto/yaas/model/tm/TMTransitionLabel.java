@@ -214,7 +214,7 @@ public class TMTransitionLabel extends AbstractGeometricForm implements Cloneabl
     
     @Override
     @SuppressWarnings( "unchecked" )
-    public Object clone() throws CloneNotSupportedException {
+    public TMTransitionLabel clone() throws CloneNotSupportedException {
         
         TMTransitionLabel c = (TMTransitionLabel) super.clone();
         

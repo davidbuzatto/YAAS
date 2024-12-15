@@ -969,21 +969,21 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
     
     @Override
     @SuppressWarnings( "unchecked" )
-    public Object clone() throws CloneNotSupportedException {
+    public PDA clone() throws CloneNotSupportedException {
         
         PDA c = (PDA) super.clone();
         Map<PDAState, PDAState> ref = new HashMap<>();
     
         c.states = new ArrayList<>();
         for ( PDAState s : states ) {
-            PDAState n = (PDAState) s.clone();
+            PDAState n = s.clone();
             c.addState( n );
             ref.put( s, n );
         }
         
         c.transitions = new ArrayList<>();
         for ( PDATransition t : transitions ) {
-            PDATransition n = (PDATransition) t.clone();
+            PDATransition n = t.clone();
             n.setOriginState( ref.get( t.getOriginState() ) );
             n.setTargetState( ref.get( t.getTargetState() ) );
             c.addTransition( n );

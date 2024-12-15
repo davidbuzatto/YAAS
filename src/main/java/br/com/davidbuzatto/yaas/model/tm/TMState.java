@@ -316,7 +316,7 @@ public class TMState extends AbstractGeometricForm implements Comparable<TMState
     
     @Override
     @SuppressWarnings( "unchecked" )
-    public Object clone() throws CloneNotSupportedException {
+    public TMState clone() throws CloneNotSupportedException {
         
         TMState c = (TMState) super.clone();
         
@@ -331,7 +331,7 @@ public class TMState extends AbstractGeometricForm implements Comparable<TMState
         c.radiusSquared = radiusSquared;
         c.diameter = diameter;
 
-        c.arrow = (Arrow) arrow.clone();
+        c.arrow = arrow.clone();
 
         c.activeInSimulation = false;
         c.activeInSimulationStrokeColor = activeInSimulationStrokeColor;

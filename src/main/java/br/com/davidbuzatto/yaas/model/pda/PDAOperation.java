@@ -281,7 +281,7 @@ public class PDAOperation extends AbstractGeometricForm implements Cloneable, Co
     
     @Override
     @SuppressWarnings( "unchecked" )
-    public Object clone() throws CloneNotSupportedException {
+    public PDAOperation clone() throws CloneNotSupportedException {
         
         PDAOperation c = (PDAOperation) super.clone();
         

@@ -108,7 +108,7 @@ public class Arrow extends AbstractGeometricForm implements Cloneable {
     
     @Override
     @SuppressWarnings( "unchecked" )
-    public Object clone() throws CloneNotSupportedException {
+    public Arrow clone() throws CloneNotSupportedException {
         
         Arrow c = (Arrow) super.clone();
         

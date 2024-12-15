@@ -171,7 +171,7 @@ public class TMOperation extends AbstractGeometricForm implements Cloneable, Com
     
     @Override
     @SuppressWarnings( "unchecked" )
-    public Object clone() throws CloneNotSupportedException {
+    public TMOperation clone() throws CloneNotSupportedException {
         
         TMOperation c = (TMOperation) super.clone();
         

@@ -144,7 +144,7 @@ public class FATransitionLabel extends AbstractGeometricForm implements Cloneabl
     
     @Override
     @SuppressWarnings( "unchecked" )
-    public Object clone() throws CloneNotSupportedException {
+    public FATransitionLabel clone() throws CloneNotSupportedException {
         
         FATransitionLabel c = (FATransitionLabel) super.clone();
         

@@ -896,7 +896,7 @@ public class FATransition extends AbstractGeometricForm implements Cloneable {
     
     @Override
     @SuppressWarnings( "unchecked" )
-    public Object clone() throws CloneNotSupportedException {
+    public FATransition clone() throws CloneNotSupportedException {
         
         FATransition c = (FATransition) super.clone();
         
@@ -909,16 +909,16 @@ public class FATransition extends AbstractGeometricForm implements Cloneable {
             c.symbols.add( ch );
         }
 
-        c.label = (FATransitionLabel) label.clone();
+        c.label = label.clone();
         c.curve = (CubicCurve2D) curve.clone();
-        c.arrow = (Arrow) arrow.clone();
+        c.arrow = arrow.clone();
 
-        c.targetCP = (ControlPoint) targetCP.clone();
-        c.centralCP = (ControlPoint) centralCP.clone();
-        c.leftCP = (ControlPoint) leftCP.clone();
-        c.rightCP = (ControlPoint) rightCP.clone();
+        c.targetCP = targetCP.clone();
+        c.centralCP = centralCP.clone();
+        c.leftCP = leftCP.clone();
+        c.rightCP = rightCP.clone();
 
-        c.cpStroke = (SerializableBasicStroke) cpStroke.clone();
+        c.cpStroke = cpStroke.clone();
 
         c.xOffset = xOffset;
         c.yOffset = yOffset;
