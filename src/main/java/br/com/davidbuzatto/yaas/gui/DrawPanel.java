@@ -65,9 +65,12 @@ public class DrawPanel extends JPanel {
     private int currentSimulationStep;
     private boolean simulationAccepted;
     
+    private ZoomFacility zf;
+    
     public DrawPanel() {
         tempTransitionArrow = new Arrow();
         tempTransitionArrow.setStroke( DrawingConstants.TRANSITION_STROKE );
+        zf = new ZoomFacility();
     }
     
     @Override
@@ -79,38 +82,43 @@ public class DrawPanel extends JPanel {
                 RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON );
         
+        Graphics2D g2dScaled = (Graphics2D) g2d.create();
+        g2dScaled.scale( zf.getZoomFactor(), zf.getZoomFactor() );
+        
         g2d.setColor( Color.WHITE );
         g2d.fillRect( 0, 0, getWidth(), getHeight() );
         
         if ( showGrid ) {
-            g2d.setColor( DrawingConstants.GRID_COLOR );
-            for ( int i = 0; i <= getHeight(); i += DrawingConstants.STATE_RADIUS ) {
-                g2d.drawLine( 0, i, getWidth(), i );
+            g2dScaled.setColor( DrawingConstants.GRID_COLOR );
+            int tWidth = zf.screenToWorld( getWidth() );
+            int tHeight = zf.screenToWorld( getHeight() );
+            for ( int i = 0; i <= tHeight; i += DrawingConstants.STATE_RADIUS ) {
+                g2dScaled.drawLine( 0, i, tWidth, i );
             }
-            for ( int i = 0; i <= getWidth(); i += DrawingConstants.STATE_RADIUS ) {
-                g2d.drawLine( i, 0, i, getHeight() );
+            for ( int i = 0; i <= tWidth; i += DrawingConstants.STATE_RADIUS ) {
+                g2dScaled.drawLine( i, 0, i, tHeight );
             }
         }
         
         boolean containsMachine = false;
         
         if ( fa != null ) {
-            fa.draw( g2d );
+            fa.draw( g2dScaled );
             containsMachine = true;
         } else if ( pda != null ) {
-            pda.draw( g2d );
+            pda.draw( g2dScaled );
             containsMachine = true;
         } else if ( tm != null ) {
-            tm.draw( g2d );
+            tm.draw( g2dScaled );
             containsMachine = true;
         }
         
         if ( containsMachine && drawingTempTransition ) {
 
-            g2d.setStroke( DrawingConstants.TEMP_TRANSITION_STROKE.getBasicStroke() );
-            g2d.setColor( DrawingConstants.TEMP_TRANSITION_COLOR );
+            g2dScaled.setStroke( DrawingConstants.TEMP_TRANSITION_STROKE.getBasicStroke() );
+            g2dScaled.setColor( DrawingConstants.TEMP_TRANSITION_COLOR );
 
-            g2d.drawLine( 
+            g2dScaled.drawLine( 
                     tempTransitionX1, tempTransitionY1, 
                     tempTransitionX2, tempTransitionY2 );
 
@@ -120,7 +128,22 @@ public class DrawPanel extends JPanel {
             tempTransitionArrow.setAngle( Math.atan2( 
                     tempTransitionY2 - tempTransitionY1, 
                     tempTransitionX2 - tempTransitionX1 ) );
-            tempTransitionArrow.draw( g2d );
+            tempTransitionArrow.draw( g2dScaled );
+
+        }
+        
+        if ( selectionRectangle != null ) {
+            
+            g2dScaled.setColor( DrawingConstants.SELECTION_RETANGLE_FILL_COLOR );
+            g2dScaled.fillRect( 
+                    selectionRectangle.x, selectionRectangle.y, 
+                    selectionRectangle.width, selectionRectangle.height );
+            
+            g2dScaled.setStroke( DrawingConstants.SELECTION_RETANGLE_STROKE.getBasicStroke() );
+            g2dScaled.setColor( DrawingConstants.SELECTION_RETANGLE_STROKE_COLOR );
+            g2dScaled.drawRect( 
+                    selectionRectangle.x, selectionRectangle.y, 
+                    selectionRectangle.width, selectionRectangle.height );
 
         }
         
@@ -134,25 +157,11 @@ public class DrawPanel extends JPanel {
             processTMSimulation( g2d );
         }
         
-        if ( selectionRectangle != null ) {
-            
-            g2d.setColor( DrawingConstants.SELECTION_RETANGLE_FILL_COLOR );
-            g2d.fillRect( 
-                    selectionRectangle.x, selectionRectangle.y, 
-                    selectionRectangle.width, selectionRectangle.height );
-            
-            g2d.setStroke( DrawingConstants.SELECTION_RETANGLE_STROKE.getBasicStroke() );
-            g2d.setColor( DrawingConstants.SELECTION_RETANGLE_STROKE_COLOR );
-            g2d.drawRect( 
-                    selectionRectangle.x, selectionRectangle.y, 
-                    selectionRectangle.width, selectionRectangle.height );
-
-        }
-        
         g2d.setStroke( DrawingConstants.DRAW_PANEL_STROKE.getBasicStroke() );
         g2d.setColor( Color.BLACK );
         g2d.drawRect( 0, 0, getWidth(), getHeight() );
         
+        g2dScaled.dispose();
         g2d.dispose();
         
     }
@@ -418,6 +427,10 @@ public class DrawPanel extends JPanel {
 
     public boolean isSimulationAccepted() {
         return simulationAccepted;
+    }
+    
+    public ZoomFacility getZoomFacility() {
+        return zf;
     }
     
 }

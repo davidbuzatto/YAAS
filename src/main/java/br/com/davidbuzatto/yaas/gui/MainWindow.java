@@ -1149,9 +1149,13 @@ public class MainWindow extends javax.swing.JFrame {
     
     private void openExample() {
         if ( ApplicationConstants.IN_DEVELOPMENT ) {
-            createTMInternalFrame( 
+            createFAInternalFrame( FAExamples.createDFASubstring01(), 
+                    false, false, null, "0010" );
+            /*createPDAInternalFrame( PDAExamples.createPDAEvenPalindromeFinalState(), 
+                    false, false, null, "001100", PDAAcceptanceType.FINAL_STATE );*/
+            /*createTMInternalFrame( 
                     TMExamples.createDTMDivideHalt(), true, true, null,
-                    "00001001", TMAcceptanceType.HALT );
+                    "00001001", TMAcceptanceType.HALT );*/
         }
     }
     

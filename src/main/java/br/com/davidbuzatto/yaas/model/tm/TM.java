@@ -16,6 +16,7 @@
  */
 package br.com.davidbuzatto.yaas.model.tm;
 
+import br.com.davidbuzatto.yaas.gui.ZoomFacility;
 import br.com.davidbuzatto.yaas.gui.tm.TMSimulationStep;
 import br.com.davidbuzatto.yaas.model.AbstractGeometricForm;
 import br.com.davidbuzatto.yaas.util.ApplicationConstants;
@@ -340,9 +341,9 @@ public class TM extends AbstractGeometricForm implements Cloneable {
         }
     }
     
-    public void draggTransitions( MouseEvent evt ) {
+    public void draggTransitions( MouseEvent evt, ZoomFacility zf ) {
         for ( TMTransition t : transitions ) {
-            t.mouseDragged( evt );
+            t.mouseDragged( evt, zf );
         }
     }
     

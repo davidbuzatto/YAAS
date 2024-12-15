@@ -17,7 +17,6 @@
 package br.com.davidbuzatto.yaas.gui.pda;
 
 import br.com.davidbuzatto.yaas.gui.MainWindow;
-import br.com.davidbuzatto.yaas.gui.ZoomFacility;
 import br.com.davidbuzatto.yaas.gui.pda.properties.PDAPropertiesPanel;
 import br.com.davidbuzatto.yaas.gui.pda.properties.PDAStatePropertiesPanel;
 import br.com.davidbuzatto.yaas.gui.pda.properties.PDATransitionPropertiesPanel;
@@ -139,8 +138,6 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     private Color txtTestStringDefaultCaretColor;
     private Color lblTestResultDefaultFC;
     
-    private ZoomFacility zoomFacility;
-    
     private boolean currentFileSaved;
     private File currentFile;
     private String baseTitle;
@@ -164,7 +161,6 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         }
         
         this.selectedStates = new HashSet<>();
-        this.zoomFacility = new ZoomFacility();
         
         initComponents();
         customInit();
@@ -210,9 +206,6 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         });
         
         if ( !ApplicationConstants.IN_DEVELOPMENT ) {
-            sep05.setVisible( false );
-            btnZoomIn.setVisible( false );
-            btnZoomOut.setVisible( false );
             btnCodeGen.setVisible( false );
             btnClone.setVisible( false );
         }
@@ -1082,8 +1075,8 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
 
         drawPanel.requestFocus();
         
-        xPressed = evt.getX();
-        yPressed = evt.getY();
+        xPressed = drawPanel.getZoomFacility().screenToWorld( evt.getX() );
+        yPressed = drawPanel.getZoomFacility().screenToWorld( evt.getY() );
         
         xPrev = xPressed;
         yPrev = yPressed;
@@ -1203,15 +1196,18 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         
         canDrag = false;
         
+        int xEvt = drawPanel.getZoomFacility().screenToWorld( evt.getX() );
+        int yEvt = drawPanel.getZoomFacility().screenToWorld( evt.getY() );
+        
         if ( evt.getButton() == MouseEvent.BUTTON1 ) {
             
             if ( btnSelectMultipleStates.isSelected() ) {
 
                 Rectangle rectangle = new Rectangle( 
-                        xPressed <= evt.getX() ? xPressed : evt.getX(), 
-                        yPressed <= evt.getY() ? yPressed : evt.getY(), 
-                        xPressed <= evt.getX() ? evt.getX() - xPressed : xPressed - evt.getX(), 
-                        yPressed <= evt.getY() ? evt.getY() - yPressed : yPressed - evt.getY() );
+                        xPressed <= xEvt ? xPressed : xEvt, 
+                        yPressed <= yEvt ? yPressed : yEvt, 
+                        xPressed <= xEvt ? xEvt - xPressed : xPressed - xEvt, 
+                        yPressed <= yEvt ? yEvt - yPressed : yPressed - yEvt );
 
                 for ( PDAState s : pda.getStates() ) {
                     if ( s.intersects( rectangle ) ) {
@@ -1237,7 +1233,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                 if ( originState != null ) {
 
                     if ( targetState == null ) {
-                        targetState = pda.getStateAt( evt.getX(), evt.getY() );
+                        targetState = pda.getStateAt( xEvt, yEvt );
                     } 
 
                     if ( targetState != null ) {
@@ -1271,8 +1267,8 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                 
                 pda.deselectAll();
                 selectedStates.clear();
-                selectedState = pda.getStateAt( evt.getX(), evt.getY() );
-                selectedTransition = pda.getTransitionAt( evt.getX(), evt.getY() );
+                selectedState = pda.getStateAt( xEvt, yEvt );
+                selectedTransition = pda.getTransitionAt( xEvt, yEvt );
                 
                 if ( selectedState != null ) {
 
@@ -1284,7 +1280,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                     checkInitialState.setSelected( selectedState.isInitial() );
                     checkFinalState.setSelected( selectedState.isFinal() );
                     
-                    popupMenuStateProperties.show( drawPanel, evt.getX(), evt.getY() );
+                    popupMenuStateProperties.show( drawPanel, xEvt, yEvt );
 
                 } else if ( selectedTransition != null ) {
 
@@ -1293,7 +1289,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                     transitionPPanel.readProperties();
                     cardLayout.show( panelProperties, TRANSITION_PROPERTIES_CARD );
 
-                    popupMenuTransitionProperties.show( drawPanel, evt.getX(), evt.getY() );
+                    popupMenuTransitionProperties.show( drawPanel, xEvt, yEvt );
 
                 } else {
 
@@ -1315,15 +1311,18 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     
     private void drawPanelMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drawPanelMouseDragged
         
+        int xEvt = drawPanel.getZoomFacility().screenToWorld( evt.getX() );
+        int yEvt = drawPanel.getZoomFacility().screenToWorld( evt.getY() );
+        
         if ( canDrag ) {
             
             if ( btnSelectMultipleStates.isSelected() ) {
 
                 Rectangle rectangle = new Rectangle( 
-                        xPressed <= evt.getX() ? xPressed : evt.getX(), 
-                        yPressed <= evt.getY() ? yPressed : evt.getY(), 
-                        xPressed <= evt.getX() ? evt.getX() - xPressed : xPressed - evt.getX(), 
-                        yPressed <= evt.getY() ? evt.getY() - yPressed : yPressed - evt.getY() );
+                        xPressed <= xEvt ? xPressed : xEvt, 
+                        yPressed <= yEvt ? yPressed : yEvt, 
+                        xPressed <= xEvt ? xEvt - xPressed : xPressed - xEvt, 
+                        yPressed <= yEvt ? yEvt - yPressed : yPressed - yEvt );
 
                 for ( PDAState s : pda.getStates() ) {
                     if ( s.intersects( rectangle ) ) {
@@ -1338,8 +1337,8 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
 
             } else if ( btnMove.isSelected() ) {
 
-                int xAmount = evt.getX() - xPrev;
-                int yAmount = evt.getY() - yPrev;
+                int xAmount = xEvt - xPrev;
+                int yAmount = yEvt - yPrev;
                 xPrev += xAmount;
                 yPrev += yAmount;
                     
@@ -1348,7 +1347,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                         s.move( xAmount, yAmount );
                     }
                     pda.updateTransitions();
-                    pda.draggTransitions( evt );
+                    pda.draggTransitions( evt, drawPanel.getZoomFacility() );
                 } else if ( selectedState != null ) {
                     if ( btnSnapToGrid.isSelected() ) {
                         updateSnapPoint( evt );
@@ -1361,9 +1360,9 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                         selectedTransition.cancelDragging();
                         selectedTransition = null;
                     }
-                    pda.draggTransitions( evt );
+                    pda.draggTransitions( evt, drawPanel.getZoomFacility() );
                 } else if ( selectedTransition != null ) {
-                    selectedTransition.mouseDragged( evt );
+                    selectedTransition.mouseDragged( evt, drawPanel.getZoomFacility() );
                 } else {
                     pda.move( xAmount, yAmount );
                 }
@@ -1371,8 +1370,8 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                 setCurrentFileSaved( false );
 
             } else if ( btnAddTransition.isSelected() ) {
-                drawPanel.setTempTransitionX2( evt.getX() );
-                drawPanel.setTempTransitionY2( evt.getY() );
+                drawPanel.setTempTransitionX2( xEvt );
+                drawPanel.setTempTransitionY2( yEvt );
             }
 
             repaintDrawPanel();
@@ -1383,8 +1382,11 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
 
     private void drawPanelMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drawPanelMouseMoved
         
+        int xEvt = drawPanel.getZoomFacility().screenToWorld( evt.getX() );
+        int yEvt = drawPanel.getZoomFacility().screenToWorld( evt.getY() );
+        
         if ( btnMove.isSelected() || btnAddTransition.isSelected() ) {
-            pda.mouseHoverStatesAndTransitions( evt.getX(), evt.getY() );
+            pda.mouseHoverStatesAndTransitions( xEvt, yEvt );
             repaintDrawPanel();
         }
         
@@ -1469,6 +1471,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                 g2d.setRenderingHint(
                         RenderingHints.KEY_ANTIALIASING,
                         RenderingHints.VALUE_ANTIALIAS_ON );
+                g2d.scale( drawPanel.getZoomFacility().getZoomFactor(), drawPanel.getZoomFacility().getZoomFactor() );
 
                 if ( r != JOptionPane.YES_OPTION ) {
                     g2d.setColor( Color.WHITE );
@@ -1476,6 +1479,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                 }
 
                 pda.draw( g2d );
+                g2d.dispose();
 
                 try {
                     ImageIO.write( img, "png", f );
@@ -2271,7 +2275,12 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
 
     public void repaintDrawPanel() {
         drawPanel.repaint();
-        drawPanel.setPreferredSize( new Dimension( pda.getWidth(), pda.getHeight() ) );
+        drawPanel.setPreferredSize( 
+            new Dimension( 
+                drawPanel.getZoomFacility().worldToScreen( pda.getWidth() ), 
+                drawPanel.getZoomFacility().worldToScreen( pda.getHeight() )
+            )
+        );
         drawPanel.revalidate();
     }
     
@@ -2290,11 +2299,10 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     
     private void zoomIn() {
         
-        System.out.println( "zoom in" );
-        zoomFacility.zoomIn();
+        drawPanel.getZoomFacility().zoomIn();
         
         btnZoomOut.setEnabled( true );
-        if ( !zoomFacility.canZoomIn() ) {
+        if ( !drawPanel.getZoomFacility().canZoomIn() ) {
             btnZoomIn.setEnabled( false );
         }
         
@@ -2305,11 +2313,10 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     
     private void zoomOut() {
         
-        System.out.println( "zoom out" );
-        zoomFacility.zoomOut();
+        drawPanel.getZoomFacility().zoomOut();
         
         btnZoomIn.setEnabled( true );
-        if ( !zoomFacility.canZoomOut() ) {
+        if ( !drawPanel.getZoomFacility().canZoomOut() ) {
             btnZoomOut.setEnabled( false );
         }
         
@@ -2498,10 +2505,13 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     
     private void updateSnapPoint( MouseEvent evt ) {
         
-        xSnap = ( evt.getX() + DrawingConstants.STATE_RADIUS / 2 ) / 
+        int xEvt = drawPanel.getZoomFacility().screenToWorld( evt.getX() );
+        int yEvt = drawPanel.getZoomFacility().screenToWorld( evt.getY() );
+        
+        xSnap = ( xEvt + DrawingConstants.STATE_RADIUS / 2 ) / 
                 DrawingConstants.STATE_RADIUS * 
                 DrawingConstants.STATE_RADIUS;
-        ySnap = ( evt.getY() + DrawingConstants.STATE_RADIUS / 2 ) / 
+        ySnap = ( yEvt + DrawingConstants.STATE_RADIUS / 2 ) / 
                 DrawingConstants.STATE_RADIUS * 
                 DrawingConstants.STATE_RADIUS;
         

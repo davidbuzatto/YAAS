@@ -16,6 +16,7 @@
  */
 package br.com.davidbuzatto.yaas.model.tm;
 
+import br.com.davidbuzatto.yaas.gui.ZoomFacility;
 import br.com.davidbuzatto.yaas.model.AbstractGeometricForm;
 import br.com.davidbuzatto.yaas.model.Arrow;
 import br.com.davidbuzatto.yaas.model.ControlPoint;
@@ -175,7 +176,10 @@ public class TMTransition extends AbstractGeometricForm implements Cloneable {
         labelDragging = false;
     }
     
-    public void mouseDragged( MouseEvent evt ) {
+    public void mouseDragged( MouseEvent evt, ZoomFacility zf ) {
+        
+        int xEvt = (int) ( evt.getX() / zf.getZoomFactor() );
+        int yEvt = (int) ( evt.getY() / zf.getZoomFactor() );
         
         updateStartAndEndPoints();
         
@@ -188,15 +192,15 @@ public class TMTransition extends AbstractGeometricForm implements Cloneable {
                 if ( originState == targetState ) {
                     
                     targetCPAngle = Math.atan2( 
-                            targetState.getY1() - evt.getY(), 
-                            targetState.getX1() - evt.getX() ) 
+                            targetState.getY1() - yEvt, 
+                            targetState.getX1() - xEvt ) 
                             - DrawingConstants.RAD_60;
                     
                 } else {
                     
                     targetCPAngle = Math.atan2( 
-                            targetState.getY1() - evt.getY(), 
-                            targetState.getX1() - evt.getX() );
+                            targetState.getY1() - yEvt, 
+                            targetState.getX1() - xEvt );
 
                     x2 = targetState.getX1() - 
                             (int) ( Math.cos( targetCPAngle ) * 
@@ -209,8 +213,8 @@ public class TMTransition extends AbstractGeometricForm implements Cloneable {
 
             } else if ( centralCPDragging ) {
                 centralCPMoved = true;
-                centralCP.setX1( evt.getX() );
-                centralCP.setY1( evt.getY() );
+                centralCP.setX1( xEvt );
+                centralCP.setY1( yEvt );
                 leftCP.setX1( prevLeftCPX + 
                         centralCP.getX1() - prevCentralCPX );
                 leftCP.setY1( prevLeftCPY + 
@@ -221,20 +225,20 @@ public class TMTransition extends AbstractGeometricForm implements Cloneable {
                         centralCP.getY1() - prevCentralCPY );
             } else if ( leftCPDragging ) {
                 centralCPMoved = true;
-                leftCP.setX1( evt.getX() );
-                leftCP.setY1( evt.getY() );
+                leftCP.setX1( xEvt );
+                leftCP.setY1( yEvt );
             } else if ( rightCPDragging ) {
                 centralCPMoved = true;
-                rightCP.setX1( evt.getX() );
-                rightCP.setY1( evt.getY() );
+                rightCP.setX1( xEvt );
+                rightCP.setY1( yEvt );
             }
             
         }
 
         if ( labelDragging ) {
             labelMoved = true;
-            label.setX1( evt.getX() - xOffset );
-            label.setY1( evt.getY() - yOffset );
+            label.setX1( xEvt - xOffset );
+            label.setY1( yEvt - yOffset );
         }
         
         curve.setCurve( 

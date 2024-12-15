@@ -16,9 +16,6 @@
  */
 package br.com.davidbuzatto.yaas.gui;
 
-import br.com.davidbuzatto.yaas.util.DrawingConstants;
-import java.awt.Font;
-
 /**
  * Encapsulates zoom related data.
  * 
@@ -31,15 +28,6 @@ public class ZoomFacility {
         0.6, 0.7, 0.8, 0.9, 1.0, 
         1.5, 2.0, 2.5, 3.0, 3.5, 
         4.0, 4.5, 5.0 };
-    
-    private static Font[] monospacedFonts = new Font[zoomFactors.length];
-    
-    static {
-        Font baseFont = DrawingConstants.DEFAULT_FONT;
-        for ( int i = 0; i < zoomFactors.length; i++ ) {
-            monospacedFonts[i] = baseFont.deriveFont( (float) ( baseFont.getSize2D() * zoomFactors[i] ) );
-        }
-    }
     
     private int currentZoomFactor;
     
@@ -67,16 +55,20 @@ public class ZoomFacility {
         return currentZoomFactor > 0;
     }
     
-    public int transformValue( int value ) {
+    public int screenToWorld( int value ) {
+        return (int) ( value / getZoomFactor() );
+    }
+    
+    public int screenToWorld( double value ) {
+        return (int) ( value / getZoomFactor() );
+    }
+    
+    public int worldToScreen( int value ) {
         return (int) ( value * getZoomFactor() );
     }
     
-    public int transformValue( double value ) {
+    public int worldToScreen( double value ) {
         return (int) ( value * getZoomFactor() );
-    }
-    
-    public Font getTransformedMonospacedFont() {
-        return monospacedFonts[currentZoomFactor];
     }
             
     public double getZoomFactor() {

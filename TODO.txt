@@ -11,13 +11,8 @@ Pushdown Automata:
 Turing Machines:
     Test other TMs (build examples)
 
-Preparation for version 1:
-    Make the application resilient to deal with different model versions.
-
 General -> Version 1.x.x
     Moore Machines?
     Mealy Machines?
 
-Probably will not be implemented:
-    Zoom-in
-    Zoom-out
+Possibility to change character constants?

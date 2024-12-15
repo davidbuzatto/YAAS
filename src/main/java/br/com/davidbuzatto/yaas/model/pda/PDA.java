@@ -16,6 +16,7 @@
  */
 package br.com.davidbuzatto.yaas.model.pda;
 
+import br.com.davidbuzatto.yaas.gui.ZoomFacility;
 import br.com.davidbuzatto.yaas.gui.pda.PDASimulationStep;
 import br.com.davidbuzatto.yaas.model.AbstractGeometricForm;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
@@ -464,9 +465,9 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
         }
     }
     
-    public void draggTransitions( MouseEvent evt ) {
+    public void draggTransitions( MouseEvent evt, ZoomFacility zf ) {
         for ( PDATransition t : transitions ) {
-            t.mouseDragged( evt );
+            t.mouseDragged( evt, zf );
         }
     }
     

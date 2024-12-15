@@ -16,6 +16,7 @@
  */
 package br.com.davidbuzatto.yaas.model.fa;
 
+import br.com.davidbuzatto.yaas.gui.ZoomFacility;
 import br.com.davidbuzatto.yaas.gui.fa.FASimulationStep;
 import br.com.davidbuzatto.yaas.model.AbstractGeometricForm;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
@@ -275,9 +276,9 @@ public class FA extends AbstractGeometricForm implements Cloneable {
         }
     }
     
-    public void draggTransitions( MouseEvent evt ) {
+    public void draggTransitions( MouseEvent evt, ZoomFacility zf ) {
         for ( FATransition t : transitions ) {
-            t.mouseDragged( evt );
+            t.mouseDragged( evt, zf );
         }
     }
     
