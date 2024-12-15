@@ -29,6 +29,8 @@ import java.util.List;
  */
 public class PDAOperation extends AbstractGeometricForm implements Cloneable, Comparable<PDAOperation> {
     
+    private static final long serialVersionUID = 1L;
+    
     private char symbol;
     private char top;
     private PDAOperationType type;

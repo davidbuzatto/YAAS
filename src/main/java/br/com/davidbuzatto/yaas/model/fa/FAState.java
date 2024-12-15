@@ -31,6 +31,8 @@ import java.awt.Rectangle;
  */
 public class FAState extends AbstractGeometricForm implements Comparable<FAState>, Cloneable {
     
+    private static final long serialVersionUID = 1L;
+    
     private int number;
     private String label;
     private String customLabel;

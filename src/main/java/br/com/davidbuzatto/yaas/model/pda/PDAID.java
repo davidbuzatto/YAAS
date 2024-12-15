@@ -35,6 +35,8 @@ import java.util.List;
  */
 public class PDAID extends AbstractGeometricForm implements Comparable<PDAID> {
     
+    private static final long serialVersionUID = 1L;
+    
     private PDAState state;
     private String string;
     private Deque<Character> stack;

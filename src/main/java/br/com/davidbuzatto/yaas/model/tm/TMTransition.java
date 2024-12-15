@@ -40,6 +40,8 @@ import java.util.Set;
  */
 public class TMTransition extends AbstractGeometricForm implements Cloneable {
     
+    private static final long serialVersionUID = 1L;
+    
     private TMState originState;
     private TMState targetState;
     private List<TMOperation> operations;

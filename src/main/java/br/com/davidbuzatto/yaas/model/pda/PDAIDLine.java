@@ -32,6 +32,8 @@ import java.awt.font.LineMetrics;
  */
 public class PDAIDLine extends AbstractGeometricForm {
 
+    private static final long serialVersionUID = 1L;
+    
     private PDAID origin;
     private PDAID target;
     private PDAOperation operation;

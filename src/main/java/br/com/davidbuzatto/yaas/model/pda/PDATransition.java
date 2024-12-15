@@ -40,6 +40,8 @@ import java.util.Set;
  */
 public class PDATransition extends AbstractGeometricForm implements Cloneable {
     
+    private static final long serialVersionUID = 1L;
+    
     private PDAState originState;
     private PDAState targetState;
     private List<PDAOperation> operations;

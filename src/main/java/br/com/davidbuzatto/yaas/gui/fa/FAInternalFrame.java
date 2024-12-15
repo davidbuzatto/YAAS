@@ -64,6 +64,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -144,6 +145,9 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private boolean currentFileSaved;
     private File currentFile;
     private String baseTitle;
+    
+    private Deque<FA> undoStack;
+    private Deque<FA> redoStack;
     
     /**
      * Creates new form FAInternalFrame

@@ -33,6 +33,8 @@ import java.util.List;
  */
 public class TMTransitionLabel extends AbstractGeometricForm implements Cloneable {
     
+    private static final long serialVersionUID = 1L;
+    
     private List<String> texts;
     private List<Integer> textsWidth;
     private List<Integer> textsHeight;

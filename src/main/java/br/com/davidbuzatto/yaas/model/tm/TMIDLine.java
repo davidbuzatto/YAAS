@@ -32,6 +32,8 @@ import java.awt.font.LineMetrics;
  */
 public class TMIDLine extends AbstractGeometricForm {
 
+    private static final long serialVersionUID = 1L;
+    
     private TMID origin;
     private TMID target;
     private TMOperation operation;

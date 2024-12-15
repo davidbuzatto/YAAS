@@ -31,6 +31,8 @@ import java.awt.Rectangle;
  */
 public class TMState extends AbstractGeometricForm implements Comparable<TMState>, Cloneable {
     
+    private static final long serialVersionUID = 1L;
+    
     private int number;
     private String label;
     private String customLabel;

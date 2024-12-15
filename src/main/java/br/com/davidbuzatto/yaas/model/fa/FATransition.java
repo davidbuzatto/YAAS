@@ -39,6 +39,8 @@ import java.util.List;
  */
 public class FATransition extends AbstractGeometricForm implements Cloneable {
     
+    private static final long serialVersionUID = 1L;
+    
     private FAState originState;
     private FAState targetState;
     private List<Character> symbols;

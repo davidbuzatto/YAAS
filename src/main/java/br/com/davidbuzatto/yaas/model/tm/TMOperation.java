@@ -28,6 +28,8 @@ import java.awt.Graphics2D;
  */
 public class TMOperation extends AbstractGeometricForm implements Cloneable, Comparable<TMOperation> {
     
+    private static final long serialVersionUID = 1L;
+    
     private transient static final boolean DEBUG = Boolean.parseBoolean( 
             Utils.getMavenModel().getProperties().getProperty( "debugAlgorithms" ) );
     

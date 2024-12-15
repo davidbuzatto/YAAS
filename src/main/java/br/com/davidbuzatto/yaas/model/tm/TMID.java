@@ -35,6 +35,8 @@ import java.util.Objects;
  */
 public class TMID extends AbstractGeometricForm implements Comparable<TMID> {
     
+    private static final long serialVersionUID = 1L;
+    
     private TMState state;
     private String string;
     private TMOperation operation;

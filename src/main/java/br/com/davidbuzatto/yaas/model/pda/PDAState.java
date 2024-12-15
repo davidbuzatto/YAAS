@@ -31,6 +31,8 @@ import java.awt.Rectangle;
  */
 public class PDAState extends AbstractGeometricForm implements Comparable<PDAState>, Cloneable {
     
+    private static final long serialVersionUID = 1L;
+    
     private int number;
     private String label;
     private String customLabel;
