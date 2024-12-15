@@ -146,9 +146,6 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private File currentFile;
     private String baseTitle;
     
-    private Deque<FA> undoStack;
-    private Deque<FA> redoStack;
-    
     /**
      * Creates new form FAInternalFrame
      */
