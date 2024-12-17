@@ -11,7 +11,8 @@ Pushdown Automata:
 Turing Machines:
     Test other TMs (build examples)
 
-General -> Version 1.x.x
+General -> Version 1.1.x
+    Undo/Redo?
     Moore Machines?
     Mealy Machines?
 

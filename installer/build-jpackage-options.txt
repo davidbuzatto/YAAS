@@ -1,0 +1,16 @@
+--input ./files/
+--name YAAS
+--main-jar YAAS.jar
+--app-version 1.0.4
+--vendor 'Prof. Dr. David Buzatto'
+--description 'Yet Another Automaton Simulator (YAAS) is a prototype tool for simulating the execution of Finite Automata, Pushdown Automata and Turing Machines.'
+--icon icons.ico
+--license-file ./files/LICENSE.MD
+--file-associations yfa.properties
+--file-associations ypda.properties
+--file-associations ytm.properties
+--win-dir-chooser
+--win-menu-group 'YAAS'
+--win-per-user-install
+--win-shortcut
+--java-options -splash:app/splash.png
