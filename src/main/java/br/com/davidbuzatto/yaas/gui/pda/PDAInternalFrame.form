@@ -368,6 +368,38 @@
         </Component>
         <Component class="javax.swing.JToolBar$Separator" name="sep01">
         </Component>
+        <Component class="javax.swing.JButton" name="btnUndo">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/arrow_undo.png"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Undo (Ctrl+Z)"/>
+            <Property name="enabled" type="boolean" value="false"/>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="horizontalTextPosition" type="int" value="0"/>
+            <Property name="verticalTextPosition" type="int" value="3"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnUndoActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="btnRedo">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/arrow_redo.png"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Redo (Ctrl+Y)"/>
+            <Property name="enabled" type="boolean" value="false"/>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="horizontalTextPosition" type="int" value="0"/>
+            <Property name="verticalTextPosition" type="int" value="3"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRedoActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JToolBar$Separator" name="sep02">
+        </Component>
         <Component class="javax.swing.JToggleButton" name="btnSelectMultipleStates">
           <Properties>
             <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
@@ -437,7 +469,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddTransitionActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JToolBar$Separator" name="sep02">
+        <Component class="javax.swing.JToolBar$Separator" name="sep03">
         </Component>
         <Component class="javax.swing.JButton" name="btnFinalStateToEmptyStack">
           <Properties>
@@ -491,7 +523,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnShowTransitionControlsActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JToolBar$Separator" name="sep03">
+        <Component class="javax.swing.JToolBar$Separator" name="sep04">
         </Component>
         <Component class="javax.swing.JToggleButton" name="btnShowGrid">
           <Properties>
@@ -518,7 +550,7 @@
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JToolBar$Separator" name="sep04">
+        <Component class="javax.swing.JToolBar$Separator" name="sep05">
         </Component>
         <Component class="javax.swing.JButton" name="btnRearrangeStates">
           <Properties>
@@ -534,7 +566,7 @@
             <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnRearrangeStatesMouseReleased"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JToolBar$Separator" name="sep05">
+        <Component class="javax.swing.JToolBar$Separator" name="sep06">
         </Component>
         <Component class="javax.swing.JButton" name="btnZoomIn">
           <Properties>

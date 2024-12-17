@@ -63,6 +63,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashSet;
@@ -146,6 +147,9 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private File currentFile;
     private String baseTitle;
     
+    private Deque<FA> undoStack;
+    private Deque<FA> redoStack;
+    
     /**
      * Creates new form FAInternalFrame
      */
@@ -157,7 +161,10 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         
         this.mainWindow = mainWindow;
         this.simulationSteps = new ArrayList<>();
-       
+        
+        this.undoStack = new ArrayDeque<>();
+        this.redoStack = new ArrayDeque<>();
+        
         if ( fa == null ) {
             this.fa = new FA();
         } else {
@@ -269,25 +276,28 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnCodeGen = new javax.swing.JButton();
         btnClone = new javax.swing.JButton();
         sep01 = new javax.swing.JToolBar.Separator();
+        btnUndo = new javax.swing.JButton();
+        btnRedo = new javax.swing.JButton();
+        sep02 = new javax.swing.JToolBar.Separator();
         btnSelectMultipleStates = new javax.swing.JToggleButton();
         btnMove = new javax.swing.JToggleButton();
         btnAddState = new javax.swing.JToggleButton();
         btnAddTransition = new javax.swing.JToggleButton();
-        sep02 = new javax.swing.JToolBar.Separator();
+        sep03 = new javax.swing.JToolBar.Separator();
         btnAddAllMissingTransitionsDFA = new javax.swing.JButton();
         btnRemoveInaccessibleAndUselessStates = new javax.swing.JButton();
-        sep03 = new javax.swing.JToolBar.Separator();
+        sep04 = new javax.swing.JToolBar.Separator();
         btnGenerateEquivalentDFA = new javax.swing.JButton();
         btnGenerateMinimizedDFA = new javax.swing.JButton();
         btnRegularOperations = new javax.swing.JButton();
         hFiller = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         btnShowTransitionControls = new javax.swing.JToggleButton();
-        sep04 = new javax.swing.JToolBar.Separator();
+        sep05 = new javax.swing.JToolBar.Separator();
         btnShowGrid = new javax.swing.JToggleButton();
         btnSnapToGrid = new javax.swing.JToggleButton();
-        sep05 = new javax.swing.JToolBar.Separator();
-        btnRearrangeStates = new javax.swing.JButton();
         sep06 = new javax.swing.JToolBar.Separator();
+        btnRearrangeStates = new javax.swing.JButton();
+        sep07 = new javax.swing.JToolBar.Separator();
         btnZoomIn = new javax.swing.JButton();
         btnZoomOut = new javax.swing.JButton();
         panelModel = new javax.swing.JPanel();
@@ -625,6 +635,33 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         toolBar.add(btnClone);
         toolBar.add(sep01);
 
+        btnUndo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/arrow_undo.png"))); // NOI18N
+        btnUndo.setToolTipText("Undo (Ctrl+Z)");
+        btnUndo.setEnabled(false);
+        btnUndo.setFocusable(false);
+        btnUndo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnUndo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnUndo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUndoActionPerformed(evt);
+            }
+        });
+        toolBar.add(btnUndo);
+
+        btnRedo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/arrow_redo.png"))); // NOI18N
+        btnRedo.setToolTipText("Redo (Ctrl+Y)");
+        btnRedo.setEnabled(false);
+        btnRedo.setFocusable(false);
+        btnRedo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnRedo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnRedo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRedoActionPerformed(evt);
+            }
+        });
+        toolBar.add(btnRedo);
+        toolBar.add(sep02);
+
         btnGroup.add(btnSelectMultipleStates);
         btnSelectMultipleStates.setIcon(new javax.swing.ImageIcon(getClass().getResource("/selection.png"))); // NOI18N
         btnSelectMultipleStates.setToolTipText("Select Multiple States (Shift+U)");
@@ -677,7 +714,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         toolBar.add(btnAddTransition);
-        toolBar.add(sep02);
+        toolBar.add(sep03);
 
         btnAddAllMissingTransitionsDFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/transitionAddAll.png"))); // NOI18N
         btnAddAllMissingTransitionsDFA.setToolTipText("Add All Missing Transitions (Alt+Shift+T)");
@@ -702,7 +739,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         toolBar.add(btnRemoveInaccessibleAndUselessStates);
-        toolBar.add(sep03);
+        toolBar.add(sep04);
 
         btnGenerateEquivalentDFA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dfa.png"))); // NOI18N
         btnGenerateEquivalentDFA.setToolTipText("Generate Equivalent DFA (Alt+Shift+D)");
@@ -752,7 +789,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         toolBar.add(btnShowTransitionControls);
-        toolBar.add(sep04);
+        toolBar.add(sep05);
 
         btnShowGrid.setIcon(new javax.swing.ImageIcon(getClass().getResource("/note.png"))); // NOI18N
         btnShowGrid.setToolTipText("Show/Hide Grid (Ctrl+Shift+G)");
@@ -772,7 +809,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnSnapToGrid.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSnapToGrid.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         toolBar.add(btnSnapToGrid);
-        toolBar.add(sep05);
+        toolBar.add(sep06);
 
         btnRearrangeStates.setIcon(new javax.swing.ImageIcon(getClass().getResource("/layers.png"))); // NOI18N
         btnRearrangeStates.setToolTipText("Rearrange States");
@@ -785,7 +822,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         toolBar.add(btnRearrangeStates);
-        toolBar.add(sep06);
+        toolBar.add(sep07);
 
         btnZoomIn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/zoom_in.png"))); // NOI18N
         btnZoomIn.setToolTipText("Zoom In");
@@ -958,7 +995,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 .addComponent(lblTestString)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelTestsAndSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(toolBarTestsAndSimulation, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                    .addComponent(toolBarTestsAndSimulation, javax.swing.GroupLayout.DEFAULT_SIZE, 463, Short.MAX_VALUE)
                     .addComponent(txtTestString))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblTestResult, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1041,7 +1078,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(toolBar, javax.swing.GroupLayout.DEFAULT_SIZE, 788, Short.MAX_VALUE)
+            .addComponent(toolBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(panelModel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1212,9 +1249,11 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
 
             } else if ( btnAddState.isSelected() ) {
 
+                saveMachineState();
+                
                 FAState newState = new FAState( currentState++ );
                 newState.setX1Y1( xPressed, yPressed );
-
+                
                 fa.addState( newState );
 
                 if ( btnSnapToGrid.isSelected() ) {
@@ -2428,6 +2467,14 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         resetTestInGUI();
     }//GEN-LAST:event_txtTestStringKeyReleased
 
+    private void btnUndoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUndoActionPerformed
+        doUndo();
+    }//GEN-LAST:event_btnUndoActionPerformed
+
+    private void btnRedoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRedoActionPerformed
+        doRedo();
+    }//GEN-LAST:event_btnRedoActionPerformed
+
     public void repaintDrawPanel() {
         drawPanel.repaint();
         drawPanel.setPreferredSize( 
@@ -2573,6 +2620,8 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnSaveAsImage.setEnabled( false );
         btnCodeGen.setEnabled( false );
         btnClone.setEnabled( false );
+        btnUndo.setEnabled( false );
+        btnRedo.setEnabled( false );
         
         if ( btnAddState.isSelected() || btnAddTransition.isSelected() ) {
             btnMove.setSelected( true );
@@ -2606,6 +2655,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         btnSaveAsImage.setEnabled( true );
         btnCodeGen.setEnabled( true );
         btnClone.setEnabled( true );
+        updateUndoRedoButtonsState();
         
         btnAddState.setEnabled( true );
         btnAddTransition.setEnabled( true );
@@ -3065,6 +3115,26 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK ), "undo" );
+        am.put( "undo", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                if ( btnUndo.isEnabled() ) {
+                    doUndo();
+                }
+            }
+        });
+        
+        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK ), "redo" );
+        am.put( "redo", new AbstractAction() {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                if ( btnRedo.isEnabled() ) {
+                    doRedo();
+                }
+            }
+        });
+        
     }
     
     private void resetGUIToAddStatesAndTransitions() {
@@ -3097,6 +3167,57 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         }
     }
     
+    private void doUndo() {
+        if ( !undoStack.isEmpty() ) {
+            redoStack.push( fa );
+            fa = undoStack.pop();
+            drawPanel.setFa( fa );
+            faPPanel.setFa( fa );
+            faPPanel.readProperties();
+        }
+        drawPanel.repaint();
+        updateUndoRedoButtonsState();
+    }
+    
+    private void doRedo() {
+        if ( !redoStack.isEmpty() ) {
+            undoStack.push( fa );
+            fa = redoStack.pop();
+            drawPanel.setFa( fa );
+            faPPanel.setFa( fa );
+            faPPanel.readProperties();
+        }
+        drawPanel.repaint();
+        updateUndoRedoButtonsState();
+    }
+    
+    private void saveMachineState() {
+        try {
+            redoStack.clear();
+            undoStack.push( fa );
+            fa = fa.clone();
+            drawPanel.setFa( fa );
+            faPPanel.setFa( fa );
+            faPPanel.readProperties();
+        } catch ( CloneNotSupportedException exc ) {
+            exc.printStackTrace();
+        }
+        updateUndoRedoButtonsState();
+    }
+    
+    private void updateUndoRedoButtonsState() {
+        if ( undoStack.isEmpty() ) {
+            btnUndo.setEnabled( false );
+        } else {
+            btnUndo.setEnabled( true );
+        }
+        if ( redoStack.isEmpty() ) {
+            btnRedo.setEnabled( false );
+        } else {
+            btnRedo.setEnabled( true );
+        }
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddAllMissingTransitionsDFA;
     private javax.swing.JToggleButton btnAddState;
@@ -3115,6 +3236,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnOpen;
     private javax.swing.JButton btnPreviousStep;
     private javax.swing.JButton btnRearrangeStates;
+    private javax.swing.JButton btnRedo;
     private javax.swing.JButton btnRegularOperations;
     private javax.swing.JButton btnRemoveInaccessibleAndUselessStates;
     private javax.swing.JButton btnReset;
@@ -3128,6 +3250,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnStart;
     private javax.swing.JButton btnStop;
     private javax.swing.JButton btnTest;
+    private javax.swing.JButton btnUndo;
     private javax.swing.JButton btnZoomIn;
     private javax.swing.JButton btnZoomOut;
     private javax.swing.JCheckBoxMenuItem checkFinalState;
@@ -3168,6 +3291,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JToolBar.Separator sep04;
     private javax.swing.JToolBar.Separator sep05;
     private javax.swing.JToolBar.Separator sep06;
+    private javax.swing.JToolBar.Separator sep07;
     private javax.swing.JToolBar.Separator sepTS01;
     private javax.swing.JToolBar.Separator sepTS02;
     private javax.swing.JPopupMenu.Separator spPopupState;

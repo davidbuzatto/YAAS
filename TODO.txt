@@ -1,3 +1,6 @@
+Implementing Undo/Redo:
+    Identify all operations that can be undone.
+
 Finite Automata:
     Highlight inacessible states (properties panel)
     Highlight useless states     (properties panel)
@@ -12,7 +15,6 @@ Turing Machines:
     Test other TMs (build examples)
 
 General -> Version 1.1.x
-    Undo/Redo?
     Moore Machines?
     Mealy Machines?
 
