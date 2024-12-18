@@ -1,5 +1,6 @@
 Implementing Undo/Redo:
     Identify all operations that can be undone.
+    Due to the application architecture, it's being very problematic to implement undo and redo...
 
 Finite Automata:
     Highlight inacessible states (properties panel)
