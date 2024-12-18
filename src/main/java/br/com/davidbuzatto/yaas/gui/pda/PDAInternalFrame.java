@@ -216,6 +216,9 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         if ( !ApplicationConstants.IN_DEVELOPMENT ) {
             btnCodeGen.setVisible( false );
             btnClone.setVisible( false );
+            sep01.setVisible( false );
+            btnUndo.setVisible( false );
+            btnRedo.setVisible( false );
         }
         
         baseTitle = getTitle();
@@ -2963,25 +2966,29 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         
-        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK ), "undo" );
-        am.put( "undo", new AbstractAction() {
-            @Override
-            public void actionPerformed( ActionEvent e ) {
-                if ( btnUndo.isEnabled() ) {
-                    doUndo();
+        if ( ApplicationConstants.IN_DEVELOPMENT ) {
+            
+            im.put( KeyStroke.getKeyStroke( KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK ), "undo" );
+            am.put( "undo", new AbstractAction() {
+                @Override
+                public void actionPerformed( ActionEvent e ) {
+                    if ( btnUndo.isEnabled() ) {
+                        doUndo();
+                    }
                 }
-            }
-        });
+            });
+
+            im.put( KeyStroke.getKeyStroke( KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK ), "redo" );
+            am.put( "redo", new AbstractAction() {
+                @Override
+                public void actionPerformed( ActionEvent e ) {
+                    if ( btnRedo.isEnabled() ) {
+                        doRedo();
+                    }
+                }
+            });
         
-        im.put( KeyStroke.getKeyStroke( KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK ), "redo" );
-        am.put( "redo", new AbstractAction() {
-            @Override
-            public void actionPerformed( ActionEvent e ) {
-                if ( btnRedo.isEnabled() ) {
-                    doRedo();
-                }
-            }
-        });
+        }
         
     }
     
