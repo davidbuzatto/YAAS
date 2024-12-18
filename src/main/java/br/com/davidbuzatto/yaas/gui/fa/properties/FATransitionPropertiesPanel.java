@@ -300,7 +300,7 @@ public class FATransitionPropertiesPanel extends javax.swing.JPanel {
                 fa.removeTransition( transition );
                 faIFrame.setCurrentFileSaved( false );
                 faIFrame.repaintDrawPanel();
-                faIFrame.updateAfterRemotion();
+                faIFrame.updateAfterRemoval();
                 transition = null;
                 readProperties();
             }

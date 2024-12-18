@@ -2218,7 +2218,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 fa.removeState( selectedState );
                 setCurrentFileSaved( false );
                 repaintDrawPanel();
-                updateAfterRemotion();
+                updateAfterRemoval();
                 selectedState = null;
                 if ( fa.getStates().isEmpty() ) {
                     currentState = 0;
@@ -2329,7 +2329,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 fa.removeTransition( selectedTransition );
                 setCurrentFileSaved( false );
                 repaintDrawPanel();
-                updateAfterRemotion();
+                updateAfterRemoval();
                 selectedTransition = null;
             }
         
@@ -2486,7 +2486,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         drawPanel.revalidate();
     }
     
-    public void updateAfterRemotion() {
+    public void updateAfterRemoval() {
         faPPanel.setFa( fa );
         faPPanel.readProperties();
         cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );

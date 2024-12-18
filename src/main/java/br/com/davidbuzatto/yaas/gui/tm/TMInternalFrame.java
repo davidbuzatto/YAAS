@@ -2107,7 +2107,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
                 tm.removeState( selectedState );
                 setCurrentFileSaved( false );
                 repaintDrawPanel();
-                updateAfterRemotion();
+                updateAfterRemoval();
                 selectedState = null;
                 if ( tm.getStates().isEmpty() ) {
                     currentState = 0;
@@ -2208,7 +2208,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
                 tm.removeTransition( selectedTransition );
                 setCurrentFileSaved( false );
                 repaintDrawPanel();
-                updateAfterRemotion();
+                updateAfterRemoval();
                 selectedTransition = null;
             }
         
@@ -2285,7 +2285,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
         drawPanel.revalidate();
     }
     
-    public void updateAfterRemotion() {
+    public void updateAfterRemoval() {
         tmPPanel.setTm( tm );
         tmPPanel.readProperties();
         cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );

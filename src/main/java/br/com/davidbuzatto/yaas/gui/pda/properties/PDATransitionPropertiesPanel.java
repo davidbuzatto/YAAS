@@ -240,7 +240,7 @@ public class PDATransitionPropertiesPanel extends javax.swing.JPanel {
             d.setVisible( true );
             
             if ( d.isTransitionRemoved() ) {
-                pdaIFrame.updateAfterRemotion();
+                pdaIFrame.updateAfterRemoval();
             } else {
                 readProperties();
             }
@@ -279,7 +279,7 @@ public class PDATransitionPropertiesPanel extends javax.swing.JPanel {
                 pda.removeTransition( transition );
                 pdaIFrame.setCurrentFileSaved( false );
                 pdaIFrame.repaintDrawPanel();
-                pdaIFrame.updateAfterRemotion();
+                pdaIFrame.updateAfterRemoval();
                 transition = null;
                 readProperties();
             }

@@ -277,7 +277,7 @@ public class PDAStatePropertiesPanel extends javax.swing.JPanel {
                 pda.removeState( state );
                 pdaIFrame.setCurrentFileSaved( false );
                 pdaIFrame.repaintDrawPanel();
-                pdaIFrame.updateAfterRemotion();
+                pdaIFrame.updateAfterRemoval();
                 state = null;
                 readProperties();
             }

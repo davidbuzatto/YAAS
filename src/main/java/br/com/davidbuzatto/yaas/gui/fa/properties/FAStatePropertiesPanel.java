@@ -277,7 +277,7 @@ public class FAStatePropertiesPanel extends javax.swing.JPanel {
                 fa.removeState( state );
                 faIFrame.setCurrentFileSaved( false );
                 faIFrame.repaintDrawPanel();
-                faIFrame.updateAfterRemotion();
+                faIFrame.updateAfterRemoval();
                 state = null;
                 readProperties();
             }

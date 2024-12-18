@@ -2106,7 +2106,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                 pda.removeState( selectedState );
                 setCurrentFileSaved( false );
                 repaintDrawPanel();
-                updateAfterRemotion();
+                updateAfterRemoval();
                 selectedState = null;
                 if ( pda.getStates().isEmpty() ) {
                     currentState = 0;
@@ -2207,7 +2207,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                 pda.removeTransition( selectedTransition );
                 setCurrentFileSaved( false );
                 repaintDrawPanel();
-                updateAfterRemotion();
+                updateAfterRemoval();
                 selectedTransition = null;
             }
         
@@ -2332,7 +2332,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         drawPanel.revalidate();
     }
     
-    public void updateAfterRemotion() {
+    public void updateAfterRemoval() {
         pdaPPanel.setPda( pda );
         pdaPPanel.readProperties();
         cardLayout.show( panelProperties, MODEL_PROPERTIES_CARD );

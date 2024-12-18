@@ -277,7 +277,7 @@ public class TMStatePropertiesPanel extends javax.swing.JPanel {
                 tm.removeState( state );
                 tmIFrame.setCurrentFileSaved( false );
                 tmIFrame.repaintDrawPanel();
-                tmIFrame.updateAfterRemotion();
+                tmIFrame.updateAfterRemoval();
                 state = null;
                 readProperties();
             }

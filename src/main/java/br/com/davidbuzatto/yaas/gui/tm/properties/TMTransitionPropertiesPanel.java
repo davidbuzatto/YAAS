@@ -240,7 +240,7 @@ public class TMTransitionPropertiesPanel extends javax.swing.JPanel {
             d.setVisible( true );
             
             if ( d.isTransitionRemoved() ) {
-                tmIFrame.updateAfterRemotion();
+                tmIFrame.updateAfterRemoval();
             } else {
                 readProperties();
             }
@@ -279,7 +279,7 @@ public class TMTransitionPropertiesPanel extends javax.swing.JPanel {
                 tm.removeTransition( transition );
                 tmIFrame.setCurrentFileSaved( false );
                 tmIFrame.repaintDrawPanel();
-                tmIFrame.updateAfterRemotion();
+                tmIFrame.updateAfterRemoval();
                 transition = null;
                 readProperties();
             }
