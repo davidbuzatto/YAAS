@@ -811,6 +811,11 @@ public class TMTransition extends AbstractGeometricForm implements Cloneable {
         return moveLabel( 0, amount );
     }
     
+    public TMTransition snapLabelToCenterCP( int xOffset, int yOffset ) {
+        label.setX1Y1( centralCP.getX1() + xOffset, centralCP.getY1() + yOffset );
+        return this;
+    }
+    
     public void replaceAllOperations( Set<TMOperation> newOperations ) {
         replaceAllOperations( new ArrayList<>( newOperations ) );
     }

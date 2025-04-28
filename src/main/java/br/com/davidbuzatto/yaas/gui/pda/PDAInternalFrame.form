@@ -118,7 +118,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="checkFinalStateActionPerformed"/>
           </Events>
         </MenuItem>
-        <Component class="javax.swing.JPopupMenu$Separator" name="spPopupState">
+        <Component class="javax.swing.JPopupMenu$Separator" name="spPopupState02">
         </Component>
         <MenuItem class="javax.swing.JMenuItem" name="popItemStateColor">
           <Properties>
@@ -131,6 +131,19 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="popItemStateColorActionPerformed"/>
           </Events>
         </MenuItem>
+        <MenuItem class="javax.swing.JMenuItem" name="popItemStateUpdateTransitionsCurvature">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/arrow_refresh.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Update Transitions Curvature"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="popItemStateUpdateTransitionsCurvatureActionPerformed"/>
+          </Events>
+        </MenuItem>
+        <Component class="javax.swing.JPopupMenu$Separator" name="spPopupState03">
+        </Component>
         <MenuItem class="javax.swing.JMenuItem" name="popItemRemoveState">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">

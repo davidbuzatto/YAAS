@@ -256,8 +256,10 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         spPopupState01 = new javax.swing.JPopupMenu.Separator();
         checkInitialState = new javax.swing.JCheckBoxMenuItem();
         checkFinalState = new javax.swing.JCheckBoxMenuItem();
-        spPopupState = new javax.swing.JPopupMenu.Separator();
+        spPopupState02 = new javax.swing.JPopupMenu.Separator();
         popItemStateColor = new javax.swing.JMenuItem();
+        popItemStateUpdateTransitionsCurvature = new javax.swing.JMenuItem();
+        spPopupState03 = new javax.swing.JPopupMenu.Separator();
         popItemRemoveState = new javax.swing.JMenuItem();
         popupMenuTransitionProperties = new javax.swing.JPopupMenu();
         popItemTransitionOperations = new javax.swing.JMenuItem();
@@ -411,7 +413,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         popupMenuStateProperties.add(checkFinalState);
-        popupMenuStateProperties.add(spPopupState);
+        popupMenuStateProperties.add(spPopupState02);
 
         popItemStateColor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/palette.png"))); // NOI18N
         popItemStateColor.setText("Color");
@@ -421,6 +423,16 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             }
         });
         popupMenuStateProperties.add(popItemStateColor);
+
+        popItemStateUpdateTransitionsCurvature.setIcon(new javax.swing.ImageIcon(getClass().getResource("/arrow_refresh.png"))); // NOI18N
+        popItemStateUpdateTransitionsCurvature.setText("Update Transitions Curvature");
+        popItemStateUpdateTransitionsCurvature.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popItemStateUpdateTransitionsCurvatureActionPerformed(evt);
+            }
+        });
+        popupMenuStateProperties.add(popItemStateUpdateTransitionsCurvature);
+        popupMenuStateProperties.add(spPopupState03);
 
         popItemRemoveState.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete.png"))); // NOI18N
         popItemRemoveState.setText("Remove");
@@ -1289,6 +1301,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                             PDATransition t = new PDATransition( 
                                     originState, targetState, op );
                             pda.addTransition( t );
+                            updateTransitionsCurvature( originState, targetState, pda.getTransitions(), 30, 30, 10 );
                             setCurrentFileSaved( false );
                         }
 
@@ -2324,6 +2337,16 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         doRedo();
     }//GEN-LAST:event_btnRedoActionPerformed
 
+    private void popItemStateUpdateTransitionsCurvatureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popItemStateUpdateTransitionsCurvatureActionPerformed
+        if ( selectedState != null ) {
+            for ( PDATransition t : pda.getTransitions() ) {
+                if ( t.getOriginState().equals( selectedState ) ) {
+                    updateTransitionsCurvature( t.getOriginState(), t.getTargetState(), pda.getTransitions(), 30, 30, 10 );
+                }
+            }
+        }
+    }//GEN-LAST:event_popItemStateUpdateTransitionsCurvatureActionPerformed
+
     public void repaintDrawPanel() {
         drawPanel.repaint();
         drawPanel.setPreferredSize( 
@@ -3100,6 +3123,60 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         }
     }
     
+    private void updateTransitionsCurvature( 
+        PDAState originState, 
+        PDAState targetState, 
+        List<PDATransition> transitions, 
+        int distance, 
+        int angleDis, 
+        int labelDist ) {
+        
+        PDATransition t1 = null;
+        PDATransition t2 = null;
+        
+        for ( PDATransition t : transitions ) {
+            if ( t.getOriginState().equals( originState ) && t.getTargetState().equals( targetState ) ) {
+                t1 = t;
+            }
+            if ( t.getOriginState().equals( targetState ) && t.getTargetState().equals( originState ) ) {
+                t2 = t;
+            }
+        }
+        
+        if ( t1 != null && t2 != null && !t1.equals( t2 ) ) {
+            
+            t1.resetTransformations();
+            t2.resetTransformations();
+            
+            double angle = Math.atan2( 
+                targetState.getY1() - originState.getY1(),
+                targetState.getX1() - originState.getX1() );
+            
+            t1.bendByCenterCP( 
+                (int) ( distance * Math.cos( angle - Math.PI / 2 ) ), 
+                (int) ( distance * Math.sin( angle - Math.PI / 2 ) )
+            );
+            t2.bendByCenterCP( 
+                (int) ( distance * Math.cos( angle + Math.PI / 2 ) ), 
+                (int) ( distance * Math.sin( angle + Math.PI / 2 ) )
+            );
+            
+            t1.rotateTargetCP( (int) Math.toDegrees( angle ) + angleDis );
+            t2.rotateTargetCP( (int) Math.toDegrees( angle + Math.PI ) + angleDis );
+            
+            t1.snapLabelToCenterCP( 
+                (int) ( labelDist * Math.cos( angle - Math.PI / 2 ) ), 
+                (int) ( labelDist * Math.sin( angle - Math.PI / 2 ) )
+            );
+            t2.snapLabelToCenterCP( 
+                (int) ( labelDist * Math.cos( angle + Math.PI / 2 ) ), 
+                (int) ( labelDist * Math.sin( angle + Math.PI / 2 ) )
+            );
+            
+        }
+        
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton btnAddState;
     private javax.swing.JToggleButton btnAddTransition;
@@ -3154,6 +3231,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JMenuItem popItemResetTransitionTransformations;
     private javax.swing.JMenuItem popItemStateColor;
     private javax.swing.JMenuItem popItemStateCustomLabel;
+    private javax.swing.JMenuItem popItemStateUpdateTransitionsCurvature;
     private javax.swing.JMenuItem popItemTransitionColor;
     private javax.swing.JMenuItem popItemTransitionOperations;
     private javax.swing.JMenuItem popItemVertical;
@@ -3173,8 +3251,9 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     private javax.swing.JToolBar.Separator sepTS02;
     private javax.swing.JToolBar.Separator sepTS03;
     private javax.swing.JToolBar.Separator sepTS04;
-    private javax.swing.JPopupMenu.Separator spPopupState;
     private javax.swing.JPopupMenu.Separator spPopupState01;
+    private javax.swing.JPopupMenu.Separator spPopupState02;
+    private javax.swing.JPopupMenu.Separator spPopupState03;
     private javax.swing.JPopupMenu.Separator spPopupTransition01;
     private javax.swing.JPopupMenu.Separator spPopupTransition02;
     private javax.swing.JToolBar toolBar;

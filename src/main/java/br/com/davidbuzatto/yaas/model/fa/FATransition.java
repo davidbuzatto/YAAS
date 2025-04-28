@@ -828,6 +828,12 @@ public class FATransition extends AbstractGeometricForm implements Cloneable {
         return moveLabel( 0, amount );
     }
     
+    public FATransition snapLabelToCenterCP( int xOffset, int yOffset ) {
+        labelMoved = true;
+        label.setX1Y1( centralCP.getX1() + xOffset, centralCP.getY1() + yOffset );
+        return this;
+    }
+    
     @Override
     public String toString() {
         return String.format( "(%s) - %s -> (%s)",
