@@ -1,3 +1,6 @@
+*** URGENT ***
+    Check the implementation of regular operations for finite automata, as it is not working correctly.
+
 Implementing Undo/Redo:
     Identify all operations that can be undone.
     Due to the application architecture, it's being very problematic to implement undo and redo...
