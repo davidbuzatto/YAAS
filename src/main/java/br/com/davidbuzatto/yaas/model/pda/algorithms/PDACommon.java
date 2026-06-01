@@ -19,6 +19,7 @@ package br.com.davidbuzatto.yaas.model.pda.algorithms;
 import br.com.davidbuzatto.yaas.model.pda.PDA;
 import br.com.davidbuzatto.yaas.model.pda.PDAState;
 import br.com.davidbuzatto.yaas.util.Utils;
+import java.util.Set;
 
 /**
  * Common algorithms for reuse.
@@ -107,10 +108,45 @@ public class PDACommon {
     }
     
     /**
+     * Chooses a fresh stack symbol to be used as the new bottom-of-stack marker
+     * (X0 in Hopcroft's notation) when converting between acceptance criteria.
+     * By definition X0 must not belong to the original stack alphabet. 'X' is
+     * preferred to keep consistency with the textbook; if it is already in use,
+     * the next free uppercase letter is returned.
+     *
+     * @param pda The Pushdown Automaton whose stack alphabet must be avoided.
+     * @return A character that is not present in the stack alphabet.
+     * @throws IllegalArgumentException If no free symbol could be found.
+     */
+    public static char chooseNewStackStartingSymbol( PDA pda )
+            throws IllegalArgumentException {
+
+        Set<Character> stackAlphabet = pda.getStackAlphabet();
+
+        // 'X' (X0) is preferred to match the textbook notation
+        if ( !stackAlphabet.contains( 'X' ) ) {
+            return 'X';
+        }
+
+        // 'X' is already used as a working symbol, so the next free uppercase
+        // letter is chosen as the fresh bottom-of-stack marker
+        for ( char c = 'A'; c <= 'Z'; c++ ) {
+            if ( !stackAlphabet.contains( c ) ) {
+                return c;
+            }
+        }
+
+        // extremely unlikely: the whole A-Z range is already in use
+        throw new IllegalArgumentException(
+                "Could not find a fresh stack symbol for the conversion!" );
+
+    }
+
+    /**
      * Set the states number in order. The initial state is the state with
      * number 0. The other will reenumerate in appearance order inside the state
      * list.
-     * 
+     *
      * @param pda The Pushdown Automaon with the states to be processed.
      */
     public static void reenumerateStates( PDA pda ) {

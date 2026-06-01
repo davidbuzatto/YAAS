@@ -1149,13 +1149,39 @@ public class MainWindow extends javax.swing.JFrame {
     
     private void openExample() {
         if ( ApplicationConstants.IN_DEVELOPMENT ) {
+            
             createFAInternalFrame( FAExamples.createDFASubstring01(), 
                     false, false, null, "0010" );
+            
             /*createPDAInternalFrame( PDAExamples.createPDAEvenPalindromeFinalState(), 
                     false, false, null, "001100", PDAAcceptanceType.FINAL_STATE );*/
+            
             /*createTMInternalFrame( 
                     TMExamples.createDTMDivideHalt(), true, true, null,
                     "00001001", TMAcceptanceType.HALT );*/
+            
+            // bug 1 - the simulation must show a final step with no active states.
+            // test "00" (rejected on the 2nd symbol) and "01" (accepted)
+            /*createFAInternalFrame( FAExamples.createDFAForRejectionStep(),
+                    false, false, null, "00" );*/
+
+            // bug 2 - minimization must result in 3 states: {S}, {T0,T1}, {U0,U1}
+            /*createFAInternalFrame( FAExamples.createDFAForMinimizationTwoGroups(),
+                    false, false, null, "001" );*/
+            // bug 2 - already minimum
+            /*createFAInternalFrame( FAExamples.createDFAForMinimizationPartial(),
+                    false, false, null, "aab" );*/
+
+            // bug 3 - "" must be accepted, "0" must be rejected (before the fix "0"
+            // was wrongly accepted and "" raised an exception)
+            /*createPDAInternalFrame( PDAExamples.createPDAEmptyTransitionEmptyStackFinalState(),
+                    false, false, null, "0", PDAAcceptanceType.FINAL_STATE );*/
+
+            // bug 4 - "" must be accepted WITHOUT a StackOverflowError (before the
+            // fix it hung)
+            /*createPDAInternalFrame( PDAExamples.createPDAEmptyTransitionCycleFinalState(),
+                    false, false, null, "", PDAAcceptanceType.FINAL_STATE );*/
+        
         }
     }
     

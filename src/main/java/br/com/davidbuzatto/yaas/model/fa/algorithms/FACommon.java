@@ -90,17 +90,24 @@ public class FACommon {
         }
         
         Map<FAState, Map<Character, List<FAState>>> delta = dfa.getDelta();
+        Map<Character, List<FAState>> d1 = delta.get( s1 );
+        Map<Character, List<FAState>> d2 = delta.get( s2 );
         Map<Character, Boolean> t1 = new HashMap<>();
         Map<Character, Boolean> t2 = new HashMap<>();
-        
-        // assumes DFA
-        for ( Map.Entry<Character, List<FAState>> e : delta.get( s1 ).entrySet() ) {
-            t1.put( e.getKey(), e.getValue().get( 0 ).isFinal() );
+
+        // iterates the whole alphabet (not only the symbols defined in each
+        // state) so partial DFAs are handled correctly: a missing transition
+        // leads to the implicit dead state, which is non-final. comparing only
+        // the defined symbols would wrongly separate equivalent states that
+        // happen to have different sets of defined symbols.
+        // assumes DFA (one target per symbol)
+        for ( Character c : dfa.getAlphabet() ) {
+            List<FAState> l1 = d1.get( c );
+            List<FAState> l2 = d2.get( c );
+            t1.put( c, l1 != null && l1.get( 0 ).isFinal() );
+            t2.put( c, l2 != null && l2.get( 0 ).isFinal() );
         }
-        for ( Map.Entry<Character, List<FAState>> e : delta.get( s2 ).entrySet() ) {
-            t2.put( e.getKey(), e.getValue().get( 0 ).isFinal() );
-        }
-        
+
         return t1.equals( t2 );
         
     }
@@ -125,18 +132,24 @@ public class FACommon {
         }
         
         Map<FAState, Map<Character, List<FAState>>> delta = dfa.getDelta();
-        
-        // assumes s1 and s2 have the same transition function with one symbol
-        Set<Character> alphabet = new TreeSet<>( delta.get( s1 ).keySet() );
-        alphabet.addAll( delta.get( s2 ).keySet() ); // should not add any symbol
-        
+
+        // uses the whole automaton alphabet, not only the symbols defined in
+        // s1/s2. a distinguishing string can start with a locally defined
+        // symbol and continue with symbols reached afterwards, so restricting
+        // the alphabet to the local one would miss distinguishing strings and
+        // wrongly merge states (acceptsDFA already treats a missing transition
+        // as a move to the implicit dead state, i.e. a rejection)
+        Set<Character> alphabet = new TreeSet<>( dfa.getAlphabet() );
+
         if ( !alphabet.isEmpty() ) {
-            
+
             // generate strings starting with length = 2
             SigmaStarGeneratorStream ssgs = new SigmaStarGeneratorStream( alphabet, 2 );
 
-            // max length => n-2, n being the number os states of the DFA
-            int maxLength = dfa.getStates().size() - 2;
+            // max length => n-1, n being the number of states of the DFA. the
+            // bound is n-1 (and not n-2) to account for the implicit dead state
+            // that represents the missing transitions of a partial DFA
+            int maxLength = dfa.getStates().size() - 1;
             
             if ( DEBUG ) {
                 System.out.println( "    Testing " + s1 + " and " + s2 + ":" );

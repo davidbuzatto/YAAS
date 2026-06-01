@@ -97,6 +97,11 @@ public class FA extends AbstractGeometricForm implements Cloneable {
                 }
                 
                 if ( targetStates.isEmpty() ) {
+                    // dead-end: registers a final step with no active states so
+                    // the simulation can show which symbol caused the rejection
+                    if ( simulationSteps != null ) {
+                        simulationSteps.add( new FASimulationStep( new HashSet<>(), c ) );
+                    }
                     return false;
                 }
                 

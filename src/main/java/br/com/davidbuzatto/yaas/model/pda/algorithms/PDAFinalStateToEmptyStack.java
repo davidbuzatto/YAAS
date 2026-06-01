@@ -54,7 +54,11 @@ public class PDAFinalStateToEmptyStack {
             PDACommon.validateFinalStates( pda );
 
             pda = (PDA) pda.clone();
-            pda.setStackStartingSymbol( 'X' );
+            // X0 (Hopcroft): a fresh bottom-of-stack marker that must not
+            // belong to the original stack alphabet. 'X' is used when free,
+            // keeping the textbook notation; otherwise the next free symbol is
+            // chosen
+            pda.setStackStartingSymbol( PDACommon.chooseNewStackStartingSymbol( pda ) );
             
             pda.deactivateAllStatesInSimulation();
             pda.deselectAll();

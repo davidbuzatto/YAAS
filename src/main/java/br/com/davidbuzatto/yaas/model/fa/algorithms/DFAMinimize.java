@@ -225,43 +225,66 @@ public class DFAMinimize {
         }
         List<Set<FAState>> newStateSets = new ArrayList<>();
         while ( !pairs.isEmpty() ) {
-            
+
             FAStatePairHelper cPair = pairs.iterator().next();
-            Set<FAState> newStateSet = new TreeSet<>();
-            newStateSet.add( cPair.s1 );
-            newStateSet.add( cPair.s2 );
-            
-            if ( newStateSets.isEmpty() ) {
+
+            // finds the groups (if any) that already contain each state of
+            // the pair. equivalence is transitive, so a pair can bridge two
+            // previously separated groups
+            Set<FAState> groupS1 = null;
+            Set<FAState> groupS2 = null;
+            for ( Set<FAState> s : newStateSets ) {
+                if ( s.contains( cPair.s1 ) ) {
+                    groupS1 = s;
+                }
+                if ( s.contains( cPair.s2 ) ) {
+                    groupS2 = s;
+                }
+            }
+
+            if ( groupS1 == null && groupS2 == null ) {
+
+                // neither state is grouped yet: creates a new group
+                Set<FAState> newStateSet = new TreeSet<>();
+                newStateSet.add( cPair.s1 );
+                newStateSet.add( cPair.s2 );
                 newStateSets.add( newStateSet );
                 if ( DEBUG ) {
                     System.out.println( "    Combining: " + newStateSet );
                 }
-            } else {
-                
-                boolean addNewStateSet = true;
-                
-                for ( Set<FAState> s : newStateSets ) {
-                    if ( s.contains( cPair.s1 ) ) {
-                        s.add( cPair.s2 );
-                        addNewStateSet = false;
-                    }
-                    if ( s.contains( cPair.s2 ) ) {
-                        s.add( cPair.s1 );
-                        addNewStateSet = false;
-                    }
+
+            } else if ( groupS1 != null && groupS2 == null ) {
+
+                // only s1 is grouped: s2 joins its group
+                groupS1.add( cPair.s2 );
+                if ( DEBUG ) {
+                    System.out.println( "    Combining: " + groupS1 );
                 }
-                
-                if ( addNewStateSet ) {
-                    newStateSets.add( newStateSet );
-                    if ( DEBUG ) {
-                        System.out.println( "    Combining: " + newStateSet );
-                    }
+
+            } else if ( groupS1 == null && groupS2 != null ) {
+
+                // only s2 is grouped: s1 joins its group
+                groupS2.add( cPair.s1 );
+                if ( DEBUG ) {
+                    System.out.println( "    Combining: " + groupS2 );
                 }
-                
+
+            } else if ( groupS1 != groupS2 ) {
+
+                // both states are in different groups: by transitivity the
+                // two groups must be merged into a single one
+                groupS1.addAll( groupS2 );
+                newStateSets.remove( groupS2 );
+                if ( DEBUG ) {
+                    System.out.println( "    Merging groups into: " + groupS1 );
+                }
+
             }
-            
+            // if groupS1 == groupS2 (and not null) both states are already
+            // in the same group, so there is nothing to do
+
             pairs.remove( cPair );
-            
+
         }
         
         if ( DEBUG ) {

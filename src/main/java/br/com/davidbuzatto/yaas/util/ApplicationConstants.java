@@ -32,5 +32,11 @@ public interface ApplicationConstants {
     public static final String DARK_THEME = "DARK";
     
     public static final int TURING_MACHINE_MAX_COUNT = 4000;
+
+    // maximum recursion depth when building the PDA id tree. it is a backstop
+    // for empty (epsilon) transition cycles that keep growing the stack (and so
+    // never repeat the exact same configuration). it must stay well below the
+    // depth that overflows the JVM stack, since buildIDTree is recursive
+    public static final int PUSHDOWN_AUTOMATON_MAX_LEVEL = 1000;
     
 }

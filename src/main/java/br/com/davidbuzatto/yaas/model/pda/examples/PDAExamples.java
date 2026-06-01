@@ -674,5 +674,116 @@ public class PDAExamples {
         return dpda;
 
     }
-    
+
+    /**
+     * Review scenario - bug 3 (empty transition consuming input on empty
+     * stack).
+     *
+     * The PDA empties its stack (q0 -> qa, popping the starting symbol with an
+     * empty transition) and then takes an empty transition that matches the
+     * empty stack (qa -> q1, accepting state). An empty transition must never
+     * consume an input symbol.
+     *
+     * Accept by FINAL STATE.
+     *
+     * Expected behaviour after the fix: "" is accepted (the empty transitions
+     * don't consume anything) and "0" is rejected (the lone input symbol is
+     * never consumed, so q1 is reached with input remaining). Before the fix
+     * "0" was wrongly accepted (and "" raised an exception).
+     */
+    public static PDA createPDAEmptyTransitionEmptyStackFinalState() {
+
+        PDA pda = new PDA();
+
+        // states
+        PDAState q0 = new PDAState( 0, null, true, false );
+        q0.setX1Y1( 100, 200 );
+        pda.addState( q0 );
+
+        PDAState qa = new PDAState( 1, null, false, false );
+        qa.setX1Y1( 250, 200 );
+        pda.addState( qa );
+
+        PDAState q1 = new PDAState( 2, null, false, true );
+        q1.setX1Y1( 400, 200 );
+        pda.addState( q1 );
+
+        // transitions
+
+        // empties the stack popping the starting symbol without consuming input
+        PDATransition q0qa = new PDATransition( q0, qa,
+                PDAOperation.getPopOperation( CharacterConstants.EMPTY_STRING,
+                        pda.getStackStartingSymbol() ) );
+        q0qa.setStrokeColor( new Color( 0, 153, 0, 255 ) );
+        pda.addTransition( q0qa );
+
+        // empty transition matching the empty stack (top is the empty string),
+        // it must not consume any input symbol
+        PDATransition qaq1 = new PDATransition( qa, q1,
+                PDAOperation.getDoNothingOperation( CharacterConstants.EMPTY_STRING,
+                        CharacterConstants.EMPTY_STRING ) );
+        qaq1.setStrokeColor( new Color( 0, 112, 192, 255 ) );
+        pda.addTransition( qaq1 );
+
+        return pda;
+
+    }
+
+    /**
+     * Review scenario - bug 4 (empty transition cycle causing a
+     * StackOverflowError).
+     *
+     * The PDA has an empty transition cycle (q0 -> q1 -> q0) that neither
+     * consumes input nor changes the stack, plus an accepting empty transition
+     * (q0 -> q2). Before the fix, building the id tree recursed forever and
+     * crashed the application; after the fix the recursion is bounded by
+     * PUSHDOWN_AUTOMATON_MAX_LEVEL and the empty string is still accepted.
+     *
+     * Accept by FINAL STATE.
+     *
+     * Suggested test: "" (accepted, without crashing).
+     */
+    public static PDA createPDAEmptyTransitionCycleFinalState() {
+
+        PDA pda = new PDA();
+
+        // states
+        PDAState q0 = new PDAState( 0, null, true, false );
+        q0.setX1Y1( 150, 200 );
+        pda.addState( q0 );
+
+        PDAState q1 = new PDAState( 1, null, false, false );
+        q1.setX1Y1( 300, 200 );
+        pda.addState( q1 );
+
+        PDAState q2 = new PDAState( 2, null, false, true );
+        q2.setX1Y1( 450, 200 );
+        pda.addState( q2 );
+
+        // transitions
+
+        // accepting path for the empty string
+        PDATransition q0q2 = new PDATransition( q0, q2,
+                PDAOperation.getDoNothingOperation( CharacterConstants.EMPTY_STRING,
+                        pda.getStackStartingSymbol() ) );
+        q0q2.setStrokeColor( new Color( 0, 112, 192, 255 ) );
+        pda.addTransition( q0q2 );
+
+        // empty transition cycle: doesn't consume input nor change the stack
+        PDATransition q0q1 = new PDATransition( q0, q1,
+                PDAOperation.getDoNothingOperation( CharacterConstants.EMPTY_STRING,
+                        pda.getStackStartingSymbol() ) );
+        q0q1.setStrokeColor( new Color( 204, 0, 0, 255 ) );
+        pda.addTransition( q0q1 );
+
+        PDATransition q1q0 = new PDATransition( q1, q0,
+                PDAOperation.getDoNothingOperation( CharacterConstants.EMPTY_STRING,
+                        pda.getStackStartingSymbol() ) );
+        q1q0.setStrokeColor( new Color( 204, 0, 0, 255 ) );
+        pda.addTransition( q1q0 );
+
+        return pda;
+
+    }
+
 }

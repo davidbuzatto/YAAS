@@ -419,9 +419,180 @@ public class FAExamples {
         enfa.addTransition( new FATransition( q3, q5,
                 CharacterConstants.EMPTY_STRING ) );
         enfa.addTransition( new FATransition( q4, q3, '.' ) );
-        
+
         return enfa;
-        
+
     }
-    
+
+    /**
+     * Review scenario - bug 1 (FA.accepts simulation step).
+     *
+     * A partial DFA that accepts only the string "01". When a string is
+     * rejected in the middle (e.g. "00"), the simulation must show a final
+     * step with no active states, pointing the symbol that caused the
+     * rejection.
+     *
+     * Suggested tests: "01" (accepted), "00", "0", "1" and "010" (rejected,
+     * the last one rejecting on the third symbol).
+     */
+    public static FA createDFAForRejectionStep() {
+
+        FA dfa = new FA();
+        int currentState = 0;
+
+        FAState q0 = new FAState( currentState++, true, false );
+        q0.setX1( 100 );
+        q0.setY1( 200 );
+
+        FAState q1 = new FAState( currentState++, false, false );
+        q1.setX1( 250 );
+        q1.setY1( 200 );
+
+        FAState q2 = new FAState( currentState++, false, true );
+        q2.setX1( 400 );
+        q2.setY1( 200 );
+
+        dfa.addState( q0 );
+        dfa.addState( q1 );
+        dfa.addState( q2 );
+
+        dfa.addTransition( new FATransition( q0, q1, '0' ) );
+        dfa.addTransition( new FATransition( q1, q2, '1' ) );
+
+        return dfa;
+
+    }
+
+    /**
+     * Review scenario - bug 2 (DFAMinimize transitive merge).
+     *
+     * A DFA for the language of strings over {0,1} that contain the substring
+     * "01". Each non-initial equivalence class is duplicated into two
+     * reachable and equivalent states, so the minimization must combine them.
+     *
+     * The expected minimum DFA has 3 states:
+     *     {S} (initial), {T0, T1} and {U0, U1} (final).
+     *
+     * This stresses the step that combines equivalent states into more than
+     * one group (the transitive closure fix).
+     *
+     * Suggested tests: "01", "001", "1101" (accepted), "0", "1", "11", "000"
+     * (rejected).
+     */
+    public static FA createDFAForMinimizationTwoGroups() {
+
+        FA dfa = new FA();
+        int currentState = 0;
+
+        // S: no progress towards "01" yet (initial)
+        FAState s = new FAState( currentState++, true, false );
+        s.setX1( 100 );
+        s.setY1( 225 );
+
+        // T0 and T1: a 0 was read and a 1 would complete "01"
+        FAState t0 = new FAState( currentState++, false, false );
+        t0.setX1( 275 );
+        t0.setY1( 125 );
+
+        FAState t1 = new FAState( currentState++, false, false );
+        t1.setX1( 275 );
+        t1.setY1( 325 );
+
+        // U0 and U1: "01" was already seen (accepting sink)
+        FAState u0 = new FAState( currentState++, false, true );
+        u0.setX1( 475 );
+        u0.setY1( 125 );
+
+        FAState u1 = new FAState( currentState++, false, true );
+        u1.setX1( 475 );
+        u1.setY1( 325 );
+
+        dfa.addState( s );
+        dfa.addState( t0 );
+        dfa.addState( t1 );
+        dfa.addState( u0 );
+        dfa.addState( u1 );
+
+        // S stays in its class on 1 and moves to the T class on 0
+        dfa.addTransition( new FATransition( s, s, '1' ) );
+        dfa.addTransition( new FATransition( s, t0, '0' ) );
+
+        // T0 and T1 stay in the T class on 0 and move to the U class on 1
+        dfa.addTransition( new FATransition( t0, t1, '0' ) );
+        dfa.addTransition( new FATransition( t0, u0, '1' ) );
+        dfa.addTransition( new FATransition( t1, t0, '0' )
+                .bendByCenterCPY( 30 ) );
+        dfa.addTransition( new FATransition( t1, u1, '1' ) );
+
+        // U0 and U1 are equivalent accepting sinks
+        dfa.addTransition( new FATransition( u0, u1, '0' ) );
+        dfa.addTransition( new FATransition( u0, u0, '1' ) );
+        dfa.addTransition( new FATransition( u1, u0, '0' )
+                .bendByCenterCPY( 30 ) );
+        dfa.addTransition( new FATransition( u1, u1, '1' ) );
+
+        return dfa;
+
+    }
+
+    /**
+     * Review scenario - bugs A and B (minimization of partial DFAs).
+     *
+     * A partial DFA (not every state defines every symbol) for the finite
+     * language { "aab", "baa" }. The states q1 and q2 share the same local
+     * alphabet ({a}) and the same one-symbol behaviour, but are distinguished
+     * only by strings that continue with symbols not defined on them
+     * ("ab" tells them apart). Before the fix the distinguishability test used
+     * the local alphabet and wrongly merged q1 and q2, producing a minimized
+     * DFA with the wrong language. After the fix they are kept separate.
+     *
+     * Suggested tests: "aab", "baa" (accepted), "aa", "ab", "ba", "" (rejected).
+     */
+    public static FA createDFAForMinimizationPartial() {
+
+        FA dfa = new FA();
+        int currentState = 0;
+
+        FAState q0 = new FAState( currentState++, true, false );
+        q0.setX1( 100 );
+        q0.setY1( 225 );
+
+        FAState q1 = new FAState( currentState++, false, false );
+        q1.setX1( 250 );
+        q1.setY1( 125 );
+
+        FAState q2 = new FAState( currentState++, false, false );
+        q2.setX1( 250 );
+        q2.setY1( 325 );
+
+        FAState q3 = new FAState( currentState++, false, false );
+        q3.setX1( 400 );
+        q3.setY1( 125 );
+
+        FAState q4 = new FAState( currentState++, false, false );
+        q4.setX1( 400 );
+        q4.setY1( 325 );
+
+        FAState qf = new FAState( currentState++, false, true );
+        qf.setX1( 550 );
+        qf.setY1( 225 );
+
+        dfa.addState( q0 );
+        dfa.addState( q1 );
+        dfa.addState( q2 );
+        dfa.addState( q3 );
+        dfa.addState( q4 );
+        dfa.addState( qf );
+
+        dfa.addTransition( new FATransition( q0, q1, 'a' ) );
+        dfa.addTransition( new FATransition( q0, q2, 'b' ) );
+        dfa.addTransition( new FATransition( q1, q3, 'a' ) );
+        dfa.addTransition( new FATransition( q2, q4, 'a' ) );
+        dfa.addTransition( new FATransition( q3, qf, 'b' ) );
+        dfa.addTransition( new FATransition( q4, qf, 'a' ) );
+
+        return dfa;
+
+    }
+
 }

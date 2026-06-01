@@ -60,8 +60,13 @@ public class FAKleeneStar {
             fa.setInitialState( null );
             fa1Initial.setInitial( false );
             
-            FAState newInitial = new FAState( 0, true, false );
-            
+            // the new initial state must be final so the empty string is
+            // accepted (every Kleene star language contains it). it is only
+            // reached at the start or after a whole word of L is consumed
+            // (via the empty transitions from the old final states), so making
+            // it final characterizes exactly L*
+            FAState newInitial = new FAState( 0, true, true );
+
             fa.addState( newInitial );
             
             fa.addTransition( new FATransition( 

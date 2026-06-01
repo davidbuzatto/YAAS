@@ -19,6 +19,7 @@ package br.com.davidbuzatto.yaas.model.pda;
 import br.com.davidbuzatto.yaas.gui.ZoomFacility;
 import br.com.davidbuzatto.yaas.gui.pda.PDASimulationStep;
 import br.com.davidbuzatto.yaas.model.AbstractGeometricForm;
+import br.com.davidbuzatto.yaas.util.ApplicationConstants;
 import br.com.davidbuzatto.yaas.util.CharacterConstants;
 import br.com.davidbuzatto.yaas.util.Utils;
 import java.awt.Color;
@@ -133,7 +134,26 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
     }
     
     private void buildIDTree( PDAID node, Map<PDAState, List<PDATransition>> delta, PDAAcceptanceType acceptanceType ) {
-        
+
+        // avoids StackOverflowErrors caused by empty (epsilon) transition
+        // cycles. the recursion is aborted when:
+        //   1) the current configuration (state, remaining string and stack) is
+        //      already present in the path from the root, meaning a cycle that
+        //      cannot lead to a new acceptance was found (the equal ancestor
+        //      already performed the acceptance test and expanded the children); or
+        //   2) the maximum level is reached, a backstop for cycles that keep
+        //      growing the stack and so never repeat the exact same configuration
+        if ( isConfigurationInPath( node ) ||
+                buildTreeLevel >= ApplicationConstants.PUSHDOWN_AUTOMATON_MAX_LEVEL ) {
+            // this node closes a cycle (or hit the backstop) and won't be
+            // expanded, so it is detached from its parent to avoid drawing a
+            // spurious id and its incoming edge in the id tree
+            if ( node.getParent() != null ) {
+                node.getParent().getChildren().remove( node );
+            }
+            return;
+        }
+
         if ( node.getString().isEmpty() ) {
             
             if ( acceptanceType == PDAAcceptanceType.FINAL_STATE && node.getState().isFinal() ) {
@@ -269,11 +289,11 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
                             System.out.println( levelString.repeat( buildTreeLevel ) + "      Matches empty stack" );
                         }
 
-                        String newString = string.substring( 1 );
+                        // empty transition: don't consume any symbol
                         processStack( o, stack );
 
-                        PDAID newId = new PDAID( t.getTargetState(), 
-                                newString, stack, o, t.getStrokeColor() );
+                        PDAID newId = new PDAID( t.getTargetState(),
+                                string, stack, o, t.getStrokeColor() );
                         node.addChild( newId );
 
                         buildIDTree( newId, delta, acceptanceType );
@@ -285,11 +305,36 @@ public class PDA extends AbstractGeometricForm implements Cloneable {
             }
 
         }
-        
+
         buildTreeLevel--;
         
     }
     
+    /**
+     * Verifies if the configuration of the given id (state, remaining string
+     * and stack) is equal to the configuration of one of its ancestors in the
+     * id tree. PDAID.toString() encodes exactly these three pieces of data, so
+     * it is used as the configuration key.
+     *
+     * @param node The id to be verified.
+     * @return true if an ancestor has the same configuration, false otherwise.
+     */
+    private boolean isConfigurationInPath( PDAID node ) {
+
+        String configuration = node.toString();
+        PDAID ancestor = node.getParent();
+
+        while ( ancestor != null ) {
+            if ( ancestor.toString().equals( configuration ) ) {
+                return true;
+            }
+            ancestor = ancestor.getParent();
+        }
+
+        return false;
+
+    }
+
     private void processStack( PDAOperation op, Deque<Character> stack ) {
         
         switch ( op.getType() ) {
