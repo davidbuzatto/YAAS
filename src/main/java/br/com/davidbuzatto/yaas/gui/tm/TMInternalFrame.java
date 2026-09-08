@@ -129,6 +129,9 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
     private TMState selectedState;
     private TMTransition selectedTransition;
     private Set<TMState> selectedStates;
+
+    // state used as the grid-snap reference while moving the whole machine
+    private TMState moveAnchor;
     
     private TMState originState;
     private TMState targetState;
@@ -1131,6 +1134,7 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
 
         xSnapRest = 0;
         ySnapRest = 0;
+        moveAnchor = null;
 
         if ( evt.getButton() == MouseEvent.BUTTON1 ) {
             
@@ -1435,14 +1439,11 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
                     int dy = yAmount;
 
                     if ( btnSnapToGrid.isSelected() && !tm.getStates().isEmpty() ) {
-                        int minX = Integer.MAX_VALUE;
-                        int minY = Integer.MAX_VALUE;
-                        for ( TMState s : tm.getStates() ) {
-                            minX = Math.min( minX, s.getX1() );
-                            minY = Math.min( minY, s.getY1() );
+                        if ( moveAnchor == null ) {
+                            moveAnchor = getStateClosestTo( tm.getStates(), xPressed, yPressed );
                         }
-                        dx = snapGroupAmountX( minX, xAmount );
-                        dy = snapGroupAmountY( minY, yAmount );
+                        dx = snapGroupAmountX( moveAnchor.getX1(), xAmount );
+                        dy = snapGroupAmountY( moveAnchor.getY1(), yAmount );
                     }
 
                     if ( dx != 0 || dy != 0 ) {
@@ -2620,6 +2621,25 @@ public class TMInternalFrame extends javax.swing.JInternalFrame {
         int dy = (int) Math.round( ( refY + ySnapRest ) / (double) g ) * g - refY;
         ySnapRest -= dy;
         return dy;
+    }
+
+    /**
+     * Returns the state whose center is closest to (x, y), used as the grid-snap
+     * anchor when the whole machine is moved and no component was grabbed.
+     */
+    private TMState getStateClosestTo( List<TMState> states, int x, int y ) {
+        TMState closest = null;
+        long best = Long.MAX_VALUE;
+        for ( TMState s : states ) {
+            long dx = s.getX1() - x;
+            long dy = s.getY1() - y;
+            long d = dx * dx + dy * dy;
+            if ( d < best ) {
+                best = d;
+                closest = s;
+            }
+        }
+        return closest;
     }
 
     public void setCurrentState( int currentState ) {

@@ -124,6 +124,9 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     private PDAState selectedState;
     private PDATransition selectedTransition;
     private Set<PDAState> selectedStates;
+
+    // state used as the grid-snap reference while moving the whole machine
+    private PDAState moveAnchor;
     
     private PDAState originState;
     private PDAState targetState;
@@ -1139,6 +1142,7 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
 
         xSnapRest = 0;
         ySnapRest = 0;
+        moveAnchor = null;
 
         if ( evt.getButton() == MouseEvent.BUTTON1 ) {
             
@@ -1444,14 +1448,11 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                     int dy = yAmount;
 
                     if ( btnSnapToGrid.isSelected() && !pda.getStates().isEmpty() ) {
-                        int minX = Integer.MAX_VALUE;
-                        int minY = Integer.MAX_VALUE;
-                        for ( PDAState s : pda.getStates() ) {
-                            minX = Math.min( minX, s.getX1() );
-                            minY = Math.min( minY, s.getY1() );
+                        if ( moveAnchor == null ) {
+                            moveAnchor = getStateClosestTo( pda.getStates(), xPressed, yPressed );
                         }
-                        dx = snapGroupAmountX( minX, xAmount );
-                        dy = snapGroupAmountY( minY, yAmount );
+                        dx = snapGroupAmountX( moveAnchor.getX1(), xAmount );
+                        dy = snapGroupAmountY( moveAnchor.getY1(), yAmount );
                     }
 
                     if ( dx != 0 || dy != 0 ) {
@@ -2652,6 +2653,25 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         int dy = (int) Math.round( ( refY + ySnapRest ) / (double) g ) * g - refY;
         ySnapRest -= dy;
         return dy;
+    }
+
+    /**
+     * Returns the state whose center is closest to (x, y), used as the grid-snap
+     * anchor when the whole machine is moved and no component was grabbed.
+     */
+    private PDAState getStateClosestTo( List<PDAState> states, int x, int y ) {
+        PDAState closest = null;
+        long best = Long.MAX_VALUE;
+        for ( PDAState s : states ) {
+            long dx = s.getX1() - x;
+            long dy = s.getY1() - y;
+            long d = dx * dx + dy * dy;
+            if ( d < best ) {
+                best = d;
+                closest = s;
+            }
+        }
+        return closest;
     }
 
     public void setCurrentState( int currentState ) {
