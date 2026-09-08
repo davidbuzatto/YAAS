@@ -215,10 +215,9 @@ public class TMTransition extends AbstractGeometricForm implements Cloneable {
 
             } else if ( centralCPDragging ) {
                 centralCPMoved = true;
-                // move both Bézier handles so the on-curve point (t = 0.5)
-                // follows the cursor exactly: B(0.5) shifts by 3/4 of the
-                // handle translation, so translate the handles by 4/3 of the
-                // desired shift.
+                // translate both Bézier handles together so the on-curve point
+                // at t = 0.5 follows the cursor: B(0.5) shifts by 3/4 of the
+                // handle translation, hence the 4/3 factor.
                 int bx = ( x1 + 3 * leftCP.getX1() + 3 * rightCP.getX1() + x2 ) / 8;
                 int by = ( y1 + 3 * leftCP.getY1() + 3 * rightCP.getY1() + y2 ) / 8;
                 int hx = ( xEvt - bx ) * 4 / 3;
@@ -227,8 +226,6 @@ public class TMTransition extends AbstractGeometricForm implements Cloneable {
                 leftCP.setY1( leftCP.getY1() + hy );
                 rightCP.setX1( rightCP.getX1() + hx );
                 rightCP.setY1( rightCP.getY1() + hy );
-                centralCP.setX1( ( x1 + 3 * leftCP.getX1() + 3 * rightCP.getX1() + x2 ) / 8 );
-                centralCP.setY1( ( y1 + 3 * leftCP.getY1() + 3 * rightCP.getY1() + y2 ) / 8 );
             } else if ( leftCPDragging ) {
                 centralCPMoved = true;
                 leftCP.setX1( xEvt );
@@ -247,24 +244,36 @@ public class TMTransition extends AbstractGeometricForm implements Cloneable {
             label.setY1( yEvt - yOffset );
         }
         
-        curve.setCurve( 
-                x1, y1, 
-                leftCP.getX1(), leftCP.getY1(), 
-                rightCP.getX1(), rightCP.getY1(), 
+        curve.setCurve(
+                x1, y1,
+                leftCP.getX1(), leftCP.getY1(),
+                rightCP.getX1(), rightCP.getY1(),
                 x2, y2 );
 
-        arrow.setAngle( Math.atan2( 
-                y2 - rightCP.getY1(), 
+        updateCentralCPOnCurve();
+
+        arrow.setAngle( Math.atan2(
+                y2 - rightCP.getY1(),
                 x2 - rightCP.getX1() ) );
-        
+
         arrow.setX1( x2 );
         arrow.setY1( y2 );
-        
+
         targetCP.setX1( x2 );
         targetCP.setY1( y2 );
 
     }
-    
+
+    /**
+     * Places the central control point on the curve, at t = 0.5:
+     * B(0.5) = ( P0 + 3*P1 + 3*P2 + P3 ) / 8.
+     */
+    private void updateCentralCPOnCurve() {
+        centralCP.setX1( ( x1 + 3 * leftCP.getX1() + 3 * rightCP.getX1() + x2 ) / 8 );
+        centralCP.setY1( ( y1 + 3 * leftCP.getY1() + 3 * rightCP.getY1() + y2 ) / 8 );
+    }
+
+
     public void mouseHover( int x, int y ) {
 
         if ( controlPointsVisible ) {
@@ -334,10 +343,7 @@ public class TMTransition extends AbstractGeometricForm implements Cloneable {
             rightCP.setY1( y2 - (y2-y1)/3 );
         }
 
-        // the central control point always lies on the curve, at t = 0.5:
-        // B(0.5) = ( P0 + 3*P1 + 3*P2 + P3 ) / 8
-        centralCP.setX1( ( x1 + 3 * leftCP.getX1() + 3 * rightCP.getX1() + x2 ) / 8 );
-        centralCP.setY1( ( y1 + 3 * leftCP.getY1() + 3 * rightCP.getY1() + y2 ) / 8 );
+        updateCentralCPOnCurve();
 
         if ( originState == targetState ) {
             if ( !labelMoved ) {
@@ -424,13 +430,13 @@ public class TMTransition extends AbstractGeometricForm implements Cloneable {
             
                 g2d.setStroke( cpStroke.getBasicStroke() );
 
+                // Bézier handles, drawn from their own anchor point:
+                // leftCP belongs to the origin, rightCP to the target.
                 g2d.setColor( leftCP.getFillColor() );
-                g2d.drawLine( centralCP.getX1(), centralCP.getY1(), 
-                        leftCP.getX1(), leftCP.getY1() );
+                g2d.drawLine( x1, y1, leftCP.getX1(), leftCP.getY1() );
 
                 g2d.setColor( rightCP.getFillColor() );
-                g2d.drawLine( centralCP.getX1(), centralCP.getY1(), 
-                        rightCP.getX1(), rightCP.getY1() );
+                g2d.drawLine( x2, y2, rightCP.getX1(), rightCP.getY1() );
 
                 targetCP.draw( g2d );
                 centralCP.draw( g2d );
