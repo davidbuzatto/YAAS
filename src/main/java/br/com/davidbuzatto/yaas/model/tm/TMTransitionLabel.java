@@ -85,35 +85,48 @@ public class TMTransitionLabel extends AbstractGeometricForm implements Cloneabl
         if ( drawBackground ) {
             g2d.setColor( localFillColor );
             g2d.fillRoundRect(
-                    x1 - totalTextWidth/2 - 4, y1 - totalTextHeight - 1, 
-                    totalTextWidth + 8, totalTextHeight + 8,
+                    getBoundsX(), getBoundsY(),
+                    getBoundsWidth(), getBoundsHeight(),
                     10, 10 );
             g2d.setColor( localStrokeColor );
             g2d.drawRoundRect(
-                    x1 - totalTextWidth/2 - 4, y1 - totalTextHeight - 1, 
-                    totalTextWidth + 8, totalTextHeight + 8,
+                    getBoundsX(), getBoundsY(),
+                    getBoundsWidth(), getBoundsHeight(),
                     10, 10 );
         }
-        
+
         for ( int i = 0; i < texts.size(); i++ ) {
             String text = texts.get( i );
             int textWidth = textsWidth.get( i );
             int textHeight = textsHeight.get( i );
-            g2d.drawString( text, x1 - textWidth/2, 
+            g2d.drawString( text, x1 - textWidth/2,
                     y1 + textHeight / 2 - ( ( maxTextHeight + 5 ) * ( texts.size() - i ) ) + 11 );
         }
-        
+
         g2d.dispose();
-        
+
+    }
+
+    private int getBoundsX() {
+        return x1 - totalTextWidth / 2 - 4;
+    }
+
+    private int getBoundsY() {
+        return y1 - totalTextHeight - 1;
+    }
+
+    private int getBoundsWidth() {
+        return totalTextWidth + 8;
+    }
+
+    private int getBoundsHeight() {
+        return totalTextHeight + 8;
     }
 
     @Override
     public boolean intersects( int x, int y ) {
-        return 
-                x >= x1 - totalTextWidth/2 - 4 && 
-                x <= x1 + totalTextWidth/2 + 8 &&
-                y >= y1 - totalTextHeight - 1 && 
-                y <= y1 + 7;
+        return x >= getBoundsX() && x <= getBoundsX() + getBoundsWidth() &&
+               y >= getBoundsY() && y <= getBoundsY() + getBoundsHeight();
     }
     
     public void addText( String text ) {

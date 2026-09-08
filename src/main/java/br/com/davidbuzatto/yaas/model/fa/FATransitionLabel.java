@@ -70,32 +70,45 @@ public class FATransitionLabel extends AbstractGeometricForm implements Cloneabl
         
         if ( drawBackground ) {
             g2d.setColor( localFillColor );
-            g2d.fillRoundRect( 
-                    x1 - textWidth/2 - 4, y1 - textHeight / 2 - 6, 
-                    textWidth + 8, textHeight + 8,
+            g2d.fillRoundRect(
+                    getBoundsX(), getBoundsY(),
+                    getBoundsWidth(), getBoundsHeight(),
                     10, 10 );
             g2d.setColor( localStrokeColor );
-            g2d.drawRoundRect( 
-                    x1 - textWidth/2 - 4, y1 - textHeight / 2 - 6, 
-                    textWidth + 8, textHeight + 8,
+            g2d.drawRoundRect(
+                    getBoundsX(), getBoundsY(),
+                    getBoundsWidth(), getBoundsHeight(),
                     10, 10 );
         }
-        
+
         if ( text != null ) {
             g2d.drawString( text, x1 - textWidth/2, y1 + textHeight / 2 );
         }
-        
+
         g2d.dispose();
-        
+
+    }
+
+    private int getBoundsX() {
+        return x1 - textWidth / 2 - 4;
+    }
+
+    private int getBoundsY() {
+        return y1 - textHeight / 2 - 6;
+    }
+
+    private int getBoundsWidth() {
+        return textWidth + 8;
+    }
+
+    private int getBoundsHeight() {
+        return textHeight + 8;
     }
 
     @Override
     public boolean intersects( int x, int y ) {
-        return 
-                x >= x1 - textWidth/2 - 4 && 
-                x <= x1 + textWidth/2 + 8 &&
-                y >= y1 - textHeight/2 - 4 && 
-                y <= y1 + textHeight/2 + 8;
+        return x >= getBoundsX() && x <= getBoundsX() + getBoundsWidth() &&
+               y >= getBoundsY() && y <= getBoundsY() + getBoundsHeight();
     }
     
     public void setText( String text ) {
