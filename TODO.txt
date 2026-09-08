@@ -1,3 +1,7 @@
+Fix introduced bug in determinization;
+Improve move tool (snap to grid entire machine when snap is enabled);
+Improve transition control points.
+
 Implementing Undo/Redo:
     Identify all operations that can be undone.
     Due to the application architecture, it's being very problematic to implement undo and redo...
