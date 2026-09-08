@@ -221,16 +221,20 @@ public class FATransition extends AbstractGeometricForm implements Cloneable {
 
             } else if ( centralCPDragging ) {
                 centralCPMoved = true;
-                centralCP.setX1( xEvt );
-                centralCP.setY1( yEvt );
-                leftCP.setX1( prevLeftCPX + 
-                        centralCP.getX1() - prevCentralCPX );
-                leftCP.setY1( prevLeftCPY + 
-                        centralCP.getY1() - prevCentralCPY );
-                rightCP.setX1( prevRightCPX + 
-                        centralCP.getX1() - prevCentralCPX );
-                rightCP.setY1( prevRightCPY + 
-                        centralCP.getY1() - prevCentralCPY );
+                // move both Bézier handles so the on-curve point (t = 0.5)
+                // follows the cursor exactly: B(0.5) shifts by 3/4 of the
+                // handle translation, so translate the handles by 4/3 of the
+                // desired shift.
+                int bx = ( x1 + 3 * leftCP.getX1() + 3 * rightCP.getX1() + x2 ) / 8;
+                int by = ( y1 + 3 * leftCP.getY1() + 3 * rightCP.getY1() + y2 ) / 8;
+                int hx = ( xEvt - bx ) * 4 / 3;
+                int hy = ( yEvt - by ) * 4 / 3;
+                leftCP.setX1( leftCP.getX1() + hx );
+                leftCP.setY1( leftCP.getY1() + hy );
+                rightCP.setX1( rightCP.getX1() + hx );
+                rightCP.setY1( rightCP.getY1() + hy );
+                centralCP.setX1( ( x1 + 3 * leftCP.getX1() + 3 * rightCP.getX1() + x2 ) / 8 );
+                centralCP.setY1( ( y1 + 3 * leftCP.getY1() + 3 * rightCP.getY1() + y2 ) / 8 );
             } else if ( leftCPDragging ) {
                 centralCPMoved = true;
                 leftCP.setX1( xEvt );
@@ -330,14 +334,17 @@ public class FATransition extends AbstractGeometricForm implements Cloneable {
         targetCP.setY1( y2 );
         
         if ( !centralCPMoved ) {
-            centralCP.setX1( x1 + (x2-x1)/2 );
-            centralCP.setY1( y1 + (y2-y1)/2 );
             leftCP.setX1( x1 + (x2-x1)/3 );
             leftCP.setY1( y1 + (y2-y1)/3 );
             rightCP.setX1( x2 - (x2-x1)/3 );
             rightCP.setY1( y2 - (y2-y1)/3 );
         }
-        
+
+        // the central control point always lies on the curve, at t = 0.5:
+        // B(0.5) = ( P0 + 3*P1 + 3*P2 + P3 ) / 8
+        centralCP.setX1( ( x1 + 3 * leftCP.getX1() + 3 * rightCP.getX1() + x2 ) / 8 );
+        centralCP.setY1( ( y1 + 3 * leftCP.getY1() + 3 * rightCP.getY1() + y2 ) / 8 );
+
         if ( originState == targetState ) {
             if ( !labelMoved ) {
                 label.setX1( x1 + (int) ( Math.cos( targetCPAngle - DrawingConstants.RAD_90 ) * 
@@ -422,12 +429,6 @@ public class FATransition extends AbstractGeometricForm implements Cloneable {
             if ( controlPointsVisible ) {
             
                 g2d.setStroke( cpStroke.getBasicStroke() );
-
-                Point2D p = Utils.cubicBezierPoint( curve, 0.5 );
-
-                g2d.setColor( centralCP.getFillColor() );
-                g2d.drawLine( centralCP.getX1(), centralCP.getY1(), 
-                        (int) p.getX(), (int) p.getY() );
 
                 g2d.setColor( leftCP.getFillColor() );
                 g2d.drawLine( centralCP.getX1(), centralCP.getY1(), 
