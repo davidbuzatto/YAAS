@@ -149,8 +149,8 @@ public class FADeterminize {
         }
         
         Map<Set<FAState>, FAState> m = new HashMap<>();
-        for ( TransitionHelper t : generatedTransitions ) {
-            m.put( t.originState.states, t.originState.state );
+        for ( StateHelper s : generatedStates ) {
+            m.put( s.states, s.state );
         }
         
         for ( TransitionHelper t : generatedTransitions ) {

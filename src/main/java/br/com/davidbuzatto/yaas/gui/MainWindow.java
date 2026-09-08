@@ -1150,8 +1150,11 @@ public class MainWindow extends javax.swing.JFrame {
     private void openExample() {
         if ( ApplicationConstants.IN_DEVELOPMENT ) {
             
-            createFAInternalFrame( FAExamples.createDFASubstring01(), 
-                    false, false, null, "0010" );
+            /*createFAInternalFrame( FAExamples.createDFASubstring01(), 
+                    false, false, null, "0010" );*/
+            
+            createFAInternalFrame( FAExamples.createNFAEndsWith00(), 
+                    false, false, null, "1100" );
             
             /*createPDAInternalFrame( PDAExamples.createPDAEvenPalindromeFinalState(), 
                     false, false, null, "001100", PDAAcceptanceType.FINAL_STATE );*/
