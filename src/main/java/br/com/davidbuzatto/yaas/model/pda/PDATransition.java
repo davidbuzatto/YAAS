@@ -343,9 +343,20 @@ public class PDATransition extends AbstractGeometricForm implements Cloneable {
             }
         } else {
             if ( !labelMoved ) {
-                label.setX1( centralCP.getX1() );
-                label.setY1( centralCP.getY1() -
-                        (int) ( label.getMaxTextHeight() * 1.5 ) );
+                // the label follows the central CP, pushed to the outer side of
+                // the bend (away from the chord); on a straight transition the
+                // offset degenerates, so it falls back to "above the line"
+                int off = (int) ( label.getMaxTextHeight() * 1.5 );
+                int ox = centralCP.getX1() - ( x1 + x2 ) / 2;
+                int oy = centralCP.getY1() - ( y1 + y2 ) / 2;
+                double len = Math.hypot( ox, oy );
+                if ( len < 1.0 ) {
+                    label.setX1( centralCP.getX1() );
+                    label.setY1( centralCP.getY1() - off );
+                } else {
+                    label.setX1( centralCP.getX1() + (int) ( ox / len * off ) );
+                    label.setY1( centralCP.getY1() + (int) ( oy / len * off ) );
+                }
             }
         }
 

@@ -1374,7 +1374,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                                 FATransition t = new FATransition( 
                                         originState, targetState, symbols );
                                 fa.addTransition( t );
-                                updateTransitionsCurvature( originState, targetState, fa.getTransitions(), 30, 30, 10 );
+                                updateTransitionsCurvature( originState, targetState, fa.getTransitions(), 30 );
                                 setCurrentFileSaved( false );
                             }
 
@@ -2532,7 +2532,7 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         if ( selectedState != null ) {
             for ( FATransition t : fa.getTransitions() ) {
                 if ( t.getOriginState().equals( selectedState ) ) {
-                    updateTransitionsCurvature( t.getOriginState(), t.getTargetState(), fa.getTransitions(), 30, 30, 10 );
+                    updateTransitionsCurvature( t.getOriginState(), t.getTargetState(), fa.getTransitions(), 30 );
                 }
             }
         }
@@ -3328,17 +3328,15 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
         }
     }
     
-    private void updateTransitionsCurvature( 
-        FAState originState, 
-        FAState targetState, 
-        List<FATransition> transitions, 
-        int distance, 
-        int angleDis, 
-        int labelDist ) {
-        
+    private void updateTransitionsCurvature(
+        FAState originState,
+        FAState targetState,
+        List<FATransition> transitions,
+        int distance ) {
+
         FATransition t1 = null;
         FATransition t2 = null;
-        
+
         for ( FATransition t : transitions ) {
             if ( t.getOriginState().equals( originState ) && t.getTargetState().equals( targetState ) ) {
                 t1 = t;
@@ -3347,39 +3345,30 @@ public class FAInternalFrame extends javax.swing.JInternalFrame {
                 t2 = t;
             }
         }
-        
+
         if ( t1 != null && t2 != null && !t1.equals( t2 ) ) {
-            
+
             t1.resetTransformations();
             t2.resetTransformations();
-            
-            double angle = Math.atan2( 
+
+            double angle = Math.atan2(
                 targetState.getY1() - originState.getY1(),
                 targetState.getX1() - originState.getX1() );
-            
-            t1.bendByCenterCP( 
-                (int) ( distance * Math.cos( angle - Math.PI / 2 ) ), 
+
+            // bow each transition out to opposite sides; the central CP (and the
+            // label, which follows it) moves along with the bend, and the tilted
+            // incoming tangent already keeps the two arrow heads apart
+            t1.bendByCenterCP(
+                (int) ( distance * Math.cos( angle - Math.PI / 2 ) ),
                 (int) ( distance * Math.sin( angle - Math.PI / 2 ) )
             );
-            t2.bendByCenterCP( 
-                (int) ( distance * Math.cos( angle + Math.PI / 2 ) ), 
+            t2.bendByCenterCP(
+                (int) ( distance * Math.cos( angle + Math.PI / 2 ) ),
                 (int) ( distance * Math.sin( angle + Math.PI / 2 ) )
             );
-            
-            t1.rotateTargetCP( (int) Math.toDegrees( angle ) + angleDis );
-            t2.rotateTargetCP( (int) Math.toDegrees( angle + Math.PI ) + angleDis );
-            
-            t1.snapLabelToCenterCP( 
-                (int) ( labelDist * Math.cos( angle - Math.PI / 2 ) ), 
-                (int) ( labelDist * Math.sin( angle - Math.PI / 2 ) )
-            );
-            t2.snapLabelToCenterCP( 
-                (int) ( labelDist * Math.cos( angle + Math.PI / 2 ) ), 
-                (int) ( labelDist * Math.sin( angle + Math.PI / 2 ) )
-            );
-            
+
         }
-        
+
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
