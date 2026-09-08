@@ -1,5 +1,3 @@
-Fix introduced bug in determinization;
-Improve move tool (snap to grid entire machine when snap is enabled);
 Improve transition control points.
 
 Implementing Undo/Redo:

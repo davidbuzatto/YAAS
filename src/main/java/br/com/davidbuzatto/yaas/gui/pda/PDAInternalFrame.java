@@ -115,7 +115,10 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
     
     private int xSnap;
     private int ySnap;
-    
+
+    private int xSnapRest;
+    private int ySnapRest;
+
     private int currentState;
     
     private PDAState selectedState;
@@ -1133,7 +1136,10 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         
         xPrev = xPressed;
         yPrev = yPressed;
-        
+
+        xSnapRest = 0;
+        ySnapRest = 0;
+
         if ( evt.getButton() == MouseEvent.BUTTON1 ) {
             
             canDrag = true;
@@ -1399,11 +1405,24 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                 yPrev += yAmount;
                     
                 if ( !selectedStates.isEmpty() ) {
-                    for ( PDAState s : selectedStates ) {
-                        s.move( xAmount, yAmount );
+
+                    int dx = xAmount;
+                    int dy = yAmount;
+
+                    if ( btnSnapToGrid.isSelected() && selectedState != null ) {
+                        dx = snapGroupAmountX( selectedState.getX1(), xAmount );
+                        dy = snapGroupAmountY( selectedState.getY1(), yAmount );
                     }
+
+                    if ( dx != 0 || dy != 0 ) {
+                        for ( PDAState s : selectedStates ) {
+                            s.move( dx, dy );
+                        }
+                    }
+                    
                     pda.updateTransitions();
                     pda.draggTransitions( evt, drawPanel.getZoomFacility() );
+                    
                 } else if ( selectedState != null ) {
                     if ( btnSnapToGrid.isSelected() ) {
                         updateSnapPoint( evt );
@@ -1420,7 +1439,25 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
                 } else if ( selectedTransition != null ) {
                     selectedTransition.mouseDragged( evt, drawPanel.getZoomFacility() );
                 } else {
-                    pda.move( xAmount, yAmount );
+
+                    int dx = xAmount;
+                    int dy = yAmount;
+
+                    if ( btnSnapToGrid.isSelected() && !pda.getStates().isEmpty() ) {
+                        int minX = Integer.MAX_VALUE;
+                        int minY = Integer.MAX_VALUE;
+                        for ( PDAState s : pda.getStates() ) {
+                            minX = Math.min( minX, s.getX1() );
+                            minY = Math.min( minY, s.getY1() );
+                        }
+                        dx = snapGroupAmountX( minX, xAmount );
+                        dy = snapGroupAmountY( minY, yAmount );
+                    }
+
+                    if ( dx != 0 || dy != 0 ) {
+                        pda.move( dx, dy );
+                    }
+                    
                 }
 
                 setCurrentFileSaved( false );
@@ -1772,7 +1809,6 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
             @Override
             public void ancestorRemoved( AncestorEvent evt ) {
             }
-
             @Override
             public void ancestorMoved( AncestorEvent evt ) {
             }
@@ -2588,10 +2624,34 @@ public class PDAInternalFrame extends javax.swing.JInternalFrame {
         xSnap = ( xEvt + DrawingConstants.STATE_RADIUS / 2 ) / 
                 DrawingConstants.STATE_RADIUS * 
                 DrawingConstants.STATE_RADIUS;
-        ySnap = ( yEvt + DrawingConstants.STATE_RADIUS / 2 ) / 
-                DrawingConstants.STATE_RADIUS * 
+        ySnap = ( yEvt + DrawingConstants.STATE_RADIUS / 2 ) /
+                DrawingConstants.STATE_RADIUS *
                 DrawingConstants.STATE_RADIUS;
-        
+
+    }
+
+    /**
+     * Amount the whole group must move so that the reference x lands on the
+     * grid. Pointer movement not yet enough for a grid step is accumulated in
+     * xSnapRest for the next drag event.
+     */
+    private int snapGroupAmountX( int refX, int xAmount ) {
+        int g = DrawingConstants.STATE_RADIUS;
+        xSnapRest += xAmount;
+        int dx = (int) Math.round( ( refX + xSnapRest ) / (double) g ) * g - refX;
+        xSnapRest -= dx;
+        return dx;
+    }
+
+    /**
+     * Vertical counterpart of snapGroupAmountX.
+     */
+    private int snapGroupAmountY( int refY, int yAmount ) {
+        int g = DrawingConstants.STATE_RADIUS;
+        ySnapRest += yAmount;
+        int dy = (int) Math.round( ( refY + ySnapRest ) / (double) g ) * g - refY;
+        ySnapRest -= dy;
+        return dy;
     }
 
     public void setCurrentState( int currentState ) {
