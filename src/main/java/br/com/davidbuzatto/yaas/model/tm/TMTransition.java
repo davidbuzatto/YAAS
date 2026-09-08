@@ -139,15 +139,14 @@ public class TMTransition extends AbstractGeometricForm implements Cloneable {
         arrow = new Arrow();
         arrow.setMouseHoverStrokeColor( DrawingConstants.TRANSITION_MOUSE_HOVER_STROKE_COLOR );
         arrow.setSelectedStrokeColor( DrawingConstants.TRANSITION_SELECTED_STROKE_COLOR );
-        arrow.setAngle( Math.atan2( 
-                y2 - rightCP.getY1(), x2 - rightCP.getX1() ) );
-        arrow.setX1( x2 );
-        arrow.setY1( y2 );
-        
-        curve = new CubicCurve2D.Double( 
-                x1, y1, 
-                leftCP.getX1(), leftCP.getY1(), 
-                rightCP.getX1(), rightCP.getY1(), 
+
+        // now that the arrow exists, let updateStartAndEndPoints place it
+        updateStartAndEndPoints();
+
+        curve = new CubicCurve2D.Double(
+                x1, y1,
+                leftCP.getX1(), leftCP.getY1(),
+                rightCP.getX1(), rightCP.getY1(),
                 x2, y2 );
         
         addOperations( operations );
@@ -199,18 +198,14 @@ public class TMTransition extends AbstractGeometricForm implements Cloneable {
                             - DrawingConstants.RAD_60;
                     
                 } else {
-                    
-                    targetCPAngle = Math.atan2( 
-                            targetState.getY1() - yEvt, 
+                    // the target CP steers the incoming direction; rightCP is
+                    // re-aimed along it at a deterministic length (see
+                    // aimRightCPAlongTargetAngle), so spinning it around the
+                    // state neither drifts nor hides rightCP behind it
+                    targetCPAngle = Math.atan2(
+                            targetState.getY1() - yEvt,
                             targetState.getX1() - xEvt );
-
-                    x2 = targetState.getX1() - 
-                            (int) ( Math.cos( targetCPAngle ) * 
-                            targetState.getRadius() );
-                    y2 = targetState.getY1() - 
-                            (int) ( Math.sin( targetCPAngle ) * 
-                            targetState.getRadius() );
-                    
+                    aimRightCPAlongTargetAngle();
                 }
 
             } else if ( centralCPDragging ) {
@@ -244,23 +239,13 @@ public class TMTransition extends AbstractGeometricForm implements Cloneable {
             label.setY1( yEvt - yOffset );
         }
         
+        updateStartAndEndPoints();
+
         curve.setCurve(
                 x1, y1,
                 leftCP.getX1(), leftCP.getY1(),
                 rightCP.getX1(), rightCP.getY1(),
                 x2, y2 );
-
-        updateCentralCPOnCurve();
-
-        arrow.setAngle( Math.atan2(
-                y2 - rightCP.getY1(),
-                x2 - rightCP.getX1() ) );
-
-        arrow.setX1( x2 );
-        arrow.setY1( y2 );
-
-        targetCP.setX1( x2 );
-        targetCP.setY1( y2 );
 
     }
 
@@ -306,67 +291,107 @@ public class TMTransition extends AbstractGeometricForm implements Cloneable {
     }
     
     public final void updateStartAndEndPoints() {
-        
-        double a = Math.atan2( 
-                targetState.getY1() - originState.getY1(), 
+
+        double a = Math.atan2(
+                targetState.getY1() - originState.getY1(),
                 targetState.getX1() - originState.getX1() );
-        
+
         x1 = originState.getX1();
         y1 = originState.getY1();
-        
+
         if ( originState == targetState ) {
-            x2 = originState.getX1() - (int) ( originState.getRadius() * 
+
+            x2 = originState.getX1() - (int) ( originState.getRadius() *
                     Math.cos( targetCPAngle + DrawingConstants.RAD_60 ) );
-            y2 = originState.getY1() - (int) ( originState.getRadius() * 
+            y2 = originState.getY1() - (int) ( originState.getRadius() *
                     Math.sin( targetCPAngle + DrawingConstants.RAD_60 ) );
+
+            targetCP.setX1( x2 );
+            targetCP.setY1( y2 );
+
         } else {
-            if ( targetCPMoved ) {
-                x2 = targetState.getX1() - (int) ( Math.cos( targetCPAngle ) * 
-                        targetState.getRadius() );
-                y2 = targetState.getY1() - (int) ( Math.sin( targetCPAngle ) * 
-                        targetState.getRadius() );
-            } else {
-                x2 = targetState.getX1() - (int) ( Math.cos( a ) * 
-                        targetState.getRadius() );
-                y2 = targetState.getY1() - (int) ( Math.sin( a ) * 
-                        targetState.getRadius() );
-            }
+            // The Bézier runs center to center, so the control polygon (and
+            // therefore the central CP and the label) stays symmetric. The
+            // stretch that falls inside each state is hidden by the state, and
+            // the arrow head / target CP are placed on the target's border.
+            x2 = targetState.getX1();
+            y2 = targetState.getY1();
         }
-        
-        targetCP.setX1( x2 );
-        targetCP.setY1( y2 );
-        
+
         if ( !centralCPMoved ) {
             leftCP.setX1( x1 + (x2-x1)/3 );
             leftCP.setY1( y1 + (y2-y1)/3 );
-            rightCP.setX1( x2 - (x2-x1)/3 );
-            rightCP.setY1( y2 - (y2-y1)/3 );
+            if ( originState != targetState && targetCPMoved ) {
+                aimRightCPAlongTargetAngle();
+            } else {
+                rightCP.setX1( x2 - (x2-x1)/3 );
+                rightCP.setY1( y2 - (y2-y1)/3 );
+            }
         }
 
         updateCentralCPOnCurve();
 
+        if ( originState != targetState ) {
+            updateArrowAndTargetCP( a );
+        }
+
         if ( originState == targetState ) {
             if ( !labelMoved ) {
-                label.setX1( x1 + (int) ( Math.cos( targetCPAngle - DrawingConstants.RAD_90 ) * 
+                label.setX1( x1 + (int) ( Math.cos( targetCPAngle - DrawingConstants.RAD_90 ) *
                         ( targetState.getDiameter() + label.getMaxTextHeight() ) ) );
-                label.setY1( y1 + (int) ( Math.sin( targetCPAngle - DrawingConstants.RAD_90 ) * 
+                label.setY1( y1 + (int) ( Math.sin( targetCPAngle - DrawingConstants.RAD_90 ) *
                         ( targetState.getDiameter() + label.getMaxTextHeight() ) ) );
             }
         } else {
             if ( !labelMoved ) {
-                if ( curve == null ) {
-                    label.setX1( x1 + (x2-x1)/2 );
-                    label.setY1( y1 + (y2-y1)/2 - 
-                            (int) ( label.getMaxTextHeight() * 1.5 ) );
-                } else {
-                    Point2D p = Utils.cubicBezierPoint( curve, 0.5 );
-                    label.setX1( (int) p.getX() );
-                    label.setY1( (int) p.getY() - 
-                            (int) ( label.getMaxTextHeight() * 1.5 ) );
-                }
+                label.setX1( centralCP.getX1() );
+                label.setY1( centralCP.getY1() -
+                        (int) ( label.getMaxTextHeight() * 1.5 ) );
             }
         }
-        
+
+    }
+
+    /**
+     * Positions the arrow head and the target control point on the target
+     * state's border, oriented along the curve's incoming tangent ( P3 - P2 ).
+     * The Bézier ends at the target center, so its last stretch is hidden by
+     * the state; the arrow must sit on the border to stay visible.
+     */
+    private void updateArrowAndTargetCP( double defaultAngle ) {
+
+        double ang;
+        if ( x2 != rightCP.getX1() || y2 != rightCP.getY1() ) {
+            ang = Math.atan2( y2 - rightCP.getY1(), x2 - rightCP.getX1() );
+        } else {
+            ang = defaultAngle;
+        }
+
+        int ax = x2 - (int) ( Math.cos( ang ) * targetState.getRadius() );
+        int ay = y2 - (int) ( Math.sin( ang ) * targetState.getRadius() );
+
+        targetCP.setX1( ax );
+        targetCP.setY1( ay );
+
+        if ( arrow != null ) {
+            arrow.setAngle( ang );
+            arrow.setX1( ax );
+            arrow.setY1( ay );
+        }
+
+    }
+
+    /**
+     * Aims rightCP along the current targetCPAngle (the direction the transition
+     * enters the target). The handle length tracks the chord but is clamped to
+     * at least one target diameter, so spinning the target CP around the state
+     * never drifts rightCP or hides it behind the state.
+     */
+    private void aimRightCPAlongTargetAngle() {
+        int d = Math.max( (int) ( Math.hypot( x2 - x1, y2 - y1 ) / 3.0 ),
+                targetState.getRadius() * 2 );
+        rightCP.setX1( x2 - (int) ( Math.cos( targetCPAngle ) * d ) );
+        rightCP.setY1( y2 - (int) ( Math.sin( targetCPAngle ) * d ) );
     }
     
     @Override
@@ -613,18 +638,13 @@ public class TMTransition extends AbstractGeometricForm implements Cloneable {
         targetCPAngle = 0;
         
         updateStartAndEndPoints();
-        
-        arrow.setAngle( Math.atan2( 
-                y2 - rightCP.getY1(), x2 - rightCP.getX1() ) );
-        arrow.setX1( x2 );
-        arrow.setY1( y2 );
-        
-        curve.setCurve( 
-                x1, y1, 
-                leftCP.getX1(), leftCP.getY1(), 
-                rightCP.getX1(), rightCP.getY1(), 
+
+        curve.setCurve(
+                x1, y1,
+                leftCP.getX1(), leftCP.getY1(),
+                rightCP.getX1(), rightCP.getY1(),
                 x2, y2 );
-        
+
         updateStartAndEndPoints();
         
     }
@@ -658,18 +678,13 @@ public class TMTransition extends AbstractGeometricForm implements Cloneable {
         rightCP.setY1( rightCPY1 );
         
         updateStartAndEndPoints();
-        
-        arrow.setAngle( Math.atan2( 
-                y2 - rightCP.getY1(), x2 - rightCP.getX1() ) );
-        arrow.setX1( x2 );
-        arrow.setY1( y2 );
-        
-        curve.setCurve( 
-                x1, y1, 
-                leftCP.getX1(), leftCP.getY1(), 
-                rightCP.getX1(), rightCP.getY1(), 
+
+        curve.setCurve(
+                x1, y1,
+                leftCP.getX1(), leftCP.getY1(),
+                rightCP.getX1(), rightCP.getY1(),
                 x2, y2 );
-        
+
         updateStartAndEndPoints();
         
         return this;
@@ -699,18 +714,13 @@ public class TMTransition extends AbstractGeometricForm implements Cloneable {
         rightCP.setY1( rightCP.getY1() + rightCPAmountY );
         
         updateStartAndEndPoints();
-        
-        arrow.setAngle( Math.atan2( 
-                y2 - rightCP.getY1(), x2 - rightCP.getX1() ) );
-        arrow.setX1( x2 );
-        arrow.setY1( y2 );
-        
-        curve.setCurve( 
-                x1, y1, 
-                leftCP.getX1(), leftCP.getY1(), 
-                rightCP.getX1(), rightCP.getY1(), 
+
+        curve.setCurve(
+                x1, y1,
+                leftCP.getX1(), leftCP.getY1(),
+                rightCP.getX1(), rightCP.getY1(),
                 x2, y2 );
-        
+
         updateStartAndEndPoints();
         
         return this;

@@ -359,14 +359,23 @@ public class DrawPanel extends JPanel {
     
     public void setFa( FA fa ) {
         this.fa = fa;
+        if ( fa != null ) {
+            fa.updateTransitions();
+        }
     }
 
     public void setPda( PDA pda ) {
         this.pda = pda;
+        if ( pda != null ) {
+            pda.updateTransitions();
+        }
     }
 
     public void setTm( TM tm ) {
         this.tm = tm;
+        if ( tm != null ) {
+            tm.updateTransitions();
+        }
     }
 
     public boolean isShowGrid() {
